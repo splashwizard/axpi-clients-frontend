@@ -1,5 +1,6 @@
 import axios from 'axios';
 let _ = require('lodash');
+import router from "../../router";
 
 export const state = {
     isLoading: false,
@@ -54,9 +55,9 @@ export const actions = {
            'device_name': 'Browser login'
         }).then(r => {
             commit('STOP_LOADING');
-
             commit('SET_API_TOKEN', r.data.token);
             commit('SET_USER', r.data.user);
+            router.push(params.to ? params.to : '/');
         }).catch(e => {
            commit('STOP_LOADING');
             this._vm.$message.error('Invalid email/password combination');

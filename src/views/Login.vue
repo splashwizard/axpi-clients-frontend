@@ -84,7 +84,8 @@
                     if (!err) {
                         this.attemptLogin({
                             email: values.email,
-                            password: values.password
+                            password: values.password,
+                            to: this.$route.query.to ? this.$route.query.to : '/'
                         });
                     }
                 });

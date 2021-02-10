@@ -1,3 +1,6 @@
+import axios from 'axios';
+let _ = require('lodash');
+
 export const state = {
     isLoading: false,
     serverErrors: [],
@@ -43,13 +46,28 @@ export const getters = {
 };
 
 export const actions = {
-    success({ commit }, message) {
-        commit('success', message);
-    },
-    error({ commit }, message) {
-        commit('error', message);
-    },
-    clear({ commit }) {
-        commit('clear');
-    }
+   attemptLogin({commit}, params) {
+      commit('START_LOADING');
+        axios.post(window.API_TOKEN_URL, {
+           'email': params.email,
+           'password': params.password,
+           'device_name': 'Browser login'
+        }).then(r => {
+            commit('STOP_LOADING');
+
+            commit('SET_API_TOKEN', r.data.token);
+            commit('SET_USER', r.data.user);
+        }).catch(e => {
+           commit('STOP_LOADING');
+            this._vm.$message.error('Invalid email/password combination');
+
+            let errors;
+            if (typeof e.response.data === 'object') {
+                errors = _.flatten(_.toArray(e.response.data.errors));
+            } else {
+                errors = ['Something went wrong. Please try again.'];
+            }
+            commit('SET_ERRORS', errors);
+        });
+   }
 };

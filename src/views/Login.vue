@@ -1,7 +1,7 @@
 <template>
     <div class="login-page">
         <div class="login-page-inner">
-            <img src="/img/axiom-icon.png" alt="Logo" width="50">
+            <img src="/img/axiom-icon.png" alt="Logo" width="60">
 
             <div class="login-form-card">
                 <h1>Welcome Back!</h1>
@@ -42,7 +42,10 @@
                     </a-form-item>
                     <a-form-item>
                         <a-button type="primary" size="large" html-type="submit" class="login-form-button">
-                            Log In
+                            <span v-if="!isLoading">
+                                Log In
+                            </span>
+                            <a-spin v-if="isLoading"/>
                         </a-button>
                         <a href="">
                             Forgot password
@@ -55,27 +58,36 @@
 </template>
 
 <script>
+    import {mapGetters, mapActions} from "vuex";
 
     export default {
         name: 'Home',
         components: {},
         data() {
             return {
-                form: this.$form.createForm(this, { name: 'login_form' })
+                form: this.$form.createForm(this, {name: 'login_form'})
             }
         },
+        computed: {
+            ...mapGetters('auth', {
+                isLoading: 'isLoading'
+            })
+        },
         methods: {
+           ...mapActions('auth', {
+               attemptLogin: 'attemptLogin'
+           }),
+
             handleSubmit(e) {
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
-                        this.login(values);
+                        this.attemptLogin({
+                            email: values.email,
+                            password: values.password
+                        });
                     }
                 });
-            },
-
-            login(values) {
-                console.log(values);
             }
         }
     }
@@ -94,7 +106,7 @@
         justify-content: center;
 
         .login-form-card {
-            margin-top: 40px;
+            margin-top: 25px;
             box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);
             max-width: 25rem;
             width: 25rem;

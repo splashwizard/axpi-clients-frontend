@@ -7,17 +7,16 @@ Vue.use(Vuex)
 
 // Vuex Storage
 import VuexPersist from 'vuex-persist';
-import localForage from 'localforage';
+// import localForage from 'localforage';
 
-const vuexAuthStorage = new VuexPersist({
+const vuexStorage = new VuexPersist({
     key: 'axpi-frontend-auth',
-    storage: localForage,
-    modules: ['auth']
+    storage: window.localStorage
 })
 
 export default new Vuex.Store({
     modules,
-    plugins: [vuexAuthStorage.plugin],
+    plugins: [vuexStorage.plugin],
     // Enable strict mode in development to get a warning
     // when mutating state outside of a mutation.
     // https://vuex.vuejs.org/guide/strict.html

@@ -41,11 +41,8 @@
                         </a-input>
                     </a-form-item>
                     <a-form-item>
-                        <a-button type="primary" size="large" html-type="submit" class="login-form-button">
-                            <span v-if="!isLoading">
-                                Log In
-                            </span>
-                            <a-spin v-if="isLoading"/>
+                        <a-button type="primary" size="large" html-type="submit" class="login-form-button" :loading="isLoading">
+                            Log In
                         </a-button>
                         <a href="">
                             Forgot password
@@ -74,9 +71,9 @@
             })
         },
         methods: {
-           ...mapActions('auth', {
-               attemptLogin: 'attemptLogin'
-           }),
+            ...mapActions('auth', {
+                attemptLogin: 'attemptLogin'
+            }),
 
             handleSubmit(e) {
                 e.preventDefault();

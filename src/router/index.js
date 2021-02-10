@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
+import store from "../store";
 
 Vue.use(VueRouter)
 
@@ -14,7 +15,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/about',
@@ -30,6 +34,26 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+// Wait for Vuex Persist to do it's thing
+const waitForStorageToBeReady = async (to, from, next) => {
+  await store.restored
+  next()
+}
+router.beforeEach(waitForStorageToBeReady)
+
+// Auth Guard
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.auth)) {
+    if (store.getters['auth/loggedIn']) {
+      next()
+      return
+    }
+    next('/login?to=' + to.path)
+  } else {
+    next()
+  }
 })
 
 export default router

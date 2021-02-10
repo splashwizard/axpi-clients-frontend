@@ -3,6 +3,7 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
+import axios from 'axios';
 
 Vue.config.productionTip = false
 
@@ -13,6 +14,19 @@ window.API_TOKEN_URL =  window.API_BASE + '/token';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.use(Antd);
+
+// Axios Interceptor
+axios.interceptors.request.use(
+    config => {
+      const token = store.getters['auth/apiToken'];
+      if (token) {
+        config.headers['Authorization'] = 'Bearer ' + token;
+      }
+      return config;
+    },
+    error => {
+      Promise.reject(error)
+    });
 
 new Vue({
   router,

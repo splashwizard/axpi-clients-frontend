@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 let _ = require('lodash');
 import router from "../../router";
 
@@ -44,22 +45,26 @@ export const getters = {
     user: (state) => {
         return state.user;
     },
+
+    loggedIn: (state) => {
+        return state.apiToken !== null;
+    }
 };
 
 export const actions = {
-   attemptLogin({commit}, params) {
-      commit('START_LOADING');
+    attemptLogin({commit}, params) {
+        commit('START_LOADING');
         axios.post(window.API_TOKEN_URL, {
-           'email': params.email,
-           'password': params.password,
-           'device_name': 'Browser login'
+            'email': params.email,
+            'password': params.password,
+            'device_name': 'Browser login'
         }).then(r => {
             commit('STOP_LOADING');
             commit('SET_API_TOKEN', r.data.token);
             commit('SET_USER', r.data.user);
             router.push(params.to ? params.to : '/');
         }).catch(e => {
-           commit('STOP_LOADING');
+            commit('STOP_LOADING');
             this._vm.$message.error('Invalid email/password combination');
 
             let errors;
@@ -70,5 +75,11 @@ export const actions = {
             }
             commit('SET_ERRORS', errors);
         });
-   }
+    },
+
+    logout({commit}) {
+        commit('SET_API_TOKEN', null);
+        commit('SET_USER', null);
+        router.push('/login');
+    }
 };

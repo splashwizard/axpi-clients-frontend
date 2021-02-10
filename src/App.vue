@@ -104,7 +104,7 @@
                                 <a-button icon="question"></a-button>
                                 <a-popover title="Account" trigger="click" placement="bottomRight">
                                     <a slot="content" @click="logout">Logout</a>
-                                    <a-button icon="user"></a-button>
+                                    <a-button icon="user">{{ user.name }}</a-button>
                                 </a-popover>
                             </div>
                         </div>
@@ -135,7 +135,8 @@
         },
         computed: {
             ...mapGetters('auth', {
-                loggedIn: 'loggedIn'
+                loggedIn: 'loggedIn',
+                user: 'user'
             })
         }
     }
@@ -190,6 +191,11 @@
         .ant-menu, .ant-menu-submenu {
             border: 0;
             background: none !important;
+        }
+
+        .ant-menu-item {
+            height: 30px !important;
+            line-height: 30px !important;
         }
 
         .ant-menu-item.ant-menu-item-selected {

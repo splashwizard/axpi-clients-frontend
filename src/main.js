@@ -15,6 +15,9 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.use(Antd);
 
+// Custom styles
+import '@/assets/scss/main.scss';
+
 // Axios Interceptor
 axios.interceptors.request.use(
     config => {

@@ -16,11 +16,12 @@
                     </router-link>
                 </div>
                 <a-menu
-                        :default-selected-keys="[$router.currentRoute]"
+                        @click="handleMenuItemClicked"
+                        :selected-keys="[selectedMenuKey]"
                         mode="inline"
                         theme="light"
                 >
-                    <a-menu-item key="home">
+                    <a-menu-item key="">
                         <a-icon type="home"/>
                         Home
                     </a-menu-item>
@@ -36,7 +37,7 @@
                         <a-icon type="rise"/>
                         Goals
                     </a-menu-item>
-                    <a-menu-item key="analytics">
+                    <a-menu-item key="optimisation">
                         <a-icon type="dashboard"/>
                         Optimisation
                     </a-menu-item>
@@ -128,6 +129,19 @@
     import {mapGetters, mapActions} from "vuex";
 
     export default {
+        data() {
+            return {
+                selectedMenuKey: this.$router.currentRoute.path.split("/")[1]
+            }
+        },
+        mounted() {
+            this.selectedMenuKey = this.$router.currentRoute.path.split("/")[1]
+        },
+        watch: {
+            '$route'(to) {
+                this.selectedMenuKey = to.path.split("/")[1]
+            }
+        },
         methods: {
             ...mapActions('auth', {
                 logout: 'logout'
@@ -138,6 +152,13 @@
             onBreakpoint(broken) {
                 console.log(broken);
             },
+            handleMenuItemClicked(e) {
+               let navigateTo = e.key;
+               if (!navigateTo) {
+                   navigateTo = '/';
+               }
+               this.$router.push(navigateTo);
+            }
         },
         computed: {
             ...mapGetters('auth', {

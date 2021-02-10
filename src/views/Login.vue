@@ -1,7 +1,7 @@
 <template>
     <div class="login-page">
         <div class="login-page-inner">
-            <img src="/img/axiom-icon.png" alt="Logo" width="70">
+            <img src="/img/axiom-icon.png" alt="Logo" width="50">
 
             <div class="login-form-card">
                 <h1>Welcome Back!</h1>
@@ -98,7 +98,7 @@
             box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);
             max-width: 25rem;
             width: 25rem;
-            padding: 2rem;
+            padding: 2rem 2rem 0.4rem 2rem;
             background: #fff;
             border-radius: .5rem;
 

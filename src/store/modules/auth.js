@@ -81,5 +81,6 @@ export const actions = {
         commit('SET_API_TOKEN', null);
         commit('SET_USER', null);
         router.push('/login');
+        this._vm.$message.success('Logged out successfully');
     }
 };

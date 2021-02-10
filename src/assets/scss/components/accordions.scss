@@ -1,0 +1,29 @@
+.ant-collapse {
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 0 0 1px #e3e8ee;
+
+  .ant-collapse-header {
+    font-weight: 600;
+    background: #fff;
+  }
+
+  .ant-collapse-item {
+    border-color: #e3e8ee;
+  }
+
+  .ant-collapse-item:last-child {
+    border-bottom: none;
+  }
+
+  .ant-collapse-item-active {
+    .ant-collapse-header, .ant-collapse-content {
+      background-color: #f7fafc !important;
+    }
+
+    .ant-collapse-content {
+      border-top: none;
+    }
+  }
+
+}

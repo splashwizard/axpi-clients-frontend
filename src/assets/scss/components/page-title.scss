@@ -1,3 +1,16 @@
 .page-title {
   font-size: 30px;
+  margin-bottom: 25px;
+}
+
+.page-header {
+  display: flex;
+
+  h1 {
+    flex-grow: 1;
+  }
+
+  .actions {
+    flex-shrink: 1;
+  }
 }

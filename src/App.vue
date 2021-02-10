@@ -11,11 +11,12 @@
                     :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
             >
                 <div class="logo">
-                    <img src="/img/axiom.png" alt="">
+                    <router-link to="/">
+                        <img src="/img/axiom.png" alt="">
+                    </router-link>
                 </div>
                 <a-menu
-                        :default-selected-keys="['1']"
-                        :default-open-keys="['sub1']"
+                        :default-selected-keys="[$router.currentRoute]"
                         mode="inline"
                         theme="light"
                 >
@@ -103,7 +104,12 @@
                                 <a-button icon="bell"></a-button>
                                 <a-button icon="question"></a-button>
                                 <a-popover title="Account" trigger="click" placement="bottomRight">
-                                    <a slot="content" @click="logout">Logout</a>
+                                    <div slot="content">
+                                        <div v-if="user.client" class="company-property">
+                                        {{ user.client.name }}
+                                         </div>
+                                        <a @click="logout">Logout</a>
+                                    </div>
                                     <a-button icon="user">{{ user.name }}</a-button>
                                 </a-popover>
                             </div>
@@ -176,11 +182,15 @@
         }
     }
 
+    .company-property {
+        margin-bottom: 10px;
+    }
+
     .ant-layout-sider {
         .logo {
             text-align: left;
             padding-left: 20px;
-            padding-top: 30px;
+            padding-top: 20px;
             padding-bottom: 30px;
         }
 

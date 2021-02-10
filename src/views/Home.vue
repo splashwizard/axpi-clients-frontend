@@ -1,20 +1,13 @@
 <template>
     <div class="home">
-        <!--    <img src="/img/placeholder.png" alt="Placeholder" style="width: 100%;">-->
         <h1 class="page-title">Get started with Axiom, {{ user.name }}</h1>
-        <template>
-            <a-page-header
-                    title="Title"
-                    sub-title="This is a subtitle"
-                    @back="() => null"
-            />
-        </template>
-
+        <setup-progress-accordion></setup-progress-accordion>
     </div>
 </template>
 
 <script>
     import {mapGetters} from "vuex";
+    import SetupProgressAccordion from "../components/Home/SetupProgressAccordion";
 
     export default {
         name: 'Home',
@@ -22,6 +15,12 @@
             ...mapGetters('auth', {
                 user: 'user'
             })
+        },
+        components: {SetupProgressAccordion},
+        data() {
+            return {
+                activeSetupStep: 1
+            }
         }
     }
 </script>

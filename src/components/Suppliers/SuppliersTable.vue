@@ -1,86 +1,102 @@
 <template>
-    <a-table :columns="columns" :data-source="data">
-        <a slot="name" slot-scope="text">{{ text }}</a>
-        <span slot="customTitle">Name</span>
-        <span slot="tags" slot-scope="tags">
-      <a-tag
-              v-for="tag in tags"
-              :key="tag"
-              :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-      >
-        {{ tag.toUpperCase() }}
-      </a-tag>
-    </span>
-        <span slot="action" slot-scope="text, record">
-      <a>Invite 一 {{ record.name }}</a>
-      <a-divider type="vertical" />
-      <a>Delete</a>
-      <a-divider type="vertical" />
-      <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
-    </span>
+    <a-table
+            :columns="columns"
+            :row-key="record => record.id"
+            :data-source="data"
+            :pagination="pagination"
+            :loading="loading"
+            @change="handleTableChange"
+    >
+        <template slot="country">
+            United Kingdom
+        </template>
+        <template slot="rating">
+            <a-rate :default-value="2" disabled/>
+        </template>
+        <template slot="last-order">
+            10th February 2020
+        </template>
     </a-table>
 </template>
 <script>
+    import axios from 'axios';
+
     const columns = [
         {
+            title: 'Name',
             dataIndex: 'name',
-            key: 'name',
-            slots: { title: 'customTitle' },
-            scopedSlots: { customRender: 'name' },
+            sorter: true,
         },
         {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
+            title: 'Country',
+            dataIndex: 'country',
+            sorter: true,
+            scopedSlots: {
+                customRender: 'country'
+            }
         },
         {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
+            title: 'Rating',
+            dataIndex: 'rating',
+            sorter: true,
+            scopedSlots: {
+                customRender: 'rating'
+            }
         },
         {
-            title: 'Tags',
-            key: 'tags',
-            dataIndex: 'tags',
-            scopedSlots: { customRender: 'tags' },
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            scopedSlots: { customRender: 'action' },
-        },
-    ];
-
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            tags: ['nice', 'developer'],
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-            tags: ['loser'],
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sidney No. 1 Lake Park',
-            tags: ['cool', 'teacher'],
-        },
+            title: 'Last Order',
+            dataIndex: 'last_order',
+            sorter: true,
+            scopedSlots: {
+                customRender: 'last-order'
+            }
+        }
     ];
 
     export default {
         data() {
             return {
-                data,
+                data: [],
+                pagination: {},
+                loading: false,
                 columns,
             };
+        },
+        mounted() {
+            this.fetch();
+        },
+        methods: {
+            handleTableChange(pagination, filters, sorter) {
+                const pager = {...this.pagination};
+                pager.current = pagination.current;
+                this.pagination = pager;
+                this.fetch({
+                    results_per_page: pagination.pageSize,
+                    page: pagination.current,
+                    sort_field: sorter.field,
+                    sort_order: sorter.order,
+                    ...filters,
+                });
+            },
+
+            fetch(params = {}) {
+                console.log('params:', params);
+                this.loading = true;
+                axios.post(window.API_BASE + '/suppliers/search', {
+                    results_per_page: 10,
+                    ...params
+                }).then(r => {
+                    const pagination = {...this.pagination};
+                    // Read total count from server
+                    pagination.total = r.data.total;
+                    this.loading = false;
+                    this.data = r.data.data;
+                    this.pagination = pagination;
+                }).catch(e => {
+                    console.log(e);
+                    this.$message.error('Error loading suppliers');
+                });
+            },
         },
     };
 </script>

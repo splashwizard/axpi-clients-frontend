@@ -154,10 +154,7 @@
             },
             handleMenuItemClicked(e) {
                let navigateTo = e.key;
-               if (!navigateTo) {
-                   navigateTo = '/';
-               }
-               this.$router.push(navigateTo);
+               this.$router.push("/" + navigateTo);
             }
         },
         computed: {
@@ -198,6 +195,10 @@
 
                 .ant-btn {
                     margin-left: 5px;
+                    border: none;
+                    box-shadow: none;
+                    padding-left: 0;
+                    padding-right: 0;
                 }
             }
         }
@@ -225,8 +226,8 @@
         }
 
         .ant-menu-item {
-            height: 30px !important;
-            line-height: 30px !important;
+            height: 24px !important;
+            line-height: 24px !important;
         }
 
         .ant-menu-item.ant-menu-item-selected {

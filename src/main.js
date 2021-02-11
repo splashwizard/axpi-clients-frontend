@@ -7,8 +7,8 @@ import axios from 'axios';
 
 Vue.config.productionTip = false
 
-window.API_BASE = 'http://axpi-api.test/api';
-window.API_TOKEN_URL =  window.API_BASE + '/token';
+window.API_BASE = 'http://axpi-api.test/api/clients';
+window.API_TOKEN_URL = 'http://axpi-api.test/api/token';
 
 // Ant Design
 import Antd from 'ant-design-vue';

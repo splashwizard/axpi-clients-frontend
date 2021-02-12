@@ -22,15 +22,15 @@
                         theme="light"
                 >
                     <a-menu-item key="">
-                        <a-icon type="home"/>
+                        <home-icon class="nav-icon"></home-icon>
                         Home
                     </a-menu-item>
                     <a-menu-item key="orders">
-                        <a-icon type="shopping-cart"/>
+                        <orders-icon class="nav-icon"></orders-icon>
                         Orders
                     </a-menu-item>
                     <a-menu-item key="suppliers">
-                        <a-icon type="bars"/>
+                        <suppliers-icon class="nav-icon"></suppliers-icon>
                         Suppliers
                     </a-menu-item>
                     <a-menu-item key="goals">
@@ -128,8 +128,12 @@
 </template>
 <script>
     import {mapGetters, mapActions} from "vuex";
+    import HomeIcon from "./components/Icons/HomeIcon";
+    import OrdersIcon from "./components/Icons/OrdersIcon";
+    import SuppliersIcon from "./components/Icons/SuppliersIcon";
 
     export default {
+        components: {HomeIcon, OrdersIcon, SuppliersIcon},
         data() {
             return {
                 selectedMenuKey: this.$router.currentRoute.path.split("/")[1]
@@ -213,8 +217,12 @@
         .logo {
             text-align: left;
             padding-left: 20px;
-            padding-top: 20px;
+            padding-top: 16px;
             padding-bottom: 30px;
+        }
+
+        .nav-icon {
+            margin-right: 10px;
         }
 
         .logo img {

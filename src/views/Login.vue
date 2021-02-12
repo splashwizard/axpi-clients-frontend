@@ -1,9 +1,9 @@
 <template>
     <div class="login-page">
         <div class="login-page-inner">
-            <img src="/img/axiom-icon.png" alt="Logo" width="60">
-
             <div class="login-form-card">
+                <img src="/img/axiom-icon.png" alt="Logo" width="60">
+
                 <h1>Welcome Back!</h1>
                 <svg class="block mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" width="100" height="2"
                      viewBox="0 0 100 2">
@@ -111,6 +111,10 @@
             padding: 2rem 2rem 0.4rem 2rem;
             background: #fff;
             border-radius: .5rem;
+
+            img {
+                margin-bottom: 20px;
+            }
 
             .login-form {
                 margin-top: 30px;

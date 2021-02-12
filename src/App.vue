@@ -111,7 +111,8 @@
                                          </div>
                                         <a @click="logout">Logout</a>
                                     </div>
-                                    <a-button icon="user">{{ user.name }}</a-button>
+                                    <a-button icon="user"></a-button>
+<!--                                    <a-button icon="user">{{ user.name }}</a-button>-->
                                 </a-popover>
                             </div>
                         </div>
@@ -194,11 +195,11 @@
                 flex-shrink: 1;
 
                 .ant-btn {
-                    margin-left: 5px;
+                    /*margin-left: 5px;*/
                     border: none;
                     box-shadow: none;
-                    padding-left: 0;
-                    padding-right: 0;
+                    /*padding-left: 0;*/
+                    /*padding-right: 0;*/
                 }
             }
         }

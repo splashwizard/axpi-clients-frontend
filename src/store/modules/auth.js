@@ -57,7 +57,8 @@ export const actions = {
         axios.post(window.API_TOKEN_URL, {
             'email': params.email,
             'password': params.password,
-            'device_name': 'Browser login'
+            'device_name': 'Browser login',
+            'user_type': 'client'
         }).then(r => {
             commit('STOP_LOADING');
             commit('SET_API_TOKEN', r.data.token);

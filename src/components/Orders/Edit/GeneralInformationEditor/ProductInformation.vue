@@ -3,13 +3,13 @@
         <a-col :span="12">
             <a-form layout="vertical">
                 <a-form-item label="Product Name">
-                    <a-input size="large" :value="orderLocal.product_name" placeholder="Product Name"/>
+                    <a-input size="large" v-model="orderLocal.product_name" placeholder="Product Name"/>
                 </a-form-item>
                 <a-form-item label="Product Description">
-                    <a-input size="large" :value="orderLocal.product_description" placeholder="Product Name"/>
+                    <a-input size="large" v-model="orderLocal.product_description" placeholder="Product Name"/>
                 </a-form-item>
                 <a-form-item label="Reference Number">
-                    <a-input size="large" :value="orderLocal.reference_number" placeholder="Reference Number"/>
+                    <a-input size="large" v-model="orderLocal.reference_number" placeholder="Reference Number"/>
                 </a-form-item>
             </a-form>
         </a-col>

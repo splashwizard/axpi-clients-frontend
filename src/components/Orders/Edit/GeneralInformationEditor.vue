@@ -19,6 +19,15 @@
             <product-information :order="orderLocal"></product-information>
         </div>
         <!-- / Product Information -->
+
+        <!-- Order Information -->
+        <div class="form-section">
+            <div class="form-header">
+                <h2>Order Information</h2>
+            </div>
+            <order-information :order="orderLocal"></order-information>
+        </div>
+        <!-- / Order Information -->
     </div>
 </template>
 
@@ -26,11 +35,12 @@
     import {mapGetters} from "vuex";
     import CustomerInformation from "./GeneralInformationEditor/CustomerInformation";
     import ProductInformation from "./GeneralInformationEditor/ProductInformation";
+    import OrderInformation from "./GeneralInformationEditor/OrderInformation";
 
     export default {
         name: "GeneralInformationEditor",
 
-        components: {CustomerInformation, ProductInformation},
+        components: {CustomerInformation, ProductInformation, OrderInformation},
 
         computed: {
             ...mapGetters('orderEditor', {

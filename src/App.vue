@@ -11,9 +11,15 @@
                     :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
             >
                 <div class="logo">
-                    <router-link to="/">
-                        <img src="/img/axiom.png" alt="">
-                    </router-link>
+                    <!--                    <router-link to="/">-->
+                    <!--                        <img src="/img/axiom.png" alt="">-->
+                    <!--                    </router-link>-->
+                    <div class="logo-circle">
+                        <img src="/img/icons/axiom-icon.png" alt="">
+                    </div>
+                    <span>
+                        {{ user.client.name }}
+                    </span>
                 </div>
                 <a-menu
                         @click="handleMenuItemClicked"
@@ -21,7 +27,7 @@
                         mode="inline"
                         theme="light"
                 >
-                    <a-menu-item key="">
+                    <a-menu-item key="" class="menu-space-below">
                         <home-icon class="nav-icon"></home-icon>
                         Home
                     </a-menu-item>
@@ -34,19 +40,19 @@
                         Suppliers
                     </a-menu-item>
                     <a-menu-item key="goals">
-                        <a-icon type="rise"/>
+                        <goals-icon class="nav-icon"></goals-icon>
                         Goals
                     </a-menu-item>
                     <a-menu-item key="optimisation">
-                        <a-icon type="dashboard"/>
+                        <optimise-icon class="nav-icon"></optimise-icon>
                         Optimisation
                     </a-menu-item>
                     <a-menu-item key="analytics">
-                        <a-icon type="eye"/>
+                        <analytics-icon class="nav-icon"></analytics-icon>
                         Analytics
                     </a-menu-item>
-                    <a-menu-item key="reports">
-                        <a-icon type="bar-chart"/>
+                    <a-menu-item key="reports" class="menu-space-below">
+                        <reports-icon class="nav-icon"></reports-icon>
                         Reports
                     </a-menu-item>
                     <!--                    <a-sub-menu key="sub1">-->
@@ -82,11 +88,11 @@
                     <!--                        </a-menu-item>-->
                     <!--                    </a-sub-menu>-->
                     <a-menu-item key="developer">
-                        <a-icon type="code"/>
+                        <developers-icon class="nav-icon"></developers-icon>
                         Developers
                     </a-menu-item>
                     <a-menu-item key="account">
-                        <a-icon type="user"/>
+                        <account-icon class="nav-icon"></account-icon>
                         Account
                     </a-menu-item>
                 </a-menu>
@@ -101,18 +107,35 @@
                         </div>
                         <div class="top-nav-links">
                             <div id="nav">
-                                <a-button icon="message">Feedback</a-button>
-                                <a-button icon="bell"></a-button>
-                                <a-button icon="question"></a-button>
+                                <a-button class="feedback-icon">
+                                    <div>
+                                        <feedback-icon></feedback-icon>
+                                        <span>Feedback?</span>
+                                    </div>
+                                </a-button>
+                                <a-button>
+                                    <div>
+                                        <bell-icon></bell-icon>
+                                    </div>
+                                </a-button>
+                                <a-button>
+                                    <div>
+                                        <question-mark-icon></question-mark-icon>
+                                    </div>
+                                </a-button>
                                 <a-popover title="Account" trigger="click" placement="bottomRight">
                                     <div slot="content">
                                         <div v-if="user.client" class="company-property">
-                                        {{ user.client.name }}
-                                         </div>
+                                            {{ user.client.name }}
+                                        </div>
                                         <a @click="logout">Logout</a>
                                     </div>
-                                    <a-button icon="user"></a-button>
-<!--                                    <a-button icon="user">{{ user.name }}</a-button>-->
+                                    <a-button>
+                                        <div>
+                                            <user-icon></user-icon>
+                                        </div>
+                                    </a-button>
+                                    <!--                                    <a-button icon="user">{{ user.name }}</a-button>-->
                                 </a-popover>
                             </div>
                         </div>
@@ -131,9 +154,33 @@
     import HomeIcon from "./components/Icons/HomeIcon";
     import OrdersIcon from "./components/Icons/OrdersIcon";
     import SuppliersIcon from "./components/Icons/SuppliersIcon";
+    import GoalsIcon from "./components/Icons/GoalsIcon";
+    import OptimiseIcon from "./components/Icons/OptimiseIcon";
+    import AnalyticsIcon from "./components/Icons/AnalyticsIcon";
+    import ReportsIcon from "./components/Icons/ReportsIcon";
+    import DevelopersIcon from "./components/Icons/DevelopersIcon";
+    import AccountIcon from "./components/Icons/AccountIcon";
+    import UserIcon from "./components/Icons/UserIcon";
+    import QuestionMarkIcon from "./components/Icons/QuestionMarkIcon";
+    import BellIcon from "./components/Icons/BellIcon";
+    import FeedbackIcon from "./components/Icons/FeedbackIcon";
 
     export default {
-        components: {HomeIcon, OrdersIcon, SuppliersIcon},
+        components: {
+            HomeIcon,
+            OrdersIcon,
+            SuppliersIcon,
+            GoalsIcon,
+            OptimiseIcon,
+            AnalyticsIcon,
+            ReportsIcon,
+            DevelopersIcon,
+            AccountIcon,
+            UserIcon,
+            QuestionMarkIcon,
+            BellIcon,
+            FeedbackIcon
+        },
         data() {
             return {
                 selectedMenuKey: this.$router.currentRoute.path.split("/")[1]
@@ -158,8 +205,8 @@
                 console.log(broken);
             },
             handleMenuItemClicked(e) {
-               let navigateTo = e.key;
-               this.$router.push("/" + navigateTo);
+                let navigateTo = e.key;
+                this.$router.push("/" + navigateTo);
             }
         },
         computed: {
@@ -176,8 +223,8 @@
     }
 
     .ant-layout-header {
-        height: 60px !important;
-        line-height: 60px !important;
+        height: 57px !important;
+        line-height: 57px !important;
 
         .top-nav {
             display: flex;
@@ -197,13 +244,29 @@
 
             .top-nav-links {
                 flex-shrink: 1;
+                line-height: 60px;
 
                 .ant-btn {
                     /*margin-left: 5px;*/
                     border: none;
                     box-shadow: none;
-                    /*padding-left: 0;*/
-                    /*padding-right: 0;*/
+                    color: rgb(135, 146, 162);
+                    padding-left: 8px;
+                    padding-right: 8px;
+
+                    div {
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+
+                .feedback-icon {
+                    padding-left: 15px;
+                    padding-right: 15px;
+
+                    svg {
+                        margin-right: 10px;
+                    }
                 }
             }
         }
@@ -219,14 +282,44 @@
             padding-left: 20px;
             padding-top: 16px;
             padding-bottom: 30px;
+            align-items: center;
+            display: flex;
+
+            .logo-circle {
+                background-color: #fff;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                text-align: center;
+                box-shadow: 0 2px 5px 0 rgb(60 66 87 / 8%), 0 1px 1px 0 rgb(0 0 0 / 12%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 19px;
+                    height: 19px;
+                }
+            }
+
+            span {
+                padding-left: 10px;
+                font-size: 16px;
+                color: #1a1f36;
+            }
         }
 
         .nav-icon {
-            margin-right: 10px;
+            margin-right: 15px;
         }
 
         .logo img {
             max-width: 140px;
+        }
+
+        .ant-menu li {
+            display: flex;
+            align-items: center;
         }
 
         .ant-menu, .ant-menu-submenu {
@@ -235,8 +328,8 @@
         }
 
         .ant-menu-item {
-            height: 24px !important;
-            line-height: 24px !important;
+            height: 23px !important;
+            line-height: 23px !important;
         }
 
         .ant-menu-item.ant-menu-item-selected {
@@ -247,6 +340,10 @@
             &:after {
                 display: none;
             }
+        }
+
+        .menu-space-below {
+            margin-bottom: 25px !important;
         }
     }
 </style>

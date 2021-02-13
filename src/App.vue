@@ -328,8 +328,8 @@
         }
 
         .ant-menu-item {
-            height: 23px !important;
-            line-height: 23px !important;
+            height: 22px !important;
+            line-height: 22px !important;
         }
 
         .ant-menu-item.ant-menu-item-selected {

@@ -38,6 +38,14 @@ export const mutations = {
         state.wizardStage = stage;
     },
 
+    INCREMENT_WIZARD_STAGE(state) {
+        state.wizardStage += 1;
+    },
+
+    DECREMENT_WIZARD_STAGE(state) {
+        state.wizardStage -= 1;
+    },
+
     SET_ORDER(state, order) {
         state.order = order;
     }
@@ -91,5 +99,13 @@ export const actions = {
 
     setWizardStage({commit}, stage) {
         commit('SET_WIZARD_STAGE', stage);
+    },
+
+    goToNextStage({commit}) {
+        commit('INCREMENT_WIZARD_STAGE');
+    },
+
+    goToPreviousStage({commit}) {
+        commit('DECREMENT_WIZARD_STAGE');
     }
 };

@@ -2,6 +2,33 @@
   .ant-modal-header {
     border-radius: 0 !important;
     background: rgb(247, 250, 252);
+    z-index: 1000;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+  }
+
+  .ant-modal-close {
+    z-index: 1001 !important;
+    position: fixed;
+    left: 5px;
+    right: auto;
+
+    svg {
+      fill: #4f566b;
+    }
+  }
+
+  .ant-modal-title {
+    margin-left: 35px;
+    font-size: 14px;
+    padding-left: 23px;
+    border-left: 1px solid #c1c9d2;
+  }
+
+  .ant-modal-body {
+    padding-top: calc(55px + 24px);
   }
 
   .ant-modal-content {

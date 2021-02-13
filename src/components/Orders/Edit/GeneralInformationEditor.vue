@@ -28,10 +28,21 @@
             <order-information :order-local="orderLocal"></order-information>
         </div>
         <!-- / Order Information -->
+
+        <!-- Form footer -->
+        <div class="form-footer">
+            <a-button size="large" type="primary" @click="goToNextStage">
+                Continue
+                <a-icon type="arrow-right"></a-icon>
+            </a-button>
+        </div>
+        <!-- / Form Footer -->
     </div>
 </template>
 
 <script>
+    import {mapActions} from "vuex";
+
     import CustomerInformation from "./GeneralInformationEditor/CustomerInformation";
     import ProductInformation from "./GeneralInformationEditor/ProductInformation";
     import OrderInformation from "./GeneralInformationEditor/OrderInformation";
@@ -40,6 +51,11 @@
         name: "GeneralInformationEditor",
         props: ['orderLocal'],
         components: {CustomerInformation, ProductInformation, OrderInformation},
+        methods: {
+            ...mapActions('orderEditor', {
+                goToNextStage: 'goToNextStage'
+            })
+        }
     }
 </script>
 

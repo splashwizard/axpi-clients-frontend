@@ -1,0 +1,25 @@
+//.ant-btn-primary {
+//  background-color: #46b98e;
+//  border-color: #46b98e;
+//
+//  &:hover {
+//    background-color: #2DA075;
+//    border-color: #2DA075;
+//  }
+//}
+
+.ant-btn {
+  &.button-space-right {
+    margin-right: 10px;
+  }
+}
+
+.ant-btn-primary {
+  background-color: rgb(84, 105, 212);
+  border-color: rgb(84, 105, 212);
+
+  &:hover {
+    background-color: #3B50BB;
+    border-color: #3B50BB;
+  }
+}

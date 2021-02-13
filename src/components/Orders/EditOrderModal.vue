@@ -20,6 +20,10 @@
             <div class="axpi-form width-medium">
                 <general-information-editor v-if="wizardStage === 0"
                                             :order-local="orderLocal"></general-information-editor>
+
+
+                <specification-information-editor v-if="wizardStage === 1"
+                                            :order-local="orderLocal"></specification-information-editor>
             </div>
             <!-- / Small form -->
         </div>
@@ -32,6 +36,7 @@
     import {mapGetters, mapActions} from "vuex";
     import ProgressBar from "./Edit/ProgressBar";
     import GeneralInformationEditor from "./Edit/GeneralInformationEditor";
+    import SpecificationInformationEditor from "./Edit/SpecificationInformationEditor";
 
     export default {
         name: "EditOrderModal",
@@ -41,7 +46,7 @@
                 orderLocal: null
             }
         },
-        components: {ProgressBar, GeneralInformationEditor},
+        components: {ProgressBar, GeneralInformationEditor, SpecificationInformationEditor},
         computed: {
             ...mapGetters('orderEditor', {
                 order: 'order',

@@ -335,7 +335,7 @@
         .ant-menu-item.ant-menu-item-selected {
             background-color: unset !important;
             font-weight: 600;
-            color: #3735B3;
+            color: #5469d4;
 
             &:after {
                 display: none;

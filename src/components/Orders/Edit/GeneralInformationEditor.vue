@@ -1,13 +1,13 @@
 <template>
-    <div class="axpi-form" v-if="orderLocal">
+    <div class="axpi-form">
         <!-- Customer Information -->
         <div class="form-section">
             <div class="form-header">
                 <h2>Customer Information</h2>
             </div>
             <customer-information
-                    :client="order.client"
-                    :organisational-unit="order.organisational_unit"></customer-information>
+                    :client="orderLocal.client"
+                    :organisational-unit="orderLocal.organisational_unit"></customer-information>
         </div>
         <!-- /Customer Information -->
 
@@ -16,7 +16,7 @@
             <div class="form-header">
                 <h2>Product Information</h2>
             </div>
-            <product-information :order="orderLocal"></product-information>
+            <product-information :order-local="orderLocal"></product-information>
         </div>
         <!-- / Product Information -->
 
@@ -25,38 +25,21 @@
             <div class="form-header">
                 <h2>Order Information</h2>
             </div>
-            <order-information :order="orderLocal"></order-information>
+            <order-information :order-local="orderLocal"></order-information>
         </div>
         <!-- / Order Information -->
     </div>
 </template>
 
 <script>
-    import {mapGetters} from "vuex";
     import CustomerInformation from "./GeneralInformationEditor/CustomerInformation";
     import ProductInformation from "./GeneralInformationEditor/ProductInformation";
     import OrderInformation from "./GeneralInformationEditor/OrderInformation";
 
     export default {
         name: "GeneralInformationEditor",
-
+        props: ['orderLocal'],
         components: {CustomerInformation, ProductInformation, OrderInformation},
-
-        computed: {
-            ...mapGetters('orderEditor', {
-                order: 'order'
-            })
-        },
-
-        data() {
-            return {
-                orderLocal: null
-            }
-        },
-
-        mounted() {
-            this.orderLocal = this.order;
-        }
     }
 </script>
 

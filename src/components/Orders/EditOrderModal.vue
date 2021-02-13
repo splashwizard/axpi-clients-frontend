@@ -11,14 +11,15 @@
         <!-- / Loading  -->
 
         <!-- Loaded -->
-        <div v-if="!isLoading && order">
+        <div v-if="!isLoading && orderLocal">
             <div class="progress-bar">
                 <progress-bar></progress-bar>
             </div>
 
             <!-- Small form -->
             <div class="axpi-form width-medium">
-                <general-information-editor v-if="wizardStage === 0"></general-information-editor>
+                <general-information-editor v-if="wizardStage === 0"
+                                            :order-local="orderLocal"></general-information-editor>
             </div>
             <!-- / Small form -->
         </div>
@@ -36,7 +37,8 @@
         name: "EditOrderModal",
         data() {
             return {
-                visible: true
+                visible: true,
+                orderLocal: null
             }
         },
         components: {ProgressBar, GeneralInformationEditor},
@@ -46,6 +48,9 @@
                 isLoading: 'isLoading',
                 wizardStage: 'wizardStage'
             })
+        },
+        mounted() {
+            this.orderLocal = {...this.order};
         },
         methods: {
             ...mapActions('orderEditor', {

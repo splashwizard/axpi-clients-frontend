@@ -1,28 +1,50 @@
 <template>
-    <div class="orders">
+    <div class="home">
 
         <div class="page-header">
             <h1 class="page-title">Orders</h1>
             <div class="actions">
-                <router-link to="/orders/create">
-                    <a-button type="primary" icon="plus">Add Order</a-button>
-                </router-link>
+                <a-button icon="filter">Filter</a-button>
+                <a-button icon="export">Export</a-button>
+                <a-button icon="form">Request Information</a-button>
+                <a-button icon="plus" type="primary">Add Order</a-button>
             </div>
         </div>
 
-        <orders-table></orders-table>
+        <orders-table @selected="handleOrderSelected"></orders-table>
+
+        <edit-order-modal v-if="order">
+        </edit-order-modal>
     </div>
 </template>
 
 <script>
     import OrdersTable from "../components/Orders/OrdersTable";
+    import EditOrderModal from "../components/Orders/EditOrderModal";
+
+    import {mapGetters, mapActions} from "vuex";
 
     export default {
         name: 'Orders',
-        computed: {},
-        components: {OrdersTable},
+        computed: {
+            ...mapGetters('orderEditor', {
+                order: 'order'
+            })
+        },
+        components: {OrdersTable, EditOrderModal},
         data() {
             return {}
+        },
+        methods: {
+            ...mapActions('orderEditor', {
+                loadOrder: 'loadOrder'
+            }),
+
+            handleOrderSelected(order) {
+                this.loadOrder(
+                    order.id
+                );
+            }
         }
     }
 </script>

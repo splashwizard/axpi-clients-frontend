@@ -12,5 +12,9 @@
 
   .actions {
     flex-shrink: 1;
+
+    .ant-btn {
+      margin-left: 8px;
+    }
   }
 }

@@ -1,0 +1,26 @@
+.axpi-form {
+  &.width-small {
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  &.width-medium {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+
+  label {
+    padding-bottom: 25px !important;
+  }
+
+  .form-section {
+    border-bottom: 1px solid #e3e8ee;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+
+  .form-header {
+    margin-bottom: 20px;
+  }
+}

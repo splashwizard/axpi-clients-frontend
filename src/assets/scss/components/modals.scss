@@ -1,0 +1,17 @@
+.fullscreen-modal {
+  .ant-modal-header {
+    border-radius: 0 !important;
+  }
+
+  .ant-modal-content {
+    border-radius: 0 !important;
+    height: 100% !important;
+    overflow-y: scroll;
+  }
+
+  .ant-modal {
+    width: 100% !important;
+    height: 100% !important;
+    padding-bottom: 0 !important;
+  }
+}

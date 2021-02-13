@@ -7,15 +7,7 @@
             :loading="loading"
             @change="handleTableChange"
     >
-        <template slot="country">
-            United Kingdom
-        </template>
-        <template slot="rating">
-            <a-rate :default-value="2" disabled/>
-        </template>
-        <template slot="last-order">
-            10th February 2020
-        </template>
+        <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{ name }}</a>
     </a-table>
 </template>
 <script>
@@ -26,30 +18,17 @@
             title: 'Name',
             dataIndex: 'name',
             sorter: true,
+            scopedSlots: {customRender: 'name'}
         },
         {
-            title: 'Country',
-            dataIndex: 'country',
+            title: 'Cost',
+            dataIndex: 'cost',
             sorter: true,
-            scopedSlots: {
-                customRender: 'country'
-            }
         },
         {
-            title: 'Rating',
-            dataIndex: 'rating',
+            title: 'Client',
+            dataIndex: 'client.name',
             sorter: true,
-            scopedSlots: {
-                customRender: 'rating'
-            }
-        },
-        {
-            title: 'Last Order',
-            dataIndex: 'last_order',
-            sorter: true,
-            scopedSlots: {
-                customRender: 'last-order'
-            }
         }
     ];
 
@@ -80,7 +59,6 @@
             },
 
             fetch(params = {}) {
-                console.log('params:', params);
                 this.loading = true;
                 axios.post(window.API_BASE + '/orders/search', {
                     results_per_page: 10,
@@ -97,6 +75,14 @@
                     this.$message.error('Error loading orders');
                 });
             },
+
+            handleRecordSelected(order) {
+                this.$emit('selected', order);
+            }
+
+            // getInformationRequestUrl(informationRequest) {
+            //    return '/information-requests/' + informationRequest.id + '/edit';
+            // }
         },
     };
 </script>

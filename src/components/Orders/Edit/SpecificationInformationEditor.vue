@@ -1,6 +1,13 @@
 <template>
     <div class="axpi-form">
-        This is the formmmm
+        <!-- Product Type -->
+        <div class="form-section">
+           <div class="form-header">
+               <h2>Product Type</h2>
+           </div>
+            <product-type-selector :order-local="orderLocal"></product-type-selector>
+        </div>
+        <!-- / Product Type -->
 
         <!-- Form footer -->
         <div class="form-footer">
@@ -20,10 +27,12 @@
 
 <script>
     import {mapActions} from "vuex";
+    import ProductTypeSelector from "./SpecificationInformationEditor/ProductTypeSelector";
 
     export default {
         name: "SpecificationInformationEditor",
         props: ['orderLocal'],
+        components: {ProductTypeSelector},
         methods: {
             ...mapActions('orderEditor', {
                 goToNextStage: 'goToNextStage',

@@ -2,7 +2,7 @@
     <div id="app">
         <a-layout id="components-layout-demo-responsive" v-if="loggedIn">
             <a-layout-sider
-                    width="250"
+                    width="270"
                     breakpoint="lg"
                     theme="dark"
                     collapsed-width="0"

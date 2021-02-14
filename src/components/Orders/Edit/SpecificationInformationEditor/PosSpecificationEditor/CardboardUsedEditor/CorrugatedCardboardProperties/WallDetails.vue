@@ -1,9 +1,9 @@
 <template>
     <a-descriptions bordered>
-        <a-descriptions-item label="Product" :span="3">
+        <a-descriptions-item :label="liningLabel" :span="3">
             Cloud Database
         </a-descriptions-item>
-        <a-descriptions-item label="Product">
+        <a-descriptions-item :label="flutingLabel" v-if="!isLastWall">
             Cloud Database
         </a-descriptions-item>
     </a-descriptions>
@@ -12,7 +12,16 @@
 <script>
     export default {
         name: "WallDetails",
-        props: ['wall', 'cardboard']
+        props: ['wall', 'cardboard', 'isLastWall'],
+        computed: {
+            liningLabel() {
+                return 'Lining ' + this.wall;
+            },
+
+            flutingLabel() {
+               return 'Fluting '  + this.wall;
+            }
+        }
     }
 </script>
 

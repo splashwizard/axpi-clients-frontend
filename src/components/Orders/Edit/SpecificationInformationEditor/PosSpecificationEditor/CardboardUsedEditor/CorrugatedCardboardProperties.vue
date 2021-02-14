@@ -6,7 +6,8 @@
 
         <!-- Wall Details -->
         <div class="wall-details" :key="updateKey">
-            <wall-details :cardboard="cardboard" v-for="wall in walls" :wall="wall" :key="wall"></wall-details>
+            <wall-details :cardboard="cardboard" v-for="wall in walls" :wall="wall" :is-last-wall="wall === walls.length"
+                          :key="wall"></wall-details>
         </div>
         <!-- / Wall Details -->
     </div>

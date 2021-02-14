@@ -8,54 +8,109 @@
                               show-search
 
                               @change="handlePropertyUpdated">
-                        <a-select-option value="kraft">
-                            Kraft
-                        </a-select-option>
-                        <a-select-option value="test-2">
-                            Test 2
-                        </a-select-option>
-                        <a-select-option value="test-3">
-                            Test 3
-                        </a-select-option>
-                        <a-select-option value="chip">
-                            Chip
-                        </a-select-option>
-                        <a-select-option value="fully-bleached-white">
-                            Fully Bleached White
-                        </a-select-option>
-                        <a-select-option value="white-top">
-                            White Top
-                        </a-select-option>
-                        <a-select-option value="mottled-kraft">
-                            Mottled Kraft
-                        </a-select-option>
-                        <a-select-option value="oyster">
-                           Oyster
-                        </a-select-option>
-                        <a-select-option value="semi-chem">
-                            Semi Chem
-                        </a-select-option>
-                        <a-select-option value="waste-based">
-                            Waste Based
+                        <a-select-option v-for="paperType in paperTypeOptions" :value="paperType.value"
+                                         :key="paperType.value">
+                            {{ paperType.label }}
                         </a-select-option>
                     </a-select>
+                </a-form-item>
+
+                <a-form-item label="Paper Weight">
+                    <a-input-group compact>
+                        <a-input style="width: 50%" v-model="cardboard[liningProperty].paper_weight"/>
+                        <a-select style="width: 50%" v-model="cardboard[liningProperty].paper_weight_unit">
+                            <a-select-option v-for="paperWeightUnit in paperWeightUnitOptions"
+                                             :value="paperWeightUnit.value"
+                                             :key="paperWeightUnit.value">
+                                {{ paperWeightUnit.label }}
+                            </a-select-option>
+                        </a-select>
+                    </a-input-group>
                 </a-form-item>
             </a-form>
             <!-- / Lining (Wall) Details -->
         </a-descriptions-item>
         <a-descriptions-item :label="flutingLabel" v-if="!isLastWall" :span="3">
-            Cloud Database
+            <!-- Fluting Details -->
+            <a-form layout="vertical">
+                <a-form-item label="Paper Type">
+                    <a-select v-model="cardboard[flutingProperty].paper_type"
+                              show-search
+
+                              @change="handlePropertyUpdated">
+                        <a-select-option v-for="paperType in paperTypeOptions" :value="paperType.value"
+                                         :key="paperType.value">
+                            {{ paperType.label }}
+                        </a-select-option>
+                    </a-select>
+                </a-form-item>
+            </a-form>
+            <!-- / Fluting Details -->
         </a-descriptions-item>
     </a-descriptions>
 </template>
 
 <script>
+    const PAPER_TYPE_OPTIONS = [
+        {
+            value: 'kraft',
+            label: 'Kraft'
+        },
+        {
+            value: 'test-2',
+            label: 'Test 2'
+        },
+        {
+            value: 'test-3',
+            label: 'Test 3'
+        },
+        {
+            value: 'chip',
+            label: 'Chip'
+        },
+        {
+            value: 'fully-bleached-white',
+            label: 'Fully Bleached White'
+        },
+        {
+            value: 'white-top',
+            label: 'White Top'
+        },
+        {
+            value: 'mottled-kraft',
+            label: 'Mottled Kraft'
+        },
+        {
+            value: 'oyster',
+            label: 'Oyster'
+        },
+        {
+            value: 'semi-chem',
+            label: 'Semi Chem'
+        },
+        {
+            value: 'waste-based',
+            label: 'Waste Based'
+        }
+    ];
+    const PAPER_WEIGHT_UNIT_OPTIONS = [
+        {
+            label: 'g',
+            value: 'g'
+        },
+        {
+            label: 'lbs',
+            value: 'lbs'
+        }
+    ];
     export default {
         name: "WallDetails",
         props: ['wall', 'cardboard', 'isLastWall'],
         data() {
             return {
-                updateKey: 1
+                updateKey: 1,
+                paperTypeOptions: PAPER_TYPE_OPTIONS,
+                paperWeightUnitOptions: PAPER_WEIGHT_UNIT_OPTIONS
             }
         },
         methods: {

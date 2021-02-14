@@ -13,8 +13,8 @@
                     <a-select-option value="GBP">
                         GBP
                     </a-select-option>
-                    <a-select-option value="Jiangsu">
-                        Jiangsu
+                    <a-select-option value="USD">
+                        USD
                     </a-select-option>
                 </a-select>
             </a-input-group>

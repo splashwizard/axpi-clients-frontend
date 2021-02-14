@@ -49,6 +49,7 @@
         watch: {
             selected(newSelection) {
                 this.orderLocal.product_subtype = newSelection;
+                this.$emit('property-updated');
             }
         },
         computed: {

@@ -21,7 +21,7 @@
                             <a-select-option value="matt-board">
                                 Matt Board
                             </a-select-option>
-                        </a-select
+                        </a-select>
                     </a-form-item>
                     <!-- / Type of cardboard -->
 

@@ -12,13 +12,17 @@
             <div class="form-header">
                 <h2>Product Subtype</h2>
             </div>
-            <product-subtype-selector :order-local="orderLocal"></product-subtype-selector>
+            <product-subtype-selector :order-local="orderLocal" @property-updated="incrementUpdateKey"></product-subtype-selector>
         </div>
         <!-- / Product Type -->
 
-        <!-- POS Specification Editor -->
-        <pos-specification-editor v-if="orderLocal.product_type === 'pos'" :order-local="orderLocal"></pos-specification-editor>
-        <!-- / POS Specification Editor -->
+        <!-- Details = Details(product_type, product_subtype) -->
+        <div :key="updateKey">
+            <!-- POS Specification Editor -->
+            <pos-specification-editor v-if="orderLocal.product_type === 'pos' && orderLocal.product_subtype" :order-local="orderLocal"></pos-specification-editor>
+            <!-- / POS Specification Editor -->
+        </div>
+        <!-- / Details -->
 
         <!-- Form footer -->
         <div class="form-footer">
@@ -46,11 +50,20 @@
         name: "SpecificationInformationEditor",
         props: ['orderLocal'],
         components: {ProductTypeSelector, ProductSubtypeSelector, PosSpecificationEditor},
+        data() {
+            return {
+                updateKey: 1
+            }
+        },
         methods: {
             ...mapActions('orderEditor', {
                 goToNextStage: 'goToNextStage',
                 goToPreviousStage: 'goToPreviousStage'
-            })
+            }),
+
+            incrementUpdateKey() {
+                this.updateKey = this.updateKey + 1;
+            }
         }
     }
 </script>

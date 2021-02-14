@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="ant-col ant-form-item-label"><label title="Type of Cardboard" class="">Number Of Walls</label></div>
         <number-of-walls-selector :cardboard="cardboard" @property-updated="handlePropertyUpdated"></number-of-walls-selector>
     </div>
 </template>

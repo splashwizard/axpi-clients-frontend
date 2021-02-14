@@ -21,9 +21,13 @@
                             <a-select-option value="matt-board">
                                 Matt Board
                             </a-select-option>
-                        </a-select>
+                        </a-select
                     </a-form-item>
                     <!-- / Type of cardboard -->
+
+                    <corrugated-cardboard-properties v-if="orderLocal.pos_cardboard_used[i].cardboard_type === 'corrugated-cardboard'"
+                    :cardboard="orderLocal.pos_cardboard_used[i]" @property-changed="incrementUpdateKey">
+                    </corrugated-cardboard-properties>
                 </a-form>
             </a-card>
         </div>
@@ -36,6 +40,7 @@
 </template>
 
 <script>
+    import CorrugatedCardboardProperties from "./CardboardUsedEditor/CorrugatedCardboardProperties";
     let _ = require('lodash');
 
     const CARDBOARD_USED_DATA_TEMPLATE = {
@@ -43,6 +48,7 @@
     };
     export default {
         name: "CardboardUsedEditor",
+        components: {CorrugatedCardboardProperties},
         props: ['orderLocal'],
         data() {
             return {

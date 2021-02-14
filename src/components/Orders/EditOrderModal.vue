@@ -23,7 +23,11 @@
 
 
                 <specification-information-editor v-if="wizardStage === 1"
-                                            :order-local="orderLocal"></specification-information-editor>
+                                                  :order-local="orderLocal"></specification-information-editor>
+
+                <additional-information-editor v-if="wizardStage === 2"
+                                               :order-local="orderLocal">
+                </additional-information-editor>
             </div>
             <!-- / Small form -->
         </div>
@@ -37,6 +41,7 @@
     import ProgressBar from "./Edit/ProgressBar";
     import GeneralInformationEditor from "./Edit/GeneralInformationEditor";
     import SpecificationInformationEditor from "./Edit/SpecificationInformationEditor";
+    import AdditionalInformationEditor from "./Edit/AdditionalInformationEditor";
 
     export default {
         name: "EditOrderModal",
@@ -46,7 +51,12 @@
                 orderLocal: null
             }
         },
-        components: {ProgressBar, GeneralInformationEditor, SpecificationInformationEditor},
+        components: {
+            ProgressBar,
+            GeneralInformationEditor,
+            SpecificationInformationEditor,
+            AdditionalInformationEditor
+        },
         computed: {
             ...mapGetters('orderEditor', {
                 order: 'order',

@@ -6,7 +6,6 @@
                 <a-form-item label="Paper Type">
                     <a-select v-model="cardboard[liningProperty].paper_type"
                               show-search
-
                               @change="handlePropertyUpdated">
                         <a-select-option v-for="paperType in paperTypeOptions" :value="paperType.value"
                                          :key="paperType.value">
@@ -18,7 +17,8 @@
                 <a-form-item label="Paper Weight">
                     <a-input-group compact>
                         <a-input style="width: 50%" v-model="cardboard[liningProperty].paper_weight"/>
-                        <a-select style="width: 50%" v-model="cardboard[liningProperty].paper_weight_unit">
+                        <a-select style="width: 50%" v-model="cardboard[liningProperty].paper_weight_unit"
+                                  placeholder="Select unit" @change="handlePropertyUpdated">
                             <a-select-option v-for="paperWeightUnit in paperWeightUnitOptions"
                                              :value="paperWeightUnit.value"
                                              :key="paperWeightUnit.value">
@@ -41,6 +41,31 @@
                         <a-select-option v-for="paperType in paperTypeOptions" :value="paperType.value"
                                          :key="paperType.value">
                             {{ paperType.label }}
+                        </a-select-option>
+                    </a-select>
+                </a-form-item>
+
+                <a-form-item label="Paper Weight">
+                    <a-input-group compact>
+                        <a-input style="width: 50%" v-model="cardboard[flutingProperty].paper_weight"/>
+                        <a-select style="width: 50%" v-model="cardboard[flutingProperty].paper_weight_unit"
+                                  placeholder="Select unit" @change="handlePropertyUpdated">
+                            <a-select-option v-for="paperWeightUnit in paperWeightUnitOptions"
+                                             :value="paperWeightUnit.value"
+                                             :key="paperWeightUnit.value">
+                                {{ paperWeightUnit.label }}
+                            </a-select-option>
+                        </a-select>
+                    </a-input-group>
+                </a-form-item>
+
+                <a-form-item label="Fluting Size">
+                    <a-select v-model="cardboard[flutingProperty].fluting_size"
+                              show-search
+                              @change="handlePropertyUpdated">
+                        <a-select-option v-for="flutingSize in flutingSizeOptions" :value="flutingSize.value"
+                                         :key="flutingSize.value">
+                            {{ flutingSize.label }}
                         </a-select-option>
                     </a-select>
                 </a-form-item>
@@ -95,12 +120,42 @@
     ];
     const PAPER_WEIGHT_UNIT_OPTIONS = [
         {
-            label: 'g',
-            value: 'g'
+            label: 'gsm',
+            value: 'gsm'
         },
         {
             label: 'lbs',
             value: 'lbs'
+        }
+    ];
+    const FLUTING_SIZE_OPTIONS = [
+        {
+            label: 'A FLUTE:  5mm',
+            value: 'a-flute-5mm'
+        },
+        {
+            label: 'B FLUTE: 3mm',
+            value: 'b-flute-5mm'
+        },
+        {
+            label: 'C FLUTE: 4mm',
+            value: 'c-flute-4mm'
+        },
+        {
+            label: 'E FLUTE: 1.5mm',
+            value: 'e-flute-1.5mm'
+        },
+        {
+            label: 'F FLUTE: 2mm',
+            value: 'f-flute-2mm'
+        },
+        {
+            label: 'BC FLUTE: Double Wall – 6mm - Combination of B + C flutes',
+            value: 'bc-flute'
+        },
+        {
+            label: 'EB FLUTE: Double Wall - 3.5mm - Combination of E + B flutes',
+            value: 'eb-flute'
         }
     ];
     export default {
@@ -110,7 +165,8 @@
             return {
                 updateKey: 1,
                 paperTypeOptions: PAPER_TYPE_OPTIONS,
-                paperWeightUnitOptions: PAPER_WEIGHT_UNIT_OPTIONS
+                paperWeightUnitOptions: PAPER_WEIGHT_UNIT_OPTIONS,
+                flutingSizeOptions: FLUTING_SIZE_OPTIONS
             }
         },
         methods: {

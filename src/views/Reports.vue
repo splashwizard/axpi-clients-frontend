@@ -3,6 +3,9 @@
 
         <div class="page-header">
             <h1 class="page-title">Reports</h1>
+            <div class="actions">
+                <a-button icon="filter">Filter</a-button>
+            </div>
         </div>
 
         <reports-grid></reports-grid>

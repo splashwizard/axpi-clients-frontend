@@ -4,23 +4,50 @@
         <!--            <h1 class="page-title">Reports</h1>-->
         <!--        </div>-->
 
-        <iframe src='https://flo.uri.sh/story/760518/embed' title='Interactive or visual content' frameborder='0'
-                scrolling='no' style='width:100%;height:600px;'
-                sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
-        <div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit'
-                                                                                         href='https://public.flourish.studio/story/760518/?utm_source=embed&utm_campaign=story/760518'
-                                                                                         target='_top'
-                                                                                         style='text-decoration:none!important'><img
-                alt='Made with Flourish' src='https://public.flourish.studio/resources/made_with_flourish.svg'
-                style='width:105px!important;height:16px!important;border:none!important;margin:0!important;'> </a>
+        <!-- Overview -->
+        <div v-if="reportId === 'overview'">
+            <iframe src='https://flo.uri.sh/story/758359/embed' title='Interactive or visual content' frameborder='0' scrolling='no' style='width:100%;height:600px;' sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'></div>
         </div>
+        <!-- / Overview -->
+
+        <!-- Australia -->
+        <div v-if="reportId === 'australia'">
+            <iframe src='https://flo.uri.sh/story/760522/embed' title='Interactive or visual content' frameborder='0'
+                    scrolling='no' style='width:100%;height:600px;'
+                    sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+            <div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit'
+                                                                                             href='https://public.flourish.studio/story/760522/?utm_source=embed&utm_campaign=story/760522'
+                                                                                             target='_top'
+                                                                                             style='text-decoration:none!important'> </a>
+            </div>
+        </div>
+        <!-- / Australia -->
+
+        <!-- Europe -->
+        <div v-if="reportId === 'europe'">
+            <iframe src='https://flo.uri.sh/story/760525/embed' title='Interactive or visual content' frameborder='0'
+                    scrolling='no' style='width:100%;height:600px;'
+                    sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+            <div style='width:100%!;margin-top:4px!important;text-align:right!important;'></div>
+        </div>
+        <!-- / Europe -->
+
+        <!-- USA -->
+        <div v-if="reportId === 'usa'">
+            <iframe src='https://flo.uri.sh/story/760518/embed' title='Interactive or visual content' frameborder='0' scrolling='no' style='width:100%;height:600px;' sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'></div>
+        </div>
+        <!-- / USA -->
     </div>
 </template>
 
 <script>
     export default {
         name: 'Show',
-        computed: {},
+        computed: {
+            reportId() {
+                return this.$route.params.id;
+            }
+        },
         components: {},
         data() {
             return {}

@@ -37,10 +37,12 @@
         },
         methods: {
             ...mapActions('orderEditor', {
-                loadOrder: 'loadOrder'
+                loadOrder: 'loadOrder',
+                setWizardStage: 'setWizardStage'
             }),
 
             handleOrderSelected(order) {
+                this.setWizardStage(0);
                 this.loadOrder(
                     order.id
                 );

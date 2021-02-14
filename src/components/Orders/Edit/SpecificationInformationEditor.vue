@@ -5,9 +5,20 @@
            <div class="form-header">
                <h2>Product Type</h2>
            </div>
-            <product-type-selector :order-local="orderLocal"></product-type-selector>
+            <div class="form-margin-bottom">
+                <product-type-selector :order-local="orderLocal"></product-type-selector>
+            </div>
+
+            <div class="form-header">
+                <h2>Product Subtype</h2>
+            </div>
+            <product-subtype-selector :order-local="orderLocal"></product-subtype-selector>
         </div>
         <!-- / Product Type -->
+
+        <!-- POS Specification Editor -->
+        <pos-specification-editor v-if="orderLocal.product_type === 'pos'" :order-local="orderLocal"></pos-specification-editor>
+        <!-- / POS Specification Editor -->
 
         <!-- Form footer -->
         <div class="form-footer">
@@ -28,11 +39,13 @@
 <script>
     import {mapActions} from "vuex";
     import ProductTypeSelector from "./SpecificationInformationEditor/ProductTypeSelector";
+    import ProductSubtypeSelector from "./SpecificationInformationEditor/ProductSubtypeSelector";
+    import PosSpecificationEditor from "./SpecificationInformationEditor/PosSpecificationEditor";
 
     export default {
         name: "SpecificationInformationEditor",
         props: ['orderLocal'],
-        components: {ProductTypeSelector},
+        components: {ProductTypeSelector, ProductSubtypeSelector, PosSpecificationEditor},
         methods: {
             ...mapActions('orderEditor', {
                 goToNextStage: 'goToNextStage',

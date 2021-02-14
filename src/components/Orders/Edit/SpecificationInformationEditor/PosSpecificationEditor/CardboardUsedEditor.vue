@@ -44,7 +44,16 @@
     let _ = require('lodash');
 
     const CARDBOARD_USED_DATA_TEMPLATE = {
-        cardboard_type: null
+        cardboard_type: null,
+
+        lining_one_details: {},
+        fluting_one_details: {},
+
+        lining_two_details: {},
+        fluting_two_details: {},
+
+        lining_three_details: {},
+        fluting_three_details: {}
     };
     export default {
         name: "CardboardUsedEditor",

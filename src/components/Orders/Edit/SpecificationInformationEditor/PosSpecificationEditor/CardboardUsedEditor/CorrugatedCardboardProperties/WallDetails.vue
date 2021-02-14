@@ -20,6 +20,26 @@
 
             flutingLabel() {
                return 'Fluting '  + this.wall;
+            },
+
+            wallNumberText() {
+               if (this.wall === 1)  {
+                   return 'one';
+               } else if (this.wall === 2) {
+                  return 'two';
+               } else if (this.wall === 3) {
+                   return 'three';
+               } else {
+                   return null;
+               }
+            },
+
+            liningProperty() {
+                return 'lining_' + this.wallNumberText + '_details';
+            },
+
+            flutingProperty() {
+                return 'fluting_' + this.wallNumberText + '_details';
             }
         }
     }

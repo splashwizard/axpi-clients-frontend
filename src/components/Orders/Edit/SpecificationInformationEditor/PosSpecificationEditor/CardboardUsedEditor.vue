@@ -7,8 +7,8 @@
                     <a-icon type="close"></a-icon>
                 </a>
 
+                <!-- Type of cardboard -->
                 <a-form layout="vertical">
-                    <!-- Type of cardboard -->
                     <a-form-item label="Type of Cardboard">
                         <a-select v-model="orderLocal.pos_cardboard_used[i].cardboard_type" size="large"
                                   @change="incrementUpdateKey">
@@ -23,12 +23,13 @@
                             </a-select-option>
                         </a-select>
                     </a-form-item>
-                    <!-- / Type of cardboard -->
-
-                    <corrugated-cardboard-properties v-if="orderLocal.pos_cardboard_used[i].cardboard_type === 'corrugated-cardboard'"
-                    :cardboard="orderLocal.pos_cardboard_used[i]" @property-changed="incrementUpdateKey">
-                    </corrugated-cardboard-properties>
                 </a-form>
+                <!-- / Type of cardboard -->
+
+                <corrugated-cardboard-properties
+                        v-if="orderLocal.pos_cardboard_used[i].cardboard_type === 'corrugated-cardboard'"
+                        :cardboard="orderLocal.pos_cardboard_used[i]" @property-changed="incrementUpdateKey">
+                </corrugated-cardboard-properties>
             </a-card>
         </div>
         <!-- / EACH CARDBOARD USED REPEATER -->
@@ -41,6 +42,7 @@
 
 <script>
     import CorrugatedCardboardProperties from "./CardboardUsedEditor/CorrugatedCardboardProperties";
+
     let _ = require('lodash');
 
     const CARDBOARD_USED_DATA_TEMPLATE = {
@@ -93,9 +95,9 @@
             },
 
             deleteCardboard(i) {
-               this.orderLocal.pos_cardboard_used = _.filter(this.orderLocal.pos_cardboard_used, function(cardboard, ii) {
-                   return String(ii) !== String(i);
-               })
+                this.orderLocal.pos_cardboard_used = _.filter(this.orderLocal.pos_cardboard_used, function (cardboard, ii) {
+                    return String(ii) !== String(i);
+                })
                 this.incrementUpdateKey();
             }
         }

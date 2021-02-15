@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <h1 class="page-title">Get started with Axiom, {{ user.name }}</h1>
+        <h1 class="page-title">Get started with Axiom</h1>
         <setup-progress-accordion></setup-progress-accordion>
     </div>
 </template>

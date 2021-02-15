@@ -34,10 +34,10 @@
         </a>
         <a href="#" @click.prevent="select('package')" :class="{'selected': isSelected('package')}">
             <div class="icon">
-                <img src="/img/icons/product-type-selector/package.png" alt="Merchandise">
+                <img src="/img/icons/product-type-selector/package.png" alt="Packaging">
             </div>
             <div class="caption">
-                Merchandise
+                Packaging
             </div>
         </a>
     </div>

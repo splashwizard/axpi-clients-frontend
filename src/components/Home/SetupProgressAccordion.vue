@@ -53,7 +53,7 @@
                 </a-button>
             </router-link>
         </a-collapse-panel>
-        <a-collapse-panel key="6" header="Very Your Email">
+        <a-collapse-panel key="6" header="Verify Your Email">
             <p>
                 Please verify your email by clicking on the link sent to you.
             </p>

@@ -8,6 +8,9 @@
             @change="handleTableChange"
     >
         <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{ name }}</a>
+        <div slot="actions" class="table-actions">
+            <a-button type="link" icon="ellipsis"></a-button>
+        </div>
     </a-table>
 </template>
 <script>
@@ -49,6 +52,10 @@
             title: 'Last Updated',
             dataIndex: 'updated_at',
             sorter: true,
+        },
+        {
+            title: '',
+            scopedSlots: {customRender: 'actions'}
         }
     ];
 

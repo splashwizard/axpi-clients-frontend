@@ -21,13 +21,33 @@
             scopedSlots: {customRender: 'name'}
         },
         {
+            title: 'Type',
+            dataIndex: 'product_type',
+            sorter: true,
+        },
+        {
             title: 'Cost',
             dataIndex: 'cost',
             sorter: true,
         },
         {
-            title: 'Client',
-            dataIndex: 'client.name',
+            title: 'Supplier',
+            dataIndex: 'supplier.name',
+            sorter: true,
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            sorter: true
+        },
+        {
+            title: 'Order Date',
+            dataIndex: 'order_date',
+            sorter: true,
+        },
+        {
+            title: 'Last Updated',
+            dataIndex: 'updated_at',
             sorter: true,
         }
     ];

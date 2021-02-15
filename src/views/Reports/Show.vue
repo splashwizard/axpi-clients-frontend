@@ -1,12 +1,20 @@
 <template>
     <div class="reports">
-        <!--        <div class="page-header">-->
-        <!--            <h1 class="page-title">Reports</h1>-->
-        <!--        </div>-->
+        <!-- Page Header -->
+        <div class="page-header">
+            <a-page-header
+                    :title="pageTitle"
+                    @back="() => $router.push('/reports')"
+            />
+        </div>
+        <!-- / Page Header -->
 
         <!-- Overview -->
         <div v-if="reportId === 'overview'">
-            <iframe src='https://flo.uri.sh/story/758359/embed' title='Interactive or visual content' frameborder='0' scrolling='no' style='width:100%;height:600px;' sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'></div>
+            <iframe src='https://flo.uri.sh/story/758359/embed' title='Interactive or visual content' frameborder='0'
+                    scrolling='no' style='width:100%;height:600px;'
+                    sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+            <div style='width:100%!;margin-top:4px!important;text-align:right!important;'></div>
         </div>
         <!-- / Overview -->
 
@@ -34,7 +42,10 @@
 
         <!-- USA -->
         <div v-if="reportId === 'usa'">
-            <iframe src='https://flo.uri.sh/story/760518/embed' title='Interactive or visual content' frameborder='0' scrolling='no' style='width:100%;height:600px;' sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'></div>
+            <iframe src='https://flo.uri.sh/story/760518/embed' title='Interactive or visual content' frameborder='0'
+                    scrolling='no' style='width:100%;height:600px;'
+                    sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+            <div style='width:100%!;margin-top:4px!important;text-align:right!important;'></div>
         </div>
         <!-- / USA -->
     </div>
@@ -46,11 +57,27 @@
         computed: {
             reportId() {
                 return this.$route.params.id;
+            },
+            pageTitle() {
+                if (this.reportId === 'overview') {
+                    return 'Overview';
+                } else if (this.reportId === 'australia') {
+                    return 'Australia';
+                } else if (this.reportId === 'europe') {
+                    return 'Europe';
+                } else if (this.reportId === 'usa') {
+                    return 'USA';
+                } else if (this.reportId === 'summary') {
+                    return 'Summary';
+                } else {
+                    return this.reportId;
+                }
             }
         },
         components: {},
         data() {
             return {}
-        }
+        },
+        methods: {}
     }
 </script>

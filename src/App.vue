@@ -141,7 +141,7 @@
                         </div>
                     </div>
                 </a-layout-header>
-                <a-layout-content :style="{ padding: '30px', background: '#fff' }">
+                <a-layout-content :style="{ padding: '25px 30px', background: '#fff' }">
                     <router-view/>
                 </a-layout-content>
             </a-layout>

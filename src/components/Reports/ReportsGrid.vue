@@ -95,6 +95,10 @@
 
 <style lang="scss">
     .reports-grid {
+       .ant-row {
+           margin-bottom: 20px;
+       }
+
         .ant-card-cover {
             background-color: #DDEAFB;
         }

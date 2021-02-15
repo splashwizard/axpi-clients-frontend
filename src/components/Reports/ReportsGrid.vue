@@ -11,7 +11,7 @@
                         />
                         <a-card-meta title="Overview">
                             <template slot="description">
-                                18/02/2021
+                                15/02/2021
                             </template>
                         </a-card-meta>
                     </a-card>
@@ -27,7 +27,7 @@
                         />
                         <a-card-meta title="Australia">
                             <template slot="description">
-                                18/02/2021
+                                15/02/2021
                             </template>
                         </a-card-meta>
                     </a-card>
@@ -43,7 +43,7 @@
                         />
                         <a-card-meta title="Europe">
                             <template slot="description">
-                                18/02/2021
+                                15/02/2021
                             </template>
                         </a-card-meta>
                     </a-card>
@@ -59,12 +59,14 @@
                         />
                         <a-card-meta title="USA">
                             <template slot="description">
-                                18/02/2021
+                                15/02/2021
                             </template>
                         </a-card-meta>
                     </a-card>
                 </router-link>
             </a-col>
+        </a-row>
+        <a-row :gutter="20">
             <a-col :span="6">
                 <router-link to="/reports/summary">
                     <a-card hoverable>
@@ -75,7 +77,7 @@
                         />
                         <a-card-meta title="Summary">
                             <template slot="description">
-                                18/02/2021
+                                15/02/2021
                             </template>
                         </a-card-meta>
                     </a-card>
@@ -95,10 +97,6 @@
     .reports-grid {
         .ant-card-cover {
             background-color: #DDEAFB;
-        }
-
-        a {
-            margin-bottom: 20px;
         }
     }
 </style>

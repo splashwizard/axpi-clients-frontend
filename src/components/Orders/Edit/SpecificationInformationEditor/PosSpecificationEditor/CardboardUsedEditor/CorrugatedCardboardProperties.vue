@@ -41,7 +41,7 @@
             determineWalls() {
                 let walls = [];
                 let i = 1;
-                for (i = 1; i <= this.cardboard.number_of_walls; i++) {
+                for (i = 1; i <= (this.cardboard.number_of_walls + 1); i++) {
                     walls.push(i);
                 }
                 this.walls = walls;
@@ -51,7 +51,4 @@
 </script>
 
 <style scoped>
-    .ant-descriptions {
-        margin-top: 20px;
-    }
 </style>

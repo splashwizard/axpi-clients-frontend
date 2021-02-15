@@ -1,78 +1,82 @@
 <template>
-    <a-descriptions bordered :key="updateKey">
-        <a-descriptions-item :label="liningLabel" :span="3">
-            <!-- Lining (Wall) Details -->
-            <a-form layout="vertical">
-                <a-form-item label="Paper Type">
-                    <a-select v-model="cardboard[liningProperty].paper_type"
-                              show-search
-                              @change="handlePropertyUpdated">
-                        <a-select-option v-for="paperType in paperTypeOptions" :value="paperType.value"
-                                         :key="paperType.value">
-                            {{ paperType.label }}
-                        </a-select-option>
-                    </a-select>
-                </a-form-item>
-
-                <a-form-item label="Paper Weight">
-                    <a-input-group compact>
-                        <a-input style="width: 50%" v-model="cardboard[liningProperty].paper_weight"/>
-                        <a-select style="width: 50%" v-model="cardboard[liningProperty].paper_weight_unit"
-                                  placeholder="Select unit" @change="handlePropertyUpdated">
-                            <a-select-option v-for="paperWeightUnit in paperWeightUnitOptions"
-                                             :value="paperWeightUnit.value"
-                                             :key="paperWeightUnit.value">
-                                {{ paperWeightUnit.label }}
+    <div :key="updateKey">
+        <a-descriptions bordered  layout="vertical">
+            <a-descriptions-item :label="liningLabel" :span="3">
+                <!-- Lining (Wall) Details -->
+                <a-form layout="vertical">
+                    <a-form-item label="Paper Type">
+                        <a-select v-model="cardboard[liningProperty].paper_type"
+                                  show-search
+                                  @change="handlePropertyUpdated">
+                            <a-select-option v-for="paperType in paperTypeOptions" :value="paperType.value"
+                                             :key="paperType.value">
+                                {{ paperType.label }}
                             </a-select-option>
                         </a-select>
-                    </a-input-group>
-                </a-form-item>
-            </a-form>
-            <!-- / Lining (Wall) Details -->
-        </a-descriptions-item>
-        <a-descriptions-item :label="flutingLabel" v-if="!isLastWall" :span="3">
-            <!-- Fluting Details -->
-            <a-form layout="vertical">
-                <a-form-item label="Paper Type">
-                    <a-select v-model="cardboard[flutingProperty].paper_type"
-                              show-search
+                    </a-form-item>
 
-                              @change="handlePropertyUpdated">
-                        <a-select-option v-for="paperType in paperTypeOptions" :value="paperType.value"
-                                         :key="paperType.value">
-                            {{ paperType.label }}
-                        </a-select-option>
-                    </a-select>
-                </a-form-item>
+                    <a-form-item label="Paper Weight">
+                        <a-input-group compact>
+                            <a-input style="width: 50%" v-model="cardboard[liningProperty].paper_weight"/>
+                            <a-select style="width: 50%" v-model="cardboard[liningProperty].paper_weight_unit"
+                                      placeholder="Select unit" @change="handlePropertyUpdated">
+                                <a-select-option v-for="paperWeightUnit in paperWeightUnitOptions"
+                                                 :value="paperWeightUnit.value"
+                                                 :key="paperWeightUnit.value">
+                                    {{ paperWeightUnit.label }}
+                                </a-select-option>
+                            </a-select>
+                        </a-input-group>
+                    </a-form-item>
+                </a-form>
+                <!-- / Lining (Wall) Details -->
+            </a-descriptions-item>
+        </a-descriptions>
+        <a-descriptions bordered layout="vertical"  v-if="!isLastWall">
+            <a-descriptions-item :label="flutingLabel" :span="3">
+                <!-- Fluting Details -->
+                <a-form layout="vertical">
+                    <a-form-item label="Paper Type">
+                        <a-select v-model="cardboard[flutingProperty].paper_type"
+                                  show-search
 
-                <a-form-item label="Paper Weight">
-                    <a-input-group compact>
-                        <a-input style="width: 50%" v-model="cardboard[flutingProperty].paper_weight"/>
-                        <a-select style="width: 50%" v-model="cardboard[flutingProperty].paper_weight_unit"
-                                  placeholder="Select unit" @change="handlePropertyUpdated">
-                            <a-select-option v-for="paperWeightUnit in paperWeightUnitOptions"
-                                             :value="paperWeightUnit.value"
-                                             :key="paperWeightUnit.value">
-                                {{ paperWeightUnit.label }}
+                                  @change="handlePropertyUpdated">
+                            <a-select-option v-for="paperType in paperTypeOptions" :value="paperType.value"
+                                             :key="paperType.value">
+                                {{ paperType.label }}
                             </a-select-option>
                         </a-select>
-                    </a-input-group>
-                </a-form-item>
+                    </a-form-item>
 
-                <a-form-item label="Fluting Size">
-                    <a-select v-model="cardboard[flutingProperty].fluting_size"
-                              show-search
-                              @change="handlePropertyUpdated">
-                        <a-select-option v-for="flutingSize in flutingSizeOptions" :value="flutingSize.value"
-                                         :key="flutingSize.value">
-                            {{ flutingSize.label }}
-                        </a-select-option>
-                    </a-select>
-                </a-form-item>
-            </a-form>
-            <!-- / Fluting Details -->
-        </a-descriptions-item>
-    </a-descriptions>
+                    <a-form-item label="Paper Weight">
+                        <a-input-group compact>
+                            <a-input style="width: 50%" v-model="cardboard[flutingProperty].paper_weight"/>
+                            <a-select style="width: 50%" v-model="cardboard[flutingProperty].paper_weight_unit"
+                                      placeholder="Select unit" @change="handlePropertyUpdated">
+                                <a-select-option v-for="paperWeightUnit in paperWeightUnitOptions"
+                                                 :value="paperWeightUnit.value"
+                                                 :key="paperWeightUnit.value">
+                                    {{ paperWeightUnit.label }}
+                                </a-select-option>
+                            </a-select>
+                        </a-input-group>
+                    </a-form-item>
+
+                    <a-form-item label="Fluting Size">
+                        <a-select v-model="cardboard[flutingProperty].fluting_size"
+                                  show-search
+                                  @change="handlePropertyUpdated">
+                            <a-select-option v-for="flutingSize in flutingSizeOptions" :value="flutingSize.value"
+                                             :key="flutingSize.value">
+                                {{ flutingSize.label }}
+                            </a-select-option>
+                        </a-select>
+                    </a-form-item>
+                </a-form>
+                <!-- / Fluting Details -->
+            </a-descriptions-item>
+        </a-descriptions>
+    </div>
 </template>
 
 <script>
@@ -207,5 +211,7 @@
 </script>
 
 <style scoped>
-
+    .ant-descriptions {
+        margin-top: 20px;
+    }
 </style>

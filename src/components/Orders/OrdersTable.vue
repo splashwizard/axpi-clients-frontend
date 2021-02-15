@@ -55,7 +55,8 @@
         },
         {
             title: '',
-            scopedSlots: {customRender: 'actions'}
+            scopedSlots: {customRender: 'actions'},
+            width: 10
         }
     ];
 

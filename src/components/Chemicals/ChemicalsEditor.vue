@@ -1,16 +1,35 @@
 <template>
     <div>
-        <a-table v-show="localChemicals && localChemicals.length" bordered :columns="columns" :data-source="localChemicals">
+        <a-table v-show="localChemicals && localChemicals.length" bordered :columns="columns"
+                 :data-source="localChemicals" :pagination="false">
             <template slot="type" slot-scope="text, record">
                 <div>
-                    <a-input
-                            v-if="record.editable"
-                            style="margin: -5px 0"
-                            :value="text"
-                            @change="e => handleChange(e.target.value, record.key, 'type')"
-                    />
+                    <a-select v-if="record.editable"
+                              :default-value="text" style="width: 120px"
+                              @change="val => handleChange(val, record.key, 'type')">
+                        <a-select-option v-for="(option, i) in typeOptions" :key="i" :value="option.value">
+                            {{ option.label }}
+                        </a-select-option>
+                    </a-select>
+
                     <template v-else>
-                        {{ text }}
+                        {{ getTypeLabel(text) }}
+                    </template>
+                </div>
+            </template>
+
+            <template slot="brand" slot-scope="text, record">
+                <div>
+                    <a-select v-if="record.editable"
+                              :default-value="text" style="width: 120px"
+                              @change="val => handleChange(val, record.key, 'brand')">
+                        <a-select-option v-for="(option, i) in brandOptions" :key="i" :value="option.value">
+                            {{ option.label }}
+                        </a-select-option>
+                    </a-select>
+
+                    <template v-else>
+                        {{ getBrandLabel(text) }}
                     </template>
                 </div>
             </template>
@@ -25,16 +44,25 @@
                     </span>
                     <span v-else>
                         <a :disabled="editingKey !== ''" @click="() => edit(record.key)">Edit</a>
-                        <a :disabled="editingKey !== ''" @click="() => deleteRow(record.key)">Delete</a>
+
+                       <a-popconfirm :disabled="editingKey !== ''" title="Sure want to delete?"
+                                     @confirm="() => deleteRow(record.key)">
+                         <a :disabled="editingKey !== ''">Delete</a>
+                      </a-popconfirm>
                     </span>
                 </div>
             </template>
         </a-table>
-        <a-button @click.native="addChemical" icon="plus">Add Chemical</a-button>
+
+        <div class="bottom-actions">
+            <a-button @click.native="addChemical" icon="plus">Add Chemical</a-button>
+        </div>
     </div>
 </template>
 
 <script>
+    let _ = require('lodash');
+
     const COLUMNS = [
         {
             title: 'Type',
@@ -79,8 +107,25 @@
     ];
 
     const TYPE_OPTIONS = [
-        'Ink',
-        'Toner'
+        {
+            value: 'ink',
+            label: 'Ink'
+        },
+        {
+            value: 'toner',
+            label: 'Toner'
+        }
+    ];
+
+    const BRAND_OPTIONS = [
+        {
+            value: 'brand-1',
+            label: 'Brand 1'
+        },
+        {
+            value: 'brand-2',
+            label: 'Brand 2'
+        }
     ];
 
     export default {
@@ -90,6 +135,7 @@
             return {
                 columns: COLUMNS,
                 typeOptions: TYPE_OPTIONS,
+                brandOptions: BRAND_OPTIONS,
                 editingKey: '',
                 localChemicals: null,
                 cacheData: null
@@ -163,12 +209,26 @@
                 this.cacheData.push(newChemical);
 
                 this.edit(newKey);
+            },
+
+            getTypeLabel(value) {
+                let r = _.find(this.typeOptions, {value: value});
+                return r ? r.label : value;
+            },
+
+            getBrandLabel(value) {
+                let r = _.find(this.brandOptions, {value: value});
+                return r ? r.label : value;
             }
         }
     }
 </script>
 
 <style scoped>
+    .bottom-actions {
+        margin-top: 20px;
+    }
+
     .editable-row-actions a {
         margin-right: 8px;
     }

@@ -1,5 +1,18 @@
 <template>
     <div class="axpi-form">
+        <!-- Delivery information -->
+        <div class="form-section">
+            <div class="form-header">
+                <h2>Delivery Information</h2>
+                <address-selector
+                        :initial-address-id="orderLocal.address_id"
+                        resource="addresses"
+                ></address-selector>
+            </div>
+
+        </div>
+        <!-- / Delivery Information -->
+
         <!-- Consumables -->
         <div class="form-section">
             <div class="form-header">
@@ -12,9 +25,9 @@
         <div class="form-section">
             <div class="form-header">
                 <h2>Additional Information</h2>
-                <a-textarea v-model="orderLocal.additional_information"
-                        placeholder="Enter additional information here..." :rows="4"/>
             </div>
+            <a-textarea v-model="orderLocal.additional_information"
+                        placeholder="Enter additional information here..." :rows="4"/>
         </div>
         <!-- / Additional Information -->
 
@@ -35,10 +48,12 @@
 
 <script>
     import {mapActions} from "vuex";
+    import AddressSelector from "../../Addresses/AddressSelector";
 
     export default {
         name: "AdditionalInformationEditor",
         props: ['orderLocal'],
+        components: {AddressSelector},
         data() {
             return {
                 updateKey: 1

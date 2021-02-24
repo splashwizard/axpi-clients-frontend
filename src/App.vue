@@ -113,16 +113,33 @@
                                         <span>Feedback?</span>
                                     </div>
                                 </a-button>
-                                <a-button>
-                                    <div>
-                                        <bell-icon></bell-icon>
+                                <a-popover title="Notifications" trigger="click" placement="bottomRight">
+                                    <div slot="content">
+                                        <div>
+                                            No notifications
+                                        </div>
                                     </div>
-                                </a-button>
-                                <a-button>
-                                    <div>
-                                        <question-mark-icon></question-mark-icon>
+                                    <a-button>
+                                        <div>
+                                            <bell-icon></bell-icon>
+                                        </div>
+                                    </a-button>
+                                </a-popover>
+                                <a-popover title="Help" trigger="click" placement="bottomRight">
+                                    <div slot="content">
+                                      <div>
+                                          <a href="#">Documentation</a>
+                                      </div>
+                                        <div>
+                                            <a href="#">API Docs</a>
+                                        </div>
                                     </div>
-                                </a-button>
+                                    <a-button>
+                                        <div>
+                                            <question-mark-icon></question-mark-icon>
+                                        </div>
+                                    </a-button>
+                                </a-popover>
                                 <a-popover title="Account" trigger="click" placement="bottomRight">
                                     <div slot="content">
                                         <div v-if="user.client" class="company-property">

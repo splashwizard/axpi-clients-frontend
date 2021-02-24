@@ -17,7 +17,7 @@
             </div>
 
             <!-- Small form -->
-            <div class="axpi-form width-medium">
+            <div>
                 <general-information-editor v-if="wizardStage === 0"
                                             :order-local="orderLocal"></general-information-editor>
 

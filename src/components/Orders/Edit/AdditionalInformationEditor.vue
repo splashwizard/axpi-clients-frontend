@@ -1,17 +1,27 @@
 <template>
-    <div class="axpi-form">
+    <div class="axpi-form width-large">
         <!-- Delivery information -->
         <div class="form-section">
             <div class="form-header">
                 <h2>Delivery Information</h2>
                 <address-selector
                         :initial-address-id="orderLocal.address_id"
+                        @address-id-changed="updateOrderAddressId"
                         resource="addresses"
                 ></address-selector>
             </div>
 
         </div>
         <!-- / Delivery Information -->
+
+        <!-- Chemicals -->
+        <div class="form-section">
+            <div class="form-header">
+                <h2>Chemicals</h2>
+            </div>
+            <chemicals-editor :chemicals="orderLocal.chemicals" @set-chemicals="setChemicals"></chemicals-editor>
+        </div>
+        <!-- / Chemicals -->
 
         <!-- Consumables -->
         <div class="form-section">
@@ -49,14 +59,20 @@
 <script>
     import {mapActions} from "vuex";
     import AddressSelector from "../../Addresses/AddressSelector";
+    import ChemicalsEditor from "../../Chemicals/ChemicalsEditor";
 
     export default {
         name: "AdditionalInformationEditor",
         props: ['orderLocal'],
-        components: {AddressSelector},
+        components: {AddressSelector, ChemicalsEditor},
         data() {
             return {
                 updateKey: 1
+            }
+        },
+        created() {
+            if (!this.orderLocal.chemicals) {
+                this.orderLocal.chemicals = [];
             }
         },
         methods: {
@@ -66,6 +82,14 @@
 
             incrementUpdateKey() {
                 this.updateKey = this.updateKey + 1;
+            },
+
+            updateOrderAddressId(id) {
+                this.orderLocal.address_id = id;
+            },
+
+            setChemicals(chemicals) {
+                this.orderLocal.chemicals = chemicals;
             }
         }
     }

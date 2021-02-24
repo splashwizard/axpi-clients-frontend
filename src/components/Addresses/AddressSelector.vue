@@ -103,7 +103,7 @@
             },
 
             onAddressSelected() {
-                alert('select');
+                this.$emit('address-id-changed', this.selectedAddressId);
             },
 
             startCreatingNewAddress() {
@@ -125,6 +125,7 @@
                 axios.post(window.API_BASE + '/' + this.resource, values).then(r => {
                     vm.isSaving = false;
                     vm.selectedAddressId = r.data.id;
+                    vm.$emit('address-id-changed', r.data.id);
                     vm.form.resetFields();
                     vm.loadAddresses();
                     vm.mode = 'select';

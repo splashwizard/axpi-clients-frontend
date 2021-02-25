@@ -5,7 +5,7 @@
             <template slot="type" slot-scope="text, record">
                 <div>
                     <a-select v-if="record.editable"
-                              :default-value="text" style="width: 120px"
+                              :default-value="text" style="width: 150px"
                               @change="val => handleChange(val, record.key, 'type')">
                         <a-select-option v-for="(option, i) in typeOptions" :key="i" :value="option.value">
                             {{ option.label }}
@@ -21,7 +21,7 @@
             <template slot="brand" slot-scope="text, record">
                 <div>
                     <a-select v-if="record.editable"
-                              :default-value="text" style="width: 120px"
+                              :default-value="text" style="width: 150px"
                               @change="val => handleChange(val, record.key, 'brand')">
                         <a-select-option v-for="(option, i) in brandOptions" :key="i" :value="option.value">
                             {{ option.label }}
@@ -32,6 +32,62 @@
                         {{ getBrandLabel(text) }}
                     </template>
                 </div>
+            </template>
+
+            <template slot="name" slot-scope="text, record">
+                <div>
+                    <a-select v-if="record.editable"
+                              :default-value="text" style="width: 150px"
+                              @change="val => handleChange(val, record.key, 'name')">
+                        <a-select-option v-for="(option, i) in nameOptions" :key="i" :value="option.value">
+                            {{ option.label }}
+                        </a-select-option>
+                    </a-select>
+
+                    <template v-else>
+                        {{ getNameLabel(text) }}
+                    </template>
+                </div>
+            </template>
+
+            <template slot="product-code" slot-scope="text, record">
+                <div>
+                    <a-select v-if="record.editable"
+                              :default-value="text" style="width: 150px"
+                              @change="val => handleChange(val, record.key, 'name')">
+                        <a-select-option v-for="(option, i) in productCodeOptions" :key="i" :value="option.value">
+                            {{ option.label }}
+                        </a-select-option>
+                    </a-select>
+
+                    <template v-else>
+                        {{ getNameLabel(text) }}
+                    </template>
+                </div>
+            </template>
+
+            <template slot="amount" slot-scope="text, record">
+                <a-input-group style="width: 190px" compact>
+                    <a-input v-if="record.editable" :value="text" style="width: 100px" @change="val => handleChange(val.target.value, record.key, 'amount')" />
+                    <a-select v-if="record.editable" :default-value="record['amount-units']" style="width:90px"
+                              @change="val => handleChange(val, record.key, 'amount-units')">
+                        <a-select-option value="kg">
+                            kg
+                        </a-select-option>
+                        <a-select-option value="lb">
+                            lb
+                        </a-select-option>
+                        <a-select-option value="L">
+                            L
+                        </a-select-option>
+                        <a-select-option value="gallons">
+                            gallons
+                        </a-select-option>
+                    </a-select>
+                </a-input-group>
+                <template v-if="!record.editable">
+                    {{ record.amount }} {{ record['amount-units'] }}
+                </template>
             </template>
 
             <template slot="actions" slot-scope="text, record">
@@ -128,6 +184,28 @@
         }
     ];
 
+    const NAME_OPTIONS = [
+        {
+            value: 'name-1',
+            label: 'Name 1'
+        },
+        {
+            value: 'name-2',
+            label: 'Name 2'
+        }
+    ];
+
+    const PRODUCT_CODE_OPTIONS = [
+        {
+            value: 'product-code-1',
+            label: 'Product Code 1'
+        },
+        {
+            value: 'product-code-2',
+            label: 'Product Code 2'
+        }
+    ];
+
     export default {
         name: "ChemicalEditor",
         props: ['chemicals'],
@@ -136,6 +214,8 @@
                 columns: COLUMNS,
                 typeOptions: TYPE_OPTIONS,
                 brandOptions: BRAND_OPTIONS,
+                nameOptions: NAME_OPTIONS,
+                productCodeOptions: PRODUCT_CODE_OPTIONS,
                 editingKey: '',
                 localChemicals: null,
                 cacheData: null
@@ -218,6 +298,16 @@
 
             getBrandLabel(value) {
                 let r = _.find(this.brandOptions, {value: value});
+                return r ? r.label : value;
+            },
+
+            getNameLabel(value) {
+                let r = _.find(this.nameOptions, {value: value});
+                return r ? r.label : value;
+            },
+
+            getProductCodeLabel(value) {
+                let r = _.find(this.productCodeOptions, {value: value});
                 return r ? r.label : value;
             }
         }

@@ -14,6 +14,11 @@
     margin: 0 auto;
   }
 
+  &.width-xl {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
   input, .ant-select-selection {
     box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(0 0 0 / 12%) 0px 1px 1px 0px, rgb(60 66 87 / 16%) 0px 0px 0px 1px !important;
     border: none !important;

@@ -18,6 +18,10 @@
 
         <!-- Details = Details(product_type, product_subtype) -->
         <div :key="updateKey">
+            <!-- Print Specification Editor -->
+            <print-specification-editor v-if="orderLocal.product_type === 'print' && orderLocal.product_subtype" :order-local="orderLocal"></print-specification-editor>
+            <!-- / Print Specification Editor -->
+
             <!-- POS Specification Editor -->
             <pos-specification-editor v-if="orderLocal.product_type === 'pos' && orderLocal.product_subtype" :order-local="orderLocal"></pos-specification-editor>
             <!-- / POS Specification Editor -->
@@ -44,12 +48,13 @@
     import {mapActions} from "vuex";
     import ProductTypeSelector from "./SpecificationInformationEditor/ProductTypeSelector";
     import ProductSubtypeSelector from "./SpecificationInformationEditor/ProductSubtypeSelector";
+    import PrintSpecificationEditor from "./SpecificationInformationEditor/PrintSpecificationEditor";
     import PosSpecificationEditor from "./SpecificationInformationEditor/PosSpecificationEditor";
 
     export default {
         name: "SpecificationInformationEditor",
         props: ['orderLocal'],
-        components: {ProductTypeSelector, ProductSubtypeSelector, PosSpecificationEditor},
+        components: {ProductTypeSelector, ProductSubtypeSelector, PrintSpecificationEditor, PosSpecificationEditor},
         data() {
             return {
                 updateKey: 1

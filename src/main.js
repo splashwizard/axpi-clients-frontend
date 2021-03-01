@@ -18,6 +18,12 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.use(Antd);
 
+// Element UI
+import 'element-ui/lib/theme-chalk/index.css';
+import {Collapse, CollapseItem} from "element-ui";
+Vue.use(Collapse);
+Vue.use(CollapseItem);
+
 // Custom styles
 import '@/assets/scss/main.scss';
 

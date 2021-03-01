@@ -1,75 +1,80 @@
 <template>
-    <div :key="updateKey">
-        <!-- EACH PAPER REPEATER -->
-        <div v-for="(paper, i) in orderLocal.paper" :key="i">
-            <a-card :title="paper.section_name">
-                <a v-if="orderLocal.paper.length > 1" slot="extra" href="#" @click="deletePaper(i)">
-                    <a-icon type="close"></a-icon>
-                </a>
+    <div>
+        <el-collapse v-model="activePanel" accordion :key="updateKey">
+            <el-collapse-item v-for="(paper, i) in orderLocal.paper" :key="i"
+                              :title="getSectionNameLabel(paper.section_name)" :name="i">
+                <!-- Update wrapper -->
+                <div class="collapse-inner-section">
 
-                <!-- General Paper Details -->
-                <a-form layout="vertical">
-                    <a-form-item label="Name of Section">
-                        <a-input v-model="orderLocal.paper[i].section_name"
-                                 @blur="incrementUpdateKey"
-                                 size="large"></a-input>
-                    </a-form-item>
+                    <!-- General Paper Details -->
+                    <a-form layout="vertical">
+                        <a-form-item label="Name of Section">
+                            <a-select v-model="orderLocal.paper[i].section_name"
+                                      show-search size="large"
+                                      @change="forceRefresh">
+                                <a-select-option v-for="name in sectionNameOptions" :value="name.value"
+                                                 :key="name.value">
+                                    {{ name.label }}
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
 
-                    <a-form-item label="Number of Pages">
-                        <a-input type="number" min="0"
-                                 v-model="orderLocal.paper[i].number_of_pages"
-                                 @blur="incrementUpdateKey"
-                                 size="large"></a-input>
-                    </a-form-item>
+                        <a-form-item label="Number of Pages">
+                            <a-input type="number" min="0"
+                                     v-model="orderLocal.paper[i].number_of_pages"
+                                     @blur="forceRefresh"
+                                     size="large"></a-input>
+                        </a-form-item>
 
-                    <a-form-item label="Paper Finish">
-                        <a-select v-model="orderLocal.paper[i].paper_finish"
-                                  show-search size="large"
-                                  @change="incrementUpdateKey">
-                            <a-select-option v-for="paperFinish in paperFinishOptions" :value="paperFinish.value"
-                                             :key="paperFinish.value">
-                                {{ paperFinish.label }}
-                            </a-select-option>
-                        </a-select>
-                    </a-form-item>
+                        <a-form-item label="Paper Finish">
+                            <a-select v-model="orderLocal.paper[i].paper_finish"
+                                      show-search size="large"
+                                      @change="forceRefresh">
+                                <a-select-option v-for="paperFinish in paperFinishOptions" :value="paperFinish.value"
+                                                 :key="paperFinish.value">
+                                    {{ paperFinish.label }}
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
 
-                    <a-form-item label="Paper Weight">
-                        <a-select v-model="orderLocal.paper[i].paper_weight"
-                                  show-search size="large"
-                                  @change="incrementUpdateKey">
-                            <a-select-option v-for="paperWeight in paperWeightOptions" :value="paperWeight.value"
-                                             :key="paperWeight.value">
-                                {{ paperWeight.label }}
-                            </a-select-option>
-                        </a-select>
-                    </a-form-item>
+                        <a-form-item label="Paper Weight">
+                            <a-select v-model="orderLocal.paper[i].paper_weight"
+                                      show-search size="large"
+                                      @change="forceRefresh">
+                                <a-select-option v-for="paperWeight in paperWeightOptions" :value="paperWeight.value"
+                                                 :key="paperWeight.value">
+                                    {{ paperWeight.label }}
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
 
-                    <a-form-item label="Paper Brand">
-                        <a-select v-model="orderLocal.paper[i].paper_brand"
-                                  show-search size="large"
-                                  @change="incrementUpdateKey">
-                            <a-select-option v-for="paperBrand in paperBrandOptions" :value="paperBrand.value"
-                                             :key="paperBrand.value">
-                                {{ paperBrand.label }}
-                            </a-select-option>
-                        </a-select>
-                    </a-form-item>
+                        <a-form-item label="Paper Brand">
+                            <a-select v-model="orderLocal.paper[i].paper_brand"
+                                      show-search size="large"
+                                      @change="forceRefresh">
+                                <a-select-option v-for="paperBrand in paperBrandOptions" :value="paperBrand.value"
+                                                 :key="paperBrand.value">
+                                    {{ paperBrand.label }}
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
 
-                    <a-form-item label="Paper Name">
-                        <a-select v-model="orderLocal.paper[i].paper_name"
-                                  show-search size="large"
-                                  @change="incrementUpdateKey">
-                            <a-select-option v-for="paperName in paperNameOptions" :value="paperName.value"
-                                             :key="paperName.value">
-                                {{ paperName.label }}
-                            </a-select-option>
-                        </a-select>
-                    </a-form-item>
-                </a-form>
-                <!-- / General Paper Details -->
-            </a-card>
-        </div>
-        <!-- / EACH PAPER REPEATER -->
+                        <a-form-item label="Paper Name">
+                            <a-select v-model="orderLocal.paper[i].paper_name"
+                                      show-search size="large"
+                                      @change="forceRefresh">
+                                <a-select-option v-for="paperName in paperNameOptions" :value="paperName.value"
+                                                 :key="paperName.value">
+                                    {{ paperName.label }}
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
+                    </a-form>
+                    <!-- / General Paper Details -->
+                </div>
+                <!-- / Update wrapper -->
+            </el-collapse-item>
+        </el-collapse>
 
         <!-- Add new paper -->
         <a-button icon="plus" @click="addPaper">Add paper section</a-button>
@@ -81,9 +86,20 @@
     let _ = require('lodash');
 
     const PAPER_DATA_TEMPLATE = {
-        section_name: '',
+        section_name: 'body',
         number_of_pages: ''
     };
+
+    const SECTION_NAME_OPTIONS = [
+        {
+            value: 'body',
+            label: 'Body'
+        },
+        {
+            value: 'cover',
+            label: 'Cover'
+        }
+    ];
 
     const PAPER_FINISH_OPTIONS = [
         {
@@ -199,7 +215,9 @@
         data() {
             return {
                 updateKey: 1,
+                activePanel: undefined,
 
+                sectionNameOptions: SECTION_NAME_OPTIONS,
                 paperFinishOptions: PAPER_FINISH_OPTIONS,
                 paperWeightOptions: PAPER_WEIGHT_OPTIONS,
                 paperBrandOptions: PAPER_BRAND_OPTIONS,
@@ -221,27 +239,37 @@
                 this.updateKey += 1;
             },
 
+            forceRefresh() {
+                this.$forceUpdate();
+            },
+
             addPaper() {
                 this.orderLocal.paper.push(
                     {
                         ...PAPER_DATA_TEMPLATE
                     }
                 );
-                this.incrementUpdateKey();
+                this.$forceUpdate();
+                this.activePanel = Number(this.orderLocal.paper.length - 1);
             },
 
             deletePaper(i) {
                 this.orderLocal.paper = _.filter(this.orderLocal.paper, function (paper, ii) {
                     return String(ii) !== String(i);
                 })
-                this.incrementUpdateKey();
+                this.$forceUpdate();
+            },
+
+            getSectionNameLabel(value) {
+                let sectionName = _.find(this.sectionNameOptions, {value: value});
+                return sectionName ? sectionName.label : value;
             }
         }
     }
 </script>
 
 <style scoped>
-    .ant-card {
+    .el-collapse {
         margin-bottom: 20px;
     }
 </style>

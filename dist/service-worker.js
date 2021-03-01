@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.36f07979cff2d6e9f7c8bee3fe251849.js"
+  "/precache-manifest.c616453706ff54a1903867473f4e66f4.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "axpi-clients-frontend"});

@@ -1,19 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "87a4252b17be4c14c0af",
-    "url": "/css/app.8bf9e54e.css"
+    "revision": "f00ea1aa511189131711",
+    "url": "/css/app.1e83b9f3.css"
   },
   {
-    "revision": "df661afa20a889b2f481",
-    "url": "/css/chunk-vendors.ac429d1b.css"
+    "revision": "50ddd89010a476df8532",
+    "url": "/css/chunk-vendors.20e03ab4.css"
   },
   {
-    "revision": "50a3656a3184a5fa5cba",
-    "url": "/css/orders.7d8c8732.css"
+    "revision": "9b61e36f9f573950022e",
+    "url": "/css/orders.992fe086.css"
   },
   {
-    "revision": "58c14ecc64612fc1a75a",
+    "revision": "1c0284a2a2b97daae917",
     "url": "/css/reports.ebb7e795.css"
+  },
+  {
+    "revision": "535877f50039c0cb49a6196a5b7517cd",
+    "url": "/fonts/element-icons.535877f5.woff"
+  },
+  {
+    "revision": "732389ded34cb9c52dd88271f1345af9",
+    "url": "/fonts/element-icons.732389de.ttf"
   },
   {
     "revision": "e310fc2204cbf7a04fb04318c595dc11",
@@ -208,36 +216,36 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "cf8d71ba198f624eb1ee4abb0e40c90a",
+    "revision": "33007849e971cca0676cd9998a7446a8",
     "url": "/index.html"
   },
   {
-    "revision": "35ef754970a08bfa16dd",
-    "url": "/js/about.3ed963f0.js"
+    "revision": "de4f52948d2d12cabe91",
+    "url": "/js/about.2166e2db.js"
   },
   {
-    "revision": "87a4252b17be4c14c0af",
-    "url": "/js/app.ecd63f7d.js"
+    "revision": "f00ea1aa511189131711",
+    "url": "/js/app.6ea5eebb.js"
   },
   {
-    "revision": "df661afa20a889b2f481",
-    "url": "/js/chunk-vendors.f5f13b5e.js"
+    "revision": "50ddd89010a476df8532",
+    "url": "/js/chunk-vendors.5d87a704.js"
   },
   {
-    "revision": "50a3656a3184a5fa5cba",
-    "url": "/js/orders.307ca414.js"
+    "revision": "9b61e36f9f573950022e",
+    "url": "/js/orders.66421b7e.js"
   },
   {
-    "revision": "d7dc836f65c3eb624fb1",
-    "url": "/js/report-show.d0cd8300.js"
+    "revision": "c91d4d9f6be0879547aa",
+    "url": "/js/report-show.e26cbd75.js"
   },
   {
-    "revision": "58c14ecc64612fc1a75a",
-    "url": "/js/reports.5b815bc9.js"
+    "revision": "1c0284a2a2b97daae917",
+    "url": "/js/reports.2635d8ac.js"
   },
   {
-    "revision": "4a882030d2c3976f14f9",
-    "url": "/js/suppliers.6c9205ea.js"
+    "revision": "2cf6e1b2ff9a702c8e93",
+    "url": "/js/suppliers.c838c4e8.js"
   },
   {
     "revision": "1f45b094ef3e2a40e337cce8c1c0f0a2",

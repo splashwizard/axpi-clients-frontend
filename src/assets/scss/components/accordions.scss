@@ -25,5 +25,16 @@
       border-top: none;
     }
   }
+}
 
+.el-collapse-item__header {
+  height: 70px !important;
+  line-height: 70px !important;
+  font-size: 15px !important;
+}
+
+.collapse-inner-section {
+  padding-top: 15px;
+  padding-left: 1px;
+  padding-right: 1px;
 }

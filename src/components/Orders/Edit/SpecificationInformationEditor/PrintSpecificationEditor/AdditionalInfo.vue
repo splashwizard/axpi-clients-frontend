@@ -9,7 +9,27 @@
                             :show-search="{ filter }"
                             placeholder="Please select a printing type"
                             @change="onChange"
+                            v-model="orderLocal.printing_method"
                     />
+                </a-form-item>
+
+                <a-form-item label="Artwork Supplied">
+                    <a-radio-group @change="forceRefresh" v-model="orderLocal.artwork_supplied"
+                                   button-style="solid">
+                        <a-radio-button v-for="option in artworkSuppliedOptions" :key="option.value"
+                                        :value="option.value">
+                            {{ option.label }}
+                        </a-radio-button>
+                    </a-radio-group>
+                </a-form-item>
+
+                <a-form-item label="Proof Made">
+                    <a-radio-group @change="forceRefresh" v-model="orderLocal.proof_made"
+                                   button-style="solid">
+                        <a-radio-button v-for="option in proofMadeOptions" :key="option.value" :value="option.value">
+                            {{ option.label }}
+                        </a-radio-button>
+                    </a-radio-group>
                 </a-form-item>
             </a-form>
         </a-col>
@@ -108,18 +128,47 @@
         }
     ];
 
+    const ARTWORK_SUPPLIED_OPTIONS = [
+        {
+            value: true,
+            label: 'Yes'
+        },
+        {
+            value: false,
+            label: 'No'
+        }
+    ];
+
+    const PROOF_MADE_OPTIONS = [
+        {
+            value: true,
+            label: 'Yes'
+        },
+        {
+            value: false,
+            label: 'No'
+        }
+    ];
+
     export default {
         name: "AdditionalInfo",
+        props: ['orderLocal'],
 
         data() {
             return {
-                printingMethodTypeOptions: PRINTING_METHOD_TYPE_OPTIONS
+                printingMethodTypeOptions: PRINTING_METHOD_TYPE_OPTIONS,
+                artworkSuppliedOptions: ARTWORK_SUPPLIED_OPTIONS,
+                proofMadeOptions: PROOF_MADE_OPTIONS
             }
         },
 
         methods: {
             filter(inputValue, path) {
                 return path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
+            },
+
+            forceRefresh() {
+                this.$forceUpdate();
             }
         }
     }

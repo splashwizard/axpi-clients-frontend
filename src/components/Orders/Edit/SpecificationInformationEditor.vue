@@ -1,5 +1,5 @@
 <template>
-    <div class="axpi-form width-medium">
+    <div class="axpi-form width-large">
         <!-- Product Type -->
         <div class="form-section">
            <div class="form-header">

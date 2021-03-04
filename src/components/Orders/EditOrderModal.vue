@@ -12,6 +12,10 @@
 
         <!-- Loaded -->
         <div v-if="!isLoading && orderLocal">
+           <div class="modal-buttons">
+               <a-button>Save</a-button>
+           </div>
+
             <div class="progress-bar">
                 <progress-bar></progress-bar>
             </div>
@@ -82,5 +86,12 @@
 <style scoped lang="scss">
     .progress-bar {
         margin-bottom: 40px;
+    }
+
+    .modal-buttons {
+        position: fixed;
+        top: 11px;
+        right: 15px;
+        z-index: 1000;
     }
 </style>

@@ -4,13 +4,12 @@
         <div class="form-section">
             <div class="form-header">
                 <h2>Delivery Information</h2>
-                <address-selector
-                        :initial-address-id="orderLocal.address_id"
-                        @address-id-changed="updateOrderAddressId"
-                        resource="addresses"
-                ></address-selector>
             </div>
-
+            <address-selector
+                    :initial-address-id="orderLocal.address_id"
+                    @address-id-changed="updateOrderAddressId"
+                    resource="addresses"
+            ></address-selector>
         </div>
         <!-- / Delivery Information -->
 
@@ -24,11 +23,11 @@
         <!-- / Chemicals -->
 
         <!-- Consumables -->
-        <div class="form-section">
-            <div class="form-header">
-                <h2>Consumables</h2>
-            </div>
-        </div>
+<!--        <div class="form-section">-->
+<!--            <div class="form-header">-->
+<!--                <h2>Consumables</h2>-->
+<!--            </div>-->
+<!--        </div>-->
         <!-- / Consumables -->
 
         <!-- Additional Information -->

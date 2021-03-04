@@ -5,37 +5,37 @@
             <div class="paper-background a0"></div>
             <div @click.prevent="selectSize('a0')" class="paper a0" :class="{'selected': isSizeSelected('a0')}">
             </div>
-            <div class="paper-size-label a0">A0</div>
+            <div class="paper-size-label a0" :class="{'selected': isSizeSelected('a0')}">A0</div>
 
             <div class="paper-background a1"></div>
             <div @click.prevent="selectSize('a1')" class="paper a1" :class="{'selected': isSizeSelected('a1')}">
             </div>
-            <div class="paper-size-label a1">A1</div>
+            <div class="paper-size-label a1" :class="{'selected': isSizeSelected('a1')}">A1</div>
 
             <div class="paper-background a2"></div>
             <div @click.prevent="selectSize('a2')" class="paper a2" :class="{'selected': isSizeSelected('a2')}">
             </div>
-            <div class="paper-size-label a2">A2</div>
+            <div class="paper-size-label a2" :class="{'selected': isSizeSelected('a2')}">A2</div>
 
             <div class="paper-background a3"></div>
             <div @click.prevent="selectSize('a3')" class="paper a3" :class="{'selected': isSizeSelected('a3')}">
             </div>
-            <div class="paper-size-label a3">A3</div>
+            <div class="paper-size-label a3" :class="{'selected': isSizeSelected('a3')}">A3</div>
 
             <div class="paper-background a4"></div>
             <div @click.prevent="selectSize('a4')" class="paper a4" :class="{'selected': isSizeSelected('a4')}">
             </div>
-            <div class="paper-size-label a4">A4</div>
+            <div class="paper-size-label a4" :class="{'selected': isSizeSelected('a4')}">A4</div>
 
             <div class="paper-background a5"></div>
             <div @click.prevent="selectSize('a5')" class="paper a5" :class="{'selected': isSizeSelected('a5')}">
             </div>
-            <div class="paper-size-label a5">A5</div>
+            <div class="paper-size-label a5" :class="{'selected': isSizeSelected('a5')}">A5</div>
 
             <div class="paper-background a6"></div>
             <div @click.prevent="selectSize('a6')" class="paper a6" :class="{'selected': isSizeSelected('a6')}">
             </div>
-            <div class="paper-size-label a6">A6</div>
+            <div class="paper-size-label a6" :class="{'selected': isSizeSelected('a6')}">A6</div>
 
             <!--        <div class="paper a7">-->
             <!--            <div class="paper-size-label">A7</div>-->
@@ -160,6 +160,7 @@
 
             &.selected {
                 opacity: 1;
+                /*z-index: 1000;*/
             }
 
             &.a0 {
@@ -218,6 +219,10 @@
             font-weight: bold;
             left: 5px;
 
+            &.selected {
+                /*z-index: 1001;*/
+            }
+
             &.a0 {
                 top: 0;
             }
@@ -245,6 +250,42 @@
             &.a6 {
                 top: 1041px * $scaling;
             }
+        }
+
+        .paper-background.a0 { z-index: 500; }
+        .paper.a0 { z-index: 501; }
+        .paper-size-label.a0 { z-index: 502; }
+
+        .paper-background.a1 { z-index: 503; }
+        .paper.a1 { z-index: 504; }
+        .paper-size-label.a1 { z-index: 505; }
+
+        .paper-background.a2 { z-index: 506; }
+        .paper.a2 { z-index: 507; }
+        .paper-size-label.a2 { z-index: 508; }
+
+        .paper-background.a3 { z-index: 509; }
+        .paper.a3 { z-index: 510; }
+        .paper-size-label.a3 { z-index: 511; }
+
+        .paper-background.a4 { z-index: 512; }
+        .paper.a4 { z-index: 513; }
+        .paper-size-label.a4 { z-index: 514; }
+
+        .paper-background.a5 { z-index: 515; }
+        .paper.a5 { z-index: 516; }
+        .paper-size-label.a5 { z-index: 517; }
+
+        .paper-background.a6 { z-index: 518; }
+        .paper.a6 { z-index: 519; }
+        .paper-size-label.a6 { z-index: 520; }
+
+        .paper.selected {
+            z-index: 1000;
+        }
+
+        .paper-size-label.selected {
+            z-index: 1001;
         }
     }
 </style>

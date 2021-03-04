@@ -10,33 +10,76 @@
 <script>
     let _ = require('lodash');
 
-    const BINDING_TYPES = [
-        'saddle_stitched',
-        'perfect_bound',
-        'pur_bound',
-        'case_bound',
-        'screw_post_binding',
-        '3_hole_punch_binding',
-        'thermal_binding',
-        'spiral_bound',
-        'wire-o_bound',
-        'plastic_comb_bound',
-        'board_bound',
-        'glued_fold_bound',
-        'thread_swen_binding',
-        'burst_bound',
-        'lock_bound',
-        'section_sewn',
-        'case_bound_section_sewn'
-    ];
+    const BINDING_TYPES = {
+        'leaflet': [
+            'saddle_stitched',
+            'perfect_bound',
+            'pur_bound',
+            'case_bound',
+            'screw_post_binding',
+            '3_hole_punch_binding',
+            'thermal_binding',
+            'spiral_bound',
+            'wire-o_bound',
+            'plastic_comb_bound',
+            'board_bound',
+            'glued_fold_bound',
+            'thread_swen_binding',
+            'burst_bound',
+            'lock_bound',
+            'section_sewn',
+            'case_bound_section_sewn'
+        ],
+        'brochure': [
+            'saddle_stitched',
+            'perfect_bound',
+            'pur_bound',
+            'case_bound',
+            'screw_post_binding',
+            '3_hole_punch_binding',
+            'thermal_binding',
+            'spiral_bound',
+            'wire-o_bound',
+            'plastic_comb_bound',
+            'board_bound',
+            'glued_fold_bound',
+            'thread_swen_binding'
+        ],
+        'book': [
+            'saddle_stitched',
+            'perfect_bound',
+            'pur_bound',
+            'case_bound',
+            'screw_post_binding',
+            '3_hole_punch_binding',
+            'thermal_binding',
+            'spiral_bound',
+            'wire-o_bound',
+            'plastic_comb_bound',
+            'board_bound',
+            'glued_fold_bound',
+            'thread_swen_binding'
+        ]
+    };
 
     export default {
         name: "ProductSubtypeSelector",
         props: ['orderLocal'],
         data() {
             return {
-                selected: null,
-                bindingTypes: BINDING_TYPES
+                selected: null
+            }
+        },
+        computed: {
+            subtype() {
+                return this.orderLocal.product_subtype;
+            },
+
+            bindingTypes() {
+                if (this.subtype in BINDING_TYPES) {
+                    return BINDING_TYPES[this.subtype];
+                }
+                return [];
             }
         },
         mounted() {
@@ -51,7 +94,7 @@
         methods: {
             getHumanReadableSubtype(bindingType) {
                 let parts = bindingType.split('_');
-                parts = _.map(parts, part  =>{
+                parts = _.map(parts, part => {
                     return part.charAt(0).toUpperCase() + part.slice(1);
                 });
                 return parts.join(' ');

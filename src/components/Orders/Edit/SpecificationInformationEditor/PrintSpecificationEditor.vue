@@ -2,7 +2,7 @@
     <div>
         <div>
             <!-- Paper -->
-            <div class="form-section">
+            <div class="form-section" v-if="['leaflet', 'brochure', 'book'].includes(subtype)">
                 <div class="form-header">
                     <h2>Paper</h2>
                 </div>
@@ -11,7 +11,7 @@
             <!-- / Paper -->
 
             <!-- Binding -->
-            <div class="form-section">
+            <div class="form-section" v-if="['brochure', 'book'].includes(subtype)">
                 <div class="form-header">
                     <h2>Binding</h2>
                 </div>
@@ -37,7 +37,12 @@
     export default {
         name: "PrintSpecificationEditor",
         components: {PaperDetails, BindingDetails, AdditionalInfo},
-        props: ['orderLocal']
+        props: ['orderLocal'],
+        computed: {
+            subtype() {
+                return this.orderLocal.product_subtype;
+            }
+        }
     }
 </script>
 

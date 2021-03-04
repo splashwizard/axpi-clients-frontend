@@ -8,7 +8,7 @@
                             :options="printingMethodTypeOptions"
                             :show-search="{ filter }"
                             placeholder="Please select a printing type"
-                            @change="onChange"
+                            @change="forceRefresh"
                             v-model="orderLocal.printing_method"
                     />
                 </a-form-item>

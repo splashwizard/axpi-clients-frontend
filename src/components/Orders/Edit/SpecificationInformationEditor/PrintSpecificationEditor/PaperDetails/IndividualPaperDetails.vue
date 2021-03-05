@@ -5,7 +5,7 @@
                 <!-- General Paper Details -->
                 <a-form layout="vertical">
                     <a-form-item v-if="!hideNameOfSection"
-                            label="Name of Section">
+                                 label="Name of Section">
                         <a-select v-model="paper.section_name"
                                   show-search size="large"
                                   @change="forceRefresh">
@@ -39,12 +39,24 @@
                         </a-select>
                     </a-form-item>
 
+                    <a-form-item label="Fold Type" v-if="productSubtype === 'leaflet'">
+                        <a-select v-model="paper.fold_type"
+                                  show-search size="large"
+                                  @change="forceRefresh">
+                            <a-select-option v-for="type in paperFoldTypeOptions"
+                                             :value="type.value"
+                                             :key="type.value">
+                                {{ type.label }}
+                            </a-select-option>
+                        </a-select>
+                    </a-form-item>
+
                     <a-form-item label="Paper Weight">
                         <a-input-group compact>
                             <a-input @blur="forceRefresh"
-                                    size="large" type="number" style="width: 75%" v-model="paper.paper_weight"  />
+                                     size="large" type="number" style="width: 75%" v-model="paper.paper_weight"/>
                             <a-select @change="forceRefresh"
-                                    size="large" style="width: 25%" v-model="paper.paper_weight_unit">
+                                      size="large" style="width: 25%" v-model="paper.paper_weight_unit">
                                 <a-select-option value="gsm">
                                     gsm
                                 </a-select-option>
@@ -549,6 +561,45 @@
         }
     ];
 
+    const PAPER_FOLD_TYPE_OPTIONS = [
+        {
+            value: 'letter-fold-c-fold',
+            label: 'Leter Fold (C Fold)'
+        },
+        {
+            value: 'tri-fold',
+            label: 'Tri Fold'
+        },
+        {
+            value: 'gate-fold',
+            label: 'Gate Fold'
+        },
+        {
+            value: 'accordion-fold-z-fold',
+            label: 'Accordion Fold (Z Fold)'
+        },
+        {
+            value: 'single-fold-v-fold',
+            label: 'Single Fold (V Fold)'
+        },
+        {
+            value: 'double-parallel-fold',
+            label: 'Double Parallel Fold'
+        },
+        {
+            value: 'engineering-fold-half-accordion',
+            label: 'Engineering Fold (Half Accordion)'
+        },
+        {
+            value: 'cross-fold-french-fold',
+            label: 'Cross Fold (French Fold)'
+        },
+        {
+            value: 'baronial-fold',
+            label: 'Baronial Fold'
+        }
+    ];
+
     export default {
         name: "IndividualPaperDetails",
         props: [
@@ -583,7 +634,8 @@
                 coatingAppliedOptions: COATING_APPLIED_OPTIONS,
                 sidesCoatedOptions: SIDES_COATED_OPTIONS,
                 embellishmentTypeOptions: EMBELLISHMENT_TYPE_OPTIONS,
-                dieCuttingRequiredOptions: DIE_CUTTING_REQUIRED_OPTIONS
+                dieCuttingRequiredOptions: DIE_CUTTING_REQUIRED_OPTIONS,
+                paperFoldTypeOptions: PAPER_FOLD_TYPE_OPTIONS
             }
         }
     }

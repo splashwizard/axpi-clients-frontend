@@ -2,7 +2,7 @@
     <div>
         <div>
             <!-- Paper -->
-            <div class="form-section" v-if="['leaflet', 'brochure', 'book', 'poster'].includes(subtype)">
+            <div class="form-section" v-if="['leaflet', 'brochure', 'book', 'poster', 'business_card'].includes(subtype)">
                 <div class="form-header">
                     <h2>Paper</h2>
                 </div>

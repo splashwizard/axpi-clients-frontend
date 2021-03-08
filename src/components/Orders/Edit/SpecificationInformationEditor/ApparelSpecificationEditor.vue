@@ -15,6 +15,40 @@
             <sweater-details v-if="orderLocal.product_subtype === 'sweater'"
                              :order-local="orderLocal"></sweater-details>
 
+            <!-- Size -->
+            <a-form layout="vertical">
+                <a-row :gutter="70">
+                    <a-col :span="12">
+                        <a-form-item label="Size">
+                            <a-select v-model="orderLocal.apparel_size"
+                                      show-search size="large">
+                                <a-select-option v-for="size in sizeOptions"
+                                                 :value="size"
+                                                 :key="size">
+                                    {{ size }}
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
+                    </a-col>
+                </a-row>
+            </a-form>
+            <!-- / Size -->
+
+            <!-- Quantity -->
+            <a-form layout="vertical">
+                <a-row :gutter="70">
+                    <a-col :span="12">
+                        <a-form-item label="Quantity">
+                            <a-input type="number"
+                                    v-model="orderLocal.apparel_quantity"
+                            size="large">
+                            </a-input>
+                        </a-form-item>
+                    </a-col>
+                </a-row>
+            </a-form>
+            <!-- Quantity -->
+
             <!-- Item Mass -->
             <a-form layout="vertical">
                 <a-row :gutter="70">
@@ -22,7 +56,8 @@
                         <a-form-item label="Mass">
                             <a-input-group compact>
                                 <a-input size="large" style="width: 70%" v-model="orderLocal.apparel_mass"/>
-                                <a-select default-value="GBP" style="width: 30%" size="large" v-model="orderLocal.apparel_mass_unit">
+                                <a-select default-value="g" style="width: 30%" size="large"
+                                          v-model="orderLocal.apparel_mass_unit">
                                     <a-select-option value="g">
                                         g
                                     </a-select-option>
@@ -36,6 +71,25 @@
                 </a-row>
             </a-form>
             <!-- / Item Mass -->
+
+            <!-- Printing Method -->
+            <a-form layout="vertical">
+                <a-row :gutter="70">
+                    <a-col :span="12">
+                        <a-form-item label="Printing Method">
+                            <a-select v-model="orderLocal.printing_method"
+                                      show-search size="large">
+                                <a-select-option v-for="method in printingMethodOptions"
+                                                 :value="method.value"
+                                                 :key="method.value">
+                                    {{ method.label }}
+                                </a-select-option>
+                            </a-select>
+                        </a-form-item>
+                    </a-col>
+                </a-row>
+            </a-form>
+            <!-- / Printing Method -->
         </div>
         <!-- / Basic Details -->
 
@@ -56,10 +110,47 @@
     import TShirtDetails from "./ApparelSpecificationEditor/TShirtDetails";
     import MaterialUsedEditor from "./ApparelSpecificationEditor/MaterialUsedEditor";
 
+    const SIZE_OPTIONS = [
+        'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'
+    ];
+
+    const PRINTING_METHOD_OPTIONS = [
+        {
+            label: 'No Printing',
+            value: 'no-printing'
+        },
+        {
+            label: 'Screen Printing',
+            value: 'screen-printing'
+        },
+        {
+            label: 'DTG Printing',
+            value: 'dtg-printing'
+        },
+        {
+            label: 'Dye-Sublimation Printing',
+            value: 'dye-sublimation-printing'
+        },
+        {
+            label: 'Plastisol Transfer Printing',
+            value: 'plastisol-transfer-printing'
+        },
+        {
+            label: 'CAD-Cut Heat Transfer Printing',
+            value: 'cad-cut-heat-transfer-printing'
+        }
+    ];
+
     export default {
         name: "ApparelSpecificationEditor",
         components: {HoodieDetails, SweaterDetails, TShirtDetails, MaterialUsedEditor},
-        props: ['orderLocal']
+        props: ['orderLocal'],
+        data() {
+            return {
+                printingMethodOptions: PRINTING_METHOD_OPTIONS,
+                sizeOptions: SIZE_OPTIONS
+            }
+        }
     }
 </script>
 

@@ -4,7 +4,7 @@
             <el-collapse-item v-for="(material, i) in orderLocal.apparel_material_used" :key="i"
                               :title="getSectionNameLabel(material.material_type)">
                 <div class="collapse-inner-section">
-                    <a-row :row="70">
+                    <a-row :gutter="70">
                         <a-col :span="12">
                             <a-form layout="vertical">
                                 <a-form-item label="Material">

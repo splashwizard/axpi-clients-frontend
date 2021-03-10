@@ -42,14 +42,23 @@
         </div>
         <!-- / Semi Permanent Material Used -->
 
-        <!-- Product Details -->
-        <div class="form-section">
+        <!-- Display Information -->
+        <div class="form-section" v-if="orderLocal.product_subtype === 'semi_permanent'">
+            <div class="form-header">
+                <h2>Display Information</h2>
+            </div>
+            <display-information :order-local="orderLocal"></display-information>
+        </div>
+        <!-- / Display Information -->
+
+        <!-- Permanent Product Details -->
+        <div class="form-section" v-if="orderLocal.product_subtype === 'permanent'">
             <div class="form-header">
                 <h2>Product Details</h2>
             </div>
             <product-details :order-local="orderLocal"></product-details>
         </div>
-        <!-- / Product Details -->
+        <!-- / Permanent Product Details -->
     </div>
 </template>
 
@@ -57,6 +66,7 @@
     import CardboardUsedEditor from "./PosSpecificationEditor/CardboardUsedEditor";
     import ProductDetails from "./PosSpecificationEditor/ProductDetails";
     import MaterialUsedEditor from "./PosSpecificationEditor/MaterialUsedEditor";
+    import DisplayInformation from "./PosSpecificationEditor/DisplayInformation";
 
     const POS_TYPE_OPTIONS = [
         {
@@ -83,7 +93,7 @@
 
     export default {
         name: "PosSpecificationEditor",
-        components: {CardboardUsedEditor, ProductDetails, MaterialUsedEditor},
+        components: {CardboardUsedEditor, ProductDetails, MaterialUsedEditor, DisplayInformation},
         props: ['orderLocal'],
         data() {
             return {

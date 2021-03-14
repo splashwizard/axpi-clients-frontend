@@ -12,15 +12,19 @@
 
     const NUMBER_OF_WALLS_OPTIONS = [
         {
-            value: 1,
+         value: 'single-face',
+         label: 'Single Face'
+        },
+        {
+            value: '1',
             label: 'Single Wall'
         },
         {
-            value: 2,
+            value: '2',
             label: 'Double Wall'
         },
         {
-            value: 3,
+            value: '3',
             label: 'Triple Wall'
         }
     ];

@@ -49,7 +49,8 @@
 
     const MATERIAL_USED_DATA_TEMPLATE = {
         material_type: null,
-        percentage: null
+        percentage: null,
+        country_of_origin: null
     };
 
     const MATERIAL_TYPE_OPTIONS = [

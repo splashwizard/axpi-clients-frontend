@@ -1,16 +1,34 @@
 <template>
     <div>
-        <!-- Cardboard Used (Permanent) -->
-        <div class="form-section" v-if="orderLocal.product_subtype === 'permanent'">
+        <!-- Semi Permanent Product Details -->
+        <div class="form-section" v-if="orderLocal.product_subtype === 'semi_permanent'">
             <div class="form-header">
-                <h2>Cardboard Used</h2>
+                <h2>Product Details</h2>
+            </div>
+            <product-details :order-local="orderLocal"></product-details>
+        </div>
+        <!-- / Semi Permanent Product Details -->
+
+        <!-- Cardboard Used (Semi Permanent) -->
+        <div class="form-section" v-if="orderLocal.product_subtype === 'semi_permanent'">
+            <div class="form-header">
+                <h2>Material Used</h2>
             </div>
             <cardboard-used-editor :order-local="orderLocal"></cardboard-used-editor>
         </div>
         <!-- / Cardboard Used -->
 
-        <!-- Semi Permanent Basic Details -->
+        <!-- Product Supported -->
         <div class="form-section" v-if="orderLocal.product_subtype === 'semi_permanent'">
+            <div class="form-header">
+                <h2>Product Supported</h2>
+            </div>
+            <product-supported-editor :order-local="orderLocal"></product-supported-editor>
+        </div>
+        <!-- / Product Supported -->
+
+        <!-- Permanent Basic Details -->
+        <div class="form-section" v-if="orderLocal.product_subtype === 'permanent'">
             <div class="form-header">
                 <h2>Basic Details</h2>
             </div>
@@ -31,10 +49,10 @@
                 </a-col>
             </a-row>
         </div>
-        <!-- / Semi Permanent Basic Details -->
+        <!-- / Permanent Basic Details -->
 
         <!-- Semi Permanent Material Used -->
-        <div class="form-section" v-if="orderLocal.product_subtype === 'semi_permanent'">
+        <div class="form-section" v-if="orderLocal.product_subtype === 'permanent'">
             <div class="form-header">
                 <h2>Material Used</h2>
             </div>
@@ -43,7 +61,7 @@
         <!-- / Semi Permanent Material Used -->
 
         <!-- Display Information -->
-        <div class="form-section" v-if="orderLocal.product_subtype === 'semi_permanent'">
+        <div class="form-section" v-if="orderLocal.product_subtype === 'permanent'">
             <div class="form-header">
                 <h2>Display Information</h2>
             </div>
@@ -51,14 +69,14 @@
         </div>
         <!-- / Display Information -->
 
-        <!-- Permanent Product Details -->
-        <div class="form-section" v-if="orderLocal.product_subtype === 'permanent'">
+        <!-- Additional Information -->
+        <div class="form-section">
             <div class="form-header">
-                <h2>Product Details</h2>
+                <h2>Additional Information</h2>
             </div>
-            <product-details :order-local="orderLocal"></product-details>
+            <additional-info :order-local="orderLocal"></additional-info>
         </div>
-        <!-- / Permanent Product Details -->
+        <!-- / Additional Information -->
     </div>
 </template>
 
@@ -67,6 +85,8 @@
     import ProductDetails from "./PosSpecificationEditor/ProductDetails";
     import MaterialUsedEditor from "./PosSpecificationEditor/MaterialUsedEditor";
     import DisplayInformation from "./PosSpecificationEditor/DisplayInformation";
+    import ProductSupportedEditor from "./PosSpecificationEditor/ProductSupportedEditor";
+    import AdditionalInfo from "./PosSpecificationEditor/AdditionalInfo";
 
     const POS_TYPE_OPTIONS = [
         {
@@ -93,7 +113,7 @@
 
     export default {
         name: "PosSpecificationEditor",
-        components: {CardboardUsedEditor, ProductDetails, MaterialUsedEditor, DisplayInformation},
+        components: {ProductSupportedEditor, CardboardUsedEditor, ProductDetails, MaterialUsedEditor, DisplayInformation, AdditionalInfo},
         props: ['orderLocal'],
         data() {
             return {

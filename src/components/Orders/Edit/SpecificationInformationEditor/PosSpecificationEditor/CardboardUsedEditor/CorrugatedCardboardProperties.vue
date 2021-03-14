@@ -6,8 +6,45 @@
 
         <!-- Wall Details -->
         <div class="wall-details" :key="updateKey">
-            <wall-details :cardboard="cardboard" v-for="wall in walls" :wall="wall" :is-last-wall="wall === walls.length"
-                          :key="wall"></wall-details>
+            <!-- Single Face -->
+            <template v-if="this.cardboard.number_of_walls === 'single-face'">
+                <wall-details :cardboard="cardboard" :wall="1"
+                              :is-last-wall="false"></wall-details>
+            </template>
+            <!-- / Single Face -->
+
+            <!-- Single Wall -->
+            <template v-if="this.cardboard.number_of_walls === '1'">
+                <wall-details :cardboard="cardboard" :wall="1"
+                              :is-last-wall="false"></wall-details>
+                <wall-details :cardboard="cardboard" :wall="2"
+                              :is-last-wall="true"></wall-details>
+            </template>
+            <!-- / Single Wall -->
+
+            <!-- Double Wall -->
+            <template v-if="this.cardboard.number_of_walls === '2'">
+                <wall-details :cardboard="cardboard" :wall="1"
+                              :is-last-wall="false"></wall-details>
+                <wall-details :cardboard="cardboard" :wall="2"
+                              :is-last-wall="false"></wall-details>
+                <wall-details :cardboard="cardboard" :wall="3"
+                              :is-last-wall="true"></wall-details>
+            </template>
+            <!-- / Double Wall -->
+
+            <!-- Triple Wall -->
+            <template v-if="this.cardboard.number_of_walls === '3'">
+                <wall-details :cardboard="cardboard" :wall="1"
+                              :is-last-wall="false"></wall-details>
+                <wall-details :cardboard="cardboard" :wall="2"
+                              :is-last-wall="false"></wall-details>
+                <wall-details :cardboard="cardboard" :wall="3"
+                              :is-last-wall="false"></wall-details>
+                <wall-details :cardboard="cardboard" :wall="4"
+                              :is-last-wall="true"></wall-details>
+            </template>
+            <!-- / Triple Wall -->
         </div>
         <!-- / Wall Details -->
     </div>
@@ -24,31 +61,25 @@
         data() {
             return {
                 updateKey: 1,
-                walls: []
+                singleFaceAccordionKey: null
             }
         },
         methods: {
             handlePropertyUpdated() {
                 this.$emit('property-updated');
-                this.determineWalls();
                 this.incrementUpdateKey();
             },
 
             incrementUpdateKey() {
                 this.updateKey = this.updateKey + 1;
-            },
-
-            determineWalls() {
-                let walls = [];
-                let i = 1;
-                for (i = 1; i <= (this.cardboard.number_of_walls + 1); i++) {
-                    walls.push(i);
-                }
-                this.walls = walls;
             }
         }
     }
 </script>
 
 <style scoped>
+    .wall-details {
+        /*padding-left: 20px;*/
+        /*padding-right: 20px;*/
+    }
 </style>

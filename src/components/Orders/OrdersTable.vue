@@ -19,7 +19,7 @@
     const columns = [
         {
             title: 'Name',
-            dataIndex: 'name',
+            dataIndex: 'product_name',
             sorter: true,
             scopedSlots: {customRender: 'name'}
         },

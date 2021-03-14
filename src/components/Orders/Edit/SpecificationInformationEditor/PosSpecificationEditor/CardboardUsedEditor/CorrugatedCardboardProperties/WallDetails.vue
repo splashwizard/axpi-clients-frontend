@@ -1,7 +1,7 @@
 <template>
     <div :key="updateKey">
-        <a-descriptions bordered  layout="vertical">
-            <a-descriptions-item :label="liningLabel" :span="3">
+        <a-card :title="liningLabel" :name="liningLabel">
+            <div class="collapse-inner-section">
                 <!-- Lining (Wall) Details -->
                 <a-form layout="vertical">
                     <a-form-item label="Paper Type">
@@ -30,10 +30,10 @@
                     </a-form-item>
                 </a-form>
                 <!-- / Lining (Wall) Details -->
-            </a-descriptions-item>
-        </a-descriptions>
-        <a-descriptions bordered layout="vertical"  v-if="!isLastWall">
-            <a-descriptions-item :label="flutingLabel" :span="3">
+            </div>
+        </a-card>
+        <a-card :title="flutingLabel" v-if="!isLastWall">
+            <div class="collapse-inner-section">
                 <!-- Fluting Details -->
                 <a-form layout="vertical">
                     <a-form-item label="Paper Type">
@@ -74,8 +74,8 @@
                     </a-form-item>
                 </a-form>
                 <!-- / Fluting Details -->
-            </a-descriptions-item>
-        </a-descriptions>
+            </div>
+        </a-card>
     </div>
 </template>
 
@@ -194,6 +194,8 @@
                     return 'two';
                 } else if (this.wall === 3) {
                     return 'three';
+                } else if (this.wall === 4) {
+                    return 'four';
                 } else {
                     return null;
                 }

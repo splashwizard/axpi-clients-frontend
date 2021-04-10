@@ -1,6 +1,8 @@
 <template>
-  <div class="metric-container" :class="{'active': isActive}" :style="metricStyle">
-    <div class="ant-statistic" v-if="metric" @click="toggleActive">
+  <div class="metric-container" :class="{'active': isActive}"
+       @click="toggleActive"
+       :style="metricStyle">
+    <div class="ant-statistic" v-if="metric">
       <div class="ant-statistic-title">
         <span v-if="!isActive">{{ metric.label }}</span>
         <a-dropdown v-if="isActive" :trigger="['click']">
@@ -30,15 +32,10 @@
 <script>
 let _ = require('lodash');
 export default {
-  props: ['id', 'metrics', 'initial', 'isActive', 'backgroundColour', 'textColour'],
-  name: "Metric",
+  props: ['index', 'metrics', 'selectedMetricId', 'isActive', 'backgroundColour', 'textColour'],
+  name: "MetricCard",
   data() {
-    return {
-      selectedMetricId: ''
-    }
-  },
-  created() {
-    this.selectedMetricId = this.initial;
+    return {}
   },
   computed: {
     metric() {
@@ -66,12 +63,14 @@ export default {
   },
   methods: {
     toggleActive() {
-      this.$emit('toggle-active', this.id);
+      this.$emit('toggle-active', this.index);
     },
 
     selectMetric(m) {
-      console.log(m);
-      this.selectedMetricId = m.id;
+      this.$emit('metric-changed', {
+        index: this.index,
+        metric_id: m.id
+      });
     }
   }
 }

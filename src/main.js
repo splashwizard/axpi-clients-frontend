@@ -25,6 +25,7 @@ Vue.use(Collapse);
 Vue.use(CollapseItem);
 
 Vue.component('loading-screen', require('./components/LoadingScreen').default);
+Vue.component('metric', require('./components/Analytics/Metric').default);
 
 // Custom styles
 import '@/assets/scss/main.scss';

@@ -32,6 +32,14 @@
             't-shirt',
             'hoodie',
             'sweater'
+        ],
+        'packaging': [
+            'boxes',
+            'bubble-wrap',
+            'strapping',
+            'jiffy-bag',
+            'pallet-wrap',
+            'page'
         ]
     };
 

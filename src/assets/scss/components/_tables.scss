@@ -10,3 +10,30 @@
     color: #4f566b;
   }
 }
+
+.axpi-table {
+  th {
+    background: none !important;
+
+    &:hover {
+      background: unset !important;
+      color: #5469d4;
+    }
+  }
+
+  .ant-table-thead > tr > th .ant-table-header-column .ant-table-column-sorters:hover::before {
+    background: unset !important;
+  }
+
+  .anticon.off {
+    display: none !important;
+  }
+
+  .ant-table-column-sorter-down.on {
+    margin-top: 8px !important;
+  }
+
+  .anticon.anticon-caret-up.on {
+    margin-top: 9px;
+  }
+}

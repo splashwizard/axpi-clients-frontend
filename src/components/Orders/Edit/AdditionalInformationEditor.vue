@@ -1,16 +1,14 @@
 <template>
     <div class="axpi-form width-xl">
         <!-- Delivery information -->
-        <div class="form-section">
-            <div class="form-header">
-                <h2>Delivery Information</h2>
-            </div>
-            <address-selector
-                    :initial-address-id="orderLocal.address_id"
-                    @address-id-changed="updateOrderAddressId"
-                    resource="addresses"
-            ></address-selector>
-        </div>
+
+        <!--            <address-selector-->
+        <!--                    :initial-address-id="orderLocal.address_id"-->
+        <!--                    @address-id-changed="updateOrderAddressId"-->
+        <!--                    resource="addresses"-->
+        <!--            ></address-selector>-->
+        <delivery-information-editor :order-local="orderLocal"></delivery-information-editor>
+
         <!-- / Delivery Information -->
 
         <!-- Chemicals -->
@@ -23,11 +21,11 @@
         <!-- / Chemicals -->
 
         <!-- Consumables -->
-<!--        <div class="form-section">-->
-<!--            <div class="form-header">-->
-<!--                <h2>Consumables</h2>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="form-section">-->
+        <!--            <div class="form-header">-->
+        <!--                <h2>Consumables</h2>-->
+        <!--            </div>-->
+        <!--        </div>-->
         <!-- / Consumables -->
 
         <!-- Additional Information -->
@@ -57,13 +55,14 @@
 
 <script>
     import {mapActions} from "vuex";
-    import AddressSelector from "../../Addresses/AddressSelector";
+    // import AddressSelector from "../../Addresses/AddressSelector";
     import ChemicalsEditor from "../../Chemicals/ChemicalsEditor";
+    import DeliveryInformationEditor from "./AdditionalInformationEditor/DeliveryInformationEditor";
 
     export default {
         name: "AdditionalInformationEditor",
         props: ['orderLocal'],
-        components: {AddressSelector, ChemicalsEditor},
+        components: {ChemicalsEditor, DeliveryInformationEditor},
         data() {
             return {
                 updateKey: 1

@@ -29,6 +29,10 @@
             <!-- Apparel Specification Editor -->
             <apparel-specification-editor v-if="orderLocal.product_type === 'apparel' && orderLocal.product_subtype" :order-local="orderLocal"></apparel-specification-editor>
             <!-- / Apparel Specification Editor -->
+
+            <!-- Packaging Specification Editor -->
+            <packaging-specification-editor v-if="orderLocal.product_type === 'packaging' && orderLocal.product_subtype" :order-local="orderLocal"></packaging-specification-editor>
+            <!-- / Packaging Specification Editor -->
         </div>
         <!-- / Details -->
 
@@ -55,13 +59,14 @@
     import PrintSpecificationEditor from "./SpecificationInformationEditor/PrintSpecificationEditor";
     import PosSpecificationEditor from "./SpecificationInformationEditor/PosSpecificationEditor";
     import ApparelSpecificationEditor from "./SpecificationInformationEditor/ApparelSpecificationEditor";
+    import PackagingSpecificationEditor from "./SpecificationInformationEditor/PackagingSpecificationEditor";
 
     export default {
         name: "SpecificationInformationEditor",
         props: ['orderLocal'],
         components: {
             ApparelSpecificationEditor,
-            ProductTypeSelector, ProductSubtypeSelector, PrintSpecificationEditor, PosSpecificationEditor},
+            ProductTypeSelector, ProductSubtypeSelector, PrintSpecificationEditor, PosSpecificationEditor, PackagingSpecificationEditor},
         data() {
             return {
                 updateKey: 1

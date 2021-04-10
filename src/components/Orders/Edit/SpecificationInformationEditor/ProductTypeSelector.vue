@@ -32,7 +32,7 @@
                 Merchandise
             </div>
         </a>
-        <a href="#" @click.prevent="select('package')" :class="{'selected': isSelected('package')}">
+        <a href="#" @click.prevent="select('packaging')" :class="{'selected': isSelected('packaging')}">
             <div class="icon">
                 <img src="/img/icons/product-type-selector/package.png" alt="Packaging">
             </div>

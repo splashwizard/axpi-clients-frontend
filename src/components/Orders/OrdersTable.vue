@@ -1,17 +1,36 @@
 <template>
-    <a-table
-            :columns="columns"
-            :row-key="record => record.id"
-            :data-source="data"
-            :pagination="pagination"
-            :loading="loading"
-            @change="handleTableChange"
-    >
-        <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{ name }}</a>
-        <div slot="actions" class="table-actions">
-            <a-button type="link" icon="ellipsis"></a-button>
-        </div>
-    </a-table>
+    <div>
+        <a-tabs default-active-key="1">
+            <a-tab-pane key="1" tab="All"></a-tab-pane>
+            <a-tab-pane key="3" tab="Information Provided"></a-tab-pane>
+            <a-tab-pane key="2" tab="Information Requested" force-render></a-tab-pane>
+        </a-tabs>
+
+        <a-table class="axpi-table"
+                 :columns="columns"
+                 :row-key="record => record.id"
+                 :data-source="data"
+                 :pagination="pagination"
+                 :loading="loading"
+                 @change="handleTableChange"
+        >
+            <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{ name
+                }}</a>
+            <div slot="actions" class="table-actions">
+                <a-dropdown :trigger="['click']">
+                    <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
+                    <a-menu slot="overlay">
+                        <a-menu-item>
+                            <a href="#">Edit</a>
+                        </a-menu-item>
+                        <a-menu-item>
+                            <a href="#" class="text-danger">Delete</a>
+                        </a-menu-item>
+                    </a-menu>
+                </a-dropdown>
+            </div>
+        </a-table>
+    </div>
 </template>
 <script>
     import axios from 'axios';

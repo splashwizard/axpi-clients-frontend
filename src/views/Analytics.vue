@@ -15,11 +15,24 @@
           <!-- Inside -->
           <div class="view-changer-inside">
             <div class="top-section">
-              <a-button :class="{'active': selectedViewId === view.id}"
-                        @click.prevent="selectView(view.id)"
-                        block v-for="view in views"
-                        :key="view.id">{{ view.name }}
-              </a-button>
+
+              <!-- View -->
+              <div class="view-selector" v-for="view in views" :key="view.id">
+
+                <a-card :bordered="false" @click.prevent="selectView(view.id)">
+                  <img slot="cover" :class="{'selected': selectedViewId === view.id}"
+                      src="/img/analytics/screenshot.png" alt="Analytics">
+                  <a-card-meta :title="view.name">
+                  </a-card-meta>
+                </a-card>
+
+<!--                <a-button :class="{'active': selectedViewId === view.id}"-->
+<!--                          -->
+<!--                          block>{{ view.name }}-->
+<!--                </a-button>-->
+              </div>
+              <!-- / View -->
+
             </div>
             <div class="bottom-section">
               <a-button @click.prevent="() => addView()"
@@ -289,7 +302,7 @@ export default {
 
     selectView(viewId) {
       this.selectedViewId = viewId;
-      this.viewChangerVisible = false;
+      // this.viewChangerVisible = false;
     },
 
     addView(name = null) {
@@ -302,6 +315,7 @@ export default {
           }
       );
       this.selectView(viewId);
+      this.viewChangerVisible = false;
     },
 
     toggleMetricActive(index) {
@@ -381,5 +395,39 @@ export default {
 
 .view-changer-inside .bottom-section {
   flex-shrink: 1;
+}
+
+.view-selector {
+  margin-bottom: 20px;
+}
+
+.view-selector:last-child {
+  margin-bottom: 0 !important;
+}
+
+.view-selector img {
+  max-width: 100%;
+  border-radius: 5px;
+  border: 2px solid #eee;
+}
+
+.view-selector img.selected {
+  border: 2px solid #4dc8f2;
+}
+
+.view-selector:hover {
+  cursor: pointer;
+}
+
+.view-selector:hover img {
+  border: 2px solid #4dc8f2;
+}
+
+.view-selector .ant-card-body {
+  padding-top: 11px;
+}
+
+.view-selector .ant-card-meta-detail  {
+  text-align: center;
 }
 </style>

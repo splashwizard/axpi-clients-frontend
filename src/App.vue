@@ -237,6 +237,7 @@
 <style lang="scss">
     #app, .ant-layout {
         height: 100%;
+        background: #fff! important;
     }
 
     .ant-layout-header {

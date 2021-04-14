@@ -4,7 +4,81 @@
     <div class="page-header">
       <h1 class="page-title">Analytics</h1>
       <div class="actions">
-        <a-button type="primary" icon="eye" @click="openViewChanger"></a-button>
+        <a-button type="secondary" class="button-header" size="large" shape="circle"
+                  icon="bulb" @click="openInsightsTab"></a-button>
+        <a-drawer title="Insights" placement="right" width="400"
+                  :visible="insightsTabVisible" @close="closeInsightsTab">
+
+          <a-collapse class="collapse-margin-bottom">
+            <a-collapse-panel key="1" header="Basic Performance">
+              <p></p>
+            </a-collapse-panel>
+          </a-collapse>
+
+          <a-collapse class="collapse-margin-bottom">
+            <a-collapse-panel key="1" header="Price Performance">
+            </a-collapse-panel>
+          </a-collapse>
+
+          <a-collapse class="collapse-margin-bottom">
+            <a-collapse-panel key="1" header="Diversity">
+            </a-collapse-panel>
+          </a-collapse>
+
+          <a-collapse class="collapse-margin-bottom">
+            <a-collapse-panel key="1" header="Suppliers">
+            </a-collapse-panel>
+          </a-collapse>
+
+          <a-collapse class="collapse-margin-bottom">
+            <a-collapse-panel key="1" header="Orders">
+            </a-collapse-panel>
+          </a-collapse>
+
+          <a-collapse class="collapse-margin-bottom">
+            <a-collapse-panel key="1" header="Information">
+            </a-collapse-panel>
+          </a-collapse>
+
+          <a-collapse>
+            <a-collapse-panel key="1" header="Environmentalism">
+              <a-button @click.prevent="getInsight">Which is my most environmentally harmful specification this month?
+              </a-button>
+              <a-button @click.prevent="getInsight">Which business unit is the least environmentally friendly?
+              </a-button>
+              <a-button @click.prevent="getInsight">Which country produces the most CO2e?</a-button>
+              <a-button @click.prevent="getInsight">What should I do to reduce my environmental impact in my print
+                category?
+              </a-button>
+              <a-button @click.prevent="getInsight">What is my environmental impact by not using recycled materials?
+              </a-button>
+            </a-collapse-panel>
+          </a-collapse>
+
+          <!-- RESULTS DRAWER -->
+          <a-drawer class="insight-results-drawer" title="Results" :visible="insightResultsTabVisible" width="350"
+                    @close="closeInsightResultsTab">
+
+            <div class="insight-results-question">
+              <b>You asked: which business unit is the most environmentally friendly?</b>
+            </div>
+
+            <a-card>
+              <p>
+                Business unit 1 is the most environmentally friendly.
+              </p>
+              <p>
+                It's carbon emissions are 20% below your organisational average.
+              </p>
+            </a-card>
+
+          </a-drawer>
+          <!-- / RESULTS DRAWER -->
+
+        </a-drawer>
+
+        <a-button type="secondary" class="button-header" size="large" shape="circle"
+                  icon="eye" @click="openViewChanger"></a-button>
         <a-drawer
             title="Views"
             placement="right"
@@ -21,15 +95,15 @@
 
                 <a-card :bordered="false" @click.prevent="selectView(view.id)">
                   <img slot="cover" :class="{'selected': selectedViewId === view.id}"
-                      src="/img/analytics/screenshot.png" alt="Analytics">
+                       src="/img/analytics/screenshot.png" alt="Analytics">
                   <a-card-meta :title="view.name">
                   </a-card-meta>
                 </a-card>
 
-<!--                <a-button :class="{'active': selectedViewId === view.id}"-->
-<!--                          -->
-<!--                          block>{{ view.name }}-->
-<!--                </a-button>-->
+                <!--                <a-button :class="{'active': selectedViewId === view.id}"-->
+                <!--                          -->
+                <!--                          block>{{ view.name }}-->
+                <!--                </a-button>-->
               </div>
               <!-- / View -->
 
@@ -78,7 +152,7 @@
             Content of Tab Pane 2
           </a-tab-pane>
           <a-tab-pane key="3" tab="Organisational Unit">
-            Content of Tab Pane 3
+            <organisational-graph></organisational-graph>
           </a-tab-pane>
           <a-tab-pane key="4" tab="Specifications">
             Content of Tab Pane 3
@@ -115,6 +189,7 @@ import TimeToolbar from "./Analytics/TimeToolbar";
 const _ = require('lodash');
 const moment = require('moment');
 import {v4 as uuidv4} from 'uuid';
+import OrganisationalGraph from "./Analytics/OrganisationalGraph";
 
 const VIEW_TEMPLATE = {
   metricsTopBar: [
@@ -153,12 +228,14 @@ const VIEW_TEMPLATE = {
 
 
 export default {
-  components: {TimeGraph, TimeToolbar},
+  components: {TimeGraph, TimeToolbar, OrganisationalGraph},
 
   data() {
     return {
       views: [],
       viewChangerVisible: false,
+      insightsTabVisible: false,
+      insightResultsTabVisible: false,
 
       metrics: [
         {
@@ -342,6 +419,26 @@ export default {
 
     closeViewChanger() {
       this.viewChangerVisible = false;
+    },
+
+    openInsightsTab() {
+      this.insightsTabVisible = true;
+    },
+
+    closeInsightsTab() {
+      this.insightsTabVisible = false;
+    },
+
+    openInsightResultsTab() {
+      this.insightResultsTabVisible = true;
+    },
+
+    closeInsightResultsTab() {
+      this.insightResultsTabVisible = false;
+    },
+
+    getInsight() {
+      this.openInsightResultsTab();
     }
   }
 }
@@ -427,7 +524,47 @@ export default {
   padding-top: 11px;
 }
 
-.view-selector .ant-card-meta-detail  {
+.view-selector .ant-card-meta-detail {
   text-align: center;
+}
+
+.button-header {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.button-header:hover {
+  background: rgb(55, 53, 179);
+  color: #fff;
+}
+
+.collapse-margin-bottom {
+  margin-bottom: 20px;
+}
+
+.ant-collapse-content-box .ant-btn, .ant-collapse-content-box .ant-btn span {
+  width: 100%;
+  word-wrap: break-word;
+  height: auto;
+  white-space: normal;
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.ant-collapse-content-box .ant-btn {
+  margin-bottom: 15px;
+}
+
+.ant-collapse-content-box .ant-btn:last-child {
+  margin-bottom: 0 !important;
+}
+
+.insight-results-drawer .ant-drawer-body {
+  background: #f7fafc;
+}
+
+.insight-results-question {
+  margin-bottom: 30px;
 }
 </style>

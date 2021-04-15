@@ -178,7 +178,7 @@
             <organisational-graph></organisational-graph>
           </a-tab-pane>
           <a-tab-pane key="4" tab="Specifications">
-            Content of Tab Pane 3
+            <analytics-specifications-table></analytics-specifications-table>
           </a-tab-pane>
         </a-tabs>
       </div>
@@ -216,6 +216,7 @@ const moment = require('moment');
 import {v4 as uuidv4} from 'uuid';
 import OrganisationalGraph from "./Analytics/OrganisationalGraph";
 import LocationGraph from "./Analytics/LocationGraph";
+import AnalyticsSpecificationsTable from "./Analytics/AnalyticsSpecificationsTable";
 
 const VIEW_TEMPLATE = {
   metricsTopBar: [
@@ -254,7 +255,7 @@ const VIEW_TEMPLATE = {
 
 
 export default {
-  components: {LocationGraph, TimeGraph, TimeToolbar, OrganisationalGraph, EnvironmentTab},
+  components: {LocationGraph, TimeGraph, TimeToolbar, OrganisationalGraph, EnvironmentTab, AnalyticsSpecificationsTable},
 
   data() {
     return {

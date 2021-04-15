@@ -16,6 +16,7 @@
     "chart.js": "2",
     "core-js": "^3.6.5",
     "country-list-js": "^3.1.7",
+    "d3": "^6.6.2",
     "element-ui": "^2.15.1",
     "insert-css": "^2.0.0",
     "less": "^4.1.1",

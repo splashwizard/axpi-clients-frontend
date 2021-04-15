@@ -5,6 +5,29 @@
       <h1 class="page-title">Analytics</h1>
       <div class="actions">
         <a-button type="secondary" class="button-header" size="large" shape="circle"
+                  icon="share-alt" @click="openShareTab"></a-button>
+        <a-drawer title="Share this report" placement="right" width="350" :visible="shareTabVisible"
+                  @close="closeShareTab"
+                  @click="openShareTab">
+          <a-button block size="large" icon="link" class="share-button button-margin-bottom">
+            <div class="share-button-inner">
+              <div class="share-button-text">
+                Share link
+              </div>
+              <a-icon type="right"></a-icon>
+            </div>
+          </a-button>
+          <a-button block size="large" icon="file" class="share-button button-margin-bottom">
+            <div class="share-button-inner">
+              <div class="share-button-text">
+                Download file
+              </div>
+              <a-icon type="right"></a-icon>
+            </div>
+          </a-button>
+        </a-drawer>
+
+        <a-button type="secondary" class="button-header" size="large" shape="circle"
                   icon="bulb" @click="openInsightsTab"></a-button>
         <a-drawer title="Insights" placement="right" width="400"
                   :visible="insightsTabVisible" @close="closeInsightsTab">
@@ -149,7 +172,7 @@
                         :styles="timeGraphStyles"></time-graph>
           </a-tab-pane>
           <a-tab-pane key="2" tab="Location" force-render>
-            Content of Tab Pane 2
+            <location-graph :key="updateKey"></location-graph>
           </a-tab-pane>
           <a-tab-pane key="3" tab="Organisational Unit">
             <organisational-graph></organisational-graph>
@@ -164,15 +187,16 @@
       <!-- Tabs 2 -->
       <div class="tabs-2-container">
         <a-tabs default-active-key="1" :animated="false">
-          <a-tab-pane key="1" tab="Orders">
+          <a-tab-pane key="1" tab="Environment">
+            <environment-tab></environment-tab>
           </a-tab-pane>
-          <a-tab-pane key="2" tab="Information">
+          <a-tab-pane key="2" tab="Orders">
           </a-tab-pane>
-          <a-tab-pane key="3" tab="Suppliers">
+          <a-tab-pane key="3" tab="Information">
           </a-tab-pane>
-          <a-tab-pane key="4" tab="Pricing">
+          <a-tab-pane key="4" tab="Suppliers">
           </a-tab-pane>
-          <a-tab-pane key="5" tab="Environments">
+          <a-tab-pane key="5" tab="Pricing">
           </a-tab-pane>
         </a-tabs>
       </div>
@@ -185,11 +209,13 @@
 <script>
 import TimeGraph from "./Analytics/TimeGraph";
 import TimeToolbar from "./Analytics/TimeToolbar";
+import EnvironmentTab from "./Analytics/EnvironmentTab";
 
 const _ = require('lodash');
 const moment = require('moment');
 import {v4 as uuidv4} from 'uuid';
 import OrganisationalGraph from "./Analytics/OrganisationalGraph";
+import LocationGraph from "./Analytics/LocationGraph";
 
 const VIEW_TEMPLATE = {
   metricsTopBar: [
@@ -228,7 +254,7 @@ const VIEW_TEMPLATE = {
 
 
 export default {
-  components: {TimeGraph, TimeToolbar, OrganisationalGraph},
+  components: {LocationGraph, TimeGraph, TimeToolbar, OrganisationalGraph, EnvironmentTab},
 
   data() {
     return {
@@ -236,6 +262,7 @@ export default {
       viewChangerVisible: false,
       insightsTabVisible: false,
       insightResultsTabVisible: false,
+      shareTabVisible: false,
 
       metrics: [
         {
@@ -429,6 +456,14 @@ export default {
       this.insightsTabVisible = false;
     },
 
+    openShareTab() {
+      this.shareTabVisible = true;
+    },
+
+    closeShareTab() {
+      this.shareTabVisible = false;
+    },
+
     openInsightResultsTab() {
       this.insightResultsTabVisible = true;
     },
@@ -566,5 +601,34 @@ export default {
 
 .insight-results-question {
   margin-bottom: 30px;
+}
+
+.button-margin-bottom {
+  margin-bottom: 15px;
+}
+
+.share-button {
+  text-align: left;
+  height: 50px;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+}
+
+.share-button i {
+  flex-shrink: 1;
+}
+
+.share-button-inner {
+  padding-left: 20px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.share-button-inner .share-button-text {
+ flex: 1;
 }
 </style>

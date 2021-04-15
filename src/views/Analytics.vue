@@ -284,7 +284,7 @@ export default {
           value: function(startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
-            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(sum);
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(sum);
           },
           time_series_data: {
             'Jan 2020': 2282860,
@@ -374,7 +374,7 @@ export default {
           value: function(startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
-            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(sum);
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(sum);
           },
           time_series_data: {
             'Jan 2020': 307304,

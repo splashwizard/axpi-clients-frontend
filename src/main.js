@@ -13,6 +13,10 @@ Vue.config.productionTip = false
 window.API_BASE = 'https://api.axiomdata.io/api/clients';
 window.API_TOKEN_URL = 'https://api.axiomdata.io/api/token';
 
+// Html 2 canvas (screenshoting analytics)
+import VueHtml2Canvas from 'vue-html2canvas';
+Vue.use(VueHtml2Canvas);
+
 // Ant Design
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';

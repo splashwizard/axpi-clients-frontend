@@ -1,191 +1,259 @@
 <template>
   <div class="analytics">
 
-    <div class="page-header">
-      <h1 class="page-title">Analytics</h1>
-      <div class="actions">
-        <a-button type="secondary" class="button-header" size="large" shape="circle"
-                  icon="share-alt" @click="openShareTab"></a-button>
-        <a-drawer title="Share this report" placement="right" width="350" :visible="shareTabVisible"
-                  @close="closeShareTab"
-                  @click="openShareTab">
-          <a-button block size="large" icon="link" class="share-button button-margin-bottom">
-            <div class="share-button-inner">
-              <div class="share-button-text">
-                Share link
-              </div>
-              <a-icon type="right"></a-icon>
-            </div>
-          </a-button>
-          <a-button block size="large" icon="file" class="share-button button-margin-bottom">
-            <div class="share-button-inner">
-              <div class="share-button-text">
-                Download file
-              </div>
-              <a-icon type="right"></a-icon>
-            </div>
-          </a-button>
-        </a-drawer>
-
-        <a-button type="secondary" class="button-header" size="large" shape="circle"
-                  icon="bulb" @click="openInsightsTab"></a-button>
-        <a-drawer title="Insights" placement="right" width="400"
-                  :visible="insightsTabVisible" @close="closeInsightsTab">
-
-          <a-collapse class="collapse-margin-bottom">
-            <a-collapse-panel key="1" header="Basic Performance">
-              <p></p>
-            </a-collapse-panel>
-          </a-collapse>
-
-          <a-collapse class="collapse-margin-bottom">
-            <a-collapse-panel key="1" header="Price Performance">
-            </a-collapse-panel>
-          </a-collapse>
-
-          <a-collapse class="collapse-margin-bottom">
-            <a-collapse-panel key="1" header="Diversity">
-            </a-collapse-panel>
-          </a-collapse>
-
-          <a-collapse class="collapse-margin-bottom">
-            <a-collapse-panel key="1" header="Suppliers">
-            </a-collapse-panel>
-          </a-collapse>
-
-          <a-collapse class="collapse-margin-bottom">
-            <a-collapse-panel key="1" header="Orders">
-            </a-collapse-panel>
-          </a-collapse>
-
-          <a-collapse class="collapse-margin-bottom">
-            <a-collapse-panel key="1" header="Information">
-            </a-collapse-panel>
-          </a-collapse>
-
-          <a-collapse>
-            <a-collapse-panel key="1" header="Environmentalism">
-              <a-button @click.prevent="getInsight">Which is my most environmentally harmful specification this month?
-              </a-button>
-              <a-button @click.prevent="getInsight">Which business unit is the least environmentally friendly?
-              </a-button>
-              <a-button @click.prevent="getInsight">Which country produces the most CO2e?</a-button>
-              <a-button @click.prevent="getInsight">What should I do to reduce my environmental impact in my print
-                category?
-              </a-button>
-              <a-button @click.prevent="getInsight">What is my environmental impact by not using recycled materials?
-              </a-button>
-            </a-collapse-panel>
-          </a-collapse>
-
-          <!-- RESULTS DRAWER -->
-          <a-drawer class="insight-results-drawer" title="Results" :visible="insightResultsTabVisible" width="350"
-                    @close="closeInsightResultsTab">
-
-            <div class="insight-results-question">
-              <b>You asked: which business unit is the most environmentally friendly?</b>
-            </div>
-
-            <a-card>
-              <p>
-                Business unit 1 is the most environmentally friendly.
-              </p>
-              <p>
-                It's carbon emissions are 20% below your organisational average.
-              </p>
-            </a-card>
-
-          </a-drawer>
-          <!-- / RESULTS DRAWER -->
-
-        </a-drawer>
-
-        <a-button type="secondary" class="button-header" size="large" shape="circle"
-                  icon="eye" @click="openViewChanger"></a-button>
-        <a-drawer
-            title="Views"
-            placement="right"
-            :visible="viewChangerVisible"
-            @close="closeViewChanger"
-        >
-
-          <!-- Inside -->
-          <div class="view-changer-inside">
-            <div class="top-section">
-
-              <!-- View -->
-              <div class="view-selector" v-for="view in views" :key="view.id">
-
-                <a-card :bordered="false" @click.prevent="selectView(view.id)">
-                  <img slot="cover" :class="{'selected': selectedViewId === view.id}"
-                       src="/img/analytics/screenshot.png" alt="Analytics">
-                  <a-card-meta :title="view.name">
-                  </a-card-meta>
-                </a-card>
-
-                <!--                <a-button :class="{'active': selectedViewId === view.id}"-->
-                <!--                          -->
-                <!--                          block>{{ view.name }}-->
-                <!--                </a-button>-->
-              </div>
-              <!-- / View -->
-
-            </div>
-            <div class="bottom-section">
-              <a-button @click.prevent="() => addView()"
-                        block type="primary" icon="plus">Add View
-              </a-button>
-            </div>
-          </div>
-          <!-- / Inside -->
-
-        </a-drawer>
-      </div>
-    </div>
-
     <!-- Wrapper -->
     <div class="wrapper" v-if="selectedView">
-      <!-- Metrics top bar -->
-      <div class="metrics-top-bar">
-        <div v-for="(m, index) in selectedView.metricsTopBar" :key="index">
-          <metric-card :index="index"
-                       :background-colour="m.background"
-                       :text-colour="m.text"
-                       :metrics="metrics"
-                       :start-month="startMonth"
-                       :end-month="endMonth"
-                       :selected-metric-id="m.metric_id"
-                       :is-active="m.active"
-                       @metric-changed="handleMetricChanged"
-                       @toggle-active="toggleMetricActive"></metric-card>
+      <!-- Screenshot wrapper -->
+      <div ref="screenshot">
+        <div class="page-header">
+          <h1 class="page-title">Analytics</h1>
+          <div class="actions">
+            <a-tooltip placement="bottom">
+              <template slot="title">
+                <span>Compare</span>
+              </template>
+              <a-button type="secondary" class="button-header" size="large" shape="circle"
+                        icon="diff" @click="openCompareTab"></a-button>
+            </a-tooltip>
+            <a-drawer
+                width="300"
+                title="Compare"
+                placement="right"
+                :visible="compareTabVisible"
+                @close="closeCompareTab"
+            >
+
+              <!-- Inside -->
+              <div class="view-changer-inside" :key="screenshotUpdateKey">
+                <div class="top-section">
+
+                  <!-- View -->
+                  <div class="view-selector" v-for="view in views" :key="view.id">
+
+                    <a-card :bordered="false" @click.prevent="selectView(view.id)" v-if="view.id !== selectedViewId">
+                      <img slot="cover" :class="{'selected': selectedViewId === view.id}"
+                           :src="view.screenshot" v-if="view.screenshot" alt="Analytics">
+                      <img slot="cover" :class="{'selected': selectedViewId === view.id}"
+                           src="/img/analytics/loading.png" v-else alt="Analytics">
+                      <a-card-meta :title="view.name">
+                      </a-card-meta>
+                    </a-card>
+
+                    <!--                <a-button :class="{'active': selectedViewId === view.id}"-->
+                    <!--                          -->
+                    <!--                          block>{{ view.name }}-->
+                    <!--                </a-button>-->
+                  </div>
+                  <!-- / View -->
+
+                </div>
+              </div>
+              <!-- / Inside -->
+
+            </a-drawer>
+
+            <a-tooltip placement="bottom">
+              <template slot="title">
+                <span>Share</span>
+              </template>
+              <a-button type="secondary" class="button-header" size="large" shape="circle"
+                        icon="share-alt" @click="openShareTab"></a-button>
+            </a-tooltip>
+
+            <a-drawer title="Share this report" placement="right" width="350" :visible="shareTabVisible"
+                      @close="closeShareTab"
+                      @click="openShareTab">
+              <a-button block size="large" icon="link" class="share-button button-margin-bottom">
+                <div class="share-button-inner">
+                  <div class="share-button-text">
+                    Share link
+                  </div>
+                  <a-icon type="right"></a-icon>
+                </div>
+              </a-button>
+              <a-button block size="large" icon="file" class="share-button button-margin-bottom">
+                <div class="share-button-inner">
+                  <div class="share-button-text">
+                    Download file
+                  </div>
+                  <a-icon type="right"></a-icon>
+                </div>
+              </a-button>
+            </a-drawer>
+
+            <a-tooltip placement="bottom">
+              <template slot="title">
+                <span>Insights</span>
+              </template>
+              <a-button type="secondary" class="button-header" size="large" shape="circle"
+                        icon="bulb" @click="openInsightsTab"></a-button>
+            </a-tooltip>
+            <a-drawer title="Insights" placement="right" width="350"
+                      :visible="insightsTabVisible" @close="closeInsightsTab">
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Basic Performance">
+                  <p></p>
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Price Performance">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Diversity">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Suppliers">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Orders">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Information">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse>
+                <a-collapse-panel key="1" header="Environmentalism">
+                  <a-button @click.prevent="getInsight">Which is my most environmentally harmful specification this
+                    month?
+                  </a-button>
+                  <a-button @click.prevent="getInsight">Which business unit is the least environmentally friendly?
+                  </a-button>
+                  <a-button @click.prevent="getInsight">Which country produces the most CO2e?</a-button>
+                  <a-button @click.prevent="getInsight">What should I do to reduce my environmental impact in my print
+                    category?
+                  </a-button>
+                  <a-button @click.prevent="getInsight">What is my environmental impact by not using recycled materials?
+                  </a-button>
+                </a-collapse-panel>
+              </a-collapse>
+
+              <!-- RESULTS DRAWER -->
+              <a-drawer class="insight-results-drawer" title="Results" :visible="insightResultsTabVisible" width="350"
+                        @close="closeInsightResultsTab">
+
+                <div class="insight-results-question">
+                  <b>You asked: which business unit is the most environmentally friendly?</b>
+                </div>
+
+                <a-card>
+                  <p>
+                    Business unit 1 is the most environmentally friendly.
+                  </p>
+                  <p>
+                    It's carbon emissions are 20% below your organisational average.
+                  </p>
+                </a-card>
+
+              </a-drawer>
+              <!-- / RESULTS DRAWER -->
+
+            </a-drawer>
+
+            <a-tooltip placement="bottom">
+              <template slot="title">
+                <span>Views</span>
+              </template>
+              <a-button type="secondary" class="button-header" size="large" shape="circle"
+                        icon="eye" @click="openViewChanger"></a-button>
+            </a-tooltip>
+            <a-drawer
+                width="300"
+                title="Views"
+                placement="right"
+                :visible="viewChangerVisible"
+                @close="closeViewChanger"
+            >
+
+              <!-- Inside -->
+              <div class="view-changer-inside" :key="screenshotUpdateKey">
+                <div class="top-section">
+
+                  <!-- View -->
+                  <div class="view-selector" v-for="view in views" :key="view.id">
+
+                    <a-card :bordered="false" @click.prevent="selectView(view.id)">
+                      <img slot="cover" :class="{'selected': selectedViewId === view.id}"
+                           :src="view.screenshot" v-if="view.screenshot" alt="Analytics">
+                      <img slot="cover" :class="{'selected': selectedViewId === view.id}"
+                           src="/img/analytics/loading.png" v-else alt="Analytics">
+                      <a-card-meta :title="view.name">
+                      </a-card-meta>
+                    </a-card>
+
+                    <!--                <a-button :class="{'active': selectedViewId === view.id}"-->
+                    <!--                          -->
+                    <!--                          block>{{ view.name }}-->
+                    <!--                </a-button>-->
+                  </div>
+                  <!-- / View -->
+
+                </div>
+                <div class="bottom-section">
+                  <a-button @click.prevent="() => addView()"
+                            block type="primary" icon="plus">Add View
+                  </a-button>
+                </div>
+              </div>
+              <!-- / Inside -->
+
+            </a-drawer>
+          </div>
         </div>
-      </div>
-      <!-- / Metrics top bar -->
 
-      <!-- Tabs 1 -->
-      <div class="tabs-container">
-        <a-tabs default-active-key="1" :animated="false">
-          <a-tab-pane key="1" tab="Time">
-            <!-- Time toolbar -->
-            <time-toolbar @filter-updated="incrementUpdateKey"
-                class="time-toolbar" :time-options="timeOptions"></time-toolbar>
-            <!-- Time toolbar -->
+        <!-- Metrics top bar -->
+        <div class="metrics-top-bar">
+          <div v-for="(m, index) in selectedView.metricsTopBar" :key="index">
+            <metric-card :index="index"
+                         :background-colour="m.background"
+                         :text-colour="m.text"
+                         :metrics="metrics"
+                         :start-month="startMonth"
+                         :end-month="endMonth"
+                         :selected-metric-id="m.metric_id"
+                         :is-active="m.active"
+                         @metric-changed="handleMetricChanged"
+                         @toggle-active="toggleMetricActive"></metric-card>
+          </div>
+        </div>
+        <!-- / Metrics top bar -->
 
-            <time-graph :key="updateKey" :chart-data="timeGraphData" :options="timeGraphOptions"
-                        :styles="timeGraphStyles"></time-graph>
-          </a-tab-pane>
-          <a-tab-pane key="2" tab="Location" force-render>
-            <location-graph :key="updateKey"></location-graph>
-          </a-tab-pane>
-          <a-tab-pane key="3" tab="Organisational Unit">
-            <organisational-graph></organisational-graph>
-          </a-tab-pane>
-          <a-tab-pane key="4" tab="Specifications">
-            <analytics-specifications-table></analytics-specifications-table>
-          </a-tab-pane>
-        </a-tabs>
+        <!-- Tabs 1 -->
+        <div class="tabs-container">
+          <a-tabs default-active-key="1" :animated="false">
+            <a-tab-pane key="1" tab="Time">
+              <!-- Time toolbar -->
+              <time-toolbar @filter-updated="incrementUpdateKey"
+                            class="time-toolbar" :time-options="timeOptions"></time-toolbar>
+              <!-- Time toolbar -->
+
+              <time-graph :key="updateKey" :chart-data="timeGraphData" :options="timeGraphOptions"
+                          :styles="timeGraphStyles"></time-graph>
+            </a-tab-pane>
+            <a-tab-pane key="2" tab="Location" force-render>
+              <location-graph :key="updateKey"></location-graph>
+            </a-tab-pane>
+            <a-tab-pane key="3" tab="Organisational Unit">
+              <organisational-graph></organisational-graph>
+            </a-tab-pane>
+            <a-tab-pane key="4" tab="Specifications">
+              <analytics-specifications-table></analytics-specifications-table>
+            </a-tab-pane>
+          </a-tabs>
+        </div>
+        <!-- / Tabs 1 -->
       </div>
-      <!-- / Tabs 1 -->
+      <!-- / Screenshot wrapper -->
 
       <!-- Tabs 2 -->
       <div class="tabs-2-container">
@@ -274,6 +342,8 @@ export default {
       insightsTabVisible: false,
       insightResultsTabVisible: false,
       shareTabVisible: false,
+      compareTabVisible: false,
+      screenshotInterval: null,
 
       metrics: [
         {
@@ -282,7 +352,7 @@ export default {
           // value: '£1.4M',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
-            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth-1, endMonth-1));
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth - 1, endMonth - 1));
             return new Intl.NumberFormat('en-US', {
               style: 'currency',
               currency: 'USD',
@@ -316,7 +386,7 @@ export default {
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
-            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth-1, endMonth-1));
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth - 1, endMonth - 1));
             return sum + ' T';
           },
           time_series_data: {
@@ -687,31 +757,32 @@ export default {
       },
 
       updateKey: 1,
+      screenshotUpdateKey: 1,
       selectedViewId: null
     }
   },
 
   computed: {
     startMonth() {
-      switch(this.timeOptions.duration) {
-       case '1W':
-         return 16;
-      case '2W':
-        return 16;
-      case '1M':
-        return 16;
-      case '3M':
-        return 15;
-      case '1Y':
-        return 5;
-      case 'QTD':
-        return 15;
-      case 'MTD':
-        return 16;
-      case 'YTD':
-        return 12;
-     default:
-       return 1;
+      switch (this.timeOptions.duration) {
+        case '1W':
+          return 16;
+        case '2W':
+          return 16;
+        case '1M':
+          return 16;
+        case '3M':
+          return 15;
+        case '1Y':
+          return 5;
+        case 'QTD':
+          return 15;
+        case 'MTD':
+          return 16;
+        case 'YTD':
+          return 12;
+        default:
+          return 1;
       }
     },
 
@@ -773,6 +844,15 @@ export default {
 
   mounted() {
     this.addView('Default');
+    let vm = this;
+    vm.updateViewScreenshot(vm);
+    this.screenshotInterval = window.setInterval(function () {
+      vm.updateViewScreenshot(vm);
+    }, 5000);
+  },
+
+  beforeDestroy() {
+    this.screenshotInterval = null;
   },
 
   methods: {
@@ -795,7 +875,7 @@ export default {
           }
       );
       this.selectView(viewId);
-      this.viewChangerVisible = false;
+      // this.viewChangerVisible = false;
     },
 
     toggleMetricActive(index) {
@@ -816,8 +896,21 @@ export default {
       this.updateKey += 1;
     },
 
+    incrementScreenshotUpdateKey() {
+      this.screenshotUpdateKey += 1;
+    },
+
     openViewChanger() {
       this.viewChangerVisible = true;
+    },
+
+    async updateViewScreenshot(vm) {
+      console.log('Taking screenshot huston');
+      const options = {
+        type: 'dataURL'
+      }
+      vm.selectedView.screenshot = await this.$html2canvas(this.$refs['screenshot'], options);
+      vm.incrementScreenshotUpdateKey();
     },
 
     closeViewChanger() {
@@ -838,6 +931,14 @@ export default {
 
     closeShareTab() {
       this.shareTabVisible = false;
+    },
+
+    openCompareTab() {
+      this.compareTabVisible = true;
+    },
+
+    closeCompareTab() {
+      this.compareTabVisible = false;
     },
 
     openInsightResultsTab() {

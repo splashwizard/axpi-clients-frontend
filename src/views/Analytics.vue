@@ -227,25 +227,25 @@ const VIEW_TEMPLATE = {
       active: true
     },
     {
-      metric_id: 'average-order-value',
+      metric_id: 'co2e',
       background: '#4dc8f2',
       text: '#fff',
       active: false
     },
     {
-      metric_id: 'average-order-value',
+      metric_id: 'water',
       background: '#46b98e',
       text: '#fff',
       active: false
     },
     {
-      metric_id: 'average-order-value',
+      metric_id: 'savings',
       background: '#ebdf00',
       text: '#000',
       active: false
     },
     {
-      metric_id: 'average-order-value',
+      metric_id: 'orders',
       background: '#fcb743',
       text: '#000',
       active: false
@@ -255,7 +255,14 @@ const VIEW_TEMPLATE = {
 
 
 export default {
-  components: {LocationGraph, TimeGraph, TimeToolbar, OrganisationalGraph, EnvironmentTab, AnalyticsSpecificationsTable},
+  components: {
+    LocationGraph,
+    TimeGraph,
+    TimeToolbar,
+    OrganisationalGraph,
+    EnvironmentTab,
+    AnalyticsSpecificationsTable
+  },
 
   data() {
     return {
@@ -271,59 +278,149 @@ export default {
           label: 'Total Spend',
           value: '£1.4M',
           time_series_data: {
-            'Apr 20': 1,
-            'May 20': 2,
-            'Jun 20': 3,
-            'Jul 20': 4,
-            'Aug 20': 5,
-            'Sep 20': 6,
-            'Oct 20': 7,
-            'Nov 20': 8,
-            'Dec 20': 9,
-            'Jan 21': 10,
-            'Feb 21': 11,
-            'Mar 21': 12,
-            'Apr 21': 13
+            'Jan 2020': 2282860,
+            'Feb 2020': 1343124,
+            'Mar 2020': 2476040,
+            'Apr 2020': 1243835,
+            'May 2020': 2647940,
+            'Jun 2020': 1950403,
+            'Jul 2020': 1106609,
+            'Aug 2020': 1754552,
+            'Sep 2020': 3023468,
+            'Oct 2020': 1729170,
+            'Nov 2020': 813515,
+            'Dec 2020': 2273012,
+            'Jan 2021': 1101033,
+            'Feb 2021': 1345824,
+            'Mar 2021': 3520224,
+            'Apr 2021': 2548798,
+            'May 2021': 3468080,
+            'Jun 2021': 2153280
           }
         },
         {
-          id: 'average-order-value',
-          label: 'AOV',
-          value: '£30k',
+          id: 'co2e',
+          label: 'CO2e',
+          value: '1',
           time_series_data: {
-            'Apr 20': 3,
-            'May 20': 2,
-            'Jun 20': 1,
-            'Jul 20': 2,
-            'Aug 20': 3,
-            'Sep 20': 2,
-            'Oct 20': 1,
-            'Nov 20': 2,
-            'Dec 20': 3,
-            'Jan 21': 2,
-            'Feb 21': 1,
-            'Mar 21': 2,
-            'Apr 21': 1
+            'Jan 2020': 63,
+            'Feb 2020': 94,
+            'Mar 2020': 140,
+            'Apr 2020': 117,
+            'May 2020': 62,
+            'Jun 2020': 84,
+            'Jul 2020': 51,
+            'Aug 2020': 134,
+            'Sep 2020': 100,
+            'Oct 2020': 114,
+            'Nov 2020': 92,
+            'Dec 2020': 117,
+            'Jan 2021': 85,
+            'Feb 2021': 77,
+            'Mar 2021': 141,
+            'Apr 2021': 131,
+            'May 2021': 91,
+            'Jun 2021': 119
           }
         },
         {
-          id: 'average-items-per-order',
-          label: 'Average Items / Order',
-          value: 3,
+          id: 'water',
+          label: 'Water',
+          value: '1',
           time_series_data: {
-            'Apr 20': 9,
-            'May 20': 8,
-            'Jun 20': 8,
-            'Jul 20': 5,
-            'Aug 20': 4,
-            'Sep 20': 3,
-            'Oct 20': 2,
-            'Nov 20': 1,
-            'Dec 20': 0,
-            'Jan 21': 0,
-            'Feb 21': 0,
-            'Mar 21': 0,
-            'Apr 21': 0
+            'Jan 2020': 730,
+            'Feb 2020': 685,
+            'Mar 2020': 606,
+            'Apr 2020': 910,
+            'May 2020': 910,
+            'Jun 2020': 392,
+            'Jul 2020': 592,
+            'Aug 2020': 1015,
+            'Sep 2020': 581,
+            'Oct 2020': 665,
+            'Nov 2020': 602,
+            'Dec 2020': 316,
+            'Jan 2021': 560,
+            'Feb 2021': 370,
+            'Mar 2021': 654,
+            'Apr 2021': 452,
+            'May 2021': 440,
+            'Jun 2021': 700
+          }
+        },
+        {
+          id: 'savings',
+          label: 'Savings',
+          value: '1',
+          time_series_data: {
+            'Jan 2020': 307304,
+            'Feb 2020': 331296,
+            'Mar 2020': 452668,
+            'Apr 2020': 202533,
+            'May 2020': 488522,
+            'Jun 2020': 149113,
+            'Jul 2020': 129732,
+            'Aug 2020': 487129,
+            'Sep 2020': 369323,
+            'Oct 2020': 197640,
+            'Nov 2020': 238145,
+            'Dec 2020': 363039,
+            'Jan 2021': 308252,
+            'Feb 2021': 398058,
+            'Mar 2021': 240899,
+            'Apr 2021': 262354,
+            'May 2021': 484095,
+            'Jun 2021': 364543
+          }
+        },
+        {
+          id: 'total-spend',
+          label: 'Total Spend',
+          value: '1',
+          time_series_data: {
+            'Jan 2020': 2389170,
+            'Feb 2020': 2631537,
+            'Mar 2020': 4053830,
+            'Apr 2020': 1466214,
+            'May 2020': 3428912,
+            'Jun 2020': 2743236,
+            'Jul 2020': 3764968,
+            'Aug 2020': 1490695,
+            'Sep 2020': 2888496,
+            'Oct 2020': 2150625,
+            'Nov 2020': 2697723,
+            'Dec 2020': 1639064,
+            'Jan 2021': 843780,
+            'Feb 2021': 4193595,
+            'Mar 2021': 2527220,
+            'Apr 2021': 1017585,
+            'May 2021': 714264,
+            'Jun 2021': 2867355
+          }
+        },
+        {
+          id: 'orders',
+          label: 'Orders',
+          value: '1',
+          time_series_data: {
+            'Jan 2020': 2140,
+            'Feb 2020': 3385,
+            'Mar 2020': 2205,
+            'Apr 2020': 2618,
+            'May 2020': 1475,
+            'Jun 2020': 2482,
+            'Jul 2020': 3012,
+            'Aug 2020': 1587,
+            'Sep 2020': 2456,
+            'Oct 2020': 1373,
+            'Nov 2020': 2135,
+            'Dec 2020': 2350,
+            'Jan 2021': 2146,
+            'Feb 2021': 2334,
+            'Mar 2021': 2394,
+            'Apr 2021': 1004,
+            'May 2021': 4782,
+            'Jun 2021': 2419
           }
         }
       ],
@@ -345,7 +442,10 @@ export default {
 
   computed: {
     timeGraphData() {
-      const labels = ["Apr 20", "May 20", "Jun 20", "Jul 20", "Aug 20", "Sep 20", "Oct 20", "Nov 20", "Dec 20", "Jan 21", "Feb 21", "Mar 21", "Apr 21"];
+      const startMonth = 3;
+      const endMonth = 16;
+
+      const labels = ["Jan 20", "Feb 20", "Mar 20", "Apr 20", "May 20", "Jun 20", "Jul 20", "Aug 20", "Sep 20", "Oct 20", "Nov 20", "Dec 20", "Jan 21", "Feb 21", "Mar 21", "Apr 21", "May 21", "Jun 21"].slice(startMonth, endMonth);
       let datasets = [];
 
       const activeTopBarMetrics = _.filter(this.selectedView.metricsTopBar, metric => {
@@ -356,7 +456,7 @@ export default {
         let metric = _.find(this.metrics, {id: tbm.metric_id});
         datasets.push({
           label: metric.label,
-          data: Object.values(metric.time_series_data),
+          data: Object.values(metric.time_series_data).slice(startMonth, endMonth),
           backgroundColor: 'rgba(0,0,0,0)',
           borderColor: tbm.background,
           pointBackgroundColor: tbm.background,
@@ -630,6 +730,6 @@ export default {
 }
 
 .share-button-inner .share-button-text {
- flex: 1;
+  flex: 1;
 }
 </style>

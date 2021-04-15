@@ -7,11 +7,11 @@ import axios from 'axios';
 
 Vue.config.productionTip = false
 
-window.API_BASE = 'http://axpi-api.test/api/clients';
-window.API_TOKEN_URL = 'http://axpi-api.test/api/token';
+// window.API_BASE = 'http://axpi-api.test/api/clients';
+// window.API_TOKEN_URL = 'http://axpi-api.test/api/token';
 
-// window.API_BASE = 'https://api.axiomdata.io/api/clients';
-// window.API_TOKEN_URL = 'https://api.axiomdata.io/api/token';
+window.API_BASE = 'https://api.axiomdata.io/api/clients';
+window.API_TOKEN_URL = 'https://api.axiomdata.io/api/token';
 //
 // Ant Design
 import Antd from 'ant-design-vue';

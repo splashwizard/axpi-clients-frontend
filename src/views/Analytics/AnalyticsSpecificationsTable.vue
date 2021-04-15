@@ -20,12 +20,12 @@ const columns = [
     key: 'orders'
   },
   {
-    title: 'Spend ($)',
+    title: 'Spend (£)',
     dataIndex: 'spend',
     key: 'spend'
   },
   {
-    title: 'Savings ($)',
+    title: 'Savings (£)',
     dataIndex: 'savings',
     key: 'savings'
   },

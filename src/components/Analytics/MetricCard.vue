@@ -21,7 +21,7 @@
       <div class="ant-statistic-content">
         <span class="ant-statistic-content-value">
           <span class="ant-statistic-content-value-int" :style="textStyle">
-           {{ metric.value }}
+           {{ metric.value(this.startMonth, this.endMonth, metric.time_series_data) }}
           </span>
         </span>
       </div>
@@ -32,7 +32,7 @@
 <script>
 let _ = require('lodash');
 export default {
-  props: ['index', 'metrics', 'selectedMetricId', 'isActive', 'backgroundColour', 'textColour'],
+  props: ['index', 'metrics', 'selectedMetricId', 'isActive', 'backgroundColour', 'textColour', 'startMonth', 'endMonth'],
   name: "MetricCard",
   data() {
     return {}

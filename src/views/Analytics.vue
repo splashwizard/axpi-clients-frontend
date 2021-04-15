@@ -152,6 +152,8 @@
                        :background-colour="m.background"
                        :text-colour="m.text"
                        :metrics="metrics"
+                       :start-month="startMonth"
+                       :end-month="endMonth"
                        :selected-metric-id="m.metric_id"
                        :is-active="m.active"
                        @metric-changed="handleMetricChanged"
@@ -271,12 +273,19 @@ export default {
       insightsTabVisible: false,
       insightResultsTabVisible: false,
       shareTabVisible: false,
+      startMonth: 3,
+      endMonth: 16,
 
       metrics: [
         {
           id: 'total-spend',
           label: 'Total Spend',
-          value: '£1.4M',
+          // value: '£1.4M',
+          value: function(startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(sum);
+          },
           time_series_data: {
             'Jan 2020': 2282860,
             'Feb 2020': 1343124,
@@ -301,7 +310,12 @@ export default {
         {
           id: 'co2e',
           label: 'CO2e',
-          value: '1',
+          // value: '1',
+          value: function(startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum + ' kg';
+          },
           time_series_data: {
             'Jan 2020': 63,
             'Feb 2020': 94,
@@ -326,7 +340,12 @@ export default {
         {
           id: 'water',
           label: 'Water',
-          value: '1',
+          // value: '1',
+          value: function(startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum + ' T';
+          },
           time_series_data: {
             'Jan 2020': 730,
             'Feb 2020': 685,
@@ -351,7 +370,12 @@ export default {
         {
           id: 'savings',
           label: 'Savings',
-          value: '1',
+          // value: '1',
+          value: function(startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(sum);
+          },
           time_series_data: {
             'Jan 2020': 307304,
             'Feb 2020': 331296,
@@ -376,7 +400,12 @@ export default {
         {
           id: 'total-spend',
           label: 'Total Spend',
-          value: '1',
+          // value: '1',
+          value: function(startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
           time_series_data: {
             'Jan 2020': 2389170,
             'Feb 2020': 2631537,
@@ -401,7 +430,12 @@ export default {
         {
           id: 'orders',
           label: 'Orders',
-          value: '1',
+          // value: '1',
+          value: function(startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
           time_series_data: {
             'Jan 2020': 2140,
             'Feb 2020': 3385,

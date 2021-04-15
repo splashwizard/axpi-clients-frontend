@@ -167,7 +167,8 @@
         <a-tabs default-active-key="1" :animated="false">
           <a-tab-pane key="1" tab="Time">
             <!-- Time toolbar -->
-            <time-toolbar class="time-toolbar" :time-options="timeOptions"></time-toolbar>
+            <time-toolbar @filter-updated="incrementUpdateKey"
+                class="time-toolbar" :time-options="timeOptions"></time-toolbar>
             <!-- Time toolbar -->
 
             <time-graph :key="updateKey" :chart-data="timeGraphData" :options="timeGraphOptions"
@@ -273,18 +274,20 @@ export default {
       insightsTabVisible: false,
       insightResultsTabVisible: false,
       shareTabVisible: false,
-      startMonth: 3,
-      endMonth: 16,
 
       metrics: [
         {
           id: 'total-spend',
           label: 'Total Spend',
           // value: '£1.4M',
-          value: function(startMonth, endMonth, timeSeriesData) {
+          value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
-            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(sum);
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth-1, endMonth-1));
+            return new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
+              maximumFractionDigits: 0
+            }).format(sum);
           },
           time_series_data: {
             'Jan 2020': 2282860,
@@ -311,10 +314,10 @@ export default {
           id: 'co2e',
           label: 'CO2e',
           // value: '1',
-          value: function(startMonth, endMonth, timeSeriesData) {
+          value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
-            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
-            return sum + ' kg';
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth-1, endMonth-1));
+            return sum + ' T';
           },
           time_series_data: {
             'Jan 2020': 63,
@@ -341,7 +344,7 @@ export default {
           id: 'water',
           label: 'Water',
           // value: '1',
-          value: function(startMonth, endMonth, timeSeriesData) {
+          value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
             return sum + ' T';
@@ -371,10 +374,14 @@ export default {
           id: 'savings',
           label: 'Savings',
           // value: '1',
-          value: function(startMonth, endMonth, timeSeriesData) {
+          value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0}).format(sum);
+            return new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
+              maximumFractionDigits: 0
+            }).format(sum);
           },
           time_series_data: {
             'Jan 2020': 307304,
@@ -401,7 +408,7 @@ export default {
           id: 'total-spend',
           label: 'Total Spend',
           // value: '1',
-          value: function(startMonth, endMonth, timeSeriesData) {
+          value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
             return sum;
@@ -431,7 +438,7 @@ export default {
           id: 'orders',
           label: 'Orders',
           // value: '1',
-          value: function(startMonth, endMonth, timeSeriesData) {
+          value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
             return sum;
@@ -456,7 +463,217 @@ export default {
             'May 2021': 4782,
             'Jun 2021': 2419
           }
-        }
+        },
+        {
+          id: 'payments-made',
+          label: 'Payments Made',
+          // value: '1',
+          value: function (startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
+          time_series_data: {
+            'Jan 2020': 2140,
+            'Feb 2020': 3385,
+            'Mar 2020': 2205,
+            'Apr 2020': 2618,
+            'May 2020': 1475,
+            'Jun 2020': 2482,
+            'Jul 2020': 3012,
+            'Aug 2020': 1587,
+            'Sep 2020': 2456,
+            'Oct 2020': 1373,
+            'Nov 2020': 2135,
+            'Dec 2020': 2350,
+            'Jan 2021': 2146,
+            'Feb 2021': 2334,
+            'Mar 2021': 2394,
+            'Apr 2021': 1004,
+            'May 2021': 4782,
+            'Jun 2021': 2419
+          }
+        },
+        {
+          id: 'information-requests-rejected',
+          label: 'Information Requests Rejected',
+          // value: '1',
+          value: function (startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
+          time_series_data: {
+            'Jan 2020': 2140,
+            'Feb 2020': 3385,
+            'Mar 2020': 2205,
+            'Apr 2020': 2618,
+            'May 2020': 1475,
+            'Jun 2020': 2482,
+            'Jul 2020': 3012,
+            'Aug 2020': 1587,
+            'Sep 2020': 2456,
+            'Oct 2020': 1373,
+            'Nov 2020': 2135,
+            'Dec 2020': 2350,
+            'Jan 2021': 2146,
+            'Feb 2021': 2334,
+            'Mar 2021': 2394,
+            'Apr 2021': 1004,
+            'May 2021': 4782,
+            'Jun 2021': 2419
+          }
+        },
+        {
+          id: 'information-requests-sent',
+          label: 'Information Requests Sent',
+          // value: '1',
+          value: function (startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
+          time_series_data: {
+            'Jan 2020': 2140,
+            'Feb 2020': 3385,
+            'Mar 2020': 2205,
+            'Apr 2020': 2618,
+            'May 2020': 1475,
+            'Jun 2020': 2482,
+            'Jul 2020': 3012,
+            'Aug 2020': 1587,
+            'Sep 2020': 2456,
+            'Oct 2020': 1373,
+            'Nov 2020': 2135,
+            'Dec 2020': 2350,
+            'Jan 2021': 2146,
+            'Feb 2021': 2334,
+            'Mar 2021': 2394,
+            'Apr 2021': 1004,
+            'May 2021': 4782,
+            'Jun 2021': 2419
+          }
+        },
+        {
+          id: 'information-requests-completed',
+          label: 'Information Requests Completed',
+          // value: '1',
+          value: function (startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
+          time_series_data: {
+            'Jan 2020': 2140,
+            'Feb 2020': 3385,
+            'Mar 2020': 2205,
+            'Apr 2020': 2618,
+            'May 2020': 1475,
+            'Jun 2020': 2482,
+            'Jul 2020': 3012,
+            'Aug 2020': 1587,
+            'Sep 2020': 2456,
+            'Oct 2020': 1373,
+            'Nov 2020': 2135,
+            'Dec 2020': 2350,
+            'Jan 2021': 2146,
+            'Feb 2021': 2334,
+            'Mar 2021': 2394,
+            'Apr 2021': 1004,
+            'May 2021': 4782,
+            'Jun 2021': 2419
+          }
+        },
+        {
+          id: 'percentage-of-information-completed',
+          label: '% Information Completed',
+          // value: '1',
+          value: function (startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
+          time_series_data: {
+            'Jan 2020': 2140,
+            'Feb 2020': 3385,
+            'Mar 2020': 2205,
+            'Apr 2020': 2618,
+            'May 2020': 1475,
+            'Jun 2020': 2482,
+            'Jul 2020': 3012,
+            'Aug 2020': 1587,
+            'Sep 2020': 2456,
+            'Oct 2020': 1373,
+            'Nov 2020': 2135,
+            'Dec 2020': 2350,
+            'Jan 2021': 2146,
+            'Feb 2021': 2334,
+            'Mar 2021': 2394,
+            'Apr 2021': 1004,
+            'May 2021': 4782,
+            'Jun 2021': 2419
+          }
+        },
+        {
+          id: 'number-of-suppliers-used',
+          label: 'Number Of Suppliers Used',
+          // value: '1',
+          value: function (startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
+          time_series_data: {
+            'Jan 2020': 2140,
+            'Feb 2020': 3385,
+            'Mar 2020': 2205,
+            'Apr 2020': 2618,
+            'May 2020': 1475,
+            'Jun 2020': 2482,
+            'Jul 2020': 3012,
+            'Aug 2020': 1587,
+            'Sep 2020': 2456,
+            'Oct 2020': 1373,
+            'Nov 2020': 2135,
+            'Dec 2020': 2350,
+            'Jan 2021': 2146,
+            'Feb 2021': 2334,
+            'Mar 2021': 2394,
+            'Apr 2021': 1004,
+            'May 2021': 4782,
+            'Jun 2021': 2419
+          }
+        },
+        {
+          id: 'number-of-unique-specifications',
+          label: 'Number Of Unique Specifications',
+          // value: '1',
+          value: function (startMonth, endMonth, timeSeriesData) {
+            // return startMonth + endMonth;
+            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
+            return sum;
+          },
+          time_series_data: {
+            'Jan 2020': 2140,
+            'Feb 2020': 3385,
+            'Mar 2020': 2205,
+            'Apr 2020': 2618,
+            'May 2020': 1475,
+            'Jun 2020': 2482,
+            'Jul 2020': 3012,
+            'Aug 2020': 1587,
+            'Sep 2020': 2456,
+            'Oct 2020': 1373,
+            'Nov 2020': 2135,
+            'Dec 2020': 2350,
+            'Jan 2021': 2146,
+            'Feb 2021': 2334,
+            'Mar 2021': 2394,
+            'Apr 2021': 1004,
+            'May 2021': 4782,
+            'Jun 2021': 2419
+          }
+        },
       ],
 
       timeGraphStyles: {
@@ -475,11 +692,35 @@ export default {
   },
 
   computed: {
-    timeGraphData() {
-      const startMonth = 3;
-      const endMonth = 16;
+    startMonth() {
+      switch(this.timeOptions.duration) {
+       case '1W':
+         return 16;
+      case '2W':
+        return 16;
+      case '1M':
+        return 16;
+      case '3M':
+        return 15;
+      case '1Y':
+        return 5;
+      case 'QTD':
+        return 15;
+      case 'MTD':
+        return 16;
+      case 'YTD':
+        return 12;
+     default:
+       return 1;
+      }
+    },
 
-      const labels = ["Jan 20", "Feb 20", "Mar 20", "Apr 20", "May 20", "Jun 20", "Jul 20", "Aug 20", "Sep 20", "Oct 20", "Nov 20", "Dec 20", "Jan 21", "Feb 21", "Mar 21", "Apr 21", "May 21", "Jun 21"].slice(startMonth, endMonth);
+    endMonth() {
+      return 18;
+    },
+
+    timeGraphData() {
+      const labels = ["Jan 20", "Feb 20", "Mar 20", "Apr 20", "May 20", "Jun 20", "Jul 20", "Aug 20", "Sep 20", "Oct 20", "Nov 20", "Dec 20", "Jan 21", "Feb 21", "Mar 21", "Apr 21", "May 21", "Jun 21"].slice(this.startMonth, this.endMonth);
       let datasets = [];
 
       const activeTopBarMetrics = _.filter(this.selectedView.metricsTopBar, metric => {
@@ -490,7 +731,7 @@ export default {
         let metric = _.find(this.metrics, {id: tbm.metric_id});
         datasets.push({
           label: metric.label,
-          data: Object.values(metric.time_series_data).slice(startMonth, endMonth),
+          data: Object.values(metric.time_series_data).slice(this.startMonth, this.endMonth),
           backgroundColor: 'rgba(0,0,0,0)',
           borderColor: tbm.background,
           pointBackgroundColor: tbm.background,

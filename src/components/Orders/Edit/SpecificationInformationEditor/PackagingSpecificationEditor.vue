@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Boxes -->
-    <boxes-specification-editor v-if="orderLocal.product_subtype === 'boxes'"></boxes-specification-editor>
+    <boxes-specification-editor :order-local="orderLocal" v-if="orderLocal.product_subtype === 'boxes'"></boxes-specification-editor>
     <!-- / Boxes -->
   </div>
 </template>

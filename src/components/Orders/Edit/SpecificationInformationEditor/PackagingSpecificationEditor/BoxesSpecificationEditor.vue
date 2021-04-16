@@ -3,23 +3,143 @@
     <div class="form-header">
       <h2 class="form-header-title">Model</h2>
       <a-button v-if="selectedModel"
-          class="form-header-action" @click="selectModel(null)">Change model</a-button>
+                class="form-header-action" @click="selectModel(null)">Change model
+      </a-button>
     </div>
 
     <div class="loading-screen" v-if="isLoadingTemplates">
-      <a-spin />
+      <a-spin/>
     </div>
 
-    <div>
+    <div class="model-details-wrapper">
       <model-selector v-if="!selectedModel"
-          :models="packagingSpecs" :selected-model="selectedModel" @select-model="selectModel"></model-selector>
+                      :models="packagingSpecs" :selected-model="selectedModel"
+                      @select-model="selectModel"></model-selector>
 
       <!-- Model selected -->
       <div class="model-details-editor" v-if="selectedModel">
 
         <a-row>
           <a-col :span="12">
-            Asdf
+            <a-form layout="vertical">
+
+              <!-- Length -->
+              <a-form-item v-if="selectedModel.length" label="Length (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.length"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Length -->
+
+              <!-- Width -->
+              <a-form-item v-if="selectedModel.width" label="Width (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.width"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Width -->
+
+              <!-- Depth -->
+              <a-form-item v-if="selectedModel.depth" label="Depth (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.depth"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Depth -->
+
+              <!-- Diameter -->
+              <a-form-item v-if="selectedModel.diameter" label="Diameter (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.diameter"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Diameter -->
+
+              <!-- Breadth -->
+              <a-form-item v-if="selectedModel.breadth" label="Breadth (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.breadth"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Breadth -->
+
+              <!-- Th - Thickness -->
+              <a-form-item v-if="selectedModel['th-thickness']" label="Th (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.th_thickness"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Th - Thickness -->
+
+              <!-- C -->
+              <a-form-item v-if="selectedModel['c-thickness']" label="C (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.c"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / C -->
+
+              <!-- h -->
+              <a-form-item v-if="selectedModel['h']" label="h (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.h"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / h -->
+
+              <!-- Angle -->
+              <a-form-item v-if="selectedModel['angle']" label="Angle (deg)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.angle"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Angle -->
+
+              <!-- Radius -->
+              <a-form-item v-if="selectedModel['radius']" label="Radius (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.radius"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Radius -->
+
+              <!-- Sw thickness -->
+              <a-form-item v-if="selectedModel['sw-thickness']" label="Sw Thickness (mm)">
+                <a-input-group compact>
+                  <a-input size="large" style="width: 70%"
+                           v-model="orderLocal.packaging_box_specification.radius"
+                           @blur="forceRefresh"/>
+                </a-input-group>
+              </a-form-item>
+              <!-- / Sw thickness -->
+
+              <!-- Dimension type -->
+              <div v-if="selectedModel['dimension-type']">
+                Dimension type changer
+              </div>
+              <!-- / Dimension type -->
+
+            </a-form>
           </a-col>
           <a-col :span="12">
             <img class="flat-image" :src="getImageSrc(this.selectedModel['image'])" alt="3D Image">
@@ -39,6 +159,7 @@ import Images from "../../../../../mixins/Images";
 
 export default {
   name: "BoxesSpecificationEditor",
+  props: ['orderLocal'],
   data() {
     return {
       isLoadingTemplates: true,
@@ -83,7 +204,13 @@ export default {
 
     selectModel(model) {
       this.selectedModel = model;
-      this.orderLocal.packaging_box_specification.model_id = model.id;
+      this.orderLocal.packaging_box_specification.model_id = (model ? model.id : null);
+    },
+
+    forceRefresh() {
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
     }
   }
 }
@@ -108,8 +235,8 @@ export default {
   flex-shrink: 1;
 }
 
-.model-details-editor {
-  padding-bottom: 75px;
+.model-details-wrapper {
+  padding-bottom: 55px;
 }
 
 .flat-image {

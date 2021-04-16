@@ -725,8 +725,8 @@ export default {
       timeOptions: {
         duration: '1Y',
         dateRange: [
-            moment('2020-06-01'),
-            moment('2021-06-30')
+            moment('2020-04-01'),
+            moment('2021-04-30')
         ]
       },
 

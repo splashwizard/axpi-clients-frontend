@@ -47,15 +47,15 @@ export default {
 
       if (period === '1Y') {
         this.timeOptions.dateRange = [
-          moment('2020-06-01'),
-          moment('2021-06-30')
+          moment('2020-04-01'),
+          moment('2021-04-30')
         ];
       }
 
       if (period === 'YTD') {
         this.timeOptions.dateRange = [
           moment('2021-01-01'),
-          moment('2021-06-30')
+          moment('2021-04-30')
         ];
       }
     },

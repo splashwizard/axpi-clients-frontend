@@ -123,7 +123,7 @@
               </a-collapse>
 
               <a-collapse>
-                <a-collapse-panel key="1" header="Environmentalism">
+                <a-collapse-panel key="1" header="Environment">
                   <a-button @click.prevent="getInsight">Which is my most environmentally harmful specification this
                     month?
                   </a-button>
@@ -143,7 +143,7 @@
                         @close="closeInsightResultsTab">
 
                 <div class="insight-results-question">
-                  <b>You asked: which business unit is the most environmentally friendly?</b>
+                  <b>You asked: Which business unit is the most environmentally friendly?</b>
                 </div>
 
                 <a-card>
@@ -774,24 +774,24 @@ export default {
         case '2W':
           return 16;
         case '1M':
-          return 16;
+          return 14;
         case '3M':
-          return 15;
+          return 13;
         case '1Y':
-          return 5;
+          return 3;
         case 'QTD':
-          return 15;
+          return 13;
         case 'MTD':
-          return 16;
+          return 14;
         case 'YTD':
-          return 12;
+          return 11;
         default:
           return 1;
       }
     },
 
     endMonth() {
-      return 18;
+      return 16;
     },
 
     timeGraphData() {

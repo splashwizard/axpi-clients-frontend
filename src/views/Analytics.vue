@@ -826,10 +826,28 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          y: {beginAtZero: true},
           xAxes: [{
             gridLines: {
               display: false
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              // Return an empty string to draw the tick line but hide the tick label
+              // Return `null` or `undefined` to hide the tick line entirely
+              userCallback: function(value) {
+                // Convert the number to a string and splite the string every 3 charaters from the end
+                value = value.toString();
+                value = value.split(/(?=(?:...)*$)/);
+                // Convert the array to a string and format the output
+                value = value.join(',');
+                if (value !== '0') {
+                  return '$' + value;
+                } else {
+                  return 0;
+                }
+              }
             }
           }]
         },

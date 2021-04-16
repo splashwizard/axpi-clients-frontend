@@ -22,7 +22,7 @@
             Asdf
           </a-col>
           <a-col :span="12">
-            <img :src="getImageSrc(this.selectedModel['3d_image'])" alt="3D Image">
+            <img class="flat-image" :src="getImageSrc(this.selectedModel['image'])" alt="3D Image">
           </a-col>
         </a-row>
 
@@ -49,6 +49,23 @@ export default {
   mixins: [Images],
   components: {ModelSelector},
   mounted() {
+    if (!this.orderLocal.packaging_box_specification) {
+      this.orderLocal.packaging_box_specification = {
+        model_id: null,
+        length: null,
+        width: null,
+        depth: null,
+        diameter: null,
+        breadth: null,
+        th_thickness: null,
+        c: null,
+        h: null,
+        angle: null,
+        radius: null,
+        sw_thickness: null,
+        dimension_type: null
+      }
+    }
     this.loadTemplates();
   },
   methods: {
@@ -66,6 +83,7 @@ export default {
 
     selectModel(model) {
       this.selectedModel = model;
+      this.orderLocal.packaging_box_specification.model_id = model.id;
     }
   }
 }
@@ -92,5 +110,9 @@ export default {
 
 .model-details-editor {
   padding-bottom: 75px;
+}
+
+.flat-image {
+  width: 100%;
 }
 </style>

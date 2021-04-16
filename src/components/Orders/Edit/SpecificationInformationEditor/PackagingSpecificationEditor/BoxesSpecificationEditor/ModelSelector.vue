@@ -6,7 +6,7 @@
           <img
               slot="cover"
               alt="Image"
-              :src="getImageSrc(model.image)"
+              :src="getImageSrc(model['3d_image'])"
           />
           <a-card-meta :title="model.name">
             <template slot="description">

@@ -475,36 +475,6 @@ export default {
           }
         },
         {
-          id: 'total-spend',
-          label: 'Total Spend',
-          // value: '1',
-          value: function (startMonth, endMonth, timeSeriesData) {
-            // return startMonth + endMonth;
-            let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
-            return sum;
-          },
-          time_series_data: {
-            'Jan 2020': 2389170,
-            'Feb 2020': 2631537,
-            'Mar 2020': 4053830,
-            'Apr 2020': 1466214,
-            'May 2020': 3428912,
-            'Jun 2020': 2743236,
-            'Jul 2020': 3764968,
-            'Aug 2020': 1490695,
-            'Sep 2020': 2888496,
-            'Oct 2020': 2150625,
-            'Nov 2020': 2697723,
-            'Dec 2020': 1639064,
-            'Jan 2021': 843780,
-            'Feb 2021': 4193595,
-            'Mar 2021': 2527220,
-            'Apr 2021': 1017585,
-            'May 2021': 714264,
-            'Jun 2021': 2867355
-          }
-        },
-        {
           id: 'orders',
           label: 'Orders',
           // value: '1',

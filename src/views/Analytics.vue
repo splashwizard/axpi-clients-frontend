@@ -884,6 +884,7 @@ export default {
 
     selectView(viewId) {
       this.selectedViewId = viewId;
+      this.incrementUpdateKey();
       // this.viewChangerVisible = false;
     },
 

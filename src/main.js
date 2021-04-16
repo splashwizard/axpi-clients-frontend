@@ -8,9 +8,13 @@ import axios from 'axios';
 Vue.config.productionTip = false
 
 // window.API_BASE = 'http://axpi-api.test/api/clients';
+// window.API_COMMON_BASE = 'http://axpi-api.test/api/common';
+// window.IMAGE_STORAGE_BASE = 'http://axpi-api.test/storage';
 // window.API_TOKEN_URL = 'http://axpi-api.test/api/token';
 
 window.API_BASE = 'https://api.axiomdata.io/api/clients';
+window.API_COMMON_BASE = 'https://api.axiomdata.io/api/common';
+window.IMAGE_STORAGE_BASE = 'https://api.axiomdata.io/storage';
 window.API_TOKEN_URL = 'https://api.axiomdata.io/api/token';
 
 // Html 2 canvas (screenshoting analytics)

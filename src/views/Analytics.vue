@@ -143,7 +143,7 @@
                         @close="closeInsightResultsTab">
 
                 <div class="insight-results-question">
-                  <b>You asked: Which business unit is the most environmentally friendly?</b>
+                  <b>You asked: Which business unit is the least environmentally friendly?</b>
                 </div>
 
                 <a-card>

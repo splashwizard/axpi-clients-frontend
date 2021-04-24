@@ -43,9 +43,9 @@
                         <goals-icon class="nav-icon"></goals-icon>
                         Goals
                     </a-menu-item>
-                    <a-menu-item key="optimisation">
+                    <a-menu-item key="optimisations">
                         <optimise-icon class="nav-icon"></optimise-icon>
-                        Optimisation
+                        Optimisations
                     </a-menu-item>
                     <a-menu-item key="analytics">
                         <analytics-icon class="nav-icon"></analytics-icon>

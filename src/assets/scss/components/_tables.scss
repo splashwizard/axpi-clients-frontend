@@ -21,6 +21,11 @@
     }
   }
 
+  td {
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+  }
+
   .ant-table-thead > tr > th .ant-table-header-column .ant-table-column-sorters:hover::before {
     background: unset !important;
   }

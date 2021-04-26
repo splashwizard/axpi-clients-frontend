@@ -1,5 +1,77 @@
 <template>
     <div id="app">
+      <a-layout-header :style="{ background: '#fff', padding: '0 20px', borderBottom: '1px solid #e3e8ee' }">
+        <div class="top-nav">
+          <div class="logo">
+            <!--                    <router-link to="/">-->
+            <!--                        <img src="/img/axiom.png" alt="">-->
+            <!--                    </router-link>-->
+            <div class="logo-circle">
+              <img src="/img/axiom-tab-icon.svg" alt="">
+            </div>
+            <span>
+                        {{ user.client.name }}
+                    </span>
+            <a-icon class="org-group-selector-arrow" type="down" />
+          </div>
+          <div class="top-nav-search-bar">
+            <a-input ref="userNameInput" placeholder="Search..." size="large">
+              <a-icon slot="prefix" type="search"/>
+            </a-input>
+          </div>
+          <div class="top-nav-links">
+            <div id="nav">
+              <a-button class="feedback-icon">
+                <div>
+                  <feedback-icon></feedback-icon>
+                  <span>Feedback?</span>
+                </div>
+              </a-button>
+              <a-popover title="Notifications" trigger="click" placement="bottomRight">
+                <div slot="content">
+                  <div>
+                    No notifications
+                  </div>
+                </div>
+                <a-button>
+                  <div>
+                    <bell-icon></bell-icon>
+                  </div>
+                </a-button>
+              </a-popover>
+              <a-popover title="Help" trigger="click" placement="bottomRight">
+                <div slot="content">
+                  <div>
+                    <a href="#">Documentation</a>
+                  </div>
+                  <div>
+                    <a href="#">API Docs</a>
+                  </div>
+                </div>
+                <a-button>
+                  <div>
+                    <question-mark-icon></question-mark-icon>
+                  </div>
+                </a-button>
+              </a-popover>
+              <a-popover title="Account" trigger="click" placement="bottomRight">
+                <div slot="content">
+                  <div v-if="user.client" class="company-property">
+                    {{ user.client.name }}
+                  </div>
+                  <a @click="logout">Logout</a>
+                </div>
+                <a-button>
+                  <div>
+                    <user-icon></user-icon>
+                  </div>
+                </a-button>
+                <!--                                    <a-button icon="user">{{ user.name }}</a-button>-->
+              </a-popover>
+            </div>
+          </div>
+        </div>
+      </a-layout-header>
         <a-layout id="components-layout-demo-responsive" v-if="loggedIn">
             <a-layout-sider
                     width="270"
@@ -10,17 +82,6 @@
                     @breakpoint="onBreakpoint"
                     :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
             >
-                <div class="logo">
-                    <!--                    <router-link to="/">-->
-                    <!--                        <img src="/img/axiom.png" alt="">-->
-                    <!--                    </router-link>-->
-                    <div class="logo-circle">
-                        <img src="/img/icons/axiom-icon.png" alt="">
-                    </div>
-                    <span>
-                        {{ user.client.name }}
-                    </span>
-                </div>
                 <a-menu
                         @click="handleMenuItemClicked"
                         :selected-keys="[selectedMenuKey]"
@@ -47,6 +108,9 @@
                         <optimise-icon class="nav-icon"></optimise-icon>
                         Optimisations
                     </a-menu-item>
+                  <a-menu-item class="submenu" key="optimisations-analytics">
+                    Optimisations
+                  </a-menu-item>
                     <a-menu-item key="analytics">
                         <analytics-icon class="nav-icon"></analytics-icon>
                         Analytics
@@ -98,67 +162,7 @@
                 </a-menu>
             </a-layout-sider>
             <a-layout>
-                <a-layout-header :style="{ background: '#fff', padding: '0 30px', borderBottom: '1px solid #e3e8ee' }">
-                    <div class="top-nav">
-                        <div class="top-nav-search-bar">
-                            <a-input ref="userNameInput" placeholder="Search..." size="large">
-                                <a-icon slot="prefix" type="search"/>
-                            </a-input>
-                        </div>
-                        <div class="top-nav-links">
-                            <div id="nav">
-                                <a-button class="feedback-icon">
-                                    <div>
-                                        <feedback-icon></feedback-icon>
-                                        <span>Feedback?</span>
-                                    </div>
-                                </a-button>
-                                <a-popover title="Notifications" trigger="click" placement="bottomRight">
-                                    <div slot="content">
-                                        <div>
-                                            No notifications
-                                        </div>
-                                    </div>
-                                    <a-button>
-                                        <div>
-                                            <bell-icon></bell-icon>
-                                        </div>
-                                    </a-button>
-                                </a-popover>
-                                <a-popover title="Help" trigger="click" placement="bottomRight">
-                                    <div slot="content">
-                                      <div>
-                                          <a href="#">Documentation</a>
-                                      </div>
-                                        <div>
-                                            <a href="#">API Docs</a>
-                                        </div>
-                                    </div>
-                                    <a-button>
-                                        <div>
-                                            <question-mark-icon></question-mark-icon>
-                                        </div>
-                                    </a-button>
-                                </a-popover>
-                                <a-popover title="Account" trigger="click" placement="bottomRight">
-                                    <div slot="content">
-                                        <div v-if="user.client" class="company-property">
-                                            {{ user.client.name }}
-                                        </div>
-                                        <a @click="logout">Logout</a>
-                                    </div>
-                                    <a-button>
-                                        <div>
-                                            <user-icon></user-icon>
-                                        </div>
-                                    </a-button>
-                                    <!--                                    <a-button icon="user">{{ user.name }}</a-button>-->
-                                </a-popover>
-                            </div>
-                        </div>
-                    </div>
-                </a-layout-header>
-                <a-layout-content :style="{ padding: '25px 30px', background: '#fff' }">
+                <a-layout-content :style="{ padding: (noPadding ? 0 : '20px 30px'), background: '#fff' }">
                     <router-view/>
                 </a-layout-content>
             </a-layout>
@@ -230,7 +234,11 @@
             ...mapGetters('auth', {
                 loggedIn: 'loggedIn',
                 user: 'user'
-            })
+            }),
+
+          noPadding() {
+              return this.$route.name === 'Optimisation Analytics';
+          }
         }
     }
 </script>
@@ -294,38 +302,40 @@
         margin-bottom: 10px;
     }
 
-    .ant-layout-sider {
-        .logo {
-            text-align: left;
-            padding-left: 20px;
-            padding-top: 16px;
-            padding-bottom: 30px;
-            align-items: center;
-            display: flex;
+    .logo {
+      text-align: left;
+      //padding-left: 20px;
+      //padding-top: 16px;
+      //padding-bottom: 30px;
+      padding-right: 170px;
+      align-items: center;
+      display: flex;
 
-            .logo-circle {
-                background-color: #fff;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                text-align: center;
-                box-shadow: 0 2px 5px 0 rgb(60 66 87 / 8%), 0 1px 1px 0 rgb(0 0 0 / 12%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
+      .logo-circle {
+        background-color: #fff;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        text-align: center;
+        //box-shadow: 0 2px 5px 0 rgb(60 66 87 / 8%), 0 1px 1px 0 rgb(0 0 0 / 12%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-                img {
-                    width: 19px;
-                    height: 19px;
-                }
-            }
-
-            span {
-                padding-left: 10px;
-                font-size: 16px;
-                color: #1a1f36;
-            }
+        img {
+          width: 19px;
+          height: 19px;
         }
+      }
+
+      span {
+        padding-left: 10px;
+        font-size: 16px;
+        color: #1a1f36;
+      }
+    }
+
+    .ant-layout-sider {
 
         .nav-icon {
             margin-right: 15px;
@@ -334,6 +344,10 @@
         .logo img {
             max-width: 140px;
         }
+
+      .ant-menu {
+        padding-top: 30px;
+      }
 
         .ant-menu li {
             display: flex;
@@ -360,8 +374,17 @@
             }
         }
 
+      .ant-menu-item.submenu {
+        padding-left: 55px !important;
+      }
+
         .menu-space-below {
             margin-bottom: 25px !important;
         }
+    }
+
+    .org-group-selector-arrow {
+      margin-left: 10px;
+      font-size: 11px;
     }
 </style>

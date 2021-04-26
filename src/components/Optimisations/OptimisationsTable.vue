@@ -1,5 +1,6 @@
 <template>
   <a-table
+      class="axpi-table"
       :columns="columns"
       :row-key="record => record.id"
       :data-source="data"
@@ -7,6 +8,11 @@
       :loading="loading"
       @change="handleTableChange"
   >
+    <template slot="name" slot-scope="text, record">
+      <router-link :to="getOptimisationLink(record)">
+        {{ text }}
+      </router-link>
+    </template>
     <template slot="items">
       2
     </template>
@@ -27,6 +33,9 @@ const columns = [
     title: 'Name',
     dataIndex: 'name',
     sorter: true,
+    scopedSlots: {
+      customRender: 'name'
+    }
   },
   {
     title: 'Scenarios',
@@ -107,6 +116,10 @@ export default {
         this.$message.error('Error loading optimisations');
       });
     },
+
+    getOptimisationLink(optimisation) {
+      return '/optimisations/' + optimisation.id;
+    }
   },
 };
 </script>

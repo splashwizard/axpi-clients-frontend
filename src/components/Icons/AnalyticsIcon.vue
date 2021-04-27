@@ -1,5 +1,5 @@
 <template>
-    <img src="/img/icons/analytics-icon.png" style="width: 16px" alt="">
+    <img src="/img/icons/analytics-icon.png" style="width: 20px" alt="">
 </template>
 
 <script>

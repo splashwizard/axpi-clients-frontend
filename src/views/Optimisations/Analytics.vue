@@ -9,11 +9,27 @@
           <div class="actions">
             <a-tooltip placement="bottom">
               <template slot="title">
+                <span>Share</span>
+              </template>
+              <a-button type="secondary" class="button-header" size="large" shape="circle"
+                        @click="() => toggleSidebar('share')"
+                        icon="share-alt"></a-button>
+            </a-tooltip>
+            <a-tooltip placement="bottom">
+              <template slot="title">
                 <span>Scenarios</span>
               </template>
               <a-button type="secondary" class="button-header" size="large" shape="circle"
-                        @click="() => (scenarioSidebarCollapsed = !scenarioSidebarCollapsed)"
+                        @click="() => toggleSidebar('scenarios')"
                         icon="form"></a-button>
+            </a-tooltip>
+            <a-tooltip placement="bottom">
+              <template slot="title">
+                <span>Insights</span>
+              </template>
+              <a-button type="secondary" class="button-header" size="large" shape="circle"
+                        @click="() => toggleSidebar('insights')"
+                        icon="bulb"></a-button>
             </a-tooltip>
           </div>
         </div>
@@ -24,131 +40,229 @@
       </a-layout>
       <a-layout-sider width="300" theme="dark"
                       :style="{ background: '#f7fafc', borderLeft: '1px solid #e3e8ee' }"
-                      :collapsed-width="0" v-model="scenarioSidebarCollapsed" :trigger="null" collapsible>
+                      :collapsed-width="0" v-model="sidebarCollapsed" :trigger="null" collapsible>
         <div>
 
-          <!-- Analytics Sidebar Header -->
-          <div class="analytics-sidebar-header">
-            <div class="left">
-              <a-icon v-if="route === 'all-scenarios'" type="form"/>
-
-              <a-icon @click.prevent="closeCreateScenario" class="back-button"
-                      v-if="route === 'edit-scenario'" type="arrow-left"/>
-
-              <!--              <a-button v-if="route === 'new-custom-scenario'"-->
-              <!--                         type="link" size="large" shape="circle"-->
-              <!--                        @click="e => e.preventDefault()"-->
-              <!--                        icon="arrow-left" class="back-icon"></a-button>-->
-
-              <h1 v-if="route === 'all-scenarios'">Scenarios</h1>
-              <input v-if="route === 'edit-scenario'" v-model="selectedScenario.name"
-                     class="edit-name-input"
-                     type="text">
-            </div>
-            <div class="right">
-              <a-button type="link" size="large" shape="circle"
-                        @click="() => (scenarioSidebarCollapsed = !scenarioSidebarCollapsed)"
-                        icon="close" class="close-icon"></a-button>
-            </div>
-          </div>
-          <!-- / Analytics Sidebar Header -->
-
-          <!-- Analytics Sidebar Body -->
-          <div class="analytics-sidebar-body">
-
-            <!-- Scenarios -->
-            <div v-if="route === 'all-scenarios'" class="scenarios-list">
-
-              <!-- Scenario -->
-              <div class="scenario" v-for="(scenario, i) in scenarios" :key="i" @click="editScenario(scenario)">
-                <div class="left">
-                  <b class="mb-2">{{ scenario.name }}</b>
-                  <div>{{ scenario.items ? scenario.items.length : 0 }}/{{ specifications ? specifications.length : 0 }} items</div>
-                </div>
-                <div class="right">
-                  <a-dropdown :trigger="['click']">
-                    <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
-                    <a-menu slot="overlay">
-                      <a-menu-item>
-                        <a href="#">Edit</a>
-                      </a-menu-item>
-                      <a-menu-item>
-                        <a href="#" @click.prevent="e => e.preventDefault()">Duplicate</a>
-                      </a-menu-item>
-                      <a-menu-item>
-                        <a href="#" @click.prevent="e => e.preventDefault()"
-                           class="text-danger">Delete</a>
-                      </a-menu-item>
-                    </a-menu>
-                  </a-dropdown>
-                </div>
+          <!-- Share -->
+          <div v-if="selectedSidebar === 'share'">
+            <!-- Analytics Sidebar Header -->
+            <div class="analytics-sidebar-header">
+              <div class="left">
+                <a-icon type="share-alt"/>
+                <h1>Share</h1>
               </div>
-              <!-- / Scenario -->
-
-              <!-- Add Scenario Buttons -->
-              <div>
-                <div class="button-space-above">
-                  <a-button icon="plus" type="default" class="scenario-button" block
-                            @click.native="addNewScenario">New Custom Scenario
-                  </a-button>
-                </div>
+              <div class="right">
+                <a-button type="link" size="large" shape="circle"
+                          @click="() => (sidebarCollapsed = !sidebarCollapsed)"
+                          icon="close" class="close-icon"></a-button>
               </div>
-              <!-- / Add Scenario Buttons -->
-
             </div>
-            <!-- / Scenarios -->
+            <!-- / Analytics Sidebar Header -->
 
-            <!-- New Custom Scenario -->
-            <div v-if="route === 'edit-scenario'">
-
-              <!-- Items -->
-              <div class="scenario-items" v-if="selectedScenario">
-
-                <div class="scenario-item" v-for="(item, key) in selectedScenario.items" :key="key">
-                  <div class="scenario-item-bin">
-                    <a-button icon="delete" @click.prevent="deleteItem(item)" type="link"></a-button>
+            <div class="analytics-sidebar-body">
+              <a-button block size="large" icon="link" class="share-button button-margin-bottom">
+                <div class="share-button-inner">
+                  <div class="share-button-text">
+                    Share link
                   </div>
-
-                  <!-- Specification Input -->
-                  <div class="scenario-item-input">
-                    <label for="Specification">Specification</label>
-                    <a-select
-                        placeholder="Select item"
-                        @change="forceRefresh" v-model="item.optimisationSpecificationId" show-search>
-                      <a-select-option v-for="spec in specifications" :value="spec.id" :key="spec.id">
-                        {{ spec.product_name }}
-                      </a-select-option>
-                    </a-select>
-                  </div>
-                  <!-- / Specification Input -->
-
-                  <!-- Supplier Input -->
-                  <div class="scenario-item-input">
-                    <label for="Supplier">Supplier</label>
-                    <a-select
-                        placeholder="Select item"
-                        @change="forceRefresh" v-model="item.supplierId" show-search>
-                      <a-select-option v-for="supplier in suppliers" :value="supplier.id" :key="supplier.id">
-                        {{ supplier.name }}
-                      </a-select-option>
-                    </a-select>
-                  </div>
-                  <!-- / Supplier Input -->
+                  <a-icon type="right"></a-icon>
                 </div>
-
-              </div>
-              <!-- / Items -->
-
-              <a-button icon="plus" type="default" class="scenario-button" block
-                        @click.native="addItemToScenario">
-                Add Item
+              </a-button>
+              <a-button block size="large" icon="file" class="share-button button-margin-bottom">
+                <div class="share-button-inner">
+                  <div class="share-button-text">
+                    Download file
+                  </div>
+                  <a-icon type="right"></a-icon>
+                </div>
               </a-button>
 
             </div>
-            <!-- / New Custom Scenario -->
-
           </div>
-          <!-- / Analytics Sidebar Body -->
+          <!-- / Share -->
+
+          <!-- Insights -->
+          <div v-if="selectedSidebar === 'insights'">
+            <!-- Analytics Sidebar Header -->
+            <div class="analytics-sidebar-header">
+              <div class="left">
+                <a-icon type="bulb"/>
+                <h1>Insights</h1>
+              </div>
+              <div class="right">
+                <a-button type="link" size="large" shape="circle"
+                          @click="() => (sidebarCollapsed = !sidebarCollapsed)"
+                          icon="close" class="close-icon"></a-button>
+              </div>
+            </div>
+            <!-- / Analytics Sidebar Header -->
+
+            <div class="analytics-sidebar-body">
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Basic Performance">
+                  <p></p>
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Price Performance">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Diversity">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Suppliers">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Orders">
+                </a-collapse-panel>
+              </a-collapse>
+
+              <a-collapse class="collapse-margin-bottom">
+                <a-collapse-panel key="1" header="Information">
+                </a-collapse-panel>
+              </a-collapse>
+
+            </div>
+          </div>
+          <!-- / Insights -->
+
+          <!-- Scenarios -->
+          <div v-if="selectedSidebar === 'scenarios'">
+            <!-- Analytics Sidebar Header -->
+            <div class="analytics-sidebar-header">
+              <div class="left">
+                <a-icon v-if="route === 'all-scenarios'" type="form"/>
+
+                <a-icon @click.prevent="closeCreateScenario" class="back-button"
+                        v-if="route === 'edit-scenario'" type="arrow-left"/>
+
+                <!--              <a-button v-if="route === 'new-custom-scenario'"-->
+                <!--                         type="link" size="large" shape="circle"-->
+                <!--                        @click="e => e.preventDefault()"-->
+                <!--                        icon="arrow-left" class="back-icon"></a-button>-->
+
+                <h1 v-if="route === 'all-scenarios'">Scenarios</h1>
+                <input v-if="route === 'edit-scenario'" v-model="selectedScenario.name"
+                       class="edit-name-input"
+                       type="text">
+              </div>
+              <div class="right">
+                <a-button type="link" size="large" shape="circle"
+                          @click="() => (sidebarCollapsed = !sidebarCollapsed)"
+                          icon="close" class="close-icon"></a-button>
+              </div>
+            </div>
+            <!-- / Analytics Sidebar Header -->
+
+            <!-- Analytics Sidebar Body -->
+            <div class="analytics-sidebar-body">
+
+              <!-- Scenarios -->
+              <div v-if="route === 'all-scenarios'" class="scenarios-list">
+
+                <!-- Scenario -->
+                <div class="scenario" v-for="(scenario, i) in scenarios" :key="i">
+                  <div class="left" @click.prevent="editScenario(scenario)">
+                    <b class="mb-2">{{ scenario.name }}</b>
+                    <div>{{ scenario.items ? scenario.items.length : 0 }}/{{
+                        specifications ? specifications.length : 0
+                      }} items
+                    </div>
+                  </div>
+                  <div class="right">
+                    <a-dropdown :trigger="['click']">
+                      <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
+                      <a-menu slot="overlay">
+                        <a-menu-item>
+                          <a href="#">Edit</a>
+                        </a-menu-item>
+                        <a-menu-item>
+                          <a href="#" @click.prevent="e => e.preventDefault()">Duplicate</a>
+                        </a-menu-item>
+                        <a-menu-item>
+                          <a href="#" @click.prevent="e => e.preventDefault()"
+                             class="text-danger">Delete</a>
+                        </a-menu-item>
+                      </a-menu>
+                    </a-dropdown>
+                  </div>
+                </div>
+                <!-- / Scenario -->
+
+                <!-- Add Scenario Buttons -->
+                <div>
+                  <div class="button-space-above">
+                    <a-button icon="plus" type="default" class="scenario-button" block
+                              @click.native="addNewScenario">New Custom Scenario
+                    </a-button>
+                  </div>
+                </div>
+                <!-- / Add Scenario Buttons -->
+
+              </div>
+              <!-- / Scenarios -->
+
+              <!-- New Custom Scenario -->
+              <div v-if="route === 'edit-scenario'">
+
+                <!-- Items -->
+                <div class="scenario-items" v-if="selectedScenario">
+
+                  <div class="scenario-item" v-for="(item, key) in selectedScenario.items" :key="key">
+                    <div class="scenario-item-bin">
+                      <a-button icon="delete" @click.prevent="deleteItem(item)" type="link"></a-button>
+                    </div>
+
+                    <!-- Specification Input -->
+                    <div class="scenario-item-input">
+                      <label for="Specification">Specification</label>
+                      <a-select
+                          placeholder="Select item"
+                          @change="forceRefresh" v-model="item.optimisationSpecificationId" show-search>
+                        <a-select-option v-for="spec in specifications" :value="spec.id" :key="spec.id">
+                          {{ spec.product_name }}
+                        </a-select-option>
+                      </a-select>
+                    </div>
+                    <!-- / Specification Input -->
+
+                    <!-- Supplier Input -->
+                    <div class="scenario-item-input">
+                      <label for="Supplier">Supplier</label>
+                      <a-select
+                          placeholder="Select item"
+                          @change="forceRefresh" v-model="item.supplierId" show-search>
+                        <a-select-option v-for="supplier in suppliers" :value="supplier.id" :key="supplier.id">
+                          {{ supplier.name }}
+                        </a-select-option>
+                      </a-select>
+                    </div>
+                    <!-- / Supplier Input -->
+                  </div>
+
+                </div>
+                <!-- / Items -->
+
+                <a-button icon="plus" type="default" class="scenario-button" block
+                          @click.native="addItemToScenario">
+                  Add Item
+                </a-button>
+
+              </div>
+              <!-- / New Custom Scenario -->
+
+            </div>
+            <!-- / Analytics Sidebar Body -->
+          </div>
+          <!-- / Scenarios -->
 
         </div>
       </a-layout-sider>
@@ -178,7 +292,9 @@ export default {
   },
   data() {
     return {
-      scenarioSidebarCollapsed: true,
+      sidebarCollapsed: true,
+      selectedSidebar: '',
+
       route: 'all-scenarios',
       selectedScenario: null,
       scenarios: [
@@ -240,7 +356,7 @@ export default {
 
     editScenario(scenario) {
       this.selectedScenario = scenario;
-     this.navigateTo('edit-scenario');
+      this.navigateTo('edit-scenario');
     },
 
     addItemToScenario() {
@@ -286,6 +402,18 @@ export default {
         this.$message.error('Error loading suppliers');
         vm.isLoadingSuppliers = false;
       });
+    },
+
+    toggleSidebar(sidebarName) {
+      if (this.selectedSidebar !== sidebarName) {
+        this.selectedSidebar = sidebarName;
+        this.sidebarCollapsed = false;
+        if (sidebarName === 'scenarios') {
+          this.route = 'all-scenarios';
+        }
+      } else {
+        this.sidebarCollapsed = !this.sidebarCollapsed;
+      }
     }
   }
 }
@@ -299,9 +427,9 @@ export default {
 .button-header {
   border: none !important;
   box-shadow: none !important;
-  font-size: 23px;
-  width: 45px;
-  height: 45px;
+  font-size: 19px;
+  //width: 40px;
+  //height: 40px;
 }
 
 .button-header:hover {
@@ -313,8 +441,8 @@ export default {
   display: flex;
   padding-left: 20px;
   padding-right: 20px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 9px;
+  padding-bottom: 9px;
   border-bottom: 1px solid rgb(227, 232, 238);
 
   .left {
@@ -325,12 +453,14 @@ export default {
 
     i {
       display: inline;
-      font-size: 23px;
+      //font-size: 23px;
+      font-size: 19px;
       margin-right: 15px;
     }
 
     h1 {
       display: inline;
+      font-size: 20px;
       margin-bottom: 0;
     }
   }
@@ -430,5 +560,57 @@ export default {
   border: none;
   background: transparent;
   font-size: 20px;
+}
+
+
+.share-button {
+  text-align: left;
+  height: 50px;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+}
+
+.share-button i {
+  flex-shrink: 1;
+}
+
+.share-button-inner {
+  padding-left: 20px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.share-button-inner .share-button-text {
+  flex: 1;
+}
+
+.button-margin-bottom {
+  margin-bottom: 15px;
+}
+
+.collapse-margin-bottom {
+  margin-bottom: 20px;
+}
+
+.ant-collapse-content-box .ant-btn, .ant-collapse-content-box .ant-btn span {
+  width: 100%;
+  word-wrap: break-word;
+  height: auto;
+  white-space: normal;
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.ant-collapse-content-box .ant-btn {
+  margin-bottom: 15px;
+}
+
+.ant-collapse-content-box .ant-btn:last-child {
+  margin-bottom: 0 !important;
 }
 </style>

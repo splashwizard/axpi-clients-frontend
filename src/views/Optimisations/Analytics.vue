@@ -1,9 +1,9 @@
 <template>
   <div class="optimisations">
-    <loading-screen :is-loading="isLoading"></loading-screen>
+    <loading-screen :is-loading="isLoading||isLoadingSpecifications||isLoadingSuppliers"></loading-screen>
 
     <a-layout>
-      <a-layout style="padding: 20px 30px">
+      <a-layout style="padding: 7px 30px">
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }} - Analytics</h1>
           <div class="actions">
@@ -22,7 +22,7 @@
           The analytics go here
         </div>
       </a-layout>
-      <a-layout-sider width="270" theme="dark"
+      <a-layout-sider width="300" theme="dark"
                       :style="{ background: '#f7fafc', borderLeft: '1px solid #e3e8ee' }"
                       :collapsed-width="0" v-model="scenarioSidebarCollapsed" :trigger="null" collapsible>
         <div>
@@ -30,10 +30,25 @@
           <!-- Analytics Sidebar Header -->
           <div class="analytics-sidebar-header">
             <div class="left">
-              <h1>Scenarios</h1>
+              <a-icon v-if="route === 'all-scenarios'" type="form"/>
+
+              <a-icon @click.prevent="closeCreateScenario" class="back-button"
+                      v-if="route === 'edit-scenario'" type="arrow-left"/>
+
+              <!--              <a-button v-if="route === 'new-custom-scenario'"-->
+              <!--                         type="link" size="large" shape="circle"-->
+              <!--                        @click="e => e.preventDefault()"-->
+              <!--                        icon="arrow-left" class="back-icon"></a-button>-->
+
+              <h1 v-if="route === 'all-scenarios'">Scenarios</h1>
+              <input v-if="route === 'edit-scenario'" v-model="selectedScenario.name"
+                     class="edit-name-input"
+                     type="text">
             </div>
             <div class="right">
-
+              <a-button type="link" size="large" shape="circle"
+                        @click="() => (scenarioSidebarCollapsed = !scenarioSidebarCollapsed)"
+                        icon="close" class="close-icon"></a-button>
             </div>
           </div>
           <!-- / Analytics Sidebar Header -->
@@ -42,13 +57,13 @@
           <div class="analytics-sidebar-body">
 
             <!-- Scenarios -->
-            <div v-if="!selectedScenario" class="scenarios-list">
+            <div v-if="route === 'all-scenarios'" class="scenarios-list">
 
               <!-- Scenario -->
-              <div class="scenario" v-for="(scenario, i) in scenarios" :key="i">
+              <div class="scenario" v-for="(scenario, i) in scenarios" :key="i" @click="editScenario(scenario)">
                 <div class="left">
                   <b class="mb-2">{{ scenario.name }}</b>
-                  <div>3/5 items</div>
+                  <div>{{ scenario.items ? scenario.items.length : 0 }}/{{ specifications ? specifications.length : 0 }} items</div>
                 </div>
                 <div class="right">
                   <a-dropdown :trigger="['click']">
@@ -70,19 +85,67 @@
               </div>
               <!-- / Scenario -->
 
+              <!-- Add Scenario Buttons -->
+              <div>
+                <div class="button-space-above">
+                  <a-button icon="plus" type="default" class="scenario-button" block
+                            @click.native="addNewScenario">New Custom Scenario
+                  </a-button>
+                </div>
+              </div>
+              <!-- / Add Scenario Buttons -->
+
             </div>
             <!-- / Scenarios -->
 
-            <!-- Add Scenario Buttons -->
-            <div>
-              <div class="button-space-above">
-                <a-button icon="plus" type="primary" block>New Custom Scenario</a-button>
+            <!-- New Custom Scenario -->
+            <div v-if="route === 'edit-scenario'">
+
+              <!-- Items -->
+              <div class="scenario-items" v-if="selectedScenario">
+
+                <div class="scenario-item" v-for="(item, key) in selectedScenario.items" :key="key">
+                  <div class="scenario-item-bin">
+                    <a-button icon="delete" @click.prevent="deleteItem(item)" type="link"></a-button>
+                  </div>
+
+                  <!-- Specification Input -->
+                  <div class="scenario-item-input">
+                    <label for="Specification">Specification</label>
+                    <a-select
+                        placeholder="Select item"
+                        @change="forceRefresh" v-model="item.optimisationSpecificationId" show-search>
+                      <a-select-option v-for="spec in specifications" :value="spec.id" :key="spec.id">
+                        {{ spec.product_name }}
+                      </a-select-option>
+                    </a-select>
+                  </div>
+                  <!-- / Specification Input -->
+
+                  <!-- Supplier Input -->
+                  <div class="scenario-item-input">
+                    <label for="Supplier">Supplier</label>
+                    <a-select
+                        placeholder="Select item"
+                        @change="forceRefresh" v-model="item.supplierId" show-search>
+                      <a-select-option v-for="supplier in suppliers" :value="supplier.id" :key="supplier.id">
+                        {{ supplier.name }}
+                      </a-select-option>
+                    </a-select>
+                  </div>
+                  <!-- / Supplier Input -->
+                </div>
+
               </div>
-              <div class="button-space-above">
-                <a-button icon="plus" type="primary" block>New Optimised Scenario</a-button>
-              </div>
+              <!-- / Items -->
+
+              <a-button icon="plus" type="default" class="scenario-button" block
+                        @click.native="addItemToScenario">
+                Add Item
+              </a-button>
+
             </div>
-            <!-- / Add Scenario Buttons -->
+            <!-- / New Custom Scenario -->
 
           </div>
           <!-- / Analytics Sidebar Body -->
@@ -95,29 +158,45 @@
 
 <script>
 import {mapGetters, mapActions} from "vuex";
+import axios from 'axios';
+
+const _ = require('lodash');
 
 export default {
   name: "Show",
   created() {
     this.loadOptimisation(this.$route.params.id);
+    this.loadSpecifications(this.$route.params.id);
+    this.loadSuppliers();
   },
   watch: {
     $route() {
       this.loadOptimisation(this.$route.params.id);
+      this.loadSpecifications(this.$route.params.id);
+      this.loadSuppliers();
     }
   },
   data() {
     return {
       scenarioSidebarCollapsed: true,
+      route: 'all-scenarios',
       selectedScenario: null,
       scenarios: [
         {
-          name: 'Demo Scenario 1'
+          name: 'Demo Scenario 1',
+          items: []
         },
         {
-          name: 'Demo Scenario 2'
+          name: 'Demo Scenario 2',
+          items: []
         }
-      ]
+      ],
+
+      isLoadingSpecifications: false,
+      specifications: [],
+
+      isLoadingSuppliers: false,
+      suppliers: []
     }
   },
   components: {},
@@ -128,6 +207,10 @@ export default {
     })
   },
   methods: {
+    navigateTo(route) {
+      this.route = route;
+    },
+
     refresh() {
       this.loadOptimisation(this.$route.params.id);
     },
@@ -138,6 +221,71 @@ export default {
 
     selectScenario(scenario) {
       this.selectedScenario = scenario;
+    },
+
+    closeCreateScenario() {
+      this.selectedScenario = null;
+      this.navigateTo('all-scenarios');
+    },
+
+    addNewScenario() {
+      let scenario = {
+        name: 'Untitled',
+        items: []
+      }
+      this.scenarios.push(scenario);
+      this.selectedScenario = scenario;
+      this.navigateTo('edit-scenario');
+    },
+
+    editScenario(scenario) {
+      this.selectedScenario = scenario;
+     this.navigateTo('edit-scenario');
+    },
+
+    addItemToScenario() {
+      this.selectedScenario.items.push({
+        optimisationSpecificationId: null,
+        supplierId: null
+      });
+    },
+
+    deleteItem(item) {
+      this.selectedScenario.items = _.without(this.selectedScenario.items, item);
+    },
+
+    forceRefresh() {
+      this.$forceUpdate();
+    },
+
+    loadSpecifications(optimisationId) {
+      let vm = this;
+      vm.isLoadingSpecifications = true;
+      vm.specifications = [];
+      axios.get(window.API_BASE + '/optimisations/' + optimisationId + '/specifications').then(r => {
+        vm.specifications = r.data;
+        vm.isLoadingSpecifications = false;
+      }).catch(e => {
+        vm.specifications = [];
+        console.log(e);
+        this.$message.error('Error loading specifications');
+        vm.isLoadingSpecifications = false;
+      });
+    },
+
+    loadSuppliers() {
+      let vm = this;
+      vm.isLoadingSuppliers = true;
+      vm.suppliers = [];
+      axios.get(window.API_BASE + '/suppliers').then(r => {
+        vm.suppliers = r.data;
+        vm.isLoadingSuppliers = false;
+      }).catch(e => {
+        vm.suppliers = [];
+        console.log(e);
+        this.$message.error('Error loading suppliers');
+        vm.isLoadingSuppliers = false;
+      });
     }
   }
 }
@@ -151,6 +299,9 @@ export default {
 .button-header {
   border: none !important;
   box-shadow: none !important;
+  font-size: 23px;
+  width: 45px;
+  height: 45px;
 }
 
 .button-header:hover {
@@ -162,15 +313,34 @@ export default {
   display: flex;
   padding-left: 20px;
   padding-right: 20px;
-  padding-top: 20px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgb(227, 232, 238);
 
   .left {
     flex: 1;
     font-size: 26px;
+    display: flex;
+    align-items: center;;
+
+    i {
+      display: inline;
+      font-size: 23px;
+      margin-right: 15px;
+    }
+
+    h1 {
+      display: inline;
+      margin-bottom: 0;
+    }
   }
 
   .right {
     flex-shrink: 1;
+
+    .close-icon {
+      color: rgba(0, 0, 0, 0.65);
+    }
   }
 }
 
@@ -184,11 +354,12 @@ export default {
   margin-bottom: 15px;
   background: #fff;
   padding: 7px 20px;
-  border-radius: 8px;
+  border-radius: 6px;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
+  border: 1px solid #e3e8ee;
 
   .left {
     flex: 1;
@@ -217,5 +388,47 @@ export default {
 
 .button-space-above {
   margin-top: 15px;
+}
+
+//.scenario-button {
+//  color: #5469d4;
+//  background: #fff;
+//  text-shadow: none;
+//  box-shadow: none;
+//}
+
+.scenario-item {
+  margin-bottom: 15px;
+  background: #fff;
+  padding: 15px 15px 10px;
+  border-radius: 6px;
+  position: relative;
+  border: 1px solid #e3e8ee;
+}
+
+.scenario-item label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.scenario-item-input {
+  margin-bottom: 15px;
+}
+
+.scenario-item .ant-select {
+  width: 100%;
+}
+
+.scenario-item-bin {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+}
+
+.edit-name-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 20px;
 }
 </style>

@@ -74,7 +74,7 @@
     </a-layout-header>
     <a-layout id="components-layout-demo-responsive" v-if="loggedIn">
       <a-layout-sider
-          width="270"
+          width="240"
           breakpoint="lg"
           theme="dark"
           :collapsed-width="70"
@@ -150,11 +150,11 @@
           <!--                            Option 10-->
           <!--                        </a-menu-item>-->
           <!--                    </a-sub-menu>-->
-          <a-menu-item key="developer">
+          <a-menu-item key="developer" title="Developers">
             <developers-icon class="nav-icon"></developers-icon>
             <span v-if="!menuCollapsed">Developers</span>
           </a-menu-item>
-          <a-menu-item key="account">
+          <a-menu-item key="account" title="Account">
             <account-icon class="nav-icon"></account-icon>
             <span v-if="!menuCollapsed">Account</span>
           </a-menu-item>
@@ -240,8 +240,7 @@ export default {
     },
 
     menuCollapsed() {
-      return true;
-      // return this.$route.name === 'Optimisation Analytics';
+      return this.$route.name === 'Optimisation Analytics';
     }
   }
 }
@@ -317,6 +316,7 @@ export default {
 
   .logo-circle {
     background-color: #fff;
+    padding-left: 5px;
     //width: 35px;
     //height: 35px;
     //border-radius: 50%;
@@ -356,7 +356,7 @@ export default {
   }
 
   .ant-menu {
-    padding-top: 20px;
+    padding-top: 15px;
   }
 
   .ant-menu li {

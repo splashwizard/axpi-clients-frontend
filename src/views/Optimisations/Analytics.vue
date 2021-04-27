@@ -3,6 +3,15 @@
     <loading-screen :is-loading="isLoading||isLoadingSpecifications||isLoadingSuppliers"></loading-screen>
 
     <a-layout>
+      <a-layout-sider width="170" theme="dark"
+                      :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
+                      :collapsed-width="0" :trigger="null">
+        <div class="sidebar-menu">
+          <a href="#" class="selected">Scenarios</a>
+          <a href="#">Analytics</a>
+          <a href="#">Review</a>
+        </div>
+      </a-layout-sider>
       <a-layout style="padding: 7px 30px">
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }} - Analytics</h1>
@@ -612,5 +621,35 @@ export default {
 
 .ant-collapse-content-box .ant-btn:last-child {
   margin-bottom: 0 !important;
+}
+
+.sidebar-menu {
+  padding-top: 20px;
+
+  a {
+    width: 100%;
+    display: block;
+    margin-bottom: 19px;
+    font-size: 15px;
+    color: #4F566B;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+
+    &.selected {
+      font-weight: bold;
+
+      &:before {
+        content: "";
+        box-shadow: 0 0 10px #9ecaed;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: #3735b3;
+      }
+    }
+  }
 }
 </style>

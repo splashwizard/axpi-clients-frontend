@@ -30,9 +30,14 @@ Vue.use(Antd);
 
 // Element UI
 import 'element-ui/lib/theme-chalk/index.css';
-import {Collapse, CollapseItem} from "element-ui";
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
+locale.use(lang);
+import {Collapse, CollapseItem, Select, Option} from "element-ui";
 Vue.use(Collapse);
 Vue.use(CollapseItem);
+Vue.use(Select);
+Vue.use(Option);
 
 Vue.component('loading-screen', require('./components/LoadingScreen').default);
 Vue.component('metric-card', require('./components/Analytics/MetricCard').default);

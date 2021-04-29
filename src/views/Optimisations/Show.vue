@@ -53,7 +53,7 @@ export default {
     }),
 
     runOptimisation() {
-      this.$router.push('/optimisations/' + this.optimisation.id + '/analytics');
+      this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios');
     }
   }
 }

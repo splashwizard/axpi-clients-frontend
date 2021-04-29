@@ -8,15 +8,24 @@
     <!-- Loaded -->
     <div>
       <div class="axpi-form width-large">
-
-      <optimisation-metrics :scenario="scenario"></optimisation-metrics>
+        <optimisation-metrics :scenario="scenario"></optimisation-metrics>
         <constraints :scenario="scenario"></constraints>
+        <other-details :scenario="scenario"></other-details>
+        <scenario-details :scenario="scenario"></scenario-details>
+
+        <!-- Form footer -->
+        <div class="form-footer">
+          <a-button size="large" type="primary">
+            Save And Quit
+          </a-button>
+        </div>
+        <!-- / Form Footer -->
       </div>
       <!-- / Selector -->
 
-      <div class="modal-buttons">
-        <a-button>Save</a-button>
-      </div>
+<!--      <div class="modal-buttons">-->
+<!--        <a-button>Save</a-button>-->
+<!--      </div>-->
     </div>
     <!-- / Loaded -->
 
@@ -25,10 +34,12 @@
 <script>
 import OptimisationMetrics from "./Create/OptimisationMetrics";
 import Constraints from "./Create/Constraints";
+import OtherDetails from "./Create/OtherDetails";
+import ScenarioDetails from "./Create/ScenarioDetails";
 
 export default {
   name: "CreateScenarioModal",
-  components: {OptimisationMetrics, Constraints},
+  components: {ScenarioDetails, OptimisationMetrics, Constraints, OtherDetails},
   data() {
     return {
       visible: true,
@@ -41,9 +52,12 @@ export default {
             value: 0
           }
         ],
-        constraints: [
-
-        ]
+        constraints: [],
+        enable_search_beyond_existing_supplier_base: false,
+        enable_bundling: false,
+        name: '',
+        description: '',
+        tags: []
       }
     }
   }

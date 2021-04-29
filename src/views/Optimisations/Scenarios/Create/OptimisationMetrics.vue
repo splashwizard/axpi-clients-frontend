@@ -8,7 +8,7 @@
     <div class="icon-selector">
       <a href="#" @click.prevent="select('best-price')" :class="{'selected': isSelected('best-price')}">
         <div class="icon">
-          <img src="/img/icons/product-type-selector/print-v2.png" alt="Print">
+          <img src="/img/icons/scenarios/value_optimisation_icon.svg" alt="Value">
         </div>
         <div class="caption">
           Best Price
@@ -17,7 +17,7 @@
       <a href="#" @click.prevent="select('environmentally-friendly')"
          :class="{'selected': isSelected('environmentally-friendly')}">
         <div class="icon">
-          <img src="/img/icons/product-type-selector/pos.png" alt="POS">
+          <img src="/img/icons/scenarios/environment_optimisation_icon.svg" alt="POS">
         </div>
         <div class="caption">
           Environmentally Friendly
@@ -34,7 +34,8 @@
       </a>
       <a href="#" @click.prevent="select('custom')" :class="{'selected': isSelected('custom')}">
         <div class="icon">
-          <img src="/img/icons/product-type-selector/merchandise.png" alt="Merchandise">
+<!--          <img src="/img/icons/product-type-selector/merchandise.png" alt="Merchandise">-->
+          <a-icon type="plus" style="font-size: 30px; color: #97BBF1;"></a-icon>
         </div>
         <div class="caption">
           Custom

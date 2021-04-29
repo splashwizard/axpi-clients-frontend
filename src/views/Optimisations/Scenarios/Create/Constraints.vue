@@ -137,7 +137,7 @@
       </a-col>
       <a-col :span="8">
         <div>
-          <a-button type="primary" block class="add-constraint-button" :disabled="!canAddNewConstraint"
+          <a-button  block class="add-constraint-button" :disabled="!canAddNewConstraint"
                     icon="plus" @click.prevent="addConstraint">Add constraint
           </a-button>
         </div>

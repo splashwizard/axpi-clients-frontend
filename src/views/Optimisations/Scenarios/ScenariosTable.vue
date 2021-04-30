@@ -1,7 +1,7 @@
 <template>
   <a-table :columns="columns" :data-source="data" class="axpi-table">
     <div slot="actions" class="table-actions">
-      <a-button style="margin-right: 5px;">Review</a-button>
+      <a-button style="margin-right: 5px;" @click.prevent="reviewScenario">Review</a-button>
       <a-dropdown :trigger="['click']">
         <a-button icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
         <a-menu slot="overlay">
@@ -63,10 +63,16 @@ const data = [
 
 export default {
   name: "ScenariosTable",
+  props: ['optimisation'],
   data() {
     return {
       columns,
       data
+    }
+  },
+  methods: {
+    reviewScenario() {
+      this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios/1/review');
     }
   }
 }

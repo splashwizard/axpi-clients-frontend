@@ -8,22 +8,15 @@
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions" style="padding-top: 15px;">
-            <a-button icon="plus" type="primary">Create Scenario</a-button>
-            <create-scenario-modal></create-scenario-modal>
+            <a-button icon="share-alt">Share</a-button>
+            <review-export-button-and-modal></review-export-button-and-modal>
+<!--            <a-button icon="export" type="primary">Export</a-button>-->
           </div>
         </div>
 
         <div v-if="optimisation">
 
-          <a-tabs>
-            <a-tab-pane key="scenarios" tab="Scenarios">
-              <scenario-graphs></scenario-graphs>
-              <scenarios-table :optimisation="optimisation"></scenarios-table>
-            </a-tab-pane>
-            <a-tab-pane key="overview" tab="Overview">
-              Content of Tab Pane 2
-            </a-tab-pane>
-          </a-tabs>
+          <review-table></review-table>
 
         </div>
       </a-layout>
@@ -35,9 +28,8 @@
 import {mapGetters, mapActions} from "vuex";
 import axios from 'axios';
 import LeftSidebar from "./LeftSidebar";
-import CreateScenarioModal from "./Scenarios/CreateScenarioModal";
-import ScenariosTable from "./Scenarios/ScenariosTable";
-import ScenarioGraphs from "./Scenarios/ScenarioGraphs";
+import ReviewTable from "./Review/ReviewTable";
+import ReviewExportButtonAndModal from "./Review/ReviewExportButtonAndModal";
 
 const _ = require('lodash');
 
@@ -80,7 +72,7 @@ export default {
       suppliers: []
     }
   },
-  components: {ScenarioGraphs, LeftSidebar, CreateScenarioModal, ScenariosTable},
+  components: {LeftSidebar, ReviewTable, ReviewExportButtonAndModal},
   computed: {
     ...mapGetters('optimisationEditor', {
       isLoading: 'isLoading',

@@ -1,28 +1,60 @@
 <template>
   <div>
-    <a-button type="primary" icon="plus" @click.prevent="showModal">Add Specification</a-button>
+    <a-button type="primary" icon="plus" @click.prevent="showMethodSelectorModal">Add Specification</a-button>
+
+    <a-modal title="Add Specification" :visible="methodSelectorModalVisible" @cancel="handleMethodSelectorCancel"
+             :footer="false">
+
+      <div class="icon-selector">
+        <a href="#" @click.prevent="selectMethod('past-order')">
+          <div class="icon">
+            <a-icon type="dropbox" style="font-size: 30px; color: #97BBF1;"></a-icon>
+          </div>
+          <div class="caption">
+            Past Order
+          </div>
+        </a>
+        <a href="#" @click.prevent="selectMethod('saved')">
+          <div class="icon">
+            <a-icon type="heart" style="font-size: 30px; color: #97BBF1;"></a-icon>
+          </div>
+          <div class="caption">
+            Saved
+          </div>
+        </a>
+        <a href="#" @click.prevent="selectMethod('create-new')">
+          <div class="icon">
+            <a-icon type="plus" style="font-size: 30px; color: #97BBF1;"></a-icon>
+          </div>
+          <div class="caption">
+            Create New
+          </div>
+        </a>
+      </div>
+
+    </a-modal>
 
     <a-modal
         title="Add Specification"
-        :visible="visible"
-        @cancel="handleCancel"
+        :visible="savedSpecModalVisible"
+        @cancel="handleSavedSpecCancel"
         :footer="false">
 
-<!--      <div class="loading-screen" v-if="isLoading">-->
-<!--        <a-spin/>-->
-<!--      </div>-->
+      <!--      <div class="loading-screen" v-if="isLoading">-->
+      <!--        <a-spin/>-->
+      <!--      </div>-->
       <loading-screen :is-loading="isSaving"></loading-screen>
 
-       <a-table class="axpi-table"
-        :columns="specificationColumns"
-       :row-key="record => record.id"
-        :data-source="specifications"
-       :pagination="specificationPagination"
-       :loading="isLoadingSpecifications">
-         <div slot="actions" slot-scope="name, record" class="table-actions">
-           <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>
-         </div>
-       </a-table>
+      <a-table class="axpi-table"
+               :columns="specificationColumns"
+               :row-key="record => record.id"
+               :data-source="specifications"
+               :pagination="specificationPagination"
+               :loading="isLoadingSpecifications">
+        <div slot="actions" slot-scope="name, record" class="table-actions">
+          <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>
+        </div>
+      </a-table>
 
     </a-modal>
   </div>
@@ -30,6 +62,7 @@
 
 <script>
 import axios from 'axios';
+
 const _ = require('lodash');
 
 const SPECIFICATION_COLUMNS = [
@@ -56,7 +89,9 @@ export default {
   props: ['optimisation'],
   data() {
     return {
-      visible: false,
+      methodSelectorModalVisible: false,
+
+      savedSpecModalVisible: false,
       serverErrors: [],
 
       specifications: [],
@@ -72,13 +107,21 @@ export default {
     }
   },
   methods: {
-    showModal() {
-      this.visible = true;
+    showMethodSelectorModal() {
+      this.methodSelectorModalVisible = true;
+    },
+
+    handleMethodSelectorCancel() {
+      this.methodSelectorModalVisible = false;
+    },
+
+    showSavedSpecModal() {
+      this.savedSpecModalVisible = true;
       this.loadSpecifications();
     },
 
-    handleCancel() {
-      this.visible = false;
+    handleSavedSpecCancel() {
+      this.savedSpecModalVisible = false;
     },
 
     loadSpecifications(params = {}) {
@@ -121,6 +164,13 @@ export default {
         vm.isSaving = false;
         vm.$message.error('Error adding specification');
       });
+    },
+
+    selectMethod(method) {
+      this.methodSelectorModalVisible = false;
+      if (method === 'saved') {
+        this.showSavedSpecModal();
+      }
     }
   }
 }
@@ -131,5 +181,28 @@ export default {
   text-align: center;
   padding-top: 20px;
   padding-bottom: 70px;
+}
+
+.method-selector {
+  margin-bottom: 15px;
+}
+
+.icon-selector a {
+  flex: 1;
+}
+
+.icon-selector .icon {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.icon-selector .caption {
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.icon-selector a:hover .icon {
+  background: #5D9CF4 !important;
 }
 </style>

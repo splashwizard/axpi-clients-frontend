@@ -43,12 +43,12 @@ export default {
     },
 
     isReview() {
-      return this.$route.name === 'Optimisation Review';
+      return this.$route.name === 'Optimisation Scenario Review';
     },
 
     reviewHref() {
       if (this.optimisation) {
-        return '/optimisations/' + this.optimisation.id + '/review';
+        return '/optimisations/' + this.optimisation.id + '/scenarios/1/review';
       }
       return '#';
     }

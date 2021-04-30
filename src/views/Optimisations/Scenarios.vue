@@ -8,7 +8,6 @@
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions" style="padding-top: 15px;">
-            <a-button icon="plus" type="primary">Create Scenario</a-button>
             <create-scenario-modal></create-scenario-modal>
           </div>
         </div>

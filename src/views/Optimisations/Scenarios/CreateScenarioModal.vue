@@ -1,35 +1,38 @@
 <template>
-  <a-modal v-model="visible"
-           class="fullscreen-modal"
-           :centered="true"
-           title="Create Scenario"
-           :footer="null">
+  <div>
+    <a-button icon="plus" type="primary" @click.prevent="showModal">Create Scenario</a-button>
+    <a-modal v-model="visible"
+             class="fullscreen-modal"
+             :centered="true"
+             title="Create Scenario"
+             :footer="null">
 
-    <!-- Loaded -->
-    <div>
-      <div class="axpi-form width-large">
-        <optimisation-metrics :scenario="scenario"></optimisation-metrics>
-        <constraints :scenario="scenario"></constraints>
-        <other-details :scenario="scenario"></other-details>
-        <scenario-details :scenario="scenario"></scenario-details>
+      <!-- Loaded -->
+      <div>
+        <div class="axpi-form width-large">
+          <optimisation-metrics :scenario="scenario"></optimisation-metrics>
+          <constraints :scenario="scenario"></constraints>
+          <other-details :scenario="scenario"></other-details>
+          <scenario-details :scenario="scenario"></scenario-details>
 
-        <!-- Form footer -->
-        <div class="form-footer">
-          <a-button size="large" type="primary">
-            Save And Quit
-          </a-button>
+          <!-- Form footer -->
+          <div class="form-footer">
+            <a-button size="large" type="primary">
+              Save And Quit
+            </a-button>
+          </div>
+          <!-- / Form Footer -->
         </div>
-        <!-- / Form Footer -->
+        <!-- / Selector -->
+
+        <!--      <div class="modal-buttons">-->
+        <!--        <a-button>Save</a-button>-->
+        <!--      </div>-->
       </div>
-      <!-- / Selector -->
+      <!-- / Loaded -->
 
-<!--      <div class="modal-buttons">-->
-<!--        <a-button>Save</a-button>-->
-<!--      </div>-->
-    </div>
-    <!-- / Loaded -->
-
-  </a-modal>
+    </a-modal>
+  </div>
 </template>
 <script>
 import OptimisationMetrics from "./Create/OptimisationMetrics";
@@ -42,7 +45,7 @@ export default {
   components: {ScenarioDetails, OptimisationMetrics, Constraints, OtherDetails},
   data() {
     return {
-      visible: true,
+      visible: false,
       scenario: {
         optimisation_metric: 'best-price',
         custom_metrics: [
@@ -59,6 +62,11 @@ export default {
         description: '',
         tags: []
       }
+    }
+  },
+  methods: {
+    showModal() {
+      this.visible = true;
     }
   }
 }

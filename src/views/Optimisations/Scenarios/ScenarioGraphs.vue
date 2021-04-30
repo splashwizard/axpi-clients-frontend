@@ -1,6 +1,21 @@
 <template>
-  <div>
-<!--    <scenario-metric-heatmap></scenario-metric-heatmap>-->
+  <div class="scenario-graphs">
+    <a-row :gutter="5">
+      <a-col :span="12">
+        <div class="graph-container">
+          <iframe src='https://flo.uri.sh/visualisation/6016612/embed' title='Interactive or visual content'
+                  frameborder='0' scrolling='no' style='width:100%;height:400px;'
+                  sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+        </div>
+      </a-col>
+      <a-col :span="12">
+        <div class="graph-container">
+          <iframe src='https://flo.uri.sh/visualisation/6016755/embed' title='Interactive or visual content'
+                  frameborder='0' scrolling='no' style='width:100%;height:400px;'
+                  sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+        </div>
+      </a-col>
+    </a-row>
   </div>
 </template>
 
@@ -14,5 +29,10 @@ export default {
 </script>
 
 <style scoped>
+.scenario-graphs {
+  margin-bottom: 0;
+}
 
+.graph-container {
+}
 </style>

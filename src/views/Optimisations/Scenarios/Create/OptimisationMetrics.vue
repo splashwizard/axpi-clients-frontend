@@ -23,15 +23,15 @@
           Environmentally Friendly
         </div>
       </a>
-      <a href="#" @click.prevent="select('socially-responsible')"
-         :class="{'selected': isSelected('socially-responsible')}">
-        <div class="icon">
-          <img src="/img/icons/product-type-selector/apparel.png" alt="Apparel">
-        </div>
-        <div class="caption">
-          Socially Responsible
-        </div>
-      </a>
+<!--      <a href="#" @click.prevent="select('socially-responsible')"-->
+<!--         :class="{'selected': isSelected('socially-responsible')}">-->
+<!--        <div class="icon">-->
+<!--          <img src="/img/icons/product-type-selector/apparel.png" alt="Apparel">-->
+<!--        </div>-->
+<!--        <div class="caption">-->
+<!--          Socially Responsible-->
+<!--        </div>-->
+<!--      </a>-->
       <a href="#" @click.prevent="select('custom')" :class="{'selected': isSelected('custom')}">
         <div class="icon">
 <!--          <img src="/img/icons/product-type-selector/merchandise.png" alt="Merchandise">-->

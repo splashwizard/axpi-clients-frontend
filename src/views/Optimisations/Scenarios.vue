@@ -6,7 +6,7 @@
       <left-sidebar :optimisation="optimisation"></left-sidebar>
       <a-layout style="padding: 7px 30px">
         <div class="page-header" v-if="optimisation">
-          <h1 class="page-title">{{ optimisation.name }} - Scenarios</h1>
+          <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions" style="padding-top: 15px;">
             <a-button icon="plus" type="primary">Create Scenario</a-button>
             <create-scenario-modal></create-scenario-modal>
@@ -14,7 +14,16 @@
         </div>
 
         <div v-if="optimisation">
-          The scenearios go here
+
+          <a-tabs>
+            <a-tab-pane key="scenarios" tab="Scenarios">
+              <scenarios-table></scenarios-table>
+            </a-tab-pane>
+            <a-tab-pane key="overview" tab="Overview">
+              Content of Tab Pane 2
+            </a-tab-pane>
+          </a-tabs>
+
         </div>
       </a-layout>
     </a-layout>
@@ -26,6 +35,7 @@ import {mapGetters, mapActions} from "vuex";
 import axios from 'axios';
 import LeftSidebar from "./LeftSidebar";
 import CreateScenarioModal from "./Scenarios/CreateScenarioModal";
+import ScenariosTable from "./Scenarios/ScenariosTable";
 
 const _ = require('lodash');
 
@@ -68,7 +78,7 @@ export default {
       suppliers: []
     }
   },
-  components: {LeftSidebar, CreateScenarioModal},
+  components: {LeftSidebar, CreateScenarioModal, ScenariosTable},
   computed: {
     ...mapGetters('optimisationEditor', {
       isLoading: 'isLoading',

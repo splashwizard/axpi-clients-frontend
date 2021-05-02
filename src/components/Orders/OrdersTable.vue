@@ -3,12 +3,14 @@
     <a-tabs v-model="statusToShow">
       <a-tab-pane :key="null" tab="All"></a-tab-pane>
       <a-tab-pane :key="0" tab="Incomplete"></a-tab-pane>
-      <a-tab-pane :key="1" tab="Sent"></a-tab-pane>
-      <a-tab-pane :key="2" tab="Rejected"></a-tab-pane>
-      <a-tab-pane :key="3" tab="Completed"></a-tab-pane>
+      <a-tab-pane :key="1" tab="Ready To Send"></a-tab-pane>
+      <a-tab-pane :key="2" tab="Sent"></a-tab-pane>
+      <a-tab-pane :key="3" tab="Rejected"></a-tab-pane>
+      <a-tab-pane :key="4" tab="Completed"></a-tab-pane>
     </a-tabs>
 
     <a-table class="axpi-table"
+             :row-selection="rowSelection"
              :columns="columns"
              :row-key="record => record.id"
              :data-source="data"
@@ -19,15 +21,15 @@
       <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{
           name
         }}</a>
-      <div slot="actions" class="table-actions">
+      <div slot="actions" class="table-actions" slot-scope="actions, record">
         <a-dropdown :trigger="['click']">
           <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="#">Edit</a>
+              <a href="#" @click="handleRecordSelected(record)">Edit</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="#" class="text-danger">Delete</a>
+              <a href="#" class="text-danger" @click.prevent="deleteRecord(record)">Delete</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -91,6 +93,7 @@ export default {
       loading: false,
       statusToShow: null,
       columns,
+      selectedOrderIds: []
     };
   },
   mounted() {
@@ -98,10 +101,30 @@ export default {
   },
   watch: {
     statusToShow() {
+      // this.selectedOrderIds = [];
       this.fetch();
     },
     reloadKey() {
       this.fetch();
+    },
+    selectedOrderIds(newSelection) {
+      this.$emit('set-selected-order-ids', newSelection);
+    }
+  },
+  computed: {
+    rowSelection() {
+      return {
+        onChange: (selectedRowKeys) => {
+          this.selectedOrderIds = selectedRowKeys;
+          // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: record => ({
+          props: {
+            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            name: record.name,
+          },
+        }),
+      };
     }
   },
   methods: {
@@ -139,6 +162,10 @@ export default {
 
     handleRecordSelected(order) {
       this.$emit('selected', order);
+    },
+
+    deleteRecord(order) {
+      this.$emit('delete-order', order);
     }
 
     // getInformationRequestUrl(informationRequest) {

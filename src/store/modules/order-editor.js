@@ -167,5 +167,9 @@ export const actions = {
 
     goToPreviousStage({commit}) {
         commit('DECREMENT_WIZARD_STAGE');
+    },
+
+    incrementReloadOrdersKey({commit}) {
+        commit('INCREMENT_RELOAD_ORDERS_KEY');
     }
 };

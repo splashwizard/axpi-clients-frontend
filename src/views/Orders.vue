@@ -1,20 +1,24 @@
 <template>
   <div class="home">
-    <loading-screen :is-loading="isLoadingSuppliers"></loading-screen>
+    <loading-screen :is-loading="isLoadingSuppliers||isDeleting"></loading-screen>
 
     <div class="page-header">
       <h1 class="page-title">Orders</h1>
       <div class="actions">
         <a-button icon="filter">Filter</a-button>
         <a-button icon="export">Export</a-button>
-        <a-button icon="form">Request Information</a-button>
+        <a-button icon="form" @click="requestInformation" :loading="isRequestingInformation"
+                  :disabled="selectedOrderIds.length == 0">Request Information
+        </a-button>
         <a-button @click="createOrder"
                   icon="plus" type="primary" :loading="isLoading">Add Order
         </a-button>
       </div>
     </div>
 
-    <orders-table :reload-key="reloadOrdersKey" @selected="handleOrderSelected"></orders-table>
+    <orders-table @set-selected-order-ids="setSelectedOrderIds"
+                  @delete-order="deleteOrder"
+                  :reload-key="reloadOrdersKey" @selected="handleOrderSelected"></orders-table>
 
     <edit-order-modal :suppliers="suppliers" v-if="order">
     </edit-order-modal>
@@ -41,7 +45,10 @@ export default {
   data() {
     return {
       suppliers: [],
-      isLoadingSuppliers: false
+      isLoadingSuppliers: false,
+      isRequestingInformation: false,
+      selectedOrderIds: [],
+      isDeleting: false
     }
   },
   created() {
@@ -51,7 +58,8 @@ export default {
     ...mapActions('orderEditor', {
       loadOrder: 'loadOrder',
       setWizardStage: 'setWizardStage',
-      createOrder: 'createOrder'
+      createOrder: 'createOrder',
+      incrementReloadOrdersKey: 'incrementReloadOrdersKey'
     }),
 
     loadSuppliers() {
@@ -65,6 +73,43 @@ export default {
         vm.isLoadingSuppliers = false;
         vm.$message.error('Error loading suppliers');
       });
+    },
+
+    requestInformation() {
+      let vm = this;
+
+      if (vm.selectedOrderIds.length === 0) {
+        return false;
+      }
+
+      vm.isRequestingInformation = true;
+      axios.post(window.API_BASE + '/request-information', {ids: vm.selectedOrderIds}).then(() => {
+        vm.isRequestingInformation = false;
+        vm.$message.success('Information requested successfully');
+        vm.incrementReloadOrdersKey();
+      }).catch(e => {
+        console.log(e);
+        vm.isRequestingInformation = false;
+        this.$message.error('Error requesting information');
+      });
+    },
+
+    deleteOrder(order) {
+      let vm = this;
+      vm.isDeleting = true;
+      axios.delete(window.API_BASE + '/orders/' + order.id).then(() => {
+        vm.isDeleting = false;
+        vm.$message.success('Order deleted successfully');
+        vm.incrementReloadOrdersKey();
+      }).catch(e => {
+        console.log(e);
+        vm.isDeleting = false;
+        vm.$message.success('Error deleting order');
+      });
+    },
+
+    setSelectedOrderIds(ids) {
+      this.selectedOrderIds = ids;
     },
 
     handleOrderSelected(order) {

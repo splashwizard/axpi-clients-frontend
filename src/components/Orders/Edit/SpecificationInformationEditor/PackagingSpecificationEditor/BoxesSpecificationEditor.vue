@@ -2,8 +2,10 @@
   <div>
     <div class="form-header">
       <h2 class="form-header-title">Model</h2>
+    </div>
+    <div class="change-model-button-wrapper">
       <a-button v-if="selectedModel"
-                class="form-header-action" @click="selectModel(null)">Change model
+                @click="selectModel(null)">Change model
       </a-button>
     </div>
 
@@ -142,7 +144,14 @@
             </a-form>
           </a-col>
           <a-col :span="12">
-            <img class="flat-image" :src="getImageSrc(this.selectedModel['image'])" alt="3D Image">
+            <a-tabs>
+              <a-tab-pane key="2d" tab="2D Image">
+                <img class="flat-image" :src="getImageSrc(this.selectedModel['image'])" alt="2D Image">
+              </a-tab-pane>
+              <a-tab-pane key="3d" tab="3D Image">
+                <img class="flat-image" :src="getImageSrc(this.selectedModel['3d_image'])" alt="3D Image">
+              </a-tab-pane>
+            </a-tabs>
           </a-col>
         </a-row>
 
@@ -233,6 +242,14 @@ export default {
 
 .form-header-action {
   flex-shrink: 1;
+}
+
+.form-header {
+  margin-bottom: 10px;
+}
+
+.change-model-button-wrapper {
+  margin-bottom: 30px;
 }
 
 .model-details-wrapper {

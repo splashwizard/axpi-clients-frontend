@@ -1,17 +1,22 @@
 export default {
     methods: {
         displayTimestamp(dateTime) {
-            let dateTimeMoment = moment(dateTime);
+            let dateTimeMoment = window.moment(dateTime);
             return dateTimeMoment.fromNow() + ' (' + dateTimeMoment.format('ddd DD MMM') + ' at ' + dateTimeMoment.format('h:mm A') + ')';
         },
 
         displayTimeOpen(dateTime) {
-            let dateTimeMoment = moment(dateTime);
+            let dateTimeMoment = window.moment(dateTime);
             return dateTimeMoment.fromNow(true);
         },
 
+        displayTimeAgo(dateTime) {
+            let dateTimeMoment = window.moment(dateTime);
+            return dateTimeMoment.fromNow();
+        },
+
         formatDate(d) {
-            return moment(d).format('DD/MM/YYYY') ;
+            return window.moment(d).format('DD/MM/YYYY') ;
         }
     }
 }

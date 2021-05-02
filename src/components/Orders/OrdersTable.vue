@@ -21,6 +21,12 @@
       <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{
           name
         }}</a>
+      <div slot="status" slot-scope="status">
+        <a-badge :count="getHumanReadableStatus(status)" :number-style="getStatusBadgeStyle(status)"></a-badge>
+      </div>
+      <div slot="updated_at" slot-scope="updated_at">
+        {{ displayTimeAgo(updated_at) }}
+      </div>
       <div slot="actions" class="table-actions" slot-scope="actions, record">
         <a-dropdown :trigger="['click']">
           <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
@@ -39,6 +45,8 @@
 </template>
 <script>
 import axios from 'axios';
+import Orders from "../../mixins/Orders";
+import Dates from "../../mixins/Dates";
 
 const columns = [
   {
@@ -46,6 +54,12 @@ const columns = [
     dataIndex: 'product_name',
     sorter: true,
     scopedSlots: {customRender: 'name'}
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    sorter: true,
+    scopedSlots: {customRender: 'status'}
   },
   {
     title: 'Type',
@@ -62,11 +76,6 @@ const columns = [
     dataIndex: 'supplier.name',
     sorter: true,
   },
-  // {
-  //   title: 'Status',
-  //   dataIndex: 'status',
-  //   sorter: true
-  // },
   {
     title: 'Order Date',
     dataIndex: 'order_date',
@@ -76,6 +85,7 @@ const columns = [
     title: 'Last Updated',
     dataIndex: 'updated_at',
     sorter: true,
+    scopedSlots: {customRender: 'updated_at'}
   },
   {
     title: '',
@@ -96,6 +106,7 @@ export default {
       selectedOrderIds: []
     };
   },
+  mixins: [Orders, Dates],
   mounted() {
     this.fetch();
   },
@@ -166,6 +177,12 @@ export default {
 
     deleteRecord(order) {
       this.$emit('delete-order', order);
+    },
+
+    getStatusBadgeStyle(status) {
+      return {
+        backgroundColor: this.getStatusColor(status)
+      };
     }
 
     // getInformationRequestUrl(informationRequest) {

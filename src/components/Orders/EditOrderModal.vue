@@ -17,7 +17,7 @@
     <!-- Loaded -->
     <div v-if="!isLoading && orderLocal">
       <div class="modal-buttons">
-        <a-button @click.prevent="() => save(false)">Save</a-button>
+        <a-button @click.prevent="() => save(true)">Save</a-button>
       </div>
 
       <div class="progress-bar">

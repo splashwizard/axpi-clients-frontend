@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <orders-table :key="reloadOrdersKey" @selected="handleOrderSelected"></orders-table>
+    <orders-table :reload-key="reloadOrdersKey" @selected="handleOrderSelected"></orders-table>
 
     <edit-order-modal v-if="order">
     </edit-order-modal>

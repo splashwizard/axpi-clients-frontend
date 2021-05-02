@@ -115,9 +115,10 @@ export const actions = {
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');
+            console.log(e);
 
             let errors;
-            if (typeof e.response.data === 'object') {
+            if (e.response && e.response.data && typeof e.response.data === 'object') {
                 errors = _.flatten(_.toArray(e.response.data.errors));
             } else {
                 errors = ['Something went wrong. Please try again.'];
@@ -131,7 +132,7 @@ export const actions = {
 
         commit('START_SAVING');
         commit('SET_ERRORS', []);
-        axios.put(window.API_BASE + '/orders/' + order.id, orders.encodeOrder(order)).then(r => {
+        axios.put(window.API_BASE + '/orders/' + order.id, orders.encodeOrder(order)).then(() => {
             commit('STOP_SAVING');
             if (quitAfterSave === true) {
                 commit('SET_ORDER', null)

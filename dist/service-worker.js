@@ -14,10 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.d4523353da1bd9995220479b9963c7cc.js"
+  "/precache-manifest.38edc87dc7ddea0a2d4bbd9dc18ac365.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "axpi-clients-frontend"});
+workbox.core.setCacheNameDetails({prefix: "Axiom"});
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {

@@ -252,7 +252,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "8ce17111a1b63bc649d2cce4ad3cf87c",
+    "revision": "78587a06732a1e75d07c7610899c60a2",
     "url": "/index.html"
   },
   {
@@ -296,7 +296,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/suppliers.da7cd8a6.js"
   },
   {
-    "revision": "1f45b094ef3e2a40e337cce8c1c0f0a2",
+    "revision": "0b4936c234cefe9085d74937569e8eed",
     "url": "/manifest.json"
   },
   {

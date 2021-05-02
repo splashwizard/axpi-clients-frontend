@@ -1,4 +1,5 @@
 import axios from 'axios';
+import orders from "../../helpers/orders";
 
 let _ = require('lodash');
 // import router from "../../router";
@@ -10,7 +11,9 @@ export const state = {
     serverErrors: [],
 
     order: null,
-    wizardStage: 0
+    wizardStage: 0,
+
+    reloadOrdersKey: 1
 };
 
 export const mutations = {
@@ -48,6 +51,10 @@ export const mutations = {
 
     SET_ORDER(state, order) {
         state.order = order;
+    },
+
+    INCREMENT_RELOAD_ORDERS_KEY(state) {
+        state.reloadOrdersKey += 1;
     }
 };
 
@@ -70,18 +77,70 @@ export const getters = {
 
     wizardStage: (state) => {
         return state.wizardStage;
+    },
+
+    reloadOrdersKey: (state) => {
+        return state.reloadOrdersKey;
     }
 };
 
 export const actions = {
+    createOrder({commit}) {
+       commit('START_LOADING');
+        commit('SET_ERRORS', []);
+        axios.post(window.API_BASE + '/orders/').then(r => {
+           commit('STOP_LOADING');
+            commit('INCREMENT_RELOAD_ORDERS_KEY');
+            commit('SET_ORDER', orders.decodeOrder(r.data));
+       }).catch(e => {
+           commit('STOP_LOADING');
+           this._vm.$message.error('Error creating order');
+
+           let errors;
+           if (typeof e.response.data === 'object') {
+               errors = _.flatten(_.toArray(e.response.data.errors));
+           } else {
+               errors = ['Something went wrong. Please try again.'];
+           }
+           commit('SET_ERRORS', errors);
+       });
+    },
+
     loadOrder({commit}, id) {
         commit('START_LOADING');
+        commit('SET_ERRORS', []);
         axios.get(window.API_BASE + '/orders/' + id).then(r => {
             commit('STOP_LOADING');
-            commit('SET_ORDER', r.data);
+            commit('SET_ORDER', orders.decodeOrder(r.data));
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');
+
+            let errors;
+            if (typeof e.response.data === 'object') {
+                errors = _.flatten(_.toArray(e.response.data.errors));
+            } else {
+                errors = ['Something went wrong. Please try again.'];
+            }
+            commit('SET_ERRORS', errors);
+        });
+    },
+
+    saveOrder({commit}, params) {
+        const {order, quitAfterSave} = params;
+
+        commit('START_SAVING');
+        commit('SET_ERRORS', []);
+        axios.put(window.API_BASE + '/orders/' + order.id, orders.encodeOrder(order)).then(r => {
+            commit('STOP_SAVING');
+            if (quitAfterSave === true) {
+                commit('SET_ORDER', null)
+            }
+            this._vm.$message.success('Order saved successfully!');
+            commit('INCREMENT_RELOAD_ORDERS_KEY');
+        }).catch(e => {
+            commit('STOP_SAVING');
+            this._vm.$message.error('Error saving order');
 
             let errors;
             if (typeof e.response.data === 'object') {

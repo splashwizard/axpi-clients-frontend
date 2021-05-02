@@ -11,7 +11,8 @@ import VuexPersist from 'vuex-persist';
 
 const vuexStorage = new VuexPersist({
     key: 'axpi-frontend-auth',
-    storage: window.localStorage
+    storage: window.localStorage,
+    modules: ['auth']
 })
 
 export default new Vuex.Store({

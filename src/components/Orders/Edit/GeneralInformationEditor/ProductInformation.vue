@@ -8,8 +8,8 @@
                 <a-form-item label="Product Description">
                     <a-input size="large" v-model="orderLocal.product_description" placeholder="Product Name"/>
                 </a-form-item>
-                <a-form-item label="PO Number">
-                    <a-input size="large" v-model="orderLocal.po_number" placeholder="PO Number"/>
+                <a-form-item label="Reference Number">
+                    <a-input size="large" v-model="orderLocal.reference_number" placeholder="Reference Number"/>
                 </a-form-item>
             </a-form>
         </a-col>

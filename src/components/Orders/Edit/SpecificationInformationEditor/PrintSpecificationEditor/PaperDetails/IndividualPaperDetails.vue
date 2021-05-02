@@ -25,7 +25,7 @@
                     </a-form-item>
 
                     <a-form-item label="Paper Finish">
-                        <a-select v-model="paper.paper_finish"
+                        <a-select v-model="paper.finish"
                                   show-search size="large"
                                   @change="forceRefresh">
                             <a-select-opt-group v-for="(group, i) in paperFinishOptions" :key="i">

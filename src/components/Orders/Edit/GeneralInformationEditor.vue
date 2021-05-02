@@ -7,6 +7,7 @@
             </div>
             <customer-information
                     :client="orderLocal.client"
+                    :order-local="orderLocal"
                     :organisational-unit="orderLocal.organisational_unit"></customer-information>
         </div>
         <!-- /Customer Information -->

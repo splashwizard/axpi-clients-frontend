@@ -83,11 +83,11 @@
             }
         },
         mounted() {
-            this.selected = this.orderLocal.paper_binding_type;
+            this.selected = this.orderLocal.print_binding_type;
         },
         watch: {
             selected(newSelection) {
-                this.orderLocal.paper_binding_type = newSelection;
+                this.orderLocal.print_binding_type = newSelection;
                 this.$emit('property-updated');
             }
         },

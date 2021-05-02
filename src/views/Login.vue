@@ -2,7 +2,7 @@
     <div class="login-page">
         <div class="login-page-inner">
             <div class="login-form-card">
-                <img src="/img/axiom-icon.png" alt="Logo" width="60">
+                <img src="/img/logo-new.png" alt="Logo" width="60">
 
                 <h1>Welcome Back!</h1>
                 <svg class="block mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" width="100" height="2"

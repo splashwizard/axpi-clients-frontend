@@ -20,7 +20,7 @@ export default {
         };
 
         // Print
-        if (orderFromServer.print_detail) {
+        if (orderFromServer.print_detail && typeof orderFromServer.print_detail === 'object') {
             // Paper Sections
             if (orderFromServer.print_detail.paper_sections && orderFromServer.print_detail.paper_sections.length) {
                 order.paper = _.cloneDeep(orderFromServer.print_detail.paper_sections);
@@ -28,7 +28,7 @@ export default {
 
             // Additional Information
             order.print_binding_type = orderFromServer.print_detail.binding;
-            order.print_printing_method = orderFromServer.print_detail.printing_method.split('/');
+            order.print_printing_method = orderFromServer.print_detail.printing_method ?  orderFromServer.print_detail.printing_method.split('/') : null;
             order.print_artwork_supplied = orderFromServer.print_detail.artwork_supplied;
             order.print_proof_made = orderFromServer.print_detail.proof_made;
         }

@@ -27,6 +27,7 @@
       <!-- Small form -->
       <div>
         <general-information-editor v-if="wizardStage === 0"
+                                    :suppliers="suppliers"
                                     :order-local="orderLocal"></general-information-editor>
 
 
@@ -53,6 +54,7 @@ import AdditionalInformationEditor from "./Edit/AdditionalInformationEditor";
 
 export default {
   name: "EditOrderModal",
+  props: ['suppliers'],
   data() {
     return {
       visible: true,

@@ -13,6 +13,7 @@ export default {
             cost_currency: orderFromServer.cost_currency,
             reference_number: orderFromServer.reference_number,
             client_id: orderFromServer.client_id,
+            supplier_id: orderFromServer.supplier_id,
             apparel_detail_id: orderFromServer.apparel_detail_id,
             permanent_pos_detail_id: orderFromServer.permanent_pos_detail_id,
             semi_permanent_pos_detail_id: orderFromServer.semi_permanent_pos_detail_id,
@@ -47,6 +48,7 @@ export default {
             cost: localOrder.cost,
             cost_currency: localOrder.cost_currency,
             reference_number: localOrder.reference_number,
+            supplier_id: localOrder.supplier_id
         };
 
         // PRINT

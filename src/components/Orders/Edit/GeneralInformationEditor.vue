@@ -26,7 +26,7 @@
             <div class="form-header">
                 <h2>Order Information</h2>
             </div>
-            <order-information :order-local="orderLocal"></order-information>
+            <order-information :suppliers="suppliers" :order-local="orderLocal"></order-information>
         </div>
         <!-- / Order Information -->
 
@@ -50,7 +50,7 @@
 
     export default {
         name: "GeneralInformationEditor",
-        props: ['orderLocal'],
+        props: ['orderLocal', 'suppliers'],
         components: {CustomerInformation, ProductInformation, OrderInformation},
         methods: {
             ...mapActions('orderEditor', {

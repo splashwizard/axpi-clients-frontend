@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <loading-screen :is-loading="isLoadingSuppliers"></loading-screen>
 
     <div class="page-header">
       <h1 class="page-title">Orders</h1>
@@ -15,7 +16,7 @@
 
     <orders-table :reload-key="reloadOrdersKey" @selected="handleOrderSelected"></orders-table>
 
-    <edit-order-modal v-if="order">
+    <edit-order-modal :suppliers="suppliers" v-if="order">
     </edit-order-modal>
   </div>
 </template>
@@ -25,6 +26,7 @@ import OrdersTable from "../components/Orders/OrdersTable";
 import EditOrderModal from "../components/Orders/EditOrderModal";
 
 import {mapGetters, mapActions} from "vuex";
+import axios from 'axios';
 
 export default {
   name: 'Orders',
@@ -37,7 +39,13 @@ export default {
   },
   components: {OrdersTable, EditOrderModal},
   data() {
-    return {}
+    return {
+      suppliers: [],
+      isLoadingSuppliers: false
+    }
+  },
+  created() {
+    this.loadSuppliers();
   },
   methods: {
     ...mapActions('orderEditor', {
@@ -45,6 +53,19 @@ export default {
       setWizardStage: 'setWizardStage',
       createOrder: 'createOrder'
     }),
+
+    loadSuppliers() {
+      let vm = this;
+      vm.isLoadingSuppliers = true;
+      axios.get(window.API_BASE + '/suppliers').then(r => {
+        vm.suppliers = r.data;
+        vm.isLoadingSuppliers = false;
+      }).catch(e => {
+        console.log(e);
+        vm.isLoadingSuppliers = false;
+        vm.$message.error('Error loading suppliers');
+      });
+    },
 
     handleOrderSelected(order) {
       this.setWizardStage(0);

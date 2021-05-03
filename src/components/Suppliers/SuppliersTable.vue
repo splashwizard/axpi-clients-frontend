@@ -7,8 +7,8 @@
             :loading="loading"
             @change="handleTableChange"
     >
-        <template slot="country">
-            United Kingdom
+        <template slot="country" slot-scope="country, record">
+           {{ getCountry(record.name) }}
         </template>
 <!--        <template slot="rating">-->
 <!--            <a-rate :default-value="2" disabled/>-->
@@ -108,6 +108,17 @@
                     this.$message.error('Error loading suppliers');
                 });
             },
+
+          getCountry(supplierName) {
+              switch(supplierName) {
+                case 'Gunn + Taylor':
+                  return 'United Kingdom';
+                case 'Courtney Colour':
+                  return 'USA'
+                default:
+                  return 'United Kingdom';
+              }
+          }
         },
     };
 </script>

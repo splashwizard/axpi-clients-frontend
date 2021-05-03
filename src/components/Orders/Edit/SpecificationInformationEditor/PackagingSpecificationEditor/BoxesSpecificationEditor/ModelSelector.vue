@@ -37,7 +37,7 @@ export default {
     },
 
     getTwoDimensionalImageForModel(model) {
-      return 'https://api.axiomdata.io/packaging/' + model.model + ".svg";
+      return 'https://api.axiomdata.io/packaging/' + model.name + ".png";
     }
   }
 }

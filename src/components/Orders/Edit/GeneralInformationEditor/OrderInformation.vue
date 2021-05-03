@@ -41,16 +41,7 @@
 </template>
 
 <script>
-const currencies = [
-  {
-    currency: "AED",
-    symbol: "د.إ"
-  },
-  {
-    currency: "GBP",
-    symbol: "£"
-  }
-];
+const currencies = [{'currency': 'AED', 'symbol': 'د.إ'}, {'currency': 'AUD', 'symbol': '$'}, {'currency': 'BDT', 'symbol': '৳'}, {'currency': 'BGN', 'symbol': 'лв'}, {'currency': 'BRL', 'symbol': 'R$'}, {'currency': 'CAD', 'symbol': '$'}, {'currency': 'CHF', 'symbol': 'CHF'}, {'currency': 'CLP', 'symbol': '$'}, {'currency': 'CNY', 'symbol': '¥'}, {'currency': 'COP', 'symbol': '$'}, {'currency': 'CZK', 'symbol': 'Kč'}, {'currency': 'DKK', 'symbol': 'kr'}, {'currency': 'EUR', 'symbol': '€'}, {'currency': 'GBP', 'symbol': '£'}, {'currency': 'GEL', 'symbol': '₾'}, {'currency': 'HKD', 'symbol': '$'}, {'currency': 'HRK', 'symbol': 'kn'}, {'currency': 'HUF', 'symbol': 'ft'}, {'currency': 'IDR', 'symbol': 'Rp'}, {'currency': 'ILS', 'symbol': '₪'}, {'currency': 'INR', 'symbol': '₹'}, {'currency': 'JPY', 'symbol': '¥'}, {'currency': 'KES', 'symbol': 'Ksh'}, {'currency': 'KRW', 'symbol': '₩'}, {'currency': 'LKR', 'symbol': 'Rs'}, {'currency': 'MAD', 'symbol': '.د.م'}, {'currency': 'MXN', 'symbol': '$'}, {'currency': 'MYR', 'symbol': 'RM'}, {'currency': 'NGN', 'symbol': '₦'}, {'currency': 'NOK', 'symbol': 'kr'}, {'currency': 'NZD', 'symbol': '$'}, {'currency': 'PEN', 'symbol': 'S/.'}, {'currency': 'PHP', 'symbol': '₱'}, {'currency': 'PKR', 'symbol': 'Rs'}, {'currency': 'PLN', 'symbol': 'zł'}, {'currency': 'RON', 'symbol': 'lei'}, {'currency': 'RUB', 'symbol': '₽'}, {'currency': 'SEK', 'symbol': 'kr'}, {'currency': 'SGD', 'symbol': '$'}, {'currency': 'THB', 'symbol': '฿'}, {'currency': 'TRY', 'symbol': '₺'}, {'currency': 'UAH', 'symbol': '₴'}, {'currency': 'USD', 'symbol': '$'}, {'currency': 'VND', 'symbol': '₫'}, {'currency': 'ZAR', 'symbol': 'R'}];
 
 export default {
   name: "OrderInformation",
@@ -62,12 +53,18 @@ export default {
   },
   computed: {
     costCurrencyPrepend() {
-      if (this.orderLocal.cost_currency === 'USD') {
-        return '$';
+      let currency = _.find(currencies, {currency: this.orderLocal.cost_currency});
+      if (currency) {
+        return currency.symbol;
+      } else {
+        return '£';
       }
-      if (this.orderLocal.cost_currency === 'GBP') {
-       return '£';
-      }
+      // if (this.orderLocal.cost_currency === 'USD') {
+      //   return '$';
+      // }
+      // if (this.orderLocal.cost_currency === 'GBP') {
+      //  return '£';
+      // }
       return null;
     }
   }

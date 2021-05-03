@@ -136,9 +136,9 @@
               <!-- / Sw thickness -->
 
               <!-- Dimension type -->
-<!--              <div v-if="selectedModel['dimension-type']">-->
-<!--                Dimension type changer-->
-<!--              </div>-->
+              <!--              <div v-if="selectedModel['dimension-type']">-->
+              <!--                Dimension type changer-->
+              <!--              </div>-->
               <!-- / Dimension type -->
 
             </a-form>
@@ -146,10 +146,14 @@
           <a-col :span="12">
             <a-tabs>
               <a-tab-pane key="2d" tab="2D Image">
-                <img class="flat-image" :src="getTwoDimensionalImageForModel(this.selectedModel)" alt="2D Image">
+                <div class="flat-image-wrapper">
+                  <img class="flat-image" :src="getTwoDimensionalImageForModel(this.selectedModel)" alt="2D Image">
+                </div>
               </a-tab-pane>
               <a-tab-pane key="3d" tab="3D Image">
-                <img class="flat-image" :src="getThreeDimensionalImageForModel(this.selectedModel)" alt="3D Image">
+                <div class="flat-image-wrapper">
+                  <img class="flat-image" :src="getThreeDimensionalImageForModel(this.selectedModel)" alt="3D Image">
+                </div>
               </a-tab-pane>
             </a-tabs>
           </a-col>
@@ -264,7 +268,13 @@ export default {
   padding-bottom: 55px;
 }
 
+.flat-image-wrapper {
+  text-align: center;
+}
+
 .flat-image {
-  width: 100%;
+  width: auto;
+  height: 300px;
+  margin: 0 auto;
 }
 </style>

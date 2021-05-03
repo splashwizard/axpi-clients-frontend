@@ -223,11 +223,11 @@ export default {
     },
 
     getTwoDimensionalImageForModel(model) {
-      return 'https://api.axiomdata.io/packaging/' + model.model + ".svg";
+      return 'https://api.axiomdata.io/packaging/' + model.name + ".svg";
     },
 
     getThreeDimensionalImageForModel(model) {
-      return 'https://api.axiomdata.io/packaging/' + model.model + "_3d.svg";
+      return 'https://api.axiomdata.io/packaging/' + model.name + "_3d.svg";
     }
   }
 }

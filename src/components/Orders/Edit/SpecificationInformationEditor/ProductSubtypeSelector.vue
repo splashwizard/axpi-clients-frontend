@@ -38,8 +38,7 @@
             'bubble-wrap',
             'strapping',
             'jiffy-bag',
-            'pallet-wrap',
-            'page'
+            'pallet-wrap'
         ]
     };
 

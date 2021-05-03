@@ -1,10 +1,20 @@
 <template>
-  <a-table :columns="columns" :data-source="data" class="axpi-table">
-    <div slot="expectedCost" slot-scope="cost, item">
+  <a-table :columns="columns" :data-source="data" class="axpi-table scenarios-table">
+    <div slot="expectedCost" slot-scope="cost">
       {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
     </div>
     <div slot="expectedCo2e" slot-scope="emission">
       {{ emission }} kg
+    </div>
+    <div slot="itemsAllocated">
+      <div class="bullet-chart">
+        <div class="left">
+          <a-progress :percent="100" :show-info="false"/>
+        </div>
+        <div class="right">
+          3/3
+        </div>
+      </div>
     </div>
     <div slot="actions" class="table-actions">
       <a-button style="margin-right: 5px;" @click.prevent="reviewScenario">Review</a-button>
@@ -52,6 +62,7 @@ const columns = [
     dataIndex: 'itemsAllocated',
     title: 'Items Allocated',
     key: 'itemsAllocated',
+    scopedSlots: {customRender: 'itemsAllocated'}
   },
   {
     dataIndex: 'actions',
@@ -110,8 +121,23 @@ export default {
 }
 </script>
 
-<style scoped>
-.table-actions {
-  text-align: right;
+<style lang="scss">
+.scenarios-table {
+  .table-actions {
+    text-align: right;
+  }
+
+  .bullet-chart {
+    display: flex;
+
+    .left {
+      flex: 1;
+    }
+
+    .right {
+      padding-left: 20px;
+      flex-shrink: 1;
+    }
+  }
 }
 </style>

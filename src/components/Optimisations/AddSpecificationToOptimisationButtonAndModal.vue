@@ -46,15 +46,23 @@
       <loading-screen :is-loading="isSaving"></loading-screen>
 
       <a-table class="axpi-table"
+               :row-selection="specificationRowSelection"
                :columns="specificationColumns"
                :row-key="record => record.id"
                :data-source="specifications"
                :pagination="specificationPagination"
                :loading="isLoadingSpecifications">
-        <div slot="actions" slot-scope="name, record" class="table-actions">
-          <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>
-        </div>
+<!--        <div slot="actions" slot-scope="name, record" class="table-actions">-->
+<!--          <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>-->
+<!--        </div>-->
       </a-table>
+
+      <div>
+        <div class="actions text-right">
+          <a-button type="primary" icon="plus" :disabled="selectedSpecificationIds.length == 0"
+                    @click="addSpecifications">Add Specifications</a-button>
+        </div>
+      </div>
 
     </a-modal>
   </div>
@@ -77,11 +85,11 @@ const SPECIFICATION_COLUMNS = [
     dataIndex: 'product_type',
     sorter: true,
   },
-  {
-    title: '',
-    scopedSlots: {customRender: 'actions'},
-    width: 10
-  }
+  // {
+  //   title: '',
+  //   scopedSlots: {customRender: 'actions'},
+  //   width: 10
+  // }
 ];
 
 export default {
@@ -98,13 +106,28 @@ export default {
       specificationPagination: {},
       isLoadingSpecifications: false,
       specificationColumns: SPECIFICATION_COLUMNS,
+      selectedSpecificationIds: [],
       isSaving: false
     }
   },
   computed: {
     isLoading() {
       return this.isLoadingSpecifications;
-    }
+    },
+
+    specificationRowSelection() {
+      return {
+        onChange: (selectedRowKeys) => {
+          this.selectedSpecificationIds = selectedRowKeys;
+        },
+        getCheckboxProps: record => ({
+          props: {
+            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            name: record.name,
+          },
+        }),
+      }
+    },
   },
   methods: {
     showMethodSelectorModal() {
@@ -171,6 +194,25 @@ export default {
       if (method === 'saved') {
         this.showSavedSpecModal();
       }
+    },
+
+    addSpecifications() {
+      if (this.selectedSpecificationIds.length == 0) {
+       return false
+      }
+      let vm = this;
+      vm.isSaving = true;
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/create-from-specifications', {
+        specification_ids: vm.selectedSpecificationIds
+      }).then(() => {
+        vm.isSaving = false;
+        vm.$message.success('Specifications added successfully');
+        vm.$emit('refresh-optimisation');
+      }).catch(e => {
+        console.log(e);
+        vm.isSaving = false;
+        vm.$message.error('Error adding specifications');
+      });
     }
   }
 }

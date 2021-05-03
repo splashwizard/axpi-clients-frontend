@@ -33,6 +33,25 @@ export default {
                     return '#46b98e';
                     // return 'Completed';
             }
+        },
+
+        formatType(type) {
+            if (type) {
+                if (type === 'pos') {
+                    return 'POS';
+                } else {
+                    return type.charAt(0).toUpperCase() + type.slice(1)
+                }
+            }
+            return type;
+        },
+
+        formatCost(order) {
+            if (order.cost) {
+                let currency = order.cost_currency ? order.cost_currency : 'GBP';
+                return new Intl.NumberFormat('ja-JP', {style: 'currency', currency: currency}).format(order.cost);
+            }
+            return order.cost;
         }
     }
 }

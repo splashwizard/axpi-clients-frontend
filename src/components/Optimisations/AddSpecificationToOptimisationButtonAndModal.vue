@@ -34,7 +34,7 @@
 
     </a-modal>
 
-    <a-modal
+    <a-modal :width="700"
         title="Add Specification"
         :visible="savedSpecModalVisible"
         @cancel="handleSavedSpecCancel"
@@ -52,15 +52,22 @@
                :data-source="specifications"
                :pagination="specificationPagination"
                :loading="isLoadingSpecifications">
-<!--        <div slot="actions" slot-scope="name, record" class="table-actions">-->
-<!--          <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>-->
-<!--        </div>-->
+        <div slot="type" slot-scope="type">
+          {{ formatType(type) }}
+        </div>
+        <div slot="date" slot-scope="date">
+          {{ displayTimeAgo(date) }}
+        </div>
+        <!--        <div slot="actions" slot-scope="name, record" class="table-actions">-->
+        <!--          <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>-->
+        <!--        </div>-->
       </a-table>
 
       <div>
         <div class="actions text-right">
           <a-button type="primary" icon="plus" :disabled="selectedSpecificationIds.length == 0"
-                    @click="addSpecifications">Add Specifications</a-button>
+                    @click="addSpecifications">Add Specifications
+          </a-button>
         </div>
       </div>
 
@@ -70,6 +77,8 @@
 
 <script>
 import axios from 'axios';
+import Orders from "../../mixins/Orders";
+import Dates from "../../mixins/Dates";
 
 const _ = require('lodash');
 
@@ -84,6 +93,19 @@ const SPECIFICATION_COLUMNS = [
     title: 'Type',
     dataIndex: 'product_type',
     sorter: true,
+    scopedSlots: {customRender: 'type'}
+  },
+  {
+    title: 'Quantity',
+    dataIndex: 'quantity',
+    sorter: true,
+    scopedSlots: {customRender: 'quantity'}
+  },
+  {
+    title: 'Last Updated',
+    dataIndex: 'updated_at',
+    sorter: true,
+    scopedSlots: {customRender: 'date'}
   },
   // {
   //   title: '',
@@ -95,6 +117,7 @@ const SPECIFICATION_COLUMNS = [
 export default {
   name: "AddSpecificationToOptimisationButtonAndModal",
   props: ['optimisation'],
+  mixins: [Orders, Dates],
   data() {
     return {
       methodSelectorModalVisible: false,
@@ -198,7 +221,7 @@ export default {
 
     addSpecifications() {
       if (this.selectedSpecificationIds.length == 0) {
-       return false
+        return false
       }
       let vm = this;
       vm.isSaving = true;

@@ -29,6 +29,9 @@
             </a-select>
           </a-input-group>
         </a-form-item>
+        <a-form-item label="Quantity">
+          <a-input size="large" type="large" style="width:100%;" v-model="orderLocal.quantity"></a-input>
+        </a-form-item>
       </a-form>
     </a-col>
   </a-row>

@@ -13,11 +13,29 @@
         {{ text }}
       </router-link>
     </template>
-    <template slot="items">
-      2
+    <template slot="scenarios" slot-scope="scenarios, optimisation">
+      <span v-if="optimisation.name === 'Customer C Campaign'">5</span>
+      <span v-if="optimisation.name === 'Drug B USA Campaign'">3</span>
     </template>
-    <template slot="truprice">
-      £1000
+    <template slot="items" slot-scope="items, optimisation">
+      <span v-if="optimisation.name == 'Customer C Campaign'">8</span>
+      <span v-if="optimisation.name == 'Drug B USA Campaign'">21</span>
+    </template>
+    <template slot="expectedCost" slot-scope="expectedCost,optimisation">
+      <span v-if="optimisation.name == 'Customer C Campaign'">
+        $11,137 - $14,839
+      </span>
+      <span v-if="optimisation.name == 'Drug B USA Campaign'">
+        $28,726 - $35,031
+      </span>
+    </template>
+    <template slot="co2e" slot-scope="co2e,optimisation">
+      <span v-if="optimisation.name == 'Customer C Campaign'">
+        2,818kg - 3,614kg
+      </span>
+      <span v-if="optimisation.name == 'Drug B USA Campaign'">
+        7,183kg - 10,097kg
+      </span>
     </template>
     <template slot="created-at" slot-scope="text">
       {{ formatDate(text) }}
@@ -54,11 +72,19 @@ const columns = [
     }
   },
   {
-    title: 'Truprice',
-    dataIndex: 'truprice',
+    title: 'Expected Cost',
+    dataIndex: 'expectedCost',
     sorter: true,
     scopedSlots: {
-      customRender: 'truprice'
+      customRender: 'expectedCost'
+    }
+  },
+  {
+    title: 'CO2e',
+    dataIndex: 'co2e',
+    sorter: true,
+    scopedSlots: {
+      customRender: 'co2e'
     }
   },
   {

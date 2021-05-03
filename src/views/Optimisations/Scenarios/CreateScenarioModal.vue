@@ -17,7 +17,7 @@
 
           <!-- Form footer -->
           <div class="form-footer">
-            <a-button size="large" type="primary">
+            <a-button size="large" type="primary" @click="saveAndQuit">
               Save And Quit
             </a-button>
           </div>
@@ -56,6 +56,7 @@ export default {
           }
         ],
         constraints: [],
+        maximum_number_of_suppliers: 1,
         enable_search_beyond_existing_supplier_base: false,
         enable_bundling: false,
         name: '',
@@ -67,6 +68,12 @@ export default {
   methods: {
     showModal() {
       this.visible = true;
+    },
+
+    saveAndQuit() {
+      this.visible = true;
+      this.$message.success('Scenario added successfully!');
+      this.$router.push('/optimisations/' + this.$route.params.id + '/scenarios?saved=true');
     }
   }
 }

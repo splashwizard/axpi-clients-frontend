@@ -9,6 +9,9 @@
   >
     <a href="#" slot="name" slot-scope="name" @click.prevent="e => e.preventDefault()">{{ name
       }}</a>
+    <div slot="type" slot-scope="type">
+      {{ formatType(type) }}
+    </div>
     <div slot="actions" class="table-actions" slot-scope="actions, record">
       <a-dropdown :trigger="['click']">
         <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
@@ -31,6 +34,7 @@
 <script>
 import axios from 'axios';
 import Dates from "../../mixins/Dates";
+import Orders from "../../mixins/Orders";
 
 const columns = [
   {
@@ -43,6 +47,7 @@ const columns = [
     title: 'Type',
     dataIndex: 'product_type',
     sorter: true,
+    scopedSlots: {customRender: 'type'}
   },
   {
     title: '',
@@ -61,7 +66,7 @@ export default {
       columns,
     };
   },
-  mixins: [Dates],
+  mixins: [Dates, Orders],
   mounted() {
     this.fetch();
   },

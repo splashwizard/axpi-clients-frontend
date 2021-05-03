@@ -24,6 +24,12 @@
       <div slot="status" slot-scope="status">
         <a-badge :count="getHumanReadableStatus(status)" :number-style="getStatusBadgeStyle(status)"></a-badge>
       </div>
+      <div slot="type" slot-scope="type">
+        {{ formatType(type) }}
+      </div>
+      <div slot="cost" slot-scope="cost, order">
+        {{ formatCost(order) }}
+      </div>
       <div slot="updated_at" slot-scope="updated_at">
         {{ displayTimeAgo(updated_at) }}
       </div>
@@ -65,11 +71,13 @@ const columns = [
     title: 'Type',
     dataIndex: 'product_type',
     sorter: true,
+    scopedSlots: {customRender: 'type'}
   },
   {
     title: 'Cost',
     dataIndex: 'cost',
     sorter: true,
+    scopedSlots: {customRender: 'cost'}
   },
   {
     title: 'Supplier',
@@ -183,6 +191,25 @@ export default {
       return {
         backgroundColor: this.getStatusColor(status)
       };
+    },
+
+    formatType(type) {
+      if (type) {
+        if (type === 'pos') {
+          return 'POS';
+        } else {
+          return type.charAt(0).toUpperCase() + type.slice(1)
+        }
+      }
+      return type;
+    },
+
+    formatCost(order) {
+      if (order.cost) {
+        let currency = order.cost_currency ? order.cost_currency : 'GBP';
+        return new Intl.NumberFormat('ja-JP', {style: 'currency', currency: currency}).format(order.cost);
+      }
+      return order.cost;
     }
 
     // getInformationRequestUrl(informationRequest) {

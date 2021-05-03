@@ -10,9 +10,12 @@
         <template slot="country">
             United Kingdom
         </template>
-        <template slot="rating">
-            <a-rate :default-value="2" disabled/>
-        </template>
+<!--        <template slot="rating">-->
+<!--            <a-rate :default-value="2" disabled/>-->
+<!--        </template>-->
+      <template slot="product-type">
+        <a-badge count="Print" :number-style="{backgroundColor: '#4dc8f2'}"></a-badge>
+      </template>
         <template slot="last-order">
             10th February 2020
         </template>
@@ -35,14 +38,22 @@
                 customRender: 'country'
             }
         },
-        {
-            title: 'Rating',
-            dataIndex: 'rating',
-            sorter: true,
-            scopedSlots: {
-                customRender: 'rating'
-            }
-        },
+      {
+        title: 'Product Type',
+        dataIndex: 'product-type',
+        sorter: true,
+        scopedSlots: {
+          customRender: 'product-type'
+        }
+      },
+        // {
+        //     title: 'Rating',
+        //     dataIndex: 'rating',
+        //     sorter: true,
+        //     scopedSlots: {
+        //         customRender: 'rating'
+        //     }
+        // },
         {
             title: 'Last Order',
             dataIndex: 'last_order',

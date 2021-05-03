@@ -18,7 +18,7 @@
         </a-form-item>
         <a-form-item label="Price">
           <a-input-group compact>
-            <a-input size="large" style="width: 70%" v-model="orderLocal.cost"/>
+            <a-input :addon-before="costCurrencyPrepend" size="large" class="order-cost-input" style="width: 70%" v-model="orderLocal.cost"/>
             <a-select default-value="GBP" size="large" style="width: 30%" v-model="orderLocal.cost_currency">
               <a-select-option value="GBP">
                 GBP
@@ -37,9 +37,26 @@
 <script>
 export default {
   name: "OrderInformation",
-  props: ['orderLocal', 'suppliers']
+  props: ['orderLocal', 'suppliers'],
+  computed: {
+    costCurrencyPrepend() {
+      if (this.orderLocal.cost_currency === 'USD') {
+        return '$';
+      }
+      if (this.orderLocal.cost_currency === 'GBP') {
+       return '£';
+      }
+      return null;
+    }
+  }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+.order-cost-input {
+  .ant-input-group-addon {
+    //background: none;
+    box-shadow: none
+  }
+}
 </style>

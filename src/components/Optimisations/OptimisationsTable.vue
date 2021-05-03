@@ -1,46 +1,66 @@
 <template>
-  <a-table
-      class="axpi-table"
-      :columns="columns"
-      :row-key="record => record.id"
-      :data-source="data"
-      :pagination="pagination"
-      :loading="loading"
-      @change="handleTableChange"
-  >
-    <template slot="name" slot-scope="text, record">
-      <router-link :to="getOptimisationLink(record)">
-        {{ text }}
-      </router-link>
-    </template>
-    <template slot="scenarios" slot-scope="scenarios, optimisation">
-      <span v-if="optimisation.name === 'Customer C Campaign'">5</span>
-      <span v-if="optimisation.name === 'Drug B USA Campaign'">3</span>
-    </template>
-    <template slot="items" slot-scope="items, optimisation">
-      <span v-if="optimisation.name == 'Customer C Campaign'">8</span>
-      <span v-if="optimisation.name == 'Drug B USA Campaign'">21</span>
-    </template>
-    <template slot="expectedCost" slot-scope="expectedCost,optimisation">
+  <div>
+    <loading-screen :is-loading="isDeleting"></loading-screen>
+    <a-table
+        class="axpi-table"
+        :columns="columns"
+        :row-key="record => record.id"
+        :data-source="data"
+        :pagination="pagination"
+        :loading="loading"
+        @change="handleTableChange"
+    >
+      <template slot="name" slot-scope="text, record">
+        <router-link :to="getOptimisationLink(record)">
+          {{ text }}
+        </router-link>
+      </template>
+      <template slot="scenarios" slot-scope="scenarios, optimisation">
+        <span v-if="optimisation.name === 'Customer C Campaign'">5</span>
+        <span v-if="optimisation.name === 'Drug B USA Campaign'">3</span>
+      </template>
+      <template slot="items" slot-scope="items, optimisation">
+        <span v-if="optimisation.name == 'Customer C Campaign'">8</span>
+        <span v-if="optimisation.name == 'Drug B USA Campaign'">21</span>
+      </template>
+      <template slot="expectedCost" slot-scope="expectedCost,optimisation">
       <span v-if="optimisation.name == 'Customer C Campaign'">
         $11,137 - $14,839
       </span>
-      <span v-if="optimisation.name == 'Drug B USA Campaign'">
+        <span v-if="optimisation.name == 'Drug B USA Campaign'">
         $28,726 - $35,031
       </span>
-    </template>
-    <template slot="co2e" slot-scope="co2e,optimisation">
+      </template>
+      <template slot="co2e" slot-scope="co2e,optimisation">
       <span v-if="optimisation.name == 'Customer C Campaign'">
         2,818kg - 3,614kg
       </span>
-      <span v-if="optimisation.name == 'Drug B USA Campaign'">
+        <span v-if="optimisation.name == 'Drug B USA Campaign'">
         7,183kg - 10,097kg
       </span>
-    </template>
-    <template slot="created-at" slot-scope="text">
-      {{ formatDate(text) }}
-    </template>
-  </a-table>
+      </template>
+      <template slot="created-at" slot-scope="text">
+        {{ formatDate(text) }}
+      </template>
+      A
+      <template slot="actions" class="table-actions" slot-scope="actions, record">
+        <a-dropdown :trigger="['click']">
+          <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <router-link :to="getOptimisationLink(record)">
+                Edit
+              </router-link>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="#" @click.prevent="deleteOptimisation(record)"
+                 class="text-danger">Delete</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+      </template>
+    </a-table>
+  </div>
 </template>
 <script>
 import axios from 'axios';
@@ -94,6 +114,11 @@ const columns = [
     scopedSlots: {
       customRender: 'created-at'
     }
+  },
+  {
+    title: '',
+    scopedSlots: {customRender: 'actions'},
+    width: 10
   }
 ];
 
@@ -104,6 +129,7 @@ export default {
       pagination: {},
       loading: false,
       columns,
+      isDeleting: false
     };
   },
   mixins: [Dates],
@@ -145,6 +171,20 @@ export default {
 
     getOptimisationLink(optimisation) {
       return '/optimisations/' + optimisation.id;
+    },
+
+    deleteOptimisation(optimisation) {
+      let vm = this;
+      vm.isDeleting = true;
+      axios.delete(window.API_BASE + '/optimisations/' + optimisation.id).then(() => {
+        vm.isDeleting = false;
+        this.$message.success('Optimisation deleted successfully');
+        vm.fetch();
+      }).catch(e => {
+        console.log(e);
+        vm.isDeleting = false;
+        this.$message.error('Error deleting optimisation');
+      });
     }
   },
 };

@@ -275,6 +275,7 @@ export default {
 .flat-image {
   width: auto;
   height: 300px;
+  object-fit: contain;
   margin: 0 auto;
 }
 </style>

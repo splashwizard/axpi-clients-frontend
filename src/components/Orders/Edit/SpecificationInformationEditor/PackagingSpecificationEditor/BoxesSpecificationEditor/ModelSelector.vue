@@ -11,7 +11,7 @@
           <img
               slot="cover"
               alt="Image"
-              :src="getTwoDimensionalImageForModel(model)"
+              :src="getThreeDimensionalImageForModel(model)"
           />
 
           <a-card-meta :title="model.name">
@@ -36,8 +36,8 @@ export default {
       this.$emit('select-model', model);
     },
 
-    getTwoDimensionalImageForModel(model) {
-      return 'https://api.axiomdata.io/packaging/' + model.name + ".png";
+    getThreeDimensionalImageForModel(model) {
+      return 'https://api.axiomdata.io/packaging/' + model.name + "_3d.png";
     }
   }
 }

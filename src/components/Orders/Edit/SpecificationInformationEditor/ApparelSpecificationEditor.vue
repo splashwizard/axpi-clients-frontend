@@ -35,18 +35,18 @@
             <!-- / Size -->
 
             <!-- Quantity -->
-            <a-form layout="vertical">
-                <a-row :gutter="70">
-                    <a-col :span="12">
-                        <a-form-item label="Quantity">
-                            <a-input type="number"
-                                    v-model="orderLocal.apparel_quantity"
-                            size="large">
-                            </a-input>
-                        </a-form-item>
-                    </a-col>
-                </a-row>
-            </a-form>
+<!--            <a-form layout="vertical">-->
+<!--                <a-row :gutter="70">-->
+<!--                    <a-col :span="12">-->
+<!--                        <a-form-item label="Quantity">-->
+<!--                            <a-input type="number"-->
+<!--                                    v-model="orderLocal.apparel_quantity"-->
+<!--                            size="large">-->
+<!--                            </a-input>-->
+<!--                        </a-form-item>-->
+<!--                    </a-col>-->
+<!--                </a-row>-->
+<!--            </a-form>-->
             <!-- Quantity -->
 
             <!-- Item Mass -->

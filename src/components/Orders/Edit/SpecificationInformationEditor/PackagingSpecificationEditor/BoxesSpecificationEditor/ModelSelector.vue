@@ -3,15 +3,21 @@
     <a-row :gutter="15">
       <a-col :span="6" v-for="(model, i) in models" :key="i">
         <a-card hoverable @click="selectModel(model)">
+<!--          <img-->
+<!--              slot="cover"-->
+<!--              alt="Image"-->
+<!--              :src="getImageSrc(model['3d_image'])"-->
+<!--          />-->
           <img
               slot="cover"
               alt="Image"
-              :src="getImageSrc(model['3d_image'])"
+              :src="getTwoDimensionalImageForModel(model)"
           />
+
           <a-card-meta :title="model.name">
-            <template slot="description">
-              {{ model.description }}
-            </template>
+<!--            <template slot="description">-->
+<!--              {{ model.description }}-->
+<!--            </template>-->
           </a-card-meta>
         </a-card>
       </a-col>
@@ -28,6 +34,10 @@ export default {
   methods: {
     selectModel(model) {
       this.$emit('select-model', model);
+    },
+
+    getTwoDimensionalImageForModel(model) {
+      return '/packaging/' + model.model + ".svg";
     }
   }
 }

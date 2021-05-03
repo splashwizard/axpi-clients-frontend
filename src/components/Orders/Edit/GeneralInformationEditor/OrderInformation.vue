@@ -20,11 +20,14 @@
           <a-input-group compact>
             <a-input :addon-before="costCurrencyPrepend" size="large" class="order-cost-input" style="width: 70%" v-model="orderLocal.cost"/>
             <a-select default-value="GBP" size="large" style="width: 30%" v-model="orderLocal.cost_currency">
-              <a-select-option value="GBP">
-                GBP
-              </a-select-option>
-              <a-select-option value="USD">
-                USD
+<!--              <a-select-option value="GBP">-->
+<!--                GBP-->
+<!--              </a-select-option>-->
+<!--              <a-select-option value="USD">-->
+<!--                USD-->
+<!--              </a-select-option>-->
+              <a-select-option v-for="currency in currencies" :value="currency.currency" :key="currency.currency">
+                {{currency.currency}}
               </a-select-option>
             </a-select>
           </a-input-group>
@@ -38,9 +41,25 @@
 </template>
 
 <script>
+const currencies = [
+  {
+    currency: "AED",
+    symbol: "د.إ"
+  },
+  {
+    currency: "GBP",
+    symbol: "£"
+  }
+];
+
 export default {
   name: "OrderInformation",
   props: ['orderLocal', 'suppliers'],
+  data() {
+   return {
+    currencies
+   }
+  },
   computed: {
     costCurrencyPrepend() {
       if (this.orderLocal.cost_currency === 'USD') {

@@ -146,10 +146,10 @@
           <a-col :span="12">
             <a-tabs>
               <a-tab-pane key="2d" tab="2D Image">
-                <img class="flat-image" :src="getImageSrc(this.selectedModel['image'])" alt="2D Image">
+                <img class="flat-image" :src="getTwoDimensionalImageForModel(this.selectedModel)" alt="2D Image">
               </a-tab-pane>
               <a-tab-pane key="3d" tab="3D Image">
-                <img class="flat-image" :src="getImageSrc(this.selectedModel['3d_image'])" alt="3D Image">
+                <img class="flat-image" :src="getThreeDimensionalImageForModel(this.selectedModel)" alt="3D Image">
               </a-tab-pane>
             </a-tabs>
           </a-col>
@@ -220,6 +220,14 @@ export default {
       this.$nextTick(() => {
         this.$forceUpdate();
       });
+    },
+
+    getTwoDimensionalImageForModel(model) {
+      return '/packaging/' + model.model + ".svg";
+    },
+
+    getThreeDimensionalImageForModel(model) {
+      return '/packaging/' + model.model + "_3d.svg";
     }
   }
 }

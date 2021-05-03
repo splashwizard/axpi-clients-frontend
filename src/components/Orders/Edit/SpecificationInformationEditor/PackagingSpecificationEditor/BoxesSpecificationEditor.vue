@@ -136,9 +136,9 @@
               <!-- / Sw thickness -->
 
               <!-- Dimension type -->
-              <div v-if="selectedModel['dimension-type']">
-                Dimension type changer
-              </div>
+<!--              <div v-if="selectedModel['dimension-type']">-->
+<!--                Dimension type changer-->
+<!--              </div>-->
               <!-- / Dimension type -->
 
             </a-form>

@@ -49,7 +49,12 @@ export default {
         formatCost(order) {
             if (order.cost) {
                 let currency = order.cost_currency ? order.cost_currency : 'GBP';
-                return new Intl.NumberFormat('ja-JP', {style: 'currency', currency: currency}).format(order.cost);
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: currency,
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(order.cost);
             }
             return order.cost;
         }

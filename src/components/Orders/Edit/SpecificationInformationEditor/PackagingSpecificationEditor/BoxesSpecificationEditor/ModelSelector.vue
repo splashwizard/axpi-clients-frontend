@@ -46,6 +46,14 @@ export default {
 
 <style lang="scss">
 .packaging-model-selector {
+ .ant-card {
+   margin-bottom: 15px;
+ }
+
+  .ant-card-cover {
+    padding-top: 15px;
+  }
+
   .ant-card-cover img {
     height: 100px;
     width: auto;

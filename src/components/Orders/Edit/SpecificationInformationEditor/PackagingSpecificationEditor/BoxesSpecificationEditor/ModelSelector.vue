@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="packaging-model-selector">
     <a-row :gutter="15">
       <a-col :span="6" v-for="(model, i) in models" :key="i">
         <a-card hoverable @click="selectModel(model)">
-<!--          <img-->
-<!--              slot="cover"-->
-<!--              alt="Image"-->
-<!--              :src="getImageSrc(model['3d_image'])"-->
-<!--          />-->
+          <!--          <img-->
+          <!--              slot="cover"-->
+          <!--              alt="Image"-->
+          <!--              :src="getImageSrc(model['3d_image'])"-->
+          <!--          />-->
           <img
               slot="cover"
               alt="Image"
@@ -15,9 +15,9 @@
           />
 
           <a-card-meta :title="model.name">
-<!--            <template slot="description">-->
-<!--              {{ model.description }}-->
-<!--            </template>-->
+            <!--            <template slot="description">-->
+            <!--              {{ model.description }}-->
+            <!--            </template>-->
           </a-card-meta>
         </a-card>
       </a-col>
@@ -27,6 +27,7 @@
 
 <script>
 import Images from "../../../../../../mixins/Images";
+
 export default {
   name: "ModelSelector",
   props: ['models', 'selectedModel'],
@@ -43,6 +44,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+.packaging-model-selector {
+  .ant-card-cover img {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    margin: 0 auto;
+  }
 
+  .ant-card-meta-title {
+    text-align: center;
+  }
+}
 </style>

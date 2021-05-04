@@ -748,14 +748,35 @@ const PAPER_BRAND_OPTIONS = [
   }
 ];
 
+
 const PAPER_NAME_OPTIONS = [
   {
-    value: 'paper-name-1',
-    label: 'Paper Name 1'
+    value: 'Magno Gloss',
+    label: 'Magno Gloss'
   },
   {
-    value: 'paper-name-2',
-    label: 'Paper Name 2'
+    value: 'Magno Plus Gloss',
+    label: 'Magno Plus Gloss'
+  },
+  {
+    value: 'Magno Satin',
+    label: 'Magno Satin'
+  },
+  {
+    value: 'Magno Plus Silk',
+    label: 'Magno Plus Silk'
+  },
+  {
+    value: 'Magno Matt',
+    label: 'Magno Matt'
+  },
+  {
+    value: 'Magno Volume',
+    label: 'Magno Volume'
+  },
+  {
+    value: 'Magno Natural',
+    label: 'Magno Natural'
   }
 ];
 

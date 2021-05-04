@@ -177,20 +177,20 @@ export default {
       availableConstraints: [
         {
           id: 'suppliers',
-          label: 'Suppliers',
+          label: 'All Suppliers',
           type: 'categorical', // categorical or numerical,
         },
         {
           id: 'items',
-          label: 'Items',
+          label: 'All Items',
           type: 'categorical', // categorical or numerical,
         }
       ],
       dimensionsAvailable: {
         'suppliers': [
           {
-            id: 'dim-1',
-            label: 'Dim 1',
+            id: 'social-accreditation',
+            label: 'Social Accreditation',
             valueOptions: [
               {
                 label: 'Val 1',
@@ -203,8 +203,64 @@ export default {
             ]
           },
           {
-            id: 'dim-2',
-            label: 'Dim 2',
+            id: 'environmental-accreditation',
+            label: 'Environmental Accreditation',
+            valueOptions: [
+              {
+                label: 'Val 2',
+                value: 'val-2'
+              },
+              {
+                label: 'Val 3',
+                value: 'val-3'
+              }
+            ]
+          },
+          {
+            id: 'country',
+            label: 'Country',
+            valueOptions: [
+              {
+                label: 'Val 2',
+                value: 'val-2'
+              },
+              {
+                label: 'Val 3',
+                value: 'val-3'
+              }
+            ]
+          },
+          {
+            id: 'distance-from-delivery-location',
+            label: 'Distance from delivery location',
+            valueOptions: [
+              {
+                label: 'Val 2',
+                value: 'val-2'
+              },
+              {
+                label: 'Val 3',
+                value: 'val-3'
+              }
+            ]
+          },
+          {
+            id: 'spend-with-supplier-this-year',
+            label: 'Spend with supplier this year',
+            valueOptions: [
+              {
+                label: 'Val 2',
+                value: 'val-2'
+              },
+              {
+                label: 'Val 3',
+                value: 'val-3'
+              }
+            ]
+          },
+          {
+            id: 'orders-with-supplier-this-year',
+            label: 'Orders with supplier this year',
             valueOptions: [
               {
                 label: 'Val 2',
@@ -219,22 +275,46 @@ export default {
         ],
         'items': [
           {
-            id: 'dim-3',
-            label: 'Dim 3',
+            id: 'environmental-accreditation',
+            label: 'Environmental Accreditation',
             valueOptions: [
               {
-                label: 'Val 1',
-                value: 'val-1'
+                label: 'ISO 14001:2015',
+                value: 'ISO 14001:2015'
               },
               {
-                label: 'Val 2',
-                value: 'val-2'
+                label: 'ISO 14053:2021',
+                value: 'ISO 14053:2021'
+              },
+              {
+                label: 'Carbon Trust Standard',
+                value: 'Carbon Trust Standard'
+              },
+              {
+                label: 'EMAS',
+                value: 'EMAS'
+              },
+              {
+                label: 'FSC',
+                value: 'FSC'
+              },
+              {
+                label: 'Blue Planet',
+                value: 'Blue Planet'
+              },
+              {
+                label: 'MCERTS',
+                value: 'MCERTS'
+              },
+              {
+                label: 'Paper Profile',
+                value: 'Paper Profile'
               }
             ]
           },
           {
-            id: 'dim-4',
-            label: 'Dim 4',
+            id: 'material-sourcing-locations',
+            label: 'Material Sourcing Locations',
             valueOptions: [
               {
                 label: 'Val 1',

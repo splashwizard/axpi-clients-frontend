@@ -39,8 +39,8 @@
 <script>
     const PRINTING_METHOD_TYPE_OPTIONS = [
         {
-            value: 'offset-printer',
-            label: 'Offset Printer',
+            value: 'offset-printing',
+            label: 'Offset Printing',
             children: [
                 {
                     value: 'coldset-web-offset',
@@ -51,8 +51,8 @@
                     label: 'Heatset Web Offset'
                 },
                 {
-                    value: 'others',
-                    label: 'Others'
+                    value: 'other',
+                    label: 'Other'
                 },
                 {
                     value: 'sheet-fed-offset',

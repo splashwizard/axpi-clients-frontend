@@ -1,7 +1,7 @@
 <template>
   <div class="axpi-form width-medium">
     <!-- Customer Information -->
-    <div class="form-section" v-if="!user.client">
+    <div class="form-section" v-if="user.supplier">
       <div class="form-header">
         <h2>Customer Information</h2>
       </div>

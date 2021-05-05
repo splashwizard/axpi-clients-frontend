@@ -1,39 +1,52 @@
 <template>
-    <a-form layout="vertical">
-<!--        <a-form-item label="Name">-->
-<!--            <a-input size="large" :value="client.name" disabled placeholder="Name"/>-->
-<!--        </a-form-item>-->
-<!--        <a-form-item label="Country">-->
-<!--            <a-input size="large" :value="client.country" disabled placeholder="Country"/>-->
-<!--        </a-form-item>-->
-<!--        <a-form-item label="Organisational Unit">-->
-<!--            <a-input size="large" :value="organisationalUnit.name" disabled placeholder="Organisation Unit"/>-->
-<!--        </a-form-item>-->
-      <a-form-item label="Name">
-        <a-input size="large" :value="orderLocal.name" disabled placeholder="Name"/>
-      </a-form-item>
-      <a-form-item label="Country">
-        <a-input size="large" :value="orderLocal.country" disabled placeholder="Country"/>
-      </a-form-item>
-      <a-form-item label="Organisational Unit">
-        <a-input size="large" :value="orderLocal.organisation_unit" disabled placeholder="Organisation Unit"/>
-      </a-form-item>
-    </a-form>
+  <a-form layout="vertical">
+    <!--        <a-form-item label="Name">-->
+    <!--            <a-input size="large" :value="client.name" disabled placeholder="Name"/>-->
+    <!--        </a-form-item>-->
+    <!--        <a-form-item label="Country">-->
+    <!--            <a-input size="large" :value="client.country" disabled placeholder="Country"/>-->
+    <!--        </a-form-item>-->
+    <!--        <a-form-item label="Organisational Unit">-->
+    <!--            <a-input size="large" :value="organisationalUnit.name" disabled placeholder="Organisation Unit"/>-->
+    <!--        </a-form-item>-->
+    <a-form-item label="Name">
+      <a-input size="large" :value="clientName" disabled placeholder="Name"/>
+    </a-form-item>
+    <!--      <a-form-item label="Country">-->
+    <!--        <a-input size="large" :value="orderLocal.country" disabled placeholder="Country"/>-->
+    <!--      </a-form-item>-->
+    <!--      <a-form-item label="Organisational Unit">-->
+    <!--        <a-input size="large" :value="orderLocal.organisation_unit" disabled placeholder="Organisation Unit"/>-->
+    <!--      </a-form-item>-->
+  </a-form>
 </template>
 
 <script>
-    export default {
-        name: "CustomerInformation",
-        props: ['client', 'organisationalUnit', 'orderLocal'],
+import {mapGetters} from "vuex";
+
+export default {
+  name: "CustomerInformation",
+  props: ['client', 'organisationalUnit', 'orderLocal'],
+  computed: {
+    ...mapGetters('auth', {
+      user: 'user'
+    }),
+    clientName() {
+      if (this.orderLocal.client) {
+        return this.orderLocal.client.name;
+      }
+      return null;
     }
+  }
+}
 </script>
 
 <style scoped lang="scss">
-    .logo-wrapper {
-        text-align: center;
+.logo-wrapper {
+  text-align: center;
 
-        img {
-            width: 70%;
-        }
-    }
+  img {
+    width: 70%;
+  }
+}
 </style>

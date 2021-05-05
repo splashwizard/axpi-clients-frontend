@@ -1,16 +1,21 @@
 <template>
   <div>
     <div class="form-header">
-      <h2 class="form-header-title">Model</h2>
+      <h2 class="form-header-title">
+        <a-button v-if="selectedModel" icon="arrow-left" style="margin-right: 10px;"
+                  @click="selectModel(null)">
+        </a-button>
+        Model
+      </h2>
       <div class="form-actions">
         <a-input-search placeholder="Search models" style="width: 200px" v-model="searchQuery" />
       </div>
     </div>
-    <div class="change-model-button-wrapper">
-      <a-button v-if="selectedModel" icon="arrow-left"
-                @click="selectModel(null)">Change model
-      </a-button>
-    </div>
+<!--    <div class="change-model-button-wrapper">-->
+<!--      <a-button v-if="selectedModel" icon="arrow-left"-->
+<!--                @click="selectModel(null)">Change model-->
+<!--      </a-button>-->
+<!--    </div>-->
 
     <div class="loading-screen" v-if="isLoadingTemplates">
       <a-spin/>
@@ -265,9 +270,9 @@ export default {
   margin-bottom: 10px;
 }
 
-.change-model-button-wrapper {
-  margin-bottom: 30px;
-}
+/*.change-model-button-wrapper {*/
+/*  margin-bottom: 30px;*/
+/*}*/
 
 .model-details-wrapper {
   padding-bottom: 55px;

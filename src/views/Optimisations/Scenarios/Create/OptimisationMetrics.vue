@@ -52,10 +52,22 @@
           <a-button type="link" icon="delete" @click.prevent="deleteMetric(metric)"></a-button>
         </div>
         <div class="icon-wrapper">
-          <a-icon :style="{ color: preColor(metric.value) }" type="frown-o"/>
+<!--          <a-icon :style="{ color: preColor(metric.value) }" type="frown-o"/>-->
+<!--          <span></span>-->
+          <div v-if="metric.label === 'Cost'" style="width: 20px" :style="{ color: preColor(metric.value) }"  class="anticon">$$</div>
+
+          <div v-if="metric.label === 'CO2e'" :style="{ color: preColor(metric.value) }"  class="anticon">
+            <img src="/img/icons/bad_environment.svg" width="15" alt="Bad environment">
+          </div>
+
           <a-slider :min="min" :max="max" :value="metric.value"
                     @change="val => handleMetricValueChange(metric, val)"/>
-          <a-icon :style="{ color: nextColor(metric.value) }" type="smile-o"/>
+
+          <div v-if="metric.label === 'Cost'" :style="{ color: nextColor(metric.value) }"  class="anticon" >$</div>
+
+          <div v-if="metric.label === 'CO2e'" :style="{ color: nextColor(metric.value) }"  class="anticon">
+            <img src="/img/icons/healthy_environment.svg" width="15" alt="Bad environment">
+          </div>
         </div>
       </div>
       <!-- / Custom metric -->

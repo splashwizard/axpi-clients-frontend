@@ -97,7 +97,11 @@
             </a-menu-item>
             <a-menu-item title="Orders" key="orders">
               <orders-icon class="nav-icon"></orders-icon>
-              <span v-if="!menuCollapsed">Orders</span>
+              <span v-if="!menuCollapsed">Past Orders</span>
+            </a-menu-item>
+            <a-menu-item title="Specifications" key="specifications">
+              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save" theme="filled"></a-icon>
+              <span v-if="!menuCollapsed">Specifications</span>
             </a-menu-item>
             <a-menu-item title="Suppliers" key="suppliers">
               <suppliers-icon class="nav-icon"></suppliers-icon>

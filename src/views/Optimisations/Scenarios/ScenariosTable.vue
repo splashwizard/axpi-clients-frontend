@@ -19,7 +19,7 @@
     <div slot="actions" class="table-actions">
       <a-button style="margin-right: 5px;" @click.prevent="reviewScenario">Review</a-button>
       <a-dropdown :trigger="['click']">
-        <a-button icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
+        <a-button icon="ellipsis" type="link" @click.prevent="e => e.preventDefault()"></a-button>
         <a-menu slot="overlay">
           <a-menu-item>
             <a href="#">Edit</a>

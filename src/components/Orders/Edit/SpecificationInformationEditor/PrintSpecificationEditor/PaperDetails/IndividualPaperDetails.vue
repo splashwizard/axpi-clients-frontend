@@ -71,6 +71,15 @@
             <a-select v-model="paper.paper_brand"
                       show-search size="large"
                       @change="forceRefresh">
+              <div slot="dropdownRender" slot-scope="menu">
+                <v-nodes :vnodes="menu"/>
+                <a-divider style="margin: 4px 0;"/>
+                <div style="display: flex; flex-wrap: nowrap; padding: 8px;">
+                  <a-input @click.prevent.stop="e => e.preventDefault()"  placeholder="Add new item" type="text" style="flex: auto;"></a-input>
+                  <a-button @click.prevent.stop="e => e.preventDefault()" style="flex: none; display: block; margin-left: 10px;"
+                      icon="plus">Add item</a-button>
+                </div>
+              </div>
               <a-select-option v-for="paperBrand in paperBrandOptions"
                                :value="paperBrand.value"
                                :key="paperBrand.value">
@@ -83,6 +92,15 @@
             <a-select v-model="paper.paper_name"
                       show-search size="large"
                       @change="forceRefresh">
+              <div slot="dropdownRender" slot-scope="menu">
+                <v-nodes :vnodes="menu"/>
+                <a-divider style="margin: 4px 0;"/>
+                <div style="display: flex; flex-wrap: nowrap; padding: 8px;">
+                  <a-input @click.prevent.stop="e => e.preventDefault()"  placeholder="Add new item" type="text" style="flex: auto;"></a-input>
+                  <a-button @click.prevent.stop="e => e.preventDefault()" style="flex: none; display: block; margin-left: 10px;"
+                            icon="plus">Add item</a-button>
+                </div>
+              </div>
               <a-select-option v-for="paperName in paperNameOptions" :value="paperName.value"
                                :key="paperName.value">
                 {{ paperName.label }}
@@ -937,7 +955,13 @@ export default {
       this.forceRefresh();
     }
   },
-  components: {PaperSizeSelector},
+  components: {
+    PaperSizeSelector,
+    VNodes: {
+      functional: true,
+      render: (h, ctx) => ctx.props.vnodes,
+    }
+  },
   data() {
     return {
       paperFinishOptions: PAPER_FINISH_OPTIONS,

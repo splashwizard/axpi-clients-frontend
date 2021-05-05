@@ -30,7 +30,7 @@ import Images from "../../../../../../mixins/Images";
 
 export default {
   name: "ModelSelector",
-  props: ['models', 'selectedModel', 'searchQuery'],
+  props: ['models', 'selectedModel', 'searchQuery', 'selectedCategory'],
   mixins: [Images],
   methods: {
     selectModel(model) {
@@ -43,7 +43,15 @@ export default {
   },
   computed: {
     modelsToShow() {
-      return this.models.filter(model => {
+      let filtered = this.models;
+
+      // if (this.selectedCategory === 'ecma') {
+      //   filtered = _.filter(filtered, function(model) {
+      //     return model.name.match(ecmaRegx);
+      //   })
+      // }
+
+      return filtered.filter(model => {
         return model.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       });
     }
@@ -55,6 +63,18 @@ export default {
 .packaging-model-selector {
   max-height: 600px;
   overflow-y: scroll;
+  overflow: -moz-scrollbars-vertical;
+
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+  }
 
   .ant-card {
     margin-bottom: 15px;

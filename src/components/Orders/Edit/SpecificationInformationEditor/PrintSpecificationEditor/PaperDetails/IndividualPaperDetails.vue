@@ -293,17 +293,19 @@
     <!-- / Coating Applied -->
 
     <!-- Embellishments -->
-    <a-form-item label="Is Embellished">
-      <a-radio-group @change="forceRefresh" v-model="paper.is_embellished"
-                     button-style="solid">
-        <a-radio-button :value="true">
-          Yes
-        </a-radio-button>
-        <a-radio-button :value="false">
-          No
-        </a-radio-button>
-      </a-radio-group>
-    </a-form-item>
+    <a-form layout="vertical">
+      <a-form-item label="Is Embellished">
+        <a-radio-group @change="forceRefresh" v-model="paper.is_embellished"
+                       button-style="solid">
+          <a-radio-button :value="true">
+            Yes
+          </a-radio-button>
+          <a-radio-button :value="false">
+            No
+          </a-radio-button>
+        </a-radio-group>
+      </a-form-item>
+    </a-form>
 
     <a-form layout="vertical" v-if="paper.is_embellished">
       <a-row :gutter="60">

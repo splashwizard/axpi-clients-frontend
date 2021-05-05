@@ -7,7 +7,14 @@
         </a-button>
         Model
       </h2>
-      <div class="form-actions">
+      <div class="form-actions" v-if="!selectedModel" >
+        <a-select placeholder="Please select a model"
+             v-model="selectedCategory" style="width: 250px; margin-right: 10px; top: -1px;">
+          <a-select-option :value="null">Show all</a-select-option>
+          <a-select-option value="ecma">ECMA (Folding carton)</a-select-option>
+          <a-select-option value="fefco">FEFCO (Corrugated containers)</a-select-option>
+          <a-select-option value="envelopes-folders-bags">Envelopes, Folders, Bags</a-select-option>
+        </a-select>
         <a-input-search placeholder="Search models" style="width: 200px" v-model="searchQuery" />
       </div>
     </div>
@@ -24,6 +31,7 @@
     <div class="model-details-wrapper">
       <model-selector v-if="!selectedModel"
                       :search-query="searchQuery"
+                      :selected-category="selectedCategory"
                       :models="packagingSpecs" :selected-model="selectedModel"
                       @select-model="selectModel"></model-selector>
 
@@ -187,6 +195,7 @@ export default {
       isLoadingTemplates: true,
       packagingSpecs: [],
       selectedModel: null,
+      selectedCategory: null,
       searchQuery: ''
     }
   },

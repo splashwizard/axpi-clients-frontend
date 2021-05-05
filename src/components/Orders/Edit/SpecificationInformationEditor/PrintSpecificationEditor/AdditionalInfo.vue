@@ -13,24 +13,29 @@
                     />
                 </a-form-item>
 
-                <a-form-item label="Artwork Supplied">
+              <a-row>
+                <a-col :span="12">
+                  <a-form-item label="Artwork Supplied">
                     <a-radio-group @change="forceRefresh" v-model="orderLocal.print_artwork_supplied"
                                    button-style="solid">
-                        <a-radio-button v-for="option in artworkSuppliedOptions" :key="option.value"
-                                        :value="option.value">
-                            {{ option.label }}
-                        </a-radio-button>
+                      <a-radio-button v-for="option in artworkSuppliedOptions" :key="option.value"
+                                      :value="option.value">
+                        {{ option.label }}
+                      </a-radio-button>
                     </a-radio-group>
-                </a-form-item>
-
-                <a-form-item label="Proof Made">
+                  </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                  <a-form-item label="Proof Made">
                     <a-radio-group @change="forceRefresh" v-model="orderLocal.print_proof_made"
                                    button-style="solid">
-                        <a-radio-button v-for="option in proofMadeOptions" :key="option.value" :value="option.value">
-                            {{ option.label }}
-                        </a-radio-button>
+                      <a-radio-button v-for="option in proofMadeOptions" :key="option.value" :value="option.value">
+                        {{ option.label }}
+                      </a-radio-button>
                     </a-radio-group>
-                </a-form-item>
+                  </a-form-item>
+                </a-col>
+              </a-row>
             </a-form>
         </a-col>
     </a-row>

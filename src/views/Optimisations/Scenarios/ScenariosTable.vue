@@ -43,7 +43,7 @@ import Orders from "../../../mixins/Orders";
 const columns = [
   {
     dataIndex: 'name',
-    title: 'Name',
+    title: 'Scenario',
     key: 'name',
   },
   {
@@ -54,7 +54,7 @@ const columns = [
   },
   {
     dataIndex: 'expectedCo2e',
-    title: 'Expected CO2e',
+    title: 'CO2e',
     key: 'expectedCo2e',
     scopedSlots: {customRender: 'expectedCo2e'}
   },

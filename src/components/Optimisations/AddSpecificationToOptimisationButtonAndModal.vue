@@ -35,10 +35,19 @@
     </a-modal>
 
     <a-modal :width="700"
-        title="Add Specification"
-        :visible="savedSpecModalVisible"
-        @cancel="handleSavedSpecCancel"
-        :footer="false">
+             title="Add Specification"
+             :visible="savedSpecModalVisible"
+             @cancel="handleSavedSpecCancel"
+             :footer="false">
+
+      <div class="toolbar">
+        <div class="left">
+          <a-input-search placeholder="Search" style="width: 250px" />
+        </div>
+        <div class="right">
+          <a-button icon="filter">Filter</a-button>
+        </div>
+      </div>
 
       <!--      <div class="loading-screen" v-if="isLoading">-->
       <!--        <a-spin/>-->
@@ -269,5 +278,18 @@ export default {
 
 .icon-selector a:hover .icon {
   background: #5D9CF4 !important;
+}
+
+.toolbar {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.toolbar .left {
+  flex: 1;
+}
+
+.toolbar .right {
+  flex-shrink: 1;
 }
 </style>

@@ -53,7 +53,7 @@ export default {
 
 <style lang="scss">
 .packaging-model-selector {
-  max-height: 200px;
+  max-height: 600px;
   overflow-y: scroll;
 
   .ant-card {

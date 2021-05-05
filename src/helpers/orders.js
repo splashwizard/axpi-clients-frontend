@@ -21,6 +21,7 @@ export default {
             permanent_pos_detail_id: orderFromServer.permanent_pos_detail_id,
             semi_permanent_pos_detail_id: orderFromServer.semi_permanent_pos_detail_id,
             print_detail_id: orderFromServer.print_detail_id,
+            status: orderFromServer.status
         };
 
         // Print
@@ -54,7 +55,8 @@ export default {
             reference_number: localOrder.reference_number,
             order_date: localOrder.order_date,
             delivery_date: localOrder.delivery_date,
-            supplier_id: localOrder.supplier_id
+            supplier_id: localOrder.supplier_id,
+            status: localOrder.status
         };
 
         // PRINT

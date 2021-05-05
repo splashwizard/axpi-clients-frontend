@@ -85,13 +85,14 @@ export const getters = {
 };
 
 export const actions = {
-    createOrder({commit}) {
+    createOrder({commit, dispatch}) {
        commit('START_LOADING');
         commit('SET_ERRORS', []);
         axios.post(window.API_BASE + '/orders/').then(r => {
            commit('STOP_LOADING');
             commit('INCREMENT_RELOAD_ORDERS_KEY');
-            commit('SET_ORDER', orders.decodeOrder(r.data));
+            // commit('SET_ORDER', orders.decodeOrder(r.data));
+           dispatch('loadOrder', r.data.id);
        }).catch(e => {
            commit('STOP_LOADING');
            this._vm.$message.error('Error creating order');
@@ -112,6 +113,7 @@ export const actions = {
         axios.get(window.API_BASE + '/orders/' + id).then(r => {
             commit('STOP_LOADING');
             commit('SET_ORDER', orders.decodeOrder(r.data));
+           commit('SET_WIZARD_STAGE', 0);
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');

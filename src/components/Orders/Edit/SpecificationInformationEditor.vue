@@ -9,10 +9,11 @@
                 <product-type-selector :order-local="orderLocal"></product-type-selector>
             </div>
 
-            <div class="form-header">
+            <div class="form-header" v-if="orderLocal.product_type">
                 <h2>Product Subtype</h2>
             </div>
-            <product-subtype-selector :order-local="orderLocal" @property-updated="incrementUpdateKey"></product-subtype-selector>
+            <product-subtype-selector v-if="orderLocal.product_type"
+                :order-local="orderLocal" @property-updated="incrementUpdateKey"></product-subtype-selector>
         </div>
         <!-- / Product Type -->
 

@@ -13,6 +13,8 @@ export default {
             cost: orderFromServer.cost,
             cost_currency: orderFromServer.cost_currency,
             reference_number: orderFromServer.reference_number,
+            order_date: orderFromServer.order_date,
+            delivery_date: orderFromServer.delivery_date,
             client_id: orderFromServer.client_id,
             supplier_id: orderFromServer.supplier_id,
             apparel_detail_id: orderFromServer.apparel_detail_id,
@@ -50,6 +52,8 @@ export default {
             cost: localOrder.cost,
             cost_currency: localOrder.cost_currency,
             reference_number: localOrder.reference_number,
+            order_date: localOrder.order_date,
+            delivery_date: localOrder.delivery_date,
             supplier_id: localOrder.supplier_id
         };
 

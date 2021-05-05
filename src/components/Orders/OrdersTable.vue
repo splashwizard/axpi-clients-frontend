@@ -30,6 +30,9 @@
       <div slot="cost" slot-scope="cost, order">
         {{ formatCost(order) }}
       </div>
+      <div slot="order_date" slot-scope="order_date">
+        {{ order_date ? formatDate(order_date) : null }}
+      </div>
       <div slot="updated_at" slot-scope="updated_at">
         {{ displayTimeAgo(updated_at) }}
       </div>
@@ -88,6 +91,7 @@ const columns = [
     title: 'Order Date',
     dataIndex: 'order_date',
     sorter: true,
+    scopedSlots: {customRender: 'order_date'}
   },
   {
     title: 'Last Updated',

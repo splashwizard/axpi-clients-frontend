@@ -14,7 +14,7 @@
         <a-form-item label="Width">
           <a-input-group compact>
             <a-input size="large" style="width: 75%" v-model="orderLocal.pos_product_width"/>
-            <a-select default-value="GBP" style="width: 25%" size="large"
+            <a-select default-value="cm" style="width: 25%" size="large"
                       v-model="orderLocal.pos_product_width_unit">
               <a-select-option value="cm">
                 cm

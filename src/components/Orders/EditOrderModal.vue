@@ -76,7 +76,22 @@ export default {
     })
   },
   mounted() {
-    this.orderLocal = {...this.order};
+    this.orderLocal = {
+      ...this.order,
+      pos_product_width_unit: 'cm',
+      pos_product_depth_unit: 'cm',
+      pos_product_height_unit: 'cm',
+      pos_weight_supported_unit: 'g',
+      usable_area_unit: 'm2',
+      pos_product_supported_width_unit: 'cm',
+      pos_product_supported_depth_unit: 'cm',
+      pos_product_supported_height_unit: 'cm',
+      pos_display_width_unit: 'cm',
+      pos_display_depth_unit: 'cm',
+      pos_display_height_unit: 'cm',
+      pos_weight_support_unit: 'g',
+      pos_usable_area_of_shelves_unit: 'm2'
+    };
   },
   methods: {
     ...mapActions('orderEditor', {

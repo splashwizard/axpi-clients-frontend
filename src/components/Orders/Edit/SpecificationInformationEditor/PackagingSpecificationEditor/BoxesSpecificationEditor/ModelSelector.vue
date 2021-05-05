@@ -1,7 +1,7 @@
 <template>
   <div class="packaging-model-selector">
     <a-row :gutter="15">
-      <a-col :span="6" v-for="(model, i) in models" :key="i">
+      <a-col :span="6" v-for="(model, i) in modelsToShow" :key="i">
         <a-card hoverable @click="selectModel(model)">
           <!--          <img-->
           <!--              slot="cover"-->
@@ -30,7 +30,7 @@ import Images from "../../../../../../mixins/Images";
 
 export default {
   name: "ModelSelector",
-  props: ['models', 'selectedModel'],
+  props: ['models', 'selectedModel', 'searchQuery'],
   mixins: [Images],
   methods: {
     selectModel(model) {
@@ -40,15 +40,26 @@ export default {
     getThreeDimensionalImageForModel(model) {
       return 'https://api.axiomdata.io/packaging/' + model.name + "_3d.png";
     }
+  },
+  computed: {
+    modelsToShow() {
+      return this.models.filter(model => {
+        return model.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      });
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .packaging-model-selector {
- .ant-card {
-   margin-bottom: 15px;
- }
+  max-height: 200px;
+  overflow-y: scroll;
+
+  .ant-card {
+    margin-bottom: 15px;
+    border: none !important;
+  }
 
   .ant-card-cover {
     padding-top: 15px;

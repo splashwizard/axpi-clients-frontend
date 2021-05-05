@@ -2,9 +2,12 @@
   <div>
     <div class="form-header">
       <h2 class="form-header-title">Model</h2>
+      <div class="form-actions">
+        <a-input-search placeholder="Search models" style="width: 200px" v-model="searchQuery" />
+      </div>
     </div>
     <div class="change-model-button-wrapper">
-      <a-button v-if="selectedModel"
+      <a-button v-if="selectedModel" icon="arrow-left"
                 @click="selectModel(null)">Change model
       </a-button>
     </div>
@@ -15,6 +18,7 @@
 
     <div class="model-details-wrapper">
       <model-selector v-if="!selectedModel"
+                      :search-query="searchQuery"
                       :models="packagingSpecs" :selected-model="selectedModel"
                       @select-model="selectModel"></model-selector>
 
@@ -177,7 +181,8 @@ export default {
     return {
       isLoadingTemplates: true,
       packagingSpecs: [],
-      selectedModel: null
+      selectedModel: null,
+      searchQuery: ''
     }
   },
   mixins: [Images],

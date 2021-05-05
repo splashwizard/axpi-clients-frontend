@@ -233,7 +233,7 @@
 
     <!-- Coating Applied -->
     <a-form layout="vertical">
-      <a-form-item label="Coating Applied?">
+      <a-form-item label="Coating Applied">
         <a-radio-group @change="forceRefresh" v-model="paper.is_coating_applied"
                        button-style="solid">
           <a-radio-button :value="true">
@@ -293,7 +293,7 @@
     <!-- / Coating Applied -->
 
     <!-- Embellishments -->
-    <a-form-item label="Is Embellished?">
+    <a-form-item label="Is Embellished">
       <a-radio-group @change="forceRefresh" v-model="paper.is_embellished"
                      button-style="solid">
         <a-radio-button :value="true">
@@ -329,7 +329,7 @@
     <a-form layout="vertical">
       <a-row :gutter="60">
         <a-col span="12">
-          <a-form-item label="Die Cutting Required?">
+          <a-form-item label="Die Cutting Required">
             <a-radio-group @change="forceRefresh"
                            v-model="paper.die_cutting_required"
                            button-style="solid">

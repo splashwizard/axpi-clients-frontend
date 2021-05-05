@@ -92,16 +92,7 @@
 </template>
 
 <script>
-    const HAS_PEGBOARD_OPTIONS = [
-        {
-            label: 'Yes',
-            value: true
-        },
-        {
-            label: 'No',
-            value: false
-        }
-    ];
+
 
     export default {
         name: "DisplayInformation",

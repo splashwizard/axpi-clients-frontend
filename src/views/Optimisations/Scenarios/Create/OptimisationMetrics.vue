@@ -54,7 +54,7 @@
         <div class="icon-wrapper">
 <!--          <a-icon :style="{ color: preColor(metric.value) }" type="frown-o"/>-->
 <!--          <span></span>-->
-          <div v-if="metric.label === 'Cost'" style="width: 20px" :style="{ color: preColor(metric.value) }"  class="anticon">$$</div>
+          <div v-if="metric.label === 'Cost'" style="width: 25px" :style="{ color: preColor(metric.value) }"  class="anticon">$$</div>
 
           <div v-if="metric.label === 'CO2e'" :style="{ color: preColor(metric.value) }"  class="anticon">
             <img src="/img/icons/bad_environment.svg" width="15" alt="Bad environment">

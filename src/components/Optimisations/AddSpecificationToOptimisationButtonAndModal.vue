@@ -1,12 +1,12 @@
 <template>
   <div>
-    <a-button type="primary" icon="plus" @click.prevent="showMethodSelectorModal">Add Specification</a-button>
+    <a-button type="primary" icon="plus" @click.prevent="showMethodSelectorModal">Add Specifications</a-button>
 
-    <a-modal title="Add Specification" :visible="methodSelectorModalVisible" @cancel="handleMethodSelectorCancel"
+    <a-modal title="Add Specifications" :visible="methodSelectorModalVisible" @cancel="handleMethodSelectorCancel"
              :footer="false">
 
       <div class="icon-selector">
-        <a href="#" @click.prevent="selectMethod('past-order')">
+        <a href="#" @click.prevent="selectMethod('past-orders')">
           <div class="icon">
             <a-icon type="dropbox" style="font-size: 30px; color: #97BBF1;"></a-icon>
           </div>
@@ -35,7 +35,7 @@
     </a-modal>
 
     <a-modal :width="700"
-             title="Add Specification"
+             title="Add Specifications"
              :visible="savedSpecModalVisible"
              @cancel="handleSavedSpecCancel"
              :footer="false">
@@ -81,6 +81,54 @@
       </div>
 
     </a-modal>
+
+    <a-modal :width="700"
+             title="Add From Past Orders"
+             :visible="pastOrdersModalVisible"
+             @cancel="handlePastOrdersCancel"
+             :footer="false">
+
+      <div class="toolbar">
+        <div class="left">
+          <a-input-search placeholder="Search" style="width: 250px" />
+        </div>
+        <div class="right">
+          <a-button icon="filter">Filter</a-button>
+        </div>
+      </div>
+
+      <!--      <div class="loading-screen" v-if="isLoading">-->
+      <!--        <a-spin/>-->
+      <!--      </div>-->
+      <loading-screen :is-loading="isSaving"></loading-screen>
+
+      <a-table class="axpi-table"
+               :row-selection="pastOrdersRowSelection"
+               :columns="pastOrdersColumns"
+               :row-key="record => record.id"
+               :data-source="pastOrders"
+               :pagination="pastOrdersPagination"
+               :loading="isLoadingPastOrders">
+        <div slot="type" slot-scope="type">
+          {{ formatType(type) }}
+        </div>
+        <div slot="date" slot-scope="date">
+          {{ displayTimeAgo(date) }}
+        </div>
+        <!--        <div slot="actions" slot-scope="name, record" class="table-actions">-->
+        <!--          <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>-->
+        <!--        </div>-->
+      </a-table>
+
+      <div>
+        <div class="actions text-right">
+          <a-button type="primary" icon="plus" :disabled="selectedPastOrdersIds.length == 0"
+                    @click="addPastOrders">Add Specifications
+          </a-button>
+        </div>
+      </div>
+
+    </a-modal>
   </div>
 </template>
 
@@ -115,12 +163,34 @@ const SPECIFICATION_COLUMNS = [
     dataIndex: 'updated_at',
     sorter: true,
     scopedSlots: {customRender: 'date'}
+  }
+];
+
+const PAST_ORDERS_COLUMNS = [
+  {
+    title: 'Name',
+    dataIndex: 'product_name',
+    sorter: true,
+    scopedSlots: {customRender: 'name'}
   },
-  // {
-  //   title: '',
-  //   scopedSlots: {customRender: 'actions'},
-  //   width: 10
-  // }
+  {
+    title: 'Type',
+    dataIndex: 'product_type',
+    sorter: true,
+    scopedSlots: {customRender: 'type'}
+  },
+  {
+    title: 'Quantity',
+    dataIndex: 'quantity',
+    sorter: true,
+    scopedSlots: {customRender: 'quantity'}
+  },
+  {
+    title: 'Last Updated',
+    dataIndex: 'updated_at',
+    sorter: true,
+    scopedSlots: {customRender: 'date'}
+  }
 ];
 
 export default {
@@ -129,22 +199,31 @@ export default {
   mixins: [Orders, Dates],
   data() {
     return {
+      serverErrors: [],
+
       methodSelectorModalVisible: false,
 
       savedSpecModalVisible: false,
-      serverErrors: [],
+      pastOrdersModalVisible: false,
 
       specifications: [],
       specificationPagination: {},
       isLoadingSpecifications: false,
       specificationColumns: SPECIFICATION_COLUMNS,
       selectedSpecificationIds: [],
+
+      pastOrders: [],
+      pastOrdersPagination: {},
+      isLoadingPastOrders: false,
+      pastOrdersColumns: PAST_ORDERS_COLUMNS,
+      selectedPastOrdersIds: [],
+
       isSaving: false
     }
   },
   computed: {
     isLoading() {
-      return this.isLoadingSpecifications;
+      return (this.isLoadingSpecifications || this.isLoadingPastOrders);
     },
 
     specificationRowSelection() {
@@ -160,8 +239,32 @@ export default {
         }),
       }
     },
+
+    pastOrdersRowSelection() {
+      return {
+        onChange: (selectedRowKeys) => {
+          this.selectedPastOrdersIds = selectedRowKeys;
+        },
+        getCheckboxProps: record => ({
+          props: {
+            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            name: record.name,
+          },
+        }),
+      }
+    },
   },
   methods: {
+    selectMethod(method) {
+      this.methodSelectorModalVisible = false;
+      if (method === 'saved') {
+        this.showSavedSpecModal();
+      }
+      if (method === 'past-orders') {
+        this.showPastOrdersModal();
+      }
+    },
+
     showMethodSelectorModal() {
       this.methodSelectorModalVisible = true;
     },
@@ -170,6 +273,7 @@ export default {
       this.methodSelectorModalVisible = false;
     },
 
+    // Saved Specifications
     showSavedSpecModal() {
       this.savedSpecModalVisible = true;
       this.loadSpecifications();
@@ -221,13 +325,6 @@ export default {
       });
     },
 
-    selectMethod(method) {
-      this.methodSelectorModalVisible = false;
-      if (method === 'saved') {
-        this.showSavedSpecModal();
-      }
-    },
-
     addSpecifications() {
       if (this.selectedSpecificationIds.length == 0) {
         return false
@@ -244,6 +341,77 @@ export default {
         console.log(e);
         vm.isSaving = false;
         vm.$message.error('Error adding specifications');
+      });
+    },
+
+    // Past Orders
+    showPastOrdersModal() {
+      this.pastOrdersModalVisible = true;
+      this.loadPastOrders();
+    },
+
+    handlePastOrdersCancel() {
+      this.pastOrdersModalVisible = false;
+    },
+
+    loadPastOrders(params = {}) {
+      let vm = this;
+      vm.isLoadingSpecifications = true;
+      axios.post(window.API_BASE + '/orders/search', {
+        results_per_page: 10,
+        ...params
+      }).then(r => {
+        const pagination = {...this.pastOrdersPagination};
+        // Read total count from server
+        pagination.total = r.data.total;
+        this.isLoadingSpecifications = false;
+        this.pastOrders = r.data.data;
+        this.pastOrdersPagination = pagination;
+      }).catch(e => {
+        vm.$message.error('Error loading past orders');
+        vm.isLoadingPastOrders = false;
+        let errors;
+        if (typeof e.response.data === 'object') {
+          errors = _.flatten(_.toArray(e.response.data.errors));
+        } else {
+          errors = ['Something went wrong. Please try again.'];
+        }
+        vm.serverErrors = errors;
+      });
+    },
+
+    addPastOrderToOptimisation(pastOrder) {
+      let vm = this;
+      vm.isSaving = true;
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/create-from-past-order', {
+        order_id: pastOrder.id
+      }).then(() => {
+        vm.isSaving = false;
+        vm.$message.success('Past order added successfully');
+        vm.$emit('refresh-optimisation');
+      }).catch(e => {
+        console.log(e);
+        vm.isSaving = false;
+        vm.$message.error('Error adding past order');
+      });
+    },
+
+    addPastOrders() {
+      if (this.selectedPastOrdersIds.length == 0) {
+        return false
+      }
+      let vm = this;
+      vm.isSaving = true;
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/create-from-orders', {
+        order_ids: vm.selectedPastOrdersIds
+      }).then(() => {
+        vm.isSaving = false;
+        vm.$message.success('Orders added successfully');
+        vm.$emit('refresh-optimisation');
+      }).catch(e => {
+        console.log(e);
+        vm.isSaving = false;
+        vm.$message.error('Error adding orders');
       });
     }
   }

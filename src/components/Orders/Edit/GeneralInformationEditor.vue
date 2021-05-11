@@ -22,7 +22,7 @@
     <!-- / Product Information -->
 
     <!-- Order Information -->
-    <div class="form-section" v-if="type == 'order'">
+    <div class="form-section" v-if="type == 'order' || type == 'optimisation-specification'">
       <div class="form-header">
         <h2>Order Information</h2>
       </div>

@@ -20,7 +20,7 @@
                   @delete-order="deleteOrder"
                   :reload-key="reloadOrdersKey" @selected="handleOrderSelected"></orders-table>
 
-    <edit-order-modal :suppliers="suppliers" v-if="order">
+    <edit-order-modal :suppliers="suppliers" v-if="order && type === 'order'">
     </edit-order-modal>
   </div>
 </template>
@@ -36,6 +36,7 @@ export default {
   name: 'Orders',
   computed: {
     ...mapGetters('orderEditor', {
+      type: 'type',
       order: 'order',
       reloadOrdersKey: 'reloadOrdersKey',
       isLoading: 'isLoading'

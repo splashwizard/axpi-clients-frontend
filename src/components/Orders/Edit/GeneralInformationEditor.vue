@@ -22,7 +22,7 @@
     <!-- / Product Information -->
 
     <!-- Order Information -->
-    <div class="form-section">
+    <div class="form-section" v-if="type == 'order'">
       <div class="form-header">
         <h2>Order Information</h2>
       </div>
@@ -56,6 +56,10 @@ export default {
     ...mapGetters('auth', {
       user: 'user'
     }),
+
+    ...mapGetters('orderEditor', {
+      type: 'type'
+    })
   },
   methods: {
     ...mapActions('orderEditor', {

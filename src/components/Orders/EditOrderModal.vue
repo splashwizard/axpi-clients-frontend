@@ -2,7 +2,7 @@
   <a-modal v-model="visible"
            class="fullscreen-modal"
            :centered="true"
-           title="Update Order"
+           :title="modalTitle"
            :after-close="handleModalClosed"
            :footer="null">
 
@@ -69,11 +69,22 @@ export default {
   },
   computed: {
     ...mapGetters('orderEditor', {
+      type: 'type',
       order: 'order',
       isLoading: 'isLoading',
       wizardStage: 'wizardStage',
       isSaving: 'isSaving'
-    })
+    }),
+
+    modalTitle() {
+      if (this.type == 'order') {
+        return 'Update Order';
+      }
+      if (this.type == 'specification') {
+        return 'Update Specification';
+      }
+      return 'Edit';
+    }
   },
   mounted() {
     this.orderLocal = {

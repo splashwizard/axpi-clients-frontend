@@ -10,6 +10,7 @@ export const state = {
 
     serverErrors: [],
 
+    type: 'order',
     order: null,
     wizardStage: 0,
 
@@ -35,6 +36,10 @@ export const mutations = {
 
     SET_ERRORS(state, errors) {
         state.serverErrors = errors;
+    },
+
+    SET_TYPE(state, type) {
+        state.type = type;
     },
 
     SET_WIZARD_STAGE(state, stage) {
@@ -75,6 +80,10 @@ export const getters = {
         return state.order;
     },
 
+    type: (state) => {
+        return state.type;
+    },
+
     wizardStage: (state) => {
         return state.wizardStage;
     },
@@ -107,7 +116,30 @@ export const actions = {
        });
     },
 
+    createSpecification({commit, dispatch}) {
+        commit('START_LOADING');
+        commit('SET_ERRORS', []);
+        axios.post(window.API_BASE + '/specifications/').then(r => {
+            commit('STOP_LOADING');
+            commit('INCREMENT_RELOAD_ORDERS_KEY');
+            // commit('SET_ORDER', orders.decodeOrder(r.data));
+            dispatch('loadSpecification', r.data.id);
+        }).catch(e => {
+            commit('STOP_LOADING');
+            this._vm.$message.error('Error creating specification');
+
+            let errors;
+            if (typeof e.response.data === 'object') {
+                errors = _.flatten(_.toArray(e.response.data.errors));
+            } else {
+                errors = ['Something went wrong. Please try again.'];
+            }
+            commit('SET_ERRORS', errors);
+        });
+    },
+
     loadOrder({commit}, id) {
+        commit('SET_TYPE', 'order');
         commit('START_LOADING');
         commit('SET_ERRORS', []);
         axios.get(window.API_BASE + '/orders/' + id).then(r => {
@@ -129,21 +161,62 @@ export const actions = {
         });
     },
 
-    saveOrder({commit}, params) {
+    loadSpecification({commit}, id) {
+        commit('SET_TYPE', 'specification');
+        commit('START_LOADING');
+        commit('SET_ERRORS', []);
+        axios.get(window.API_BASE + '/specifications/' + id).then(r => {
+            commit('STOP_LOADING');
+            commit('SET_ORDER', orders.decodeOrder(r.data));
+            commit('SET_WIZARD_STAGE', 0);
+        }).catch(e => {
+            commit('STOP_LOADING');
+            this._vm.$message.error('Error loading specification');
+            console.log(e);
+
+            let errors;
+            if (e.response && e.response.data && typeof e.response.data === 'object') {
+                errors = _.flatten(_.toArray(e.response.data.errors));
+            } else {
+                errors = ['Something went wrong. Please try again.'];
+            }
+            commit('SET_ERRORS', errors);
+        });
+    },
+
+    saveOrder({commit, getters}, params) {
         const {order, quitAfterSave} = params;
+
+        let resource;
+        if (getters.type === 'order') {
+           resource = window.API_BASE + '/orders/' + order.id;
+        } else if (getters.type === 'specification') {
+            resource = window.API_BASE + '/specifications/' + order.id;
+        }
 
         commit('START_SAVING');
         commit('SET_ERRORS', []);
-        axios.put(window.API_BASE + '/orders/' + order.id, orders.encodeOrder(order)).then(() => {
+        axios.put(resource, orders.encodeOrder(order)).then(() => {
             commit('STOP_SAVING');
             if (quitAfterSave === true) {
                 commit('SET_ORDER', null)
             }
-            this._vm.$message.success('Order saved successfully!');
+
+            if (getters.type === 'order') {
+                this._vm.$message.success('Order saved successfully!');
+            } else if (getters.type === 'specification') {
+                this._vm.$message.success('Specification saved successfully!');
+            }
+
             commit('INCREMENT_RELOAD_ORDERS_KEY');
         }).catch(e => {
             commit('STOP_SAVING');
-            this._vm.$message.error('Error saving order');
+
+            if (getters.type === 'order') {
+                this._vm.$message.error('Error saving order');
+            } else if (getters.type === 'specification') {
+                this._vm.$message.error('Error saving specification');
+            }
 
             let errors;
             if (typeof e.response.data === 'object') {
@@ -157,6 +230,10 @@ export const actions = {
 
     cancelOrderEdit({commit}) {
         commit('SET_ORDER', null);
+    },
+
+    setType({commit}, type) {
+        commit('SET_TYPE', type);
     },
 
     setWizardStage({commit}, stage) {

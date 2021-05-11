@@ -104,12 +104,12 @@ const SPECIFICATION_COLUMNS = [
     sorter: true,
     scopedSlots: {customRender: 'type'}
   },
-  {
-    title: 'Quantity',
-    dataIndex: 'quantity',
-    sorter: true,
-    scopedSlots: {customRender: 'quantity'}
-  },
+  // {
+  //   title: 'Quantity',
+  //   dataIndex: 'quantity',
+  //   sorter: true,
+  //   scopedSlots: {customRender: 'quantity'}
+  // },
   {
     title: 'Last Updated',
     dataIndex: 'updated_at',

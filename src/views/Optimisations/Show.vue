@@ -12,7 +12,11 @@
     </div>
 
     <div v-if="optimisation">
-      <optimisation-specifications-table :optimisation="optimisation"></optimisation-specifications-table>
+      <optimisation-specifications-table :optimisation="optimisation"
+                                         :reload-key="reloadOrdersKey"
+      @selected="handleOptimisationSpecificationSelected"></optimisation-specifications-table>
+
+     <edit-order-modal v-if="order && type === 'optimisation-specification'"></edit-order-modal>
     </div>
   </div>
 </template>
@@ -22,6 +26,7 @@ import {mapGetters, mapActions} from "vuex";
 import AddSpecificationToOptimisationButtonAndModal
   from "../../components/Optimisations/AddSpecificationToOptimisationButtonAndModal";
 import OptimisationSpecificationsTable from "../../components/Optimisations/OptimisationSpecificationsTable";
+import EditOrderModal from "../../components/Orders/EditOrderModal";
 
 export default {
   name: "Show",
@@ -36,11 +41,17 @@ export default {
   data() {
     return {}
   },
-  components: {AddSpecificationToOptimisationButtonAndModal, OptimisationSpecificationsTable},
+  components: {EditOrderModal, AddSpecificationToOptimisationButtonAndModal, OptimisationSpecificationsTable},
   computed: {
     ...mapGetters('optimisationEditor', {
       isLoading: 'isLoading',
       optimisation: 'optimisation'
+    }),
+
+    ...mapGetters('orderEditor', {
+      type: 'type',
+      order: 'order',
+      reloadOrdersKey: 'reloadOrdersKey'
     })
   },
   methods: {
@@ -52,8 +63,21 @@ export default {
       loadOptimisation: 'loadOptimisation'
     }),
 
+    ...mapActions('orderEditor', {
+      loadOptimisationSpecification: 'loadOptimisationSpecification'
+    }),
+
     runOptimisation() {
       this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios');
+    },
+
+    handleOptimisationSpecificationSelected(spec) {
+      this.loadOptimisationSpecification(
+          {
+            optimisationId: spec.optimisation_id,
+            id: spec.id
+          }
+      );
     }
   }
 }

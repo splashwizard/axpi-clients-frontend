@@ -184,6 +184,31 @@ export const actions = {
         });
     },
 
+    loadOptimisationSpecification({commit}, params) {
+        const {optimisationId, id} = params;
+
+        commit('SET_TYPE', 'optimisation-specification');
+        commit('START_LOADING');
+        commit('SET_ERRORS', []);
+        axios.get(window.API_BASE + '/optimisations/' + optimisationId + '/specifications/' + id).then(r => {
+            commit('STOP_LOADING');
+            commit('SET_ORDER', orders.decodeOrder(r.data));
+            commit('SET_WIZARD_STAGE', 0);
+        }).catch(e => {
+            commit('STOP_LOADING');
+            this._vm.$message.error('Error loading specification');
+            console.log(e);
+
+            let errors;
+            if (e.response && e.response.data && typeof e.response.data === 'object') {
+                errors = _.flatten(_.toArray(e.response.data.errors));
+            } else {
+                errors = ['Something went wrong. Please try again.'];
+            }
+            commit('SET_ERRORS', errors);
+        });
+    },
+
     saveOrder({commit, getters}, params) {
         const {order, quitAfterSave} = params;
 
@@ -192,6 +217,8 @@ export const actions = {
            resource = window.API_BASE + '/orders/' + order.id;
         } else if (getters.type === 'specification') {
             resource = window.API_BASE + '/specifications/' + order.id;
+        }  else if (getters.type === 'optimisation-specification') {
+            resource = window.API_BASE + '/optimisations/' + getters.order.optimisation_id + '/specifications/' + order.id;
         }
 
         commit('START_SAVING');
@@ -206,6 +233,8 @@ export const actions = {
                 this._vm.$message.success('Order saved successfully!');
             } else if (getters.type === 'specification') {
                 this._vm.$message.success('Specification saved successfully!');
+            }  else if (getters.type === 'optimisation-specification') {
+                this._vm.$message.success('Specification saved successfully!');
             }
 
             commit('INCREMENT_RELOAD_ORDERS_KEY');
@@ -215,6 +244,8 @@ export const actions = {
             if (getters.type === 'order') {
                 this._vm.$message.error('Error saving order');
             } else if (getters.type === 'specification') {
+                this._vm.$message.error('Error saving specification');
+            } else if (getters.type === 'optimisation-specification') {
                 this._vm.$message.error('Error saving specification');
             }
 

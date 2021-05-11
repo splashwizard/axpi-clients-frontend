@@ -7,17 +7,23 @@
            :loading="loading"
            @change="handleTableChange"
   >
-    <a href="#" slot="name" slot-scope="name" @click.prevent="e => e.preventDefault()">{{ name
+    <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{ name
       }}</a>
     <div slot="type" slot-scope="type">
       {{ formatType(type) }}
+    </div>
+    <div slot="quantity" slot-scope="quantity">
+      <span v-if="quantity">
+        {{ quantity }}
+      </span>
+      <a-badge v-else count="Please provide" :number-style="{background: '#  ec2c74'}"></a-badge>
     </div>
     <div slot="actions" class="table-actions" slot-scope="actions, record">
       <a-dropdown :trigger="['click']">
         <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
         <a-menu slot="overlay">
           <a-menu-item>
-            <a href="#">Edit</a>
+            <a href="#" @click="handleRecordSelected(record)">Edit</a>
           </a-menu-item>
           <a-menu-item>
             <a href="#" @click.prevent="duplicateSpecification(record)">Duplicate</a>
@@ -50,6 +56,12 @@ const columns = [
     scopedSlots: {customRender: 'type'}
   },
   {
+    title: 'Quantity',
+    dataIndex: 'quantity',
+    sorter: true,
+    scopedSlots: {customRender: 'quantity'}
+  },
+  {
     title: '',
     scopedSlots: {customRender: 'actions'},
     width: 10
@@ -57,7 +69,7 @@ const columns = [
 ];
 
 export default {
-  props: ['optimisation'],
+  props: ['optimisation', 'reloadKey'],
   data() {
     return {
       data: [],
@@ -69,6 +81,11 @@ export default {
   mixins: [Dates, Orders],
   mounted() {
     this.fetch();
+  },
+  watch: {
+   reloadKey() {
+     this.fetch();
+   }
   },
   methods: {
     handleTableChange(pagination, filters, sorter) {
@@ -129,6 +146,10 @@ export default {
         vm.isLoading = false;
         this.$message.error('Error duplicating specification');
       });
+    },
+
+    handleRecordSelected(spec) {
+      this.$emit('selected', spec);
     }
   },
 };

@@ -79,11 +79,13 @@ export default {
     modalTitle() {
       if (this.type == 'order') {
         return 'Update Order';
-      }
-      if (this.type == 'specification') {
+      } else if (this.type == 'specification') {
         return 'Update Specification';
+      } else if (this.type == 'optimisation-specification') {
+        return 'Update Specification';
+      } else {
+        return 'Edit';
       }
-      return 'Edit';
     }
   },
   mounted() {

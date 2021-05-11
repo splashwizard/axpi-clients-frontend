@@ -24,6 +24,10 @@ export default {
             status: orderFromServer.status
         };
 
+        if (orderFromServer.optimisation_id) {
+            order.optimisation_id = orderFromServer.optimisation_id;
+        }
+
         // Print
         if (orderFromServer.print_detail && typeof orderFromServer.print_detail === 'object') {
             // Paper Sections

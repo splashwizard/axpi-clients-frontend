@@ -74,7 +74,7 @@ const columns = [
 
 export default {
   name: "ScenariosTable",
-  props: ['optimisation'],
+  props: ['optimisation', 'scenarios'],
   data() {
     return {
       columns
@@ -88,6 +88,7 @@ export default {
   computed: {
     data() {
       const data = [
+          ...this.scenarios,
         {
           key: 1,
           name: 'Best Price',

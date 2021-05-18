@@ -111,6 +111,7 @@ export default {
         const pagination = {...this.pagination};
         // Read total count from server
         pagination.total = r.data.total;
+        this.$emit('set-number-of-specs', r.data.total);
         this.loading = false;
         this.data = r.data.data;
         this.pagination = pagination;

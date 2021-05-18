@@ -18,7 +18,7 @@
             'poster',
             'envelope',
             'business_card',
-            'binder',
+            // 'binder',
             'pad',
             'letterhead',
             'postcard',

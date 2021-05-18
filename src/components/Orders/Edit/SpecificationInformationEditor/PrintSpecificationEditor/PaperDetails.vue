@@ -49,7 +49,7 @@
     let _ = require('lodash');
 
     const PAPER_DATA_TEMPLATE = {
-        section_name: 'body',
+        section_name: 'Body',
         number_of_pages: '',
         paper_weight: '',
         paper_weight_unit: 'gsm',
@@ -78,11 +78,11 @@
     };
     const SECTION_NAME_OPTIONS = [
         {
-            value: 'body',
+            value: 'Body',
             label: 'Body'
         },
         {
-            value: 'cover',
+            value: 'Cover',
             label: 'Cover'
         }
     ];

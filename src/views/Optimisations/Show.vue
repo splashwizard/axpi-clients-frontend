@@ -1,22 +1,23 @@
 <template>
   <div class="optimisations">
-    <loading-screen :is-loading="isLoading"></loading-screen>
+    <loading-screen :is-loading="isLoading||isOptimising"></loading-screen>
 
     <div class="page-header" v-if="optimisation">
       <h1 class="page-title">{{ optimisation.name }}</h1>
-      <a-button class="" type="primary" @click.prevent="runOptimisation">Optimise</a-button>
+      <a-button :disabled="hasNoSpecs" class="" type="primary" @click.prevent="runOptimisation">Optimise</a-button>
       <add-specification-to-optimisation-button-and-modal style="margin-left: 8px;"
-          :optimisation="optimisation"
-          @refresh-optimisation="refresh"
+                                                          :optimisation="optimisation"
+                                                          @refresh-optimisation="refresh"
       ></add-specification-to-optimisation-button-and-modal>
     </div>
 
     <div v-if="optimisation">
       <optimisation-specifications-table :optimisation="optimisation"
                                          :reload-key="reloadOrdersKey"
-      @selected="handleOptimisationSpecificationSelected"></optimisation-specifications-table>
+                                         @set-number-of-specs="setNumberOfSpecs"
+                                         @selected="handleOptimisationSpecificationSelected"></optimisation-specifications-table>
 
-     <edit-order-modal v-if="order && type === 'optimisation-specification'"></edit-order-modal>
+      <edit-order-modal v-if="order && type === 'optimisation-specification'"></edit-order-modal>
     </div>
   </div>
 </template>
@@ -27,6 +28,7 @@ import AddSpecificationToOptimisationButtonAndModal
   from "../../components/Optimisations/AddSpecificationToOptimisationButtonAndModal";
 import OptimisationSpecificationsTable from "../../components/Optimisations/OptimisationSpecificationsTable";
 import EditOrderModal from "../../components/Orders/EditOrderModal";
+import axios from 'axios';
 
 export default {
   name: "Show",
@@ -39,7 +41,10 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      numberOfSpecs: null,
+      isOptimising: false
+    }
   },
   components: {EditOrderModal, AddSpecificationToOptimisationButtonAndModal, OptimisationSpecificationsTable},
   computed: {
@@ -52,7 +57,15 @@ export default {
       type: 'type',
       order: 'order',
       reloadOrdersKey: 'reloadOrdersKey'
-    })
+    }),
+
+    hasNoSpecs() {
+      if (!this.numberOfSpecs) {
+        return true;
+      } else {
+        return (this.numberOfSpecs == 0);
+      }
+    }
   },
   methods: {
     refresh() {
@@ -68,7 +81,17 @@ export default {
     }),
 
     runOptimisation() {
-      this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios');
+      let vm = this;
+      vm.isOptimising = true;
+
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/optimise').then(() => {
+        vm.isOptimising = false;
+        this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios');
+      }).catch(e => {
+        console.log(e);
+        vm.isOptimising = false;
+        this.$message.error('An error occurred while optimising');
+      });
     },
 
     handleOptimisationSpecificationSelected(spec) {
@@ -78,6 +101,10 @@ export default {
             id: spec.id
           }
       );
+    },
+
+    setNumberOfSpecs(numberOfSpecs) {
+      this.numberOfSpecs = numberOfSpecs;
     }
   }
 }

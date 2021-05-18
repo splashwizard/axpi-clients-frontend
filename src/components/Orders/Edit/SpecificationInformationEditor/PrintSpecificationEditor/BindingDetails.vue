@@ -58,7 +58,7 @@ const BINDING_TYPES = {
     'plastic_comb_bound',
     'board_bound',
     'glued_fold_bound',
-    'thread_swen_bound'
+    'thread_sewn_bound'
   ]
 };
 

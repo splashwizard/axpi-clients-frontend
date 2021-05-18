@@ -382,8 +382,8 @@ const PAPER_FINISH_OPTIONS = [
         label: 'Satin'
       },
       {
-        value: 'matte',
-        label: 'Matte'
+        value: 'matt',
+        label: 'Matt'
       },
       {
         value: 'silk',

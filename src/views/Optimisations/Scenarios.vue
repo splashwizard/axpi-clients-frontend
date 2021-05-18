@@ -1,6 +1,6 @@
 <template>
   <div class="optimisations">
-    <loading-screen :is-loading="isLoading||isLoadingSpecifications||isLoadingSuppliers"></loading-screen>
+    <loading-screen :is-loading="isLoading||isLoadingSpecifications||isLoadingScenarios||isLoadingSuppliers"></loading-screen>
 
     <a-layout>
       <left-sidebar :optimisation="optimisation"></left-sidebar>
@@ -17,7 +17,7 @@
           <a-tabs>
             <a-tab-pane key="scenarios" tab="Scenarios">
               <scenario-graphs></scenario-graphs>
-              <scenarios-table :optimisation="optimisation"></scenarios-table>
+              <scenarios-table :scenarios="scenarios" :optimisation="optimisation"></scenarios-table>
             </a-tab-pane>
             <a-tab-pane key="overview" tab="Overview">
               Content of Tab Pane 2
@@ -45,12 +45,14 @@ export default {
   created() {
     this.loadOptimisation(this.$route.params.id);
     this.loadSpecifications(this.$route.params.id);
+    this.loadScenarios(this.$route.params.id);
     this.loadSuppliers();
   },
   watch: {
     $route() {
       this.loadOptimisation(this.$route.params.id);
       this.loadSpecifications(this.$route.params.id);
+      this.loadScenarios(this.$route.params.id);
       this.loadSuppliers();
     }
   },
@@ -61,19 +63,22 @@ export default {
 
       route: 'all-scenarios',
       selectedScenario: null,
-      scenarios: [
-        {
-          name: 'Demo Scenario 1',
-          items: []
-        },
-        {
-          name: 'Demo Scenario 2',
-          items: []
-        }
-      ],
+      // scenarios: [
+      //   {
+      //     name: 'Demo Scenario 1',
+      //     items: []
+      //   },
+      //   {
+      //     name: 'Demo Scenario 2',
+      //     items: []
+      //   }
+      // ],
 
       isLoadingSpecifications: false,
       specifications: [],
+
+      isLoadingScenarios: false,
+      scenarios: [],
 
       isLoadingSuppliers: false,
       suppliers: []
@@ -150,6 +155,21 @@ export default {
         console.log(e);
         this.$message.error('Error loading specifications');
         vm.isLoadingSpecifications = false;
+      });
+    },
+
+    loadScenarios(optimisationId) {
+      let vm = this;
+      vm.isLoadingScenarios = true;
+      vm.scenarios = [];
+      axios.get(window.API_BASE + '/optimisations/' + optimisationId + '/scenarios').then(r => {
+        vm.scenarios = r.data;
+        vm.isLoadingScenarios = false;
+      }).catch(e => {
+        vm.scenarios = [];
+        console.log(e);
+        this.$message.error('Error loading scenrios');
+        vm.isLoadingScenarios = false;
       });
     },
 

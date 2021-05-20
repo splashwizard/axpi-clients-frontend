@@ -16,8 +16,8 @@
 
           <a-tabs>
             <a-tab-pane key="scenarios" tab="Scenarios">
-              <scenario-graphs></scenario-graphs>
-              <scenarios-table :scenarios="scenarios" :optimisation="optimisation"></scenarios-table>
+              <scenario-graphs v-if="scenarios && scenarios.length" :scenarios="scenarios"></scenario-graphs>
+              <scenarios-table v-if="scenarios" :scenarios="scenarios" :optimisation="optimisation"></scenarios-table>
             </a-tab-pane>
             <a-tab-pane key="overview" tab="Overview">
               Content of Tab Pane 2

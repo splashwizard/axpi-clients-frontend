@@ -1,7 +1,7 @@
 <template>
   <div class="graph-container" :key="updateKey">
     <v-chart :forceFit="true" :height="height" :data="graphData" :scale="scale">
-      <!--      <v-legend/>-->
+<!--      <v-legend/>-->
       <v-tooltip/>
       <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
       <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-// const DataSet = require("@antv/data-set");
+const DataSet = require("@antv/data-set");
 const _ = require('lodash');
 
 const axis1Opts = {
@@ -115,7 +115,7 @@ export default {
     },
 
     graphData() {
-      let sourceData = [
+      const sourceData = [
         // {item: "Learn", count: 40},
         // {item: "Listen to Songs", count: 21},
         // {item: "work out", count: 17},
@@ -126,18 +126,6 @@ export default {
         {scenario: "Environmentally Friendly", metric: "cost", value: 15},
         {scenario: "Environmentally Friendly", metric: "co2e", value: 30}
       ];
-
-      sourceData = _.map(sourceData, data => {
-        let scenario = _.find(this.scenarios, {name: data.scenario});
-        let scenarioIndex = this.scenarios.indexOf(scenario);
-        let metricIndex = this.selectedMetricIds.indexOf(data.metric);
-
-        return {
-          scenario: scenarioIndex,
-          metric: metricIndex,
-          value: data.value
-        };
-      });
 
       return sourceData;
     },

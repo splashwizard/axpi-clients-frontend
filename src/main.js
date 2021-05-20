@@ -42,8 +42,13 @@ Vue.use(CollapseItem);
 Vue.use(Select);
 Vue.use(Option);
 
+// Viser
+import Viser from 'viser-vue';
+Vue.use(Viser);
+
 Vue.component('loading-screen', require('./components/LoadingScreen').default);
 Vue.component('metric-card', require('./components/Analytics/MetricCard').default);
+Vue.component('swooshy-selector', require('./components/SwooshySelector').default);
 
 // Custom styles
 import '@/assets/scss/main.scss';

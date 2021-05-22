@@ -5,7 +5,7 @@
     <v-chart :forceFit="true" :height="height" :data="graphData" :scale="scale">
       <v-tooltip :showTitle="false" data-key="item*percent"/>
       <v-axis/>
-<!--      <v-legend data-key="item"/>-->
+      <!--      <v-legend data-key="item"/>-->
       <v-pie position="percent" color="item" :vStyle="pieStyle" :label="labelConfig"/>
       <v-coord type="theta" :radius="0.75" :innerRadius="0.6"/>
     </v-chart>
@@ -80,14 +80,36 @@ export default {
     }
   },
   computed: {
+    selectedScenario() {
+      return _.find(this.scenarios, {id: this.selectedScenarioId});
+    },
+
     graphData() {
-      const sourceData = [
-        {item: "Learn", count: 40},
-        {item: "Listen to Songs", count: 21},
-        {item: "work out", count: 17},
-        {item: "game", count: 13},
-        {item: "daze", count: 9}
-      ];
+      // const sourceData = [
+      //   {item: "Learn", count: 40},
+      //   {item: "Listen to Songs", count: 21},
+      //   {item: "work out", count: 17},
+      //   {item: "game", count: 13},
+      //   {item: "daze", count: 9}
+      // ];
+
+      let sourceData = [];
+
+      _.each(this.selectedScenario.optimisation_scenario_specification_supplier_mappings, mapping => {
+        if (this.metric.value === 'expected-cost') {
+          sourceData.push({
+            item: mapping.optimisation_specification.product_name,
+            count: mapping.expected_price
+          });
+        }
+        if (this.metric.value === 'co2e') {
+          sourceData.push({
+            item: mapping.optimisation_specification.product_name,
+            count: mapping.co2e
+            // count: mapping.co2e + Math.random() * 100
+          });
+        }
+      });
 
       const dv = new DataSet.View().source(sourceData);
       dv.transform({

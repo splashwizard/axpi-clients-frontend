@@ -6,7 +6,7 @@
       <left-sidebar :optimisation="optimisation"></left-sidebar>
       <a-layout style="padding: 7px 30px">
         <div class="page-header" v-if="optimisation">
-          <h1 class="page-title">{{ optimisation.name }} - Analytics</h1>
+          <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions">
             <a-tooltip placement="bottom">
               <template slot="title">
@@ -36,7 +36,58 @@
         </div>
 
         <div v-if="optimisation">
-          The analytics go here
+
+          <!-- Tabs -->
+          <a-tabs v-model="analyticsTab">
+            <a-tab-pane key="overview" tab="Overview">
+              <a-row :gutter="20">
+                <a-col :span="12">
+                  <what-should-be-paying-for-each-specification-graph></what-should-be-paying-for-each-specification-graph>
+                </a-col>
+                <a-col :span="12">
+                  <supplier-histories-graph></supplier-histories-graph>
+                </a-col>
+              </a-row>
+              <a-row :gutter="20">
+                <a-col :span="12">
+                  <which-suppliers-environmentally-friendly-graph></which-suppliers-environmentally-friendly-graph>
+                </a-col>
+                <a-col :span="12">
+                  <what-accreditations-do-suppliers-have-graph></what-accreditations-do-suppliers-have-graph>
+                </a-col>
+              </a-row>
+            </a-tab-pane>
+            <a-tab-pane key="pricing" tab="Pricing">
+              <a-row :gutter="20">
+                <a-col :span="12">
+                  <what-should-be-paying-for-each-specification-graph></what-should-be-paying-for-each-specification-graph>
+                </a-col>
+                <a-col :span="12">
+                  <expected-price-by-supplier-for-each-specification-graph></expected-price-by-supplier-for-each-specification-graph>
+                </a-col>
+              </a-row>
+            </a-tab-pane>
+            <a-tab-pane key="environment" tab="Environment">
+              <a-row :gutter="20">
+                <a-col :span="12">
+                  <what-environmental-information-complete-for-each-specification-graph></what-environmental-information-complete-for-each-specification-graph>
+                </a-col>
+                <a-col :span="12">
+                  <which-suppliers-are-most-environmentally-friendly></which-suppliers-are-most-environmentally-friendly>
+                </a-col>
+              </a-row>
+              <a-row :gutter="20">
+                <a-col :span="12">
+                  <what-is-ghg-pollution-for-each-specification></what-is-ghg-pollution-for-each-specification>
+                </a-col>
+                <a-col :span="12">
+                  <what-accreditations-do-my-suppliers-have-graph></what-accreditations-do-my-suppliers-have-graph>
+                </a-col>
+              </a-row>
+            </a-tab-pane>
+          </a-tabs>
+          <!-- / Tabs -->
+
         </div>
       </a-layout>
       <a-layout-sider width="300" theme="dark"
@@ -275,6 +326,16 @@
 import {mapGetters, mapActions} from "vuex";
 import axios from 'axios';
 import LeftSidebar from "./LeftSidebar";
+import ExpectedPriceBySupplierForEachSpecificationGraph
+  from "./Analytics/Pricing/ExpectedPriceBySupplierForEachSpecificationGraph";
+import WhatEnvironmentalInformationCompleteForEachSpecificationGraph
+  from "./Analytics/Environment/WhatEnvironmentalInformationCompleteForEachSpecificationGraph";
+import WhichSuppliersAreMostEnvironmentallyFriendly
+  from "./Analytics/Environment/WhichSuppliersAreMostEnvironmentallyFriendlyGraph";
+import WhatIsGhgPollutionForEachSpecification from "./Analytics/Environment/WhatIsGhgPollutionForEachSpecification";
+import WhatAccreditationsDoMySuppliersHaveGraph
+  from "./Analytics/Environment/WhatAccreditationsDoMySuppliersHaveGraph";
+import WhatShouldBePayingForEachSpecificationGraph from "./Analytics/Pricing/WhatShouldBePayingForEachSpecificationGraph";
 
 const _ = require('lodash');
 
@@ -294,6 +355,8 @@ export default {
   },
   data() {
     return {
+      analyticsTab: 'overview',
+
       sidebarCollapsed: true,
       selectedSidebar: '',
 
@@ -317,7 +380,15 @@ export default {
       suppliers: []
     }
   },
-  components: {LeftSidebar},
+  components: {
+    WhatAccreditationsDoMySuppliersHaveGraph,
+    WhatIsGhgPollutionForEachSpecification,
+    WhichSuppliersAreMostEnvironmentallyFriendly,
+    WhatEnvironmentalInformationCompleteForEachSpecificationGraph,
+    ExpectedPriceBySupplierForEachSpecificationGraph,
+    WhatShouldBePayingForEachSpecificationGraph,
+    LeftSidebar
+  },
   computed: {
     ...mapGetters('optimisationEditor', {
       isLoading: 'isLoading',

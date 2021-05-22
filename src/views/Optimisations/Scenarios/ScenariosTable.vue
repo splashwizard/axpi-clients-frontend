@@ -47,13 +47,13 @@ const columns = [
     key: 'name',
   },
   {
-    dataIndex: 'expectedCost',
+    dataIndex: 'expected_cost',
     title: 'Expected Cost',
     key: 'expectedCost',
     scopedSlots: {customRender: 'expectedCost'}
   },
   {
-    dataIndex: 'expectedCo2e',
+    dataIndex: 'co2e',
     title: 'CO2e',
     key: 'expectedCo2e',
     scopedSlots: {customRender: 'expectedCo2e'}
@@ -92,15 +92,15 @@ export default {
         {
           key: 1,
           name: 'Best Price',
-          expectedCost: '5219',
-          expectedCo2e: 1503,
+          expected_cost: '5219',
+          co2e: 1503,
           itemsAllocated: '3/3'
         },
         {
           key: 2,
           name: 'Environmentally Friendly',
-          expectedCost: '6377',
-          expectedCo2e: 1377,
+          expected_cost: '6377',
+          co2e: 1377,
           itemsAllocated: '3/3'
         }
       ];
@@ -109,8 +109,8 @@ export default {
         data.push({
           key: 3,
           name: 'Balanced',
-          expectedCost: '5385',
-          expectedCo2e: 1398,
+          expected_cost: '5385',
+          co2e: 1398,
           itemsAllocated: '3/3'
         });
       }

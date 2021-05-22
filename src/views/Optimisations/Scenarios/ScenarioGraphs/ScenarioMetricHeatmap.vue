@@ -115,17 +115,36 @@ export default {
     },
 
     graphData() {
-      let sourceData = [
-        // {item: "Learn", count: 40},
-        // {item: "Listen to Songs", count: 21},
-        // {item: "work out", count: 17},
-        // {item: "game", count: 13},
-        // {item: "daze", count: 9}
-        {scenario: "Best Price", metric: "cost", value: 20},
-        {scenario: "Best Price", metric: "co2e", value: 1},
-        {scenario: "Environmentally Friendly", metric: "cost", value: 15},
-        {scenario: "Environmentally Friendly", metric: "co2e", value: 30}
-      ];
+      // let sourceData = [
+      //   // {item: "Learn", count: 40},
+      //   // {item: "Listen to Songs", count: 21},
+      //   // {item: "work out", count: 17},
+      //   // {item: "game", count: 13},
+      //   // {item: "daze", count: 9}
+      //   {scenario: "Best Price", metric: "cost", value: 20},
+      //   {scenario: "Best Price", metric: "co2e", value: 1},
+      //   {scenario: "Environmentally Friendly", metric: "cost", value: 15},
+      //   {scenario: "Environmentally Friendly", metric: "co2e", value: 30}
+      // ];
+
+      let sourceData = [];
+      _.each(this.scenarios, scenario => {
+        if (this.selectedMetricIds.includes('cost')) {
+          sourceData.push({
+            scenario: scenario.name,
+            metric: 'cost',
+            value: scenario.expected_cost
+          });
+        }
+
+        if (this.selectedMetricIds.includes('co2e')) {
+          sourceData.push({
+            scenario: scenario.name,
+            metric: 'co2e',
+            value: scenario.co2e
+          });
+        }
+      });
 
       sourceData = _.map(sourceData, data => {
         let scenario = _.find(this.scenarios, {name: data.scenario});

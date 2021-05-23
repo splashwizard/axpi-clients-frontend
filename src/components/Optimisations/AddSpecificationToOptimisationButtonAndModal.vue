@@ -34,9 +34,10 @@
 
     </a-modal>
 
-    <a-modal :width="700"
+    <a-modal :width="1200"
              title="Add Specifications"
              :visible="savedSpecModalVisible"
+             :centered="true"
              @cancel="handleSavedSpecCancel"
              :footer="false">
 
@@ -64,6 +65,9 @@
         <div slot="type" slot-scope="type">
           {{ formatType(type) }}
         </div>
+        <div slot="subtype" slot-scope="subtype">
+          {{ formatSubtype(subtype) }}
+        </div>
         <div slot="date" slot-scope="date">
           {{ displayTimeAgo(date) }}
         </div>
@@ -82,8 +86,9 @@
 
     </a-modal>
 
-    <a-modal :width="700"
+    <a-modal :width="1200"
              title="Add From Past Orders"
+             :centered="true"
              :visible="pastOrdersModalVisible"
              @cancel="handlePastOrdersCancel"
              :footer="false">
@@ -111,6 +116,9 @@
                :loading="isLoadingPastOrders">
         <div slot="type" slot-scope="type">
           {{ formatType(type) }}
+        </div>
+        <div slot="subtype" slot-scope="subtype">
+          {{ formatSubtype(subtype) }}
         </div>
         <div slot="date" slot-scope="date">
           {{ displayTimeAgo(date) }}
@@ -152,6 +160,12 @@ const SPECIFICATION_COLUMNS = [
     sorter: true,
     scopedSlots: {customRender: 'type'}
   },
+  {
+    title: 'Subtype',
+    dataIndex: 'product_subtype',
+    sorter: true,
+    scopedSlots: {customRender: 'subtype'}
+  },
   // {
   //   title: 'Quantity',
   //   dataIndex: 'quantity',
@@ -178,6 +192,12 @@ const PAST_ORDERS_COLUMNS = [
     dataIndex: 'product_type',
     sorter: true,
     scopedSlots: {customRender: 'type'}
+  },
+  {
+    title: 'Subtype',
+    dataIndex: 'product_subtype',
+    sorter: true,
+    scopedSlots: {customRender: 'subtype'}
   },
   {
     title: 'Quantity',
@@ -356,7 +376,7 @@ export default {
 
     loadPastOrders(params = {}) {
       let vm = this;
-      vm.isLoadingSpecifications = true;
+      vm.isLoadingPastOrders = true;
       axios.post(window.API_BASE + '/orders/search', {
         results_per_page: 10,
         ...params
@@ -364,7 +384,7 @@ export default {
         const pagination = {...this.pastOrdersPagination};
         // Read total count from server
         pagination.total = r.data.total;
-        this.isLoadingSpecifications = false;
+        this.isLoadingPastOrders = false;
         this.pastOrders = r.data.data;
         this.pastOrdersPagination = pagination;
       }).catch(e => {

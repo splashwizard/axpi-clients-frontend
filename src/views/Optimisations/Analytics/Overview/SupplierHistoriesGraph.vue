@@ -6,16 +6,16 @@
     <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale">
       <v-tooltip :shared="true"></v-tooltip>
       <v-interval
-          position="specification*trueprice"
+          position="supplier*value"
           opacity="1"
       >
       </v-interval>
       <v-axis
-          dataKey="specification"
+          dataKey="supplier"
       >
       </v-axis>
       <v-axis
-          dataKey="trueprice"
+          dataKey="value"
       >
       </v-axis>
     </v-chart>
@@ -27,8 +27,7 @@ import axios from "axios";
 const _ = require('lodash');
 
 export default {
-  name: "WhatShouldBePayingForSpecificationGraph",
-  props: ['optimisationId'],
+  name: "SupplierHistoriesGraph",
   data() {
     return {
       isLoading: true,
@@ -36,28 +35,29 @@ export default {
       height: 500
     }
   },
+  props: ['optimisationId'],
   computed: {
-   graphData() {
-    if (!this.data) {
-      return [];
-    }
+    graphData() {
+      if (!this.data) {
+        return [];
+      }
 
-     let sourceData = [];
-     _.each(this.data, specData => {
-       sourceData.push({
-         'specification': specData.optimisation_specification.product_name,
-         'trueprice': specData.trueprice
-       });
-     });
-     return sourceData;
-   },
+      let sourceData = [];
+      _.each(this.data, specData => {
+        sourceData.push({
+          'supplier': specData.supplier.name,
+          'value': specData.order_count
+        });
+      });
+      return sourceData;
+    },
     scale() {
       return [{
-        dataKey: 'specification',
+        dataKey: 'supplier',
         type: 'cat',
-        values: _.map(this.data, 'optimisation_specification.product_name'),
+        values: _.map(this.data, 'supplier.name'),
       }, {
-        dataKey: 'trueprice'
+        dataKey: 'value'
       }];
     }
   },
@@ -68,13 +68,13 @@ export default {
     fetch() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/price-analytics').then(r => {
+      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-analytics').then(r => {
         vm.isLoading = false;
         vm.data = r.data;
       }).catch(e => {
         console.log(e);
         vm.isLoading = false;
-        vm.$message.error('Error loading price analytics');
+        vm.$message.error('Error loading supplier analytics');
       });
     }
   }

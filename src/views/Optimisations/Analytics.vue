@@ -42,10 +42,10 @@
             <a-tab-pane key="overview" tab="Overview">
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <what-should-be-paying-for-each-specification-graph></what-should-be-paying-for-each-specification-graph>
+                  <what-should-be-paying-for-each-specification-graph :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
-                  <supplier-histories-graph></supplier-histories-graph>
+                  <supplier-histories-graph :optimisation-id="optimisation.id"></supplier-histories-graph>
                 </a-col>
               </a-row>
               <a-row :gutter="20">
@@ -53,14 +53,14 @@
                   <which-suppliers-environmentally-friendly-graph></which-suppliers-environmentally-friendly-graph>
                 </a-col>
                 <a-col :span="12">
-                  <what-accreditations-do-suppliers-have-graph></what-accreditations-do-suppliers-have-graph>
+                  <what-accreditations-do-my-suppliers-have-graph></what-accreditations-do-my-suppliers-have-graph>
                 </a-col>
               </a-row>
             </a-tab-pane>
             <a-tab-pane key="pricing" tab="Pricing">
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <what-should-be-paying-for-each-specification-graph></what-should-be-paying-for-each-specification-graph>
+                  <what-should-be-paying-for-each-specification-graph :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
                   <expected-price-by-supplier-for-each-specification-graph></expected-price-by-supplier-for-each-specification-graph>
@@ -336,6 +336,7 @@ import WhatIsGhgPollutionForEachSpecification from "./Analytics/Environment/What
 import WhatAccreditationsDoMySuppliersHaveGraph
   from "./Analytics/Environment/WhatAccreditationsDoMySuppliersHaveGraph";
 import WhatShouldBePayingForEachSpecificationGraph from "./Analytics/Pricing/WhatShouldBePayingForEachSpecificationGraph";
+import SupplierHistoriesGraph from "./Analytics/Overview/SupplierHistoriesGraph";
 
 const _ = require('lodash');
 
@@ -387,6 +388,7 @@ export default {
     WhatEnvironmentalInformationCompleteForEachSpecificationGraph,
     ExpectedPriceBySupplierForEachSpecificationGraph,
     WhatShouldBePayingForEachSpecificationGraph,
+    SupplierHistoriesGraph,
     LeftSidebar
   },
   computed: {

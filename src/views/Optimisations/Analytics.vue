@@ -79,7 +79,7 @@
                       :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
-                  <b>What is the expected price by supplier for each specification?</b>
+                  <b>What is the expected price for each specification?</b>
                   <expected-price-by-supplier-for-each-specification-graph
                       :optimisation-id="optimisation.id"></expected-price-by-supplier-for-each-specification-graph>
                 </a-col>

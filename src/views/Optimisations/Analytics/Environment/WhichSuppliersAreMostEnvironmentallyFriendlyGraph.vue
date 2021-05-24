@@ -4,7 +4,7 @@
       <a-spin/>
     </div>
     <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
-      <v-tooltip :showTitle="false" />
+      <v-tooltip :showTitle="false" :crosshairs="{type: 'cross'}" />
       <v-axis dataKey="total_co2e" />
 <!--      <v-legend dataKey="specification"-->
 <!--                :show="false" />-->

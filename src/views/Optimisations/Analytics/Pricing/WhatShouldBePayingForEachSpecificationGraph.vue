@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="graph-container">
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
@@ -55,7 +55,7 @@ export default {
       return [{
         dataKey: 'specification',
         type: 'cat',
-        values: _.map(this.data, 'optimisation_specification.product_name'),
+        // values: _.map(this.data, 'optimisation_specification.product_name'),
       }, {
         dataKey: 'trueprice'
       }];

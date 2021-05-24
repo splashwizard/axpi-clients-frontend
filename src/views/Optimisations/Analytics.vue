@@ -1,5 +1,5 @@
 <template>
-  <div class="optimisations">
+  <div class="optimisations optimisation-analytics">
     <loading-screen :is-loading="isLoading||isLoadingSpecifications||isLoadingSuppliers"></loading-screen>
 
     <a-layout>
@@ -50,7 +50,7 @@
               </a-row>
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <which-suppliers-environmentally-friendly-graph></which-suppliers-environmentally-friendly-graph>
+                  <which-suppliers-are-most-environmentally-friendly :optimisation-id="optimisation.id"></which-suppliers-are-most-environmentally-friendly>
                 </a-col>
                 <a-col :span="12">
                   <what-accreditations-do-my-suppliers-have-graph></what-accreditations-do-my-suppliers-have-graph>
@@ -70,15 +70,15 @@
             <a-tab-pane key="environment" tab="Environment">
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <what-environmental-information-complete-for-each-specification-graph></what-environmental-information-complete-for-each-specification-graph>
+                  <what-environmental-information-complete-for-each-specification-graph :optimisation-id="optimisation.id"></what-environmental-information-complete-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
-                  <which-suppliers-are-most-environmentally-friendly></which-suppliers-are-most-environmentally-friendly>
+                  <which-suppliers-are-most-environmentally-friendly :optimisation-id="optimisation.id"></which-suppliers-are-most-environmentally-friendly>
                 </a-col>
               </a-row>
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <what-is-ghg-pollution-for-each-specification></what-is-ghg-pollution-for-each-specification>
+                  <what-is-ghg-pollution-for-each-specification :optimisation-id="optimisation.id"></what-is-ghg-pollution-for-each-specification>
                 </a-col>
                 <a-col :span="12">
                   <what-accreditations-do-my-suppliers-have-graph></what-accreditations-do-my-suppliers-have-graph>
@@ -687,5 +687,15 @@ export default {
 
 .ant-collapse-content-box .ant-btn:last-child {
   margin-bottom: 0 !important;
+}
+
+.optimisation-analytics {
+  .graph-container {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    overflow: hidden;
+
+  }
 }
 </style>

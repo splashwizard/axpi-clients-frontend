@@ -55,14 +55,14 @@ const seriesOpts = {
   quickType: 'polygon',
   color: ['value', '#BAE7FF-#1890FF-#0050B3'],
   position: 'metric*scenario',
-  label: ['value', {
-    offset: -2,
-    textStyle: {
-      fill: '#fff',
-      shadowBlur: 2,
-      shadowColor: 'rgba(0, 0, 0, .45)',
-    },
-  }],
+  // label: ['value', {
+  //   offset: -2,
+  //   textStyle: {
+  //     fill: '#fff',
+  //     shadowBlur: 2,
+  //     shadowColor: 'rgba(0, 0, 0, .45)',
+  //   },
+  // }],
   style: {
     lineWidth: 1,
     stroke: '#fff',

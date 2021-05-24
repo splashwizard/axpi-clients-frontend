@@ -48,16 +48,17 @@ const axis2Opts = {
 
 const seriesOpts = {
   quickType: 'polygon',
-  color: ['value', '#E60000-#000000-#4CBB17'],
+  // color: ['value', '#E60000-#000000-#4CBB17'],
+  color: ['value', '#BAE7FF-#1890FF-#0050B3'],
   position: 'accreditation*supplier',
-  label: ['value', {
-    offset: -2,
-    textStyle: {
-      fill: '#fff',
-      shadowBlur: 2,
-      shadowColor: 'rgba(0, 0, 0, .45)',
-    },
-  }],
+  // label: ['value', {
+  //   offset: -2,
+  //   textStyle: {
+  //     fill: '#fff',
+  //     shadowBlur: 2,
+  //     shadowColor: 'rgba(0, 0, 0, .45)',
+  //   },
+  // }],
   style: {
     lineWidth: 1,
     stroke: '#fff',
@@ -109,11 +110,11 @@ export default {
       return [{
         dataKey: 'supplier',
         type: 'cat',
-        values: _.map(this.suppliers, 'name'),
+        // values: _.map(this.suppliers, 'name'),
       }, {
         dataKey: 'accreditation',
         type: 'cat',
-        values: _.map(this.accreditations, 'name'),
+        // values: _.map(this.accreditations, 'name'),
       }];
     }
   },

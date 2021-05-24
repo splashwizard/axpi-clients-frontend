@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="graph-container">
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>

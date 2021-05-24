@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="graph-container">
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
@@ -15,7 +15,7 @@
 
 <script>
 import axios from "axios";
-const _ = require('lodash');
+// const _ = require('lodash');
 
 const axis1Opts = {
   dataKey: 'specification',
@@ -48,14 +48,14 @@ const seriesOpts = {
   quickType: 'polygon',
   color: ['expected_price', '#BAE7FF-#1890FF-#0050B3'],
   position: 'specification*supplier',
-  label: ['expected_price', {
-    offset: -2,
-    textStyle: {
-      fill: '#fff',
-      shadowBlur: 2,
-      shadowColor: 'rgba(0, 0, 0, .45)',
-    },
-  }],
+  // label: ['expected_price', {
+  //   offset: -2,
+  //   textStyle: {
+  //     fill: '#fff',
+  //     shadowBlur: 2,
+  //     shadowColor: 'rgba(0, 0, 0, .45)',
+  //   },
+  // }],
   style: {
     lineWidth: 1,
     stroke: '#fff',
@@ -95,11 +95,11 @@ export default {
       return [{
         dataKey: 'supplier',
         type: 'cat',
-        values: _.map(this.data, 'supplier'),
+        // values: _.map(this.data, 'supplier'),
       }, {
         dataKey: 'specification',
         type: 'cat',
-        values: _.map(this.data, 'specification'),
+        // values: _.map(this.data, 'specification'),
       }];
     }
   },

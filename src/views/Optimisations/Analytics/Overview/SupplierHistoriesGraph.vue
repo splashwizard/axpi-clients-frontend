@@ -49,7 +49,7 @@ export default {
           'value': specData.order_count
         });
       });
-      return sourceData;
+      return sourceData.splice(0, 10);
     },
     scale() {
       return [{

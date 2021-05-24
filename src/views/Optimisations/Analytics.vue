@@ -63,7 +63,7 @@
                   <what-should-be-paying-for-each-specification-graph :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
-                  <expected-price-by-supplier-for-each-specification-graph></expected-price-by-supplier-for-each-specification-graph>
+                  <expected-price-by-supplier-for-each-specification-graph :optimisation-id="optimisation.id"></expected-price-by-supplier-for-each-specification-graph>
                 </a-col>
               </a-row>
             </a-tab-pane>

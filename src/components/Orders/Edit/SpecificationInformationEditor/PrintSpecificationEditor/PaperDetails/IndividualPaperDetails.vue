@@ -374,19 +374,19 @@ const PAPER_FINISH_OPTIONS = [
     group: 'Coated Paper',
     options: [
       {
-        value: 'gloss',
+        value: 'Gloss',
         label: 'Gloss'
       },
       {
-        value: 'satin',
+        value: 'Satin',
         label: 'Satin'
       },
       {
-        value: 'matt',
-        label: 'Matt'
+        value: 'Matte',
+        label: 'Matte'
       },
       {
-        value: 'silk',
+        value: 'Silk',
         label: 'Silk'
       }
     ]
@@ -395,15 +395,15 @@ const PAPER_FINISH_OPTIONS = [
     group: 'Uncoated Paper',
     options: [
       {
-        value: 'wove',
+        value: 'Wove',
         label: 'Wove'
       },
       {
-        value: 'laid',
+        value: 'Laid',
         label: 'Laid'
       },
       {
-        value: 'linen',
+        value: 'Linen',
         label: 'Linen'
       }
     ]
@@ -825,8 +825,8 @@ const COATING_TYPE_OPTIONS = [
 
 const COATING_FINISH_OPTIONS = [
   {
-    value: 'matt',
-    label: 'Matt'
+    value: 'matte',
+    label: 'Matte'
   },
   {
     value: 'gloss',

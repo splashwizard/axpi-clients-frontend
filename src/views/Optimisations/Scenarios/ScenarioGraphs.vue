@@ -1,6 +1,6 @@
 <template>
   <div class="scenario-graphs">
-    <a-row :gutter="5">
+    <a-row :gutter="20">
       <a-col :span="12">
         <scenario-metric-heatmap :scenarios="scenarios"></scenario-metric-heatmap>
       </a-col>

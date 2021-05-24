@@ -3,12 +3,11 @@
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
-    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale">
+    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <v-tooltip :showTitle="false" />
       <v-axis dataKey="total_co2e" />
-      <v-legend dataKey="Specification"
-                :slidable="false"
-                :show="true" />
+<!--      <v-legend dataKey="specification"-->
+<!--                :show="false" />-->
       <v-point
           position="total_co2e*water"
           :color="pointColor"
@@ -27,10 +26,22 @@ import axios from "axios";
 
 const scale = [{
   dataKey: 'total_co2e',
-  alias: 'CO2e'
+  alias: 'CO2e',
+  formatter: (val) => {
+    if (val === 0) {
+      return 0;
+    }
+    return val + ' kg'
+  }
 }, {
   dataKey: 'water',
-  alias: 'Water'
+  alias: 'Water',
+  formatter: (val) => {
+    if (val === 0) {
+      return 0;
+    }
+    return val + ' kg'
+  }
 }, {
   dataKey: 'supplier',
   alias: 'Supplier'

@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
-    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale">
+    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <v-tooltip :shared="true"></v-tooltip>
       <v-interval
           position="supplier*value"
@@ -45,7 +45,7 @@ export default {
       let sourceData = [];
       _.each(this.data, specData => {
         sourceData.push({
-          'supplier': specData.supplier.name,
+          'supplier': specData.supplier.name.substring(0, 5) + '...',
           'value': specData.order_count
         });
       });
@@ -55,7 +55,7 @@ export default {
       return [{
         dataKey: 'supplier',
         type: 'cat',
-        values: _.map(this.data, 'supplier.name'),
+        // values: _.map(this.data, 'supplier.name'),
       }, {
         dataKey: 'value'
       }];

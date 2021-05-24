@@ -1,6 +1,6 @@
 <template>
   <div class="graph-container" :key="updateKey">
-    <v-chart :forceFit="true" :height="height" :data="graphData" :scale="scale">
+    <v-chart :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <!--      <v-legend/>-->
       <v-tooltip/>
       <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
@@ -54,7 +54,8 @@ const axis2Opts = {
 const seriesOpts = {
   quickType: 'polygon',
   color: ['value', '#BAE7FF-#1890FF-#0050B3'],
-  position: 'metric*scenario',
+  // position: 'metric*scenario',
+  position: 'scenario*metric',
   // label: ['value', {
   //   offset: -2,
   //   textStyle: {

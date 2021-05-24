@@ -1,6 +1,7 @@
 <template>
   <div class="optimisations">
-    <loading-screen :is-loading="isLoading||isLoadingSpecifications||isLoadingSuppliers"></loading-screen>
+    <loading-screen
+        :is-loading="isLoading||isLoadingSpecifications||isLoadingSuppliers||isLoadingScenario"></loading-screen>
 
     <a-layout>
       <left-sidebar :optimisation="optimisation"></left-sidebar>
@@ -10,13 +11,13 @@
           <div class="actions" style="padding-top: 15px;">
             <a-button icon="share-alt">Share</a-button>
             <review-export-button-and-modal></review-export-button-and-modal>
-<!--            <a-button icon="export" type="primary">Export</a-button>-->
+            <!--            <a-button icon="export" type="primary">Export</a-button>-->
           </div>
         </div>
 
-        <div v-if="optimisation">
+        <div v-if="optimisation && scenario">
 
-          <review-table></review-table>
+          <review-table :table-data="tableData"></review-table>
 
         </div>
       </a-layout>
@@ -37,14 +38,16 @@ export default {
   name: "Show",
   created() {
     this.loadOptimisation(this.$route.params.id);
-    this.loadSpecifications(this.$route.params.id);
+    // this.loadSpecifications(this.$route.params.id);
     this.loadSuppliers();
+    this.loadScenario(this.$route.params.id, this.$route.params.scenarioId);
   },
   watch: {
     $route() {
       this.loadOptimisation(this.$route.params.id);
-      this.loadSpecifications(this.$route.params.id);
+      // this.loadSpecifications(this.$route.params.id);
       this.loadSuppliers();
+      this.loadScenario(this.$route.params.id, this.$route.params.scenarioId);
     }
   },
   data() {
@@ -69,7 +72,10 @@ export default {
       specifications: [],
 
       isLoadingSuppliers: false,
-      suppliers: []
+      suppliers: [],
+
+      isLoadingScenario: false,
+      scenario: null
     }
   },
   components: {LeftSidebar, ReviewTable, ReviewExportButtonAndModal},
@@ -77,7 +83,50 @@ export default {
     ...mapGetters('optimisationEditor', {
       isLoading: 'isLoading',
       optimisation: 'optimisation'
-    })
+    }),
+
+    mappings() {
+      if (this.scenario) {
+        return _.map(this.scenario.optimisation_scenario_specification_supplier_mappings, mapping => {
+          return {
+            spec_name: mapping.optimisation_specification.product_name,
+            spec_quantity: mapping.optimisation_specification.quantity,
+            supplier_name: mapping.supplier.name,
+            ...mapping
+          }
+        });
+      }
+      return [];
+    },
+
+    mappingsGroupedBySpec() {
+      return _.groupBy(this.mappings, 'spec_name');
+    },
+
+    tableData() {
+      let data = [];
+
+      _.each(this.mappingsGroupedBySpec, (specMappings, specName) => {
+        let expectedPrices = _.map(specMappings, mapping => {
+          return mapping.expected_price / 100;
+        });
+        let co2es = _.map(specMappings, 'co2e');
+
+        let specDetails = {
+          name: specName,
+          quantity: _.first(specMappings).spec_quantity,
+          min_expected_price: _.min(expectedPrices),
+          max_expected_price: _.max(expectedPrices),
+          min_co2e: _.min(co2es),
+          max_co2e: _.max(co2es),
+          number_of_suppliers: specMappings.length,
+          mappings: specMappings
+        };
+        data.push(specDetails);
+      });
+
+      return data;
+    }
   },
   methods: {
     navigateTo(route) {
@@ -158,6 +207,20 @@ export default {
         console.log(e);
         this.$message.error('Error loading suppliers');
         vm.isLoadingSuppliers = false;
+      });
+    },
+
+    loadScenario(optimisationId, scenarioId) {
+      let vm = this;
+      vm.isLoadingScenario = false;
+      vm.scenario = null;
+      axios.get(window.API_BASE + '/optimisations/' + optimisationId + '/scenarios/' + scenarioId).then(r => {
+        vm.scenario = r.data;
+        vm.isLoadingScenario = false;
+      }).catch(e => {
+        console.log(e);
+        this.$message.error('Error loading scenario');
+        vm.isLoadingScenario = false;
       });
     },
 

@@ -8,6 +8,13 @@
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions">
+
+            <a-popover v-model="filtersVisible" title="Filters" trigger="click">
+              <a slot="content" @click="filtersVisible=false">Close</a>
+              <a-button type="secondary" class="button-header" size="large" shape="circle"
+                        icon="filter"></a-button>
+            </a-popover>
+
             <a-tooltip placement="bottom">
               <template slot="title">
                 <span>Share</span>
@@ -32,59 +39,79 @@
                         @click="() => toggleSidebar('insights')"
                         icon="bulb"></a-button>
             </a-tooltip>
+
           </div>
         </div>
 
-        <div v-if="optimisation">
+        <div v-if="optimisation" class="graph-wrapper">
 
           <!-- Tabs -->
           <a-tabs v-model="analyticsTab">
-            <a-tab-pane key="overview" tab="Overview">
+            <a-tab-pane :force-render="true" key="overview" tab="Overview">
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <what-should-be-paying-for-each-specification-graph :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
+                  <b>What should I be paying for each specification?</b>
+                  <what-should-be-paying-for-each-specification-graph
+                      :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
+                  <b>How many orders have I placed with each supplier?</b>
                   <supplier-histories-graph :optimisation-id="optimisation.id"></supplier-histories-graph>
                 </a-col>
               </a-row>
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <which-suppliers-are-most-environmentally-friendly :optimisation-id="optimisation.id"></which-suppliers-are-most-environmentally-friendly>
+                  <b>Which suppliers are most environmentally friendly and best value?</b>
+                  <which-suppliers-are-most-environmentally-friendly
+                      :optimisation-id="optimisation.id"></which-suppliers-are-most-environmentally-friendly>
                 </a-col>
                 <a-col :span="12">
+                  <b>What accreditations do my suppliers have?</b>
                   <what-accreditations-do-my-suppliers-have-graph></what-accreditations-do-my-suppliers-have-graph>
                 </a-col>
               </a-row>
             </a-tab-pane>
-            <a-tab-pane key="pricing" tab="Pricing">
+            <a-tab-pane :force-render="true" key="pricing" tab="Pricing">
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <what-should-be-paying-for-each-specification-graph :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
+                  <b>What should I be paying for each specification?</b>
+                  <what-should-be-paying-for-each-specification-graph
+                      :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
-                  <expected-price-by-supplier-for-each-specification-graph :optimisation-id="optimisation.id"></expected-price-by-supplier-for-each-specification-graph>
+                  <b>What is the expected price by supplier for each specification?</b>
+                  <expected-price-by-supplier-for-each-specification-graph
+                      :optimisation-id="optimisation.id"></expected-price-by-supplier-for-each-specification-graph>
                 </a-col>
               </a-row>
             </a-tab-pane>
-            <a-tab-pane key="environment" tab="Environment">
+            <a-tab-pane :force-render="true" key="environment" tab="Environment">
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <what-environmental-information-complete-for-each-specification-graph :optimisation-id="optimisation.id"></what-environmental-information-complete-for-each-specification-graph>
+                  <b>What environmental information is complete for each specification?</b>
+                  <what-environmental-information-complete-for-each-specification-graph
+                      :optimisation-id="optimisation.id"></what-environmental-information-complete-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
-                  <which-suppliers-are-most-environmentally-friendly :optimisation-id="optimisation.id"></which-suppliers-are-most-environmentally-friendly>
+                  <b>Which suppliers are most environmentally friendly and best value?</b>
+                  <which-suppliers-are-most-environmentally-friendly
+                      :optimisation-id="optimisation.id"></which-suppliers-are-most-environmentally-friendly>
                 </a-col>
               </a-row>
               <a-row :gutter="20">
                 <a-col :span="12">
-                  <what-is-ghg-pollution-for-each-specification :optimisation-id="optimisation.id"></what-is-ghg-pollution-for-each-specification>
+                  <b>What is the GHG pollution for each specification?</b>
+                  <what-is-ghg-pollution-for-each-specification
+                      :optimisation-id="optimisation.id"></what-is-ghg-pollution-for-each-specification>
                 </a-col>
                 <a-col :span="12">
+                  <b>What accreditations do my suppliers have?</b>
                   <what-accreditations-do-my-suppliers-have-graph></what-accreditations-do-my-suppliers-have-graph>
                 </a-col>
               </a-row>
             </a-tab-pane>
+            <a-tab-pane key="demand" tab="Demand"></a-tab-pane>
+            <a-tab-pane key="specifications" tab="Specifications"></a-tab-pane>
           </a-tabs>
           <!-- / Tabs -->
 
@@ -335,7 +362,8 @@ import WhichSuppliersAreMostEnvironmentallyFriendly
 import WhatIsGhgPollutionForEachSpecification from "./Analytics/Environment/WhatIsGhgPollutionForEachSpecification";
 import WhatAccreditationsDoMySuppliersHaveGraph
   from "./Analytics/Environment/WhatAccreditationsDoMySuppliersHaveGraph";
-import WhatShouldBePayingForEachSpecificationGraph from "./Analytics/Pricing/WhatShouldBePayingForEachSpecificationGraph";
+import WhatShouldBePayingForEachSpecificationGraph
+  from "./Analytics/Pricing/WhatShouldBePayingForEachSpecificationGraph";
 import SupplierHistoriesGraph from "./Analytics/Overview/SupplierHistoriesGraph";
 
 const _ = require('lodash');
@@ -378,7 +406,9 @@ export default {
       specifications: [],
 
       isLoadingSuppliers: false,
-      suppliers: []
+      suppliers: [],
+
+      filtersVisible: false
     }
   },
   components: {
@@ -695,7 +725,13 @@ export default {
     border-radius: 5px;
     margin-bottom: 15px;
     overflow: hidden;
-
   }
+}
+
+.graph-wrapper b {
+  text-transform: uppercase;
+  font-size: 13px;
+  padding-bottom: 7px;
+  display: block;
 }
 </style>

@@ -2,10 +2,10 @@
   <div class="graph-container" :key="updateKey">
     <swooshy-selector v-model="metric" :options="metricOptions"></swooshy-selector>
 
-    <v-chart :forceFit="true" :height="height" :data="graphData" :scale="scale">
+    <v-chart :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <v-tooltip :showTitle="false" data-key="item*percent"/>
       <v-axis/>
-      <!--      <v-legend data-key="item"/>-->
+            <v-legend data-key="item"/>
       <v-pie position="percent" color="item" :vStyle="pieStyle" :label="labelConfig"/>
       <v-coord type="theta" :radius="0.75" :innerRadius="0.6"/>
     </v-chart>
@@ -61,12 +61,12 @@ export default {
         lineWidth: 1
       },
       labelConfig: [
-        "percent",
-        {
-          formatter: (val, item) => {
-            return item.point.item + ": " + val;
-          }
-        }
+        // "percent",
+        // {
+        //   formatter: (val, item) => {
+        //     return item.point.item + ": " + val;
+        //   }
+        // }
       ]
     };
   },

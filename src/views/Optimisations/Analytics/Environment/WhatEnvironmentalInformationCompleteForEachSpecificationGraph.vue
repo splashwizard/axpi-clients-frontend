@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
-    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale">
+    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <!--      <v-legend/>-->
       <v-tooltip/>
       <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
@@ -94,7 +94,7 @@ export default {
       let sourceData = [];
       _.each(this.data, envData => {
         sourceData.push({
-          specification: envData.specification,
+          specification: envData.specification.substring(0, 8) + '...',
           supplier: envData.supplier,
           value: Math.round((envData.completeness.completed / envData.completeness.total) * 100)
         });

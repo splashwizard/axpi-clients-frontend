@@ -1,7 +1,7 @@
 <template>
   <a-table :columns="columns" :data-source="data" class="axpi-table scenarios-table">
     <div slot="expectedCost" slot-scope="cost">
-      {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
+      {{ formatCost({cost: cost/100, cost_currency: 'USD'}) }}
     </div>
     <div slot="expectedCo2e" slot-scope="emission">
       {{ emission }} kg
@@ -16,8 +16,8 @@
         </div>
       </div>
     </div>
-    <div slot="actions" class="table-actions">
-      <a-button style="margin-right: 5px;" @click.prevent="reviewScenario">Review</a-button>
+    <div slot="actions" class="table-actions" slot-scope="actions, record">
+      <a-button style="margin-right: 5px;" @click.prevent="reviewScenario(record.id)">Review</a-button>
       <a-dropdown :trigger="['click']">
         <a-button icon="ellipsis" type="link" @click.prevent="e => e.preventDefault()"></a-button>
         <a-menu slot="overlay">
@@ -81,28 +81,28 @@ export default {
     }
   },
   methods: {
-    reviewScenario() {
-      this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios/1/review');
+    reviewScenario(scenarioId) {
+      this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios/' + scenarioId + '/review');
     }
   },
   computed: {
     data() {
       const data = [
           ...this.scenarios,
-        {
-          key: 1,
-          name: 'Best Price',
-          expected_cost: '5219',
-          co2e: 1503,
-          itemsAllocated: '3/3'
-        },
-        {
-          key: 2,
-          name: 'Environmentally Friendly',
-          expected_cost: '6377',
-          co2e: 1377,
-          itemsAllocated: '3/3'
-        }
+        // {
+        //   key: 1,
+        //   name: 'Best Price',
+        //   expected_cost: '5219',
+        //   co2e: 1503,
+        //   itemsAllocated: '3/3'
+        // },
+        // {
+        //   key: 2,
+        //   name: 'Environmentally Friendly',
+        //   expected_cost: '6377',
+        //   co2e: 1377,
+        //   itemsAllocated: '3/3'
+        // }
       ];
 
       if (this.$route.query.saved) {

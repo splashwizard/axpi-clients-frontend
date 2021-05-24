@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
-    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale">
+    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <v-tooltip/>
       <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
       <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
@@ -59,8 +59,10 @@ const seriesOpts = {
   style: {
     lineWidth: 1,
     stroke: '#fff',
-  },
+  }
 }
+
+const _ = require('lodash');
 
 export default {
   name: "ExpectedPriceBySupplierForEachSpecificationGraph",
@@ -89,7 +91,13 @@ export default {
       //   });
       // });
       // return sourceData;
-      return this.data;
+      return _.map(this.data, specData => {
+        return {
+          ...specData,
+          'specification': specData.specification.substring(0, 11) + '...',
+          'supplier': specData.supplier.substring(0, 7) + '...'
+        }
+      });
     },
     scale() {
       return [{

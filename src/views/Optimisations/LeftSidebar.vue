@@ -6,10 +6,10 @@
       <div class="sidebar-menu">
         <a :href="scenarioHref" :class="{'selected': isScenarios}">Scenarios</a>
         <a :href="analyticsHref" :class="{'selected': isAnalytics}">Analytics</a>
-        <a :href="reviewHref" :class="{'selected': isReview}">Review</a>
+<!--        <a :href="reviewHref" :class="{'selected': isReview}">Review</a>-->
       </div>
       <div class="sidebar-footer">
-        <a-button block type="primary">Save and exit</a-button>
+        <a-button block type="primary" @click="saveAndExit">Save and exit</a-button>
       </div>
     </div>
   </a-layout-sider>
@@ -19,6 +19,11 @@
 export default {
   name: "LeftSidebar",
   props: ['optimisation'],
+  methods: {
+    saveAndExit() {
+      this.$router.push('/optimisations');
+    }
+  },
   computed: {
     isScenarios() {
       return this.$route.name === 'Optimisation Scenarios';

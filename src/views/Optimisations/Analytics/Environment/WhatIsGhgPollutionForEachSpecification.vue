@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
-    <v-chart v-else :forceFit="true" :height="height" :data="graphData">
+    <v-chart v-else :forceFit="true" :height="height" :data="graphData" renderer="svg" :scale="scale">
       <v-tooltip/>
       <v-axis/>
       <v-legend/>
@@ -17,6 +17,18 @@ import axios from "axios";
 
 const _ = require('lodash');
 
+const scale = [
+  {
+    dataKey: 'co2e',
+    formatter: (val) => {
+      if (val === 0) {
+        return 0;
+      }
+      return val + ' kg'
+    }
+  }
+];
+
 export default {
   name: "WhatIsGhgPollutionForEachSpecification",
   props: ['optimisationId'],
@@ -24,7 +36,8 @@ export default {
     return {
       isLoading: false,
       data: null,
-      height: 500
+      height: 500,
+      scale
     }
   },
   computed: {
@@ -33,28 +46,28 @@ export default {
       _.each(this.data, envData => {
         if (envData.emissions.factory_co2e) {
           sourceData.push({
-            specification: envData.specification,
+            specification: envData.specification.substring(0, 7) + '...',
             name: 'Factory',
             co2e: envData.emissions.factory_co2e
           });
         }
         if (envData.emissions.fuel_use_co2e) {
           sourceData.push({
-            specification: envData.specification,
+            specification: envData.specification.substring(0, 7) + '...',
             name: 'Fuel Use',
             co2e: envData.emissions.fuel_use_co2e
           });
         }
         if (envData.emissions.chemicals_used_co2e) {
           sourceData.push({
-            specification: envData.specification,
+            specification: envData.specification.substring(0, 7) + '...',
             name: 'Chemicals Used',
             co2e: envData.emissions.chemicals_used_co2e
           });
         }
         if (envData.emissions.vehicle_use_co2e) {
           sourceData.push({
-            specification: envData.specification,
+            specification: envData.specification.substring(0, 7) + '...',
             name: 'Vehicle Use',
             co2e: envData.emissions.vehicle_use_co2e
           });

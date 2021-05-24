@@ -3,7 +3,7 @@
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
-    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale">
+    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <!--      <v-legend/>-->
       <v-tooltip/>
       <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
@@ -99,7 +99,7 @@ export default {
           let doesSupplierHaveAccreditation = idsOfAccreditationsSupplierHas.includes(accreditation.id);
           sourceData.push({
             accreditation: accreditation.name,
-            supplier: supplier.name,
+            supplier: supplier.name.substring(0, 6) + '...',
             value: doesSupplierHaveAccreditation ? 1 : 0
           });
         });

@@ -3,14 +3,14 @@
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
-    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale">
-      <v-tooltip :shared="true"></v-tooltip>
+    <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
+      <v-tooltip :shared="true" :show-title="false"></v-tooltip>
       <v-interval
           position="specification*trueprice"
           opacity="1"
       >
       </v-interval>
-      <v-axis
+      <v-axis :auto-rotate="true"
           dataKey="specification"
       >
       </v-axis>
@@ -25,10 +25,12 @@
 <script>
 import axios from "axios";
 const _ = require('lodash');
+import Orders from "../../../../mixins/Orders";
 
 export default {
   name: "WhatShouldBePayingForSpecificationGraph",
   props: ['optimisationId'],
+  mixins: [Orders],
   data() {
     return {
       isLoading: true,
@@ -45,7 +47,9 @@ export default {
      let sourceData = [];
      _.each(this.data, specData => {
        sourceData.push({
-         'specification': specData.optimisation_specification.product_name,
+         'specification_full': specData.optimisation_specification.product_name,
+         'specification': specData.optimisation_specification.product_name.substring(0, 15) + '...',
+         // 'specification': specData.optimisation_specification.product_name,
          'trueprice': specData.trueprice
        });
      });
@@ -57,7 +61,10 @@ export default {
         type: 'cat',
         // values: _.map(this.data, 'optimisation_specification.product_name'),
       }, {
-        dataKey: 'trueprice'
+        dataKey: 'trueprice',
+        formatter: (val) => {
+          return this.formatCost({cost: val, cost_currency: 'USD'})
+        }
       }];
     }
   },

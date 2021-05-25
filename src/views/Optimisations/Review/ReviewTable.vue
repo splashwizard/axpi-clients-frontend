@@ -9,6 +9,9 @@
         })
       }}</span>
     </div>
+    <div slot="quantity" slot-scope="quantity">
+      {{ formatQuantity(quantity) }}
+    </div>
     <div slot="co2e" slot-scope="co2e, row">
       {{ row.min_co2e }} kg
     </div>
@@ -41,12 +44,13 @@ const columns = [
     dataIndex: 'name',
     title: 'Spec Name',
     key: 'specName',
-    width: 350,
+    width: 300,
   },
   {
     dataIndex: 'quantity',
     title: 'Quantity',
     key: 'quantity',
+    scopedSlots: {customRender: 'quantity'}
   },
   {
     dataIndex: 'expectedPrice',
@@ -65,10 +69,15 @@ const columns = [
   //   title: 'Delivery Date',
   //   key: 'deliveryDate',
   // },
+  // {
+  //   dataIndex: 'number_of_suppliers',
+  //   title: 'Suppliers',
+  //   key: 'number_of_suppliers',
+  // },
   {
-    dataIndex: 'number_of_suppliers',
+    dataIndex: 'supplier',
     title: 'Suppliers',
-    key: 'number_of_suppliers',
+    key: 'supplier',
   },
   {
     dataIndex: 'actions',

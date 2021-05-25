@@ -120,6 +120,9 @@
         <div slot="subtype" slot-scope="subtype">
           {{ formatSubtype(subtype) }}
         </div>
+        <div slot="quantity" slot-scope="quantity">
+          {{ formatQuantity(quantity) }}
+        </div>
         <div slot="date" slot-scope="date">
           {{ displayTimeAgo(date) }}
         </div>

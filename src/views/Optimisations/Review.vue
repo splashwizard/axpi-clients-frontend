@@ -120,6 +120,7 @@ export default {
           min_co2e: _.min(co2es),
           max_co2e: _.max(co2es),
           number_of_suppliers: specMappings.length,
+          supplier: _.first(specMappings).supplier.name,
           mappings: specMappings
         };
         data.push(specDetails);

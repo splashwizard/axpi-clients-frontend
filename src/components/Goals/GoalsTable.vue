@@ -1,5 +1,5 @@
 <template>
-    <a-table
+    <a-table class="axpi-table"
             :columns="columns"
             :row-key="record => record.id"
             :data-source="data"

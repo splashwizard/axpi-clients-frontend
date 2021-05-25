@@ -77,6 +77,13 @@ export default {
                 }).format(order.cost / 100);
             }
             return order.cost;
+        },
+
+        formatQuantity(quantity) {
+            if (quantity) {
+               return new Intl.NumberFormat('en-US', {}).format(quantity);
+            }
+            return quantity;
         }
     }
 }

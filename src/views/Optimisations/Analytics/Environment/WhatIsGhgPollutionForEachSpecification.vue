@@ -90,7 +90,7 @@ export default {
           }
         }
       });
-      return sourceData;
+      return _.sortBy(sourceData, 'co2e');
     }
   },
   created() {

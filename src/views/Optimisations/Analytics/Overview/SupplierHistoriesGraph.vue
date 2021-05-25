@@ -49,7 +49,8 @@ export default {
           'value': specData.order_count
         });
       });
-      return sourceData.splice(0, 10);
+      sourceData = _.uniqBy(sourceData, 'supplier');
+      return _.sortBy(sourceData, 'value');
     },
     scale() {
       return [{

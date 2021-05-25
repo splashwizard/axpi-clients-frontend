@@ -53,7 +53,8 @@ export default {
          'trueprice': specData.trueprice
        });
      });
-     return sourceData;
+     // return sourceData;
+     return _.sortBy(sourceData, 'trueprice');
    },
     scale() {
       return [{

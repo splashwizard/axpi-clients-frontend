@@ -2,7 +2,7 @@
   <div class="graph-container" :key="updateKey">
     <v-chart :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <!--      <v-legend/>-->
-      <v-tooltip/>
+      <v-tooltip />
       <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
       <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
       <v-polygon :position="seriesOpts.position" :color="seriesOpts.color" :label="seriesOpts.label"
@@ -34,7 +34,7 @@ const axis1Opts = {
       lineDash: null,
       stroke: '#f0f0f0',
     },
-  },
+  }
 };
 
 const axis2Opts = {
@@ -129,12 +129,17 @@ export default {
       // ];
 
       let sourceData = [];
+
+      let maxCost = _.max(_.map(this.scenarios, 'expected_cost'));
+      let maxCo2e =  _.max(_.map(this.scenarios, 'co2e'));
+
       _.each(this.scenarios, scenario => {
         if (this.selectedMetricIds.includes('cost')) {
           sourceData.push({
             scenario: scenario.name,
             metric: 'cost',
-            value: scenario.expected_cost
+            value: scenario.expected_cost / maxCost,
+            unnormalized: scenario.expected_cost
           });
         }
 
@@ -142,7 +147,8 @@ export default {
           sourceData.push({
             scenario: scenario.name,
             metric: 'co2e',
-            value: scenario.co2e
+            value: scenario.co2e / maxCo2e,
+            unnormalized: scenario.co2e
           });
         }
       });
@@ -155,7 +161,8 @@ export default {
         return {
           scenario: scenarioIndex,
           metric: metricIndex,
-          value: data.value
+          value: data.value,
+          unnormalized: data.unnormalized
         };
       });
 

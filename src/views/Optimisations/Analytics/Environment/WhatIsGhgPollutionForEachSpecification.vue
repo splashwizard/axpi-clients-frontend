@@ -3,7 +3,16 @@
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
-    <v-chart v-else :forceFit="true" :height="height" :data="graphData" renderer="svg" :scale="scale">
+    <div v-if="!isLoading">
+      <div class="supplier-selector">
+        <a-select v-model="selectedSupplierName" style="width: 100%;">
+          <a-select-option v-for="(name, i) in suppliers" :key="i" :value="name">
+            {{ name }}
+          </a-select-option>
+        </a-select>
+      </div>
+    </div>
+    <v-chart v-if="!isLoading" :forceFit="true" :height="height" :data="graphData" renderer="svg" :scale="scale">
       <v-tooltip/>
       <v-axis/>
       <v-legend/>
@@ -36,41 +45,49 @@ export default {
     return {
       isLoading: false,
       data: null,
-      height: 500,
-      scale
+      height: 428,
+      scale,
+
+      selectedSupplierName: _.first(this.suppliers)
     }
   },
   computed: {
+    suppliers() {
+      return _.uniq(_.map(this.data, 'supplier'));
+    },
+
     graphData() {
       let sourceData = [];
       _.each(this.data, envData => {
-        if (envData.emissions.factory_co2e) {
-          sourceData.push({
-            specification: envData.specification.substring(0, 7) + '...',
-            name: 'Factory',
-            co2e: envData.emissions.factory_co2e
-          });
-        }
-        if (envData.emissions.fuel_use_co2e) {
-          sourceData.push({
-            specification: envData.specification.substring(0, 7) + '...',
-            name: 'Fuel Use',
-            co2e: envData.emissions.fuel_use_co2e
-          });
-        }
-        if (envData.emissions.chemicals_used_co2e) {
-          sourceData.push({
-            specification: envData.specification.substring(0, 7) + '...',
-            name: 'Chemicals Used',
-            co2e: envData.emissions.chemicals_used_co2e
-          });
-        }
-        if (envData.emissions.vehicle_use_co2e) {
-          sourceData.push({
-            specification: envData.specification.substring(0, 7) + '...',
-            name: 'Vehicle Use',
-            co2e: envData.emissions.vehicle_use_co2e
-          });
+        if (envData.supplier === this.selectedSupplierName) {
+          if (envData.emissions.factory_co2e) {
+            sourceData.push({
+              specification: envData.specification.substring(0, 7) + '...',
+              name: 'Factory',
+              co2e: envData.emissions.factory_co2e
+            });
+          }
+          if (envData.emissions.fuel_use_co2e) {
+            sourceData.push({
+              specification: envData.specification.substring(0, 7) + '...',
+              name: 'Fuel Use',
+              co2e: envData.emissions.fuel_use_co2e
+            });
+          }
+          if (envData.emissions.chemicals_used_co2e) {
+            sourceData.push({
+              specification: envData.specification.substring(0, 7) + '...',
+              name: 'Chemicals Used',
+              co2e: envData.emissions.chemicals_used_co2e
+            });
+          }
+          if (envData.emissions.vehicle_use_co2e) {
+            sourceData.push({
+              specification: envData.specification.substring(0, 7) + '...',
+              name: 'Vehicle Use',
+              co2e: envData.emissions.vehicle_use_co2e
+            });
+          }
         }
       });
       return sourceData;
@@ -85,6 +102,7 @@ export default {
       vm.isLoading = true;
       axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/environmental-analytics').then(r => {
         vm.data = r.data;
+        vm.selectedSupplierName = _.first(this.suppliers);
         console.log(r);
         vm.isLoading = false;
       }).catch(e => {
@@ -98,5 +116,7 @@ export default {
 </script>
 
 <style scoped>
-
+.supplier-selector {
+  padding: 20px;
+}
 </style>

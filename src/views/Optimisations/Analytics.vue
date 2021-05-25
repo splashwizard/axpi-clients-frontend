@@ -91,6 +91,7 @@
                       :optimisation-id="optimisation.id"></expected-price-by-supplier-for-each-specification-graph>
                 </a-col>
               </a-row>
+              <pricing-table :optimisation-id="optimisation.id"></pricing-table>
             </a-tab-pane>
             <a-tab-pane :force-render="true" key="environment" tab="Environment">
               <a-row :gutter="20">
@@ -372,6 +373,7 @@ import WhatAccreditationsDoMySuppliersHaveGraph
 import WhatShouldBePayingForEachSpecificationGraph
   from "./Analytics/Pricing/WhatShouldBePayingForEachSpecificationGraph";
 import SupplierHistoriesGraph from "./Analytics/Overview/SupplierHistoriesGraph";
+import PricingTable from "./Analytics/Pricing/PricingTable";
 
 const _ = require('lodash');
 
@@ -419,6 +421,7 @@ export default {
     }
   },
   components: {
+    PricingTable,
     WhatAccreditationsDoMySuppliersHaveGraph,
     WhatIsGhgPollutionForEachSpecification,
     WhichSuppliersAreMostEnvironmentallyFriendly,

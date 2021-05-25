@@ -46,7 +46,7 @@ const axis2Opts = {
 
 const seriesOpts = {
   quickType: 'polygon',
-  color: ['expected_price', '#BAE7FF-#1890FF-#0050B3'],
+  color: ['value', '#BAE7FF-#1890FF-#0050B3'],
   position: 'specification*supplier',
   // label: ['expected_price', {
   //   offset: -2,
@@ -91,11 +91,15 @@ export default {
       //   });
       // });
       // return sourceData;
+      let vm = this;
       return _.map(this.data, specData => {
+        let value = vm.normaliseExpectedPrice(specData);
+
         return {
           ...specData,
           'specification': specData.specification.substring(0, 11) + '...',
-          'supplier': specData.supplier.substring(0, 7) + '...'
+          'supplier': specData.supplier.substring(0, 7) + '...',
+          value: value
         }
       });
     },
@@ -126,6 +130,15 @@ export default {
         vm.isLoading = false;
         vm.$message.error('Error loading supplier spec expected prices');
       });
+    },
+
+    normaliseExpectedPrice(specData) {
+      let dataForSpecification = _.filter(this.data, {
+        specification: specData.specification
+      })
+      let prices = _.map(dataForSpecification, 'expected_price');
+      let max = _.max(prices);
+      return specData.expected_price / max;
     }
   }
 }

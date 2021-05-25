@@ -41,6 +41,7 @@ const columns = [
     dataIndex: 'name',
     title: 'Spec Name',
     key: 'specName',
+    width: 350,
   },
   {
     dataIndex: 'quantity',
@@ -73,6 +74,7 @@ const columns = [
     dataIndex: 'actions',
     title: '',
     key: 'actions',
+    width: 300,
     scopedSlots: {customRender: 'actions'}
   }
 ];
@@ -142,10 +144,12 @@ export default {
 
       let finalRow = {
         key: _.last(data).key + 1,
-        specName: 'Total',
+        name: 'Total',
         quantity: '',
-        expectedPrice: _.sumBy(data, 'expectedPrice'),
-        co2e: _.sumBy(data, 'co2e'),
+        min_expected_price: _.sumBy(data, 'min_expected_price'),
+        max_expected_price: _.sumBy(data, 'max_expected_price'),
+        min_co2e: _.sumBy(data, 'min_co2e'),
+        max_co2e: _.sumBy(data, 'max_co2e'),
       };
 
       data.push(finalRow);
@@ -163,23 +167,23 @@ export default {
 }
 
 .review-table {
-  //tbody tr:last-child {
-  //  background: #f9f9f9;
-  //
-  //  .ant-table-row-expand-icon {
-  //    display: none;
-  //  }
-  //
-  //  td {
-  //    border-top: 2px solid #e8e8e8;
-  //    padding-top: 13px !important;
-  //    padding-bottom: 13px !important;
-  //    font-weight: bold;
-  //  }
-  //
-  //  .table-actions {
-  //    display: none;
-  //  }
-  //}
+  tbody tr:last-child {
+    background: #f9f9f9;
+
+    .ant-table-row-expand-icon {
+      display: none;
+    }
+
+    td {
+      border-top: 2px solid #e8e8e8;
+      padding-top: 13px !important;
+      padding-bottom: 13px !important;
+      font-weight: bold;
+    }
+
+    .table-actions {
+      display: none;
+    }
+  }
 }
 </style>

@@ -119,4 +119,10 @@ export default {
 .supplier-selector {
   padding: 20px;
 }
+
+.loading-screen {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 70px;
+}
 </style>

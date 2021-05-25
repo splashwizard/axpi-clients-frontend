@@ -2,7 +2,7 @@
   <div class="graph-container" :key="updateKey">
     <v-chart :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <!--      <v-legend/>-->
-      <v-tooltip />
+      <v-tooltip  />
       <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
       <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
       <v-polygon :position="seriesOpts.position" :color="seriesOpts.color" :label="seriesOpts.label"

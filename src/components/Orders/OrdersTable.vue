@@ -28,7 +28,7 @@
         {{ formatType(type) }}
       </div>
       <div slot="cost" slot-scope="cost, order">
-        {{ formatCost(order) }}
+        {{ formatCostInPence(order) }}
       </div>
       <div slot="order_date" slot-scope="order_date">
         {{ order_date ? formatDate(order_date) : null }}

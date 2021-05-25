@@ -12,10 +12,12 @@
       </v-interval>
       <v-axis :auto-rotate="true"
           dataKey="specification"
+              :title="{'text': 'Specification'}"
       >
       </v-axis>
       <v-axis
           dataKey="trueprice"
+          :title="{'text': 'Expected Price'}"
       >
       </v-axis>
     </v-chart>

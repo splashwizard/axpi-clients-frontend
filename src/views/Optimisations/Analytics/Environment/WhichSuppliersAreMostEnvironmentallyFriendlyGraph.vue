@@ -5,7 +5,12 @@
     </div>
     <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <v-tooltip :showTitle="false" :crosshairs="{type: 'cross'}" />
-      <v-axis dataKey="total_co2e" />
+      <v-axis dataKey="total_co2e"
+              :title="{'text': 'CO2e'}"
+      />
+      <v-axis dataKey="water"
+              :title="{'text': 'Water'}"
+      />
 <!--      <v-legend dataKey="specification"-->
 <!--                :show="false" />-->
       <v-point

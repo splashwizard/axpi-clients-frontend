@@ -12,10 +12,12 @@
       </v-interval>
       <v-axis
           dataKey="supplier"
+          :title="{'text': 'Supplier'}"
       >
       </v-axis>
       <v-axis
           dataKey="value"
+          :title="{'text': 'Number of Orders'}"
       >
       </v-axis>
     </v-chart>

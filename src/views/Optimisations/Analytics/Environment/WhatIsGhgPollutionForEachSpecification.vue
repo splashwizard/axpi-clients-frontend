@@ -14,7 +14,8 @@
     </div>
     <v-chart v-if="!isLoading" :forceFit="true" :height="height" :data="graphData" renderer="svg" :scale="scale">
       <v-tooltip/>
-      <v-axis/>
+      <v-axis dataKey="specification" :title="{'text': 'Specification'}" />
+      <v-axis dataKey="co2e" :title="{'text': 'CO2e'}" />
       <v-legend/>
       <v-stack-bar position="specification*co2e" color="name"/>
     </v-chart>

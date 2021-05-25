@@ -11,7 +11,7 @@ import axios from 'axios';
 Vue.config.productionTip = false;
 
 window.moment = require('moment');
-//
+
 // window.API_BASE = 'http://axpi-api.test/api/clients';
 // window.API_COMMON_BASE = 'http://axpi-api.test/api/common';
 // window.IMAGE_STORAGE_BASE = 'http://axpi-api.test/storage';

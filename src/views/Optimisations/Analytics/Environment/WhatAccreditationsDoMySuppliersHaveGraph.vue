@@ -6,8 +6,10 @@
     <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <!--      <v-legend/>-->
       <v-tooltip/>
-      <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
-      <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
+      <v-axis :title="{'text': 'Accreditation'}"
+          :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
+      <v-axis :title="{'text': 'Supplier'}"
+          :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
       <v-polygon :position="seriesOpts.position" :color="seriesOpts.color" :label="seriesOpts.label"
                  :vStyle="seriesOpts.style"/>
     </v-chart>

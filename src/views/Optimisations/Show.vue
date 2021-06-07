@@ -4,7 +4,10 @@
 
     <div class="page-header" v-if="optimisation">
       <h1 class="page-title">{{ optimisation.name }}</h1>
-      <a-button :disabled="hasNoSpecs" class="" type="primary" @click.prevent="runOptimisation">Optimise</a-button>
+      <a-button icon="arrow-left" @click="backToAllOptimisations">Back to all optimisations</a-button>
+      <div style="margin-left: 8px">
+        <a-button :disabled="hasNoSpecs" class="" type="primary" @click.prevent="runOptimisation">Optimise</a-button>
+      </div>
       <add-specification-to-optimisation-button-and-modal style="margin-left: 8px;"
                                                           :optimisation="optimisation"
                                                           @refresh-optimisation="refresh"
@@ -105,6 +108,10 @@ export default {
 
     setNumberOfSpecs(numberOfSpecs) {
       this.numberOfSpecs = numberOfSpecs;
+    },
+
+    backToAllOptimisations() {
+      this.$router.push('/optimisations');
     }
   }
 }

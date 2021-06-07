@@ -21,7 +21,8 @@ export default {
             permanent_pos_detail_id: orderFromServer.permanent_pos_detail_id,
             semi_permanent_pos_detail_id: orderFromServer.semi_permanent_pos_detail_id,
             print_detail_id: orderFromServer.print_detail_id,
-            status: orderFromServer.status
+            status: orderFromServer.status,
+            supplier: orderFromServer.supplier
         };
 
         if (orderFromServer.optimisation_id) {

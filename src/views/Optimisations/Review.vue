@@ -17,7 +17,7 @@
 
         <div v-if="optimisation && scenario">
 
-          <review-table :table-data="tableData"></review-table>
+          <review-table :optimisation="optimisation" :table-data="tableData"></review-table>
 
         </div>
       </a-layout>

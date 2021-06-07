@@ -242,11 +242,11 @@ export default {
     }),
 
     noPadding() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review'].includes(this.$route.name);
+      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details'].includes(this.$route.name);
     },
 
     menuCollapsed() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review'].includes(this.$route.name);
+      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details'].includes(this.$route.name);
     }
   }
 }

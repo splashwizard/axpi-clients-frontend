@@ -15,9 +15,9 @@
     <div slot="co2e" slot-scope="co2e, row">
       {{ row.min_co2e }} kg
     </div>
-    <div slot="actions" class="table-actions">
+    <div slot="actions" slot-scope="actions, row" class="table-actions">
       <a-button style="margin-right: 5px;">Analyse</a-button>
-      <a-button>Review Specification</a-button>
+      <a-button @click="reviewSpecification(row)">Review Specification</a-button>
     </div>
     <a-table slot="expandedRowRender"
              slot-scope="text, row"
@@ -110,11 +110,17 @@ const innerColumns = [
 
 export default {
   name: "ReviewTable",
-  props: ['tableData'],
+  props: ['tableData', 'optimisation'],
   data() {
     return {
       columns,
       innerColumns
+    }
+  },
+  methods: {
+    reviewSpecification(specification) {
+      console.log(specification);
+      this.$router.push('/optimisations/' + this.optimisation.id + '/specifications/' + specification.mappings[0].optimisation_specification_id);
     }
   },
   computed: {

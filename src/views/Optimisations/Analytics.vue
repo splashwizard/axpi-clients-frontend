@@ -4,7 +4,7 @@
 
     <a-layout>
       <left-sidebar :optimisation="optimisation"></left-sidebar>
-      <a-layout style="padding: 7px 30px">
+      <a-layout style="padding: 7px 30px" :key="updateKey">
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions">
@@ -389,6 +389,12 @@ export default {
       this.loadOptimisation(this.$route.params.id);
       this.loadSpecifications(this.$route.params.id);
       this.loadSuppliers();
+    },
+    sidebarCollapsed() {
+      let vm = this;
+      window.setTimeout(function() {
+        vm.incrementUpdateKey();
+      }, 500);
     }
   },
   data() {
@@ -417,7 +423,9 @@ export default {
       isLoadingSuppliers: false,
       suppliers: [],
 
-      filtersVisible: false
+      filtersVisible: false,
+
+      updateKey: 1
     }
   },
   components: {
@@ -529,6 +537,10 @@ export default {
       } else {
         this.sidebarCollapsed = !this.sidebarCollapsed;
       }
+    },
+
+    incrementUpdateKey() {
+      this.updateKey += 1;
     }
   }
 }

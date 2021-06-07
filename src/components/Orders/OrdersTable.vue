@@ -41,7 +41,7 @@
           <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="#" @click="handleRecordSelected(record)">Edit</a>
+              <a href="#" @click="editOrder(record)">Edit</a>
             </a-menu-item>
             <a-menu-item>
               <a href="#" class="text-danger" @click.prevent="deleteRecord(record)">Delete</a>
@@ -184,6 +184,11 @@ export default {
     },
 
     handleRecordSelected(order) {
+      // this.$emit('selected', order);
+      this.$router.push('/orders/' + order.id);
+    },
+
+    editOrder(order) {
       this.$emit('selected', order);
     },
 

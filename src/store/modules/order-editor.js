@@ -95,25 +95,25 @@ export const getters = {
 
 export const actions = {
     createOrder({commit, dispatch}) {
-       commit('START_LOADING');
+        commit('START_LOADING');
         commit('SET_ERRORS', []);
         axios.post(window.API_BASE + '/orders/').then(r => {
-           commit('STOP_LOADING');
+            commit('STOP_LOADING');
             commit('INCREMENT_RELOAD_ORDERS_KEY');
             // commit('SET_ORDER', orders.decodeOrder(r.data));
-           dispatch('loadOrder', r.data.id);
-       }).catch(e => {
-           commit('STOP_LOADING');
-           this._vm.$message.error('Error creating order');
+            dispatch('loadOrder', r.data.id);
+        }).catch(e => {
+            commit('STOP_LOADING');
+            this._vm.$message.error('Error creating order');
 
-           let errors;
-           if (typeof e.response.data === 'object') {
-               errors = _.flatten(_.toArray(e.response.data.errors));
-           } else {
-               errors = ['Something went wrong. Please try again.'];
-           }
-           commit('SET_ERRORS', errors);
-       });
+            let errors;
+            if (typeof e.response.data === 'object') {
+                errors = _.flatten(_.toArray(e.response.data.errors));
+            } else {
+                errors = ['Something went wrong. Please try again.'];
+            }
+            commit('SET_ERRORS', errors);
+        });
     },
 
     createSpecification({commit, dispatch}) {
@@ -145,7 +145,7 @@ export const actions = {
         axios.get(window.API_BASE + '/orders/' + id).then(r => {
             commit('STOP_LOADING');
             commit('SET_ORDER', orders.decodeOrder(r.data));
-           commit('SET_WIZARD_STAGE', 0);
+            commit('SET_WIZARD_STAGE', 0);
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');
@@ -214,10 +214,10 @@ export const actions = {
 
         let resource;
         if (getters.type === 'order') {
-           resource = window.API_BASE + '/orders/' + order.id;
+            resource = window.API_BASE + '/orders/' + order.id;
         } else if (getters.type === 'specification') {
             resource = window.API_BASE + '/specifications/' + order.id;
-        }  else if (getters.type === 'optimisation-specification') {
+        } else if (getters.type === 'optimisation-specification') {
             resource = window.API_BASE + '/optimisations/' + getters.order.optimisation_id + '/specifications/' + order.id;
         }
 
@@ -233,7 +233,7 @@ export const actions = {
                 this._vm.$message.success('Order saved successfully!');
             } else if (getters.type === 'specification') {
                 this._vm.$message.success('Specification saved successfully!');
-            }  else if (getters.type === 'optimisation-specification') {
+            } else if (getters.type === 'optimisation-specification') {
                 this._vm.$message.success('Specification saved successfully!');
             }
 

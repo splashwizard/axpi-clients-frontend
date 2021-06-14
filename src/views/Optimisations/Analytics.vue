@@ -62,7 +62,7 @@
                       :optimisation-id="optimisation.id"></what-should-be-paying-for-each-specification-graph>
                 </a-col>
                 <a-col :span="12">
-                  <b>How many orders have I placed with each supplier?</b>
+                  <b>Supplier histories</b>
                   <supplier-histories-graph :optimisation-id="optimisation.id"></supplier-histories-graph>
                 </a-col>
               </a-row>

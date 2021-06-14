@@ -17,7 +17,7 @@
       </v-axis>
       <v-axis
           dataKey="trueprice"
-          :title="{'text': 'Expected Price'}"
+          :title="{'text': 'Trueprice'}"
       >
       </v-axis>
     </v-chart>

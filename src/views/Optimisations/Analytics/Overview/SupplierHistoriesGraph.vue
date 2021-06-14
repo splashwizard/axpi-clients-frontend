@@ -1,5 +1,19 @@
 <template>
   <div class="graph-container">
+    <div class="toolbar">
+      <div class="toolbar-col">
+        <a-select v-model="metric">
+          <a-select-option :value="option.value"
+                           v-for="(option, i) in metricOptions" :key="i">
+            {{ option.label }}
+          </a-select-option>
+        </a-select>
+      </div>
+      <div class="toolbar-col">
+        <a-range-picker v-model="dateRange"/>
+      </div>
+    </div>
+
     <div v-if="isLoading" class="loading-screen">
       <a-spin/>
     </div>
@@ -17,7 +31,7 @@
       </v-axis>
       <v-axis
           dataKey="value"
-          :title="{'text': 'Number of Orders'}"
+          :title="{'text': selectedMetric.label}"
       >
       </v-axis>
     </v-chart>
@@ -26,19 +40,41 @@
 
 <script>
 import axios from "axios";
+import Orders from "../../../../mixins/Orders";
+
 const _ = require('lodash');
+
+const METRIC_OPTIONS = [
+  {
+    label: 'Number of past orders',
+    value: 'order_count'
+  },
+  {
+    label: 'Total spend',
+    value: 'total_spend'
+  }
+];
 
 export default {
   name: "SupplierHistoriesGraph",
+  mixins: [Orders],
   data() {
     return {
       isLoading: true,
       data: null,
-      height: 500
+      height: 500,
+      metric: 'order_count',
+      metricOptions: METRIC_OPTIONS,
+      dateRange: null
     }
   },
   props: ['optimisationId'],
   computed: {
+    selectedMetric() {
+      return _.find(this.metricOptions, {
+        value: this.metric
+      });
+    },
     graphData() {
       if (!this.data) {
         return [];
@@ -46,10 +82,11 @@ export default {
 
       let sourceData = [];
       _.each(this.data, specData => {
-        sourceData.push({
+        let params = {
           'supplier': specData.supplier.name.substring(0, 5) + '...',
-          'value': specData.order_count
-        });
+          'value': specData[this.metric]
+        };
+        sourceData.push(params);
       });
       sourceData = _.uniqBy(sourceData, 'supplier');
       return _.sortBy(sourceData, 'value');
@@ -60,18 +97,36 @@ export default {
         type: 'cat',
         // values: _.map(this.data, 'supplier.name'),
       }, {
-        dataKey: 'value'
+        dataKey: 'value',
+        formatter: (val) => {
+          if (this.metric == 'total_spend') {
+            return this.formatCost({cost: val, cost_currency: 'USD'})
+          }
+          return val;
+        }
       }];
     }
   },
   created() {
     this.fetch();
   },
+  watch: {
+    dateRange() {
+      this.fetch();
+    }
+  },
   methods: {
     fetch() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-analytics').then(r => {
+
+      let params = {};
+      if (this.dateRange && this.dateRange.length === 2) {
+        params['start_date'] = window.moment(this.dateRange[0]).format('YYYY-MM-DD');
+        params['end_date'] = window.moment(this.dateRange[1]).format('YYYY-MM-DD');
+      }
+
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-analytics', params).then(r => {
         vm.isLoading = false;
         vm.data = r.data;
       }).catch(e => {
@@ -89,5 +144,22 @@ export default {
   text-align: center;
   padding-top: 20px;
   padding-bottom: 70px;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: row;
+}
+
+.toolbar .ant-select {
+  width: 100%;
+}
+
+.toolbar .toolbar-col {
+  flex: 1;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 10px;
 }
 </style>

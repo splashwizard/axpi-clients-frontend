@@ -91,7 +91,18 @@
                       :optimisation-id="optimisation.id"></expected-price-by-supplier-for-each-specification-graph>
                 </a-col>
               </a-row>
-              <pricing-table :optimisation-id="optimisation.id"></pricing-table>
+
+              <!-- Tabs -->
+              <a-tabs v-model="analyticsPricingTablesTab">
+                <a-tab-pane key="expected" tab="Expected">
+                  <pricing-table :optimisation-id="optimisation.id"></pricing-table>
+                </a-tab-pane>
+                <a-tab-pane key="past" tab="Past Orders">
+                  <past-orders-table :optimisation="optimisation"></past-orders-table>
+                </a-tab-pane>
+              </a-tabs>
+              <!-- / Tabs -->
+
             </a-tab-pane>
             <a-tab-pane :force-render="true" key="environment" tab="Environment">
               <a-row :gutter="20">
@@ -374,6 +385,7 @@ import WhatShouldBePayingForEachSpecificationGraph
   from "./Analytics/Pricing/WhatShouldBePayingForEachSpecificationGraph";
 import SupplierHistoriesGraph from "./Analytics/Overview/SupplierHistoriesGraph";
 import PricingTable from "./Analytics/Pricing/PricingTable";
+import PastOrdersTable from "./Analytics/Pricing/PastOrdersTable";
 
 const _ = require('lodash');
 
@@ -392,7 +404,7 @@ export default {
     },
     sidebarCollapsed() {
       let vm = this;
-      window.setTimeout(function() {
+      window.setTimeout(function () {
         vm.incrementUpdateKey();
       }, 500);
     }
@@ -425,10 +437,13 @@ export default {
 
       filtersVisible: false,
 
-      updateKey: 1
+      updateKey: 1,
+
+      analyticsPricingTablesTab: 'expected'
     }
   },
   components: {
+    PastOrdersTable,
     PricingTable,
     WhatAccreditationsDoMySuppliersHaveGraph,
     WhatIsGhgPollutionForEachSpecification,

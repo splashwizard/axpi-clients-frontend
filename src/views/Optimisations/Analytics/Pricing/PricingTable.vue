@@ -1,6 +1,6 @@
 <template>
   <div class="pricing-table">
-    <a-table :columns="columns" :data-source="data" class="axpi-table" :pagination="false">
+    <a-table :columns="columns" :data-source="data" class="axpi-table">
       <div slot="expectedPrice" slot-scope="expectedPrice">
         {{ formatCost({cost: expectedPrice, cost_currency: 'USD'}) }}
       </div>
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style scoped>
-.pricing-table {
-  margin-top: 10px;
-}
+/*.pricing-table {*/
+/*  margin-top: 10px;*/
+/*}*/
 </style>

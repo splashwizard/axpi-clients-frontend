@@ -6,6 +6,7 @@
              :centered="true"
              title="Create Scenario"
              :footer="null">
+      <loading-screen :is-loading="isSaving"></loading-screen>
 
       <!-- Loaded -->
       <div>
@@ -39,12 +40,16 @@ import OptimisationMetrics from "./Create/OptimisationMetrics";
 import Constraints from "./Create/Constraints";
 import OtherDetails from "./Create/OtherDetails";
 import ScenarioDetails from "./Create/ScenarioDetails";
+import axios from 'axios';
+const _ = require('lodash');
 
 export default {
   name: "CreateScenarioModal",
+  props: ['optimisationId'],
   components: {ScenarioDetails, OptimisationMetrics, Constraints, OtherDetails},
   data() {
     return {
+      isSaving: false,
       visible: false,
       scenario: {
         optimisation_metric: 'best-price',
@@ -70,10 +75,50 @@ export default {
       this.visible = true;
     },
 
+    getFormParams() {
+      let params = {
+        name: this.scenario.name,
+        description: this.scenario.description,
+        tags: JSON.stringify(this.scenario.tags),
+        constraints: JSON.stringify(this.scenario.constraints),
+        maximum_number_of_suppliers: this.scenario.maximum_number_of_suppliers,
+        optimisation_id: this.optimisationId
+      };
+
+      // Metrics
+      if (this.scenario.optimisation_metric === 'best-price') {
+        params['weightings'] = JSON.stringify({
+          'cost': 1
+        });
+      } else if (this.scenario.optimisation_metric === 'environmentally-friendly') {
+        params['weightings'] = JSON.stringify({
+          'co2e': 1
+        });
+      } else if (this.scenario.optimisation_metric === 'custom') {
+        let weightings = {};
+        _.each(this.custom_metrics, metric => {
+          weightings[metric.id] = metric.value;
+        });
+        params['weightings'] = JSON.stringify(weightings);
+      }
+
+      // Finished :)
+      return params;
+    },
+
     saveAndQuit() {
       this.visible = true;
-      this.$message.success('Scenario added successfully!');
-      this.$router.push('/optimisations/' + this.$route.params.id + '/scenarios?saved=true');
+      let vm = this;
+      vm.isSaving = true;
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/scenarios', this.getFormParams()).then(() => {
+        vm.isSaving = false;
+        vm.$message.success('Scenario added successfully!');
+        vm.$emit('scenario-created');
+      }).catch(e => {
+        console.log(e);
+        vm.$message.error('Error saving scenario');
+        vm.isSaving = false;
+      });
     }
   }
 }

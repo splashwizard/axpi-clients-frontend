@@ -94,7 +94,7 @@
 
               <!-- Tabs -->
               <a-tabs v-model="analyticsPricingTablesTab">
-                <a-tab-pane key="expected" tab="Expected">
+                <a-tab-pane key="expected" tab="Expected Prices">
                   <pricing-table :optimisation-id="optimisation.id"></pricing-table>
                 </a-tab-pane>
                 <a-tab-pane key="past" tab="Past Orders">

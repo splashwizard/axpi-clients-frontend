@@ -1,6 +1,7 @@
 <template>
   <div class="optimisations">
-    <loading-screen :is-loading="isLoading||isLoadingSpecifications||isLoadingScenarios||isLoadingSuppliers"></loading-screen>
+    <loading-screen
+        :is-loading="isLoading||isLoadingSpecifications||isLoadingScenarios||isLoadingSuppliers"></loading-screen>
 
     <a-layout>
       <left-sidebar :optimisation="optimisation"></left-sidebar>
@@ -8,7 +9,9 @@
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions" style="padding-top: 15px;">
-            <create-scenario-modal></create-scenario-modal>
+            <create-scenario-modal :key="createScenarioModalKey"
+                                   @scenario-created="handleScenarioCreated"
+                                   :optimisation-id="optimisation.id"></create-scenario-modal>
           </div>
         </div>
 
@@ -81,7 +84,9 @@ export default {
       scenarios: [],
 
       isLoadingSuppliers: false,
-      suppliers: []
+      suppliers: [],
+
+      createScenarioModalKey: 1
     }
   },
   components: {ScenarioGraphs, LeftSidebar, CreateScenarioModal, ScenariosTable},
@@ -98,6 +103,14 @@ export default {
 
     refresh() {
       this.loadOptimisation(this.$route.params.id);
+      this.loadSpecifications(this.$route.params.id);
+      this.loadScenarios(this.$route.params.id);
+      this.loadSuppliers();
+    },
+
+    handleScenarioCreated() {
+      this.refresh();
+      this.createScenarioModalKey += 1;
     },
 
     ...mapActions('optimisationEditor', {

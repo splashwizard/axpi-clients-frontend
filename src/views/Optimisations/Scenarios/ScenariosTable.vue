@@ -1,23 +1,38 @@
 <template>
   <a-table :columns="columns" :data-source="data" class="axpi-table scenarios-table">
+    <div slot="name" slot-scope="name, row">
+      <span v-if="!row.description">{{ name }}</span>
+      <a-tooltip v-if="row.description">
+        <template slot="title">
+          {{  row.description }}
+        </template>
+        <a href="#" style="text-decoration-style: dotted;">{{ name }}</a>
+      </a-tooltip>
+    </div>
     <div slot="expectedCost" slot-scope="cost">
-      {{ formatCost({cost: cost/100, cost_currency: 'USD'}) }}
+      {{ formatCost({cost: cost / 100, cost_currency: 'USD'}) }}
     </div>
     <div slot="expectedCo2e" slot-scope="emission">
       {{ emission }} kg
     </div>
-    <div slot="itemsAllocated">
+    <div slot="items_allocated" slot-scope="items_allocated">
       <div class="bullet-chart">
         <div class="left">
           <a-progress :percent="100" :show-info="false"/>
         </div>
         <div class="right">
-          3/3
+          {{ items_allocated }}/{{ optimisation.optimisation_specification_count }}
         </div>
       </div>
     </div>
+    <div slot="tags" slot-scope="tags">
+      <a-badge v-for="(tag, i) in decodeTags(tags)" :key="i"
+               :count="tag" :number-style="getTagBadgeStyle(tag)"></a-badge>
+      <span v-if="decodeTags(tags).length == 0">-</span>
+    </div>
     <div slot="actions" class="table-actions" slot-scope="actions, record">
-      <a-button style="margin-right: 5px;" @click.prevent="reviewScenario(record.id)">Review</a-button>
+      <a-button v-if="record.optimised" style="margin-right: 5px;" @click.prevent="reviewScenario(record.id)">Review</a-button>
+      <a-button type="primary" v-if="!record.optimised" style="margin-right: 5px;" @click.prevent="optimise">Optimise</a-button>
       <a-dropdown :trigger="['click']">
         <a-button icon="ellipsis" type="link" @click.prevent="e => e.preventDefault()"></a-button>
         <a-menu slot="overlay">
@@ -45,6 +60,7 @@ const columns = [
     dataIndex: 'name',
     title: 'Scenario',
     key: 'name',
+    scopedSlots: {customRender: 'name'}
   },
   {
     dataIndex: 'expected_cost',
@@ -59,10 +75,21 @@ const columns = [
     scopedSlots: {customRender: 'expectedCo2e'}
   },
   {
-    dataIndex: 'itemsAllocated',
+    dataIndex: 'maximum_number_of_suppliers',
+    title: 'Max Suppliers',
+    key: 'maximum_number_of_suppliers'
+  },
+  {
+    dataIndex: 'items_allocated',
     title: 'Items Allocated',
-    key: 'itemsAllocated',
-    scopedSlots: {customRender: 'itemsAllocated'}
+    key: 'items_allocated',
+    scopedSlots: {customRender: 'items_allocated'}
+  },
+  {
+    dataIndex: 'tags',
+    title: 'Tags',
+    key: 'tags',
+    scopedSlots: {customRender: 'tags'}
   },
   {
     dataIndex: 'actions',
@@ -83,12 +110,35 @@ export default {
   methods: {
     reviewScenario(scenarioId) {
       this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios/' + scenarioId + '/review');
+    },
+
+    getTagBadgeStyle() {
+      return {
+        backgroundColor: this.getStatusColor(0)
+      }
+    },
+
+    decodeTags(tags) {
+      let tagsDecoded = [];
+      if (tags) {
+        try {
+          tagsDecoded = JSON.parse(tags);
+        } catch ($e) {
+          tagsDecoded = [];
+        }
+      }
+      return tagsDecoded;
+    },
+
+    optimise() {
+      // alert('optimise');
+      this.$router.push('/optimisations/' + this.optimisation.id + '?optimise_on_load=1');
     }
   },
   computed: {
     data() {
       const data = [
-          ...this.scenarios,
+        ...this.scenarios,
         // {
         //   key: 1,
         //   name: 'Best Price',

@@ -36,15 +36,24 @@ import axios from 'axios';
 export default {
   name: "Show",
   created() {
+    this.optimisationId = this.$route.params.id;
     this.loadOptimisation(this.$route.params.id);
+    if (this.$route.query.optimise_on_load) {
+      this.runOptimisation();
+    }
   },
   watch: {
     $route() {
+      this.optimisationId = this.$route.params.id;
       this.loadOptimisation(this.$route.params.id);
+      if (this.$route.query.optimise_on_load) {
+        this.runOptimisation();
+      }
     }
   },
   data() {
     return {
+      optimisationId: null,
       numberOfSpecs: null,
       isOptimising: false
     }
@@ -87,9 +96,9 @@ export default {
       let vm = this;
       vm.isOptimising = true;
 
-      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/optimise').then(() => {
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/optimise').then(() => {
         vm.isOptimising = false;
-        this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios');
+        this.$router.push('/optimisations/' + this.optimisationId + '/scenarios');
       }).catch(e => {
         console.log(e);
         vm.isOptimising = false;

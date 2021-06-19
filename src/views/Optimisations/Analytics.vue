@@ -9,18 +9,7 @@
           <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions">
 
-            <a-popover v-model="filtersVisible" title="Filters" trigger="click">
-              <a slot="content">
-                <div style="margin-bottom: 10px;">
-                  <a-checkbox>Filter by supplier</a-checkbox>
-                </div>
-                <div>
-                  <a-checkbox>Filter by specification</a-checkbox>
-                </div>
-              </a>
-              <a-button type="secondary" class="button-header" size="large" shape="circle"
-                        icon="filter"></a-button>
-            </a-popover>
+           <analytics-filters></analytics-filters>
 
             <a-tooltip placement="bottom">
               <template slot="title">
@@ -386,6 +375,7 @@ import WhatShouldBePayingForEachSpecificationGraph
 import SupplierHistoriesGraph from "./Analytics/Overview/SupplierHistoriesGraph";
 import PricingTable from "./Analytics/Pricing/PricingTable";
 import PastOrdersTable from "./Analytics/Pricing/PastOrdersTable";
+import AnalyticsFilters from "./Analytics/AnalyticsFilters";
 
 const _ = require('lodash');
 
@@ -435,14 +425,13 @@ export default {
       isLoadingSuppliers: false,
       suppliers: [],
 
-      filtersVisible: false,
-
       updateKey: 1,
 
       analyticsPricingTablesTab: 'expected'
     }
   },
   components: {
+    AnalyticsFilters,
     PastOrdersTable,
     PricingTable,
     WhatAccreditationsDoMySuppliersHaveGraph,

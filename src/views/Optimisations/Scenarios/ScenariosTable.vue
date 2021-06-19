@@ -6,7 +6,7 @@
         <template slot="title">
           {{  row.description }}
         </template>
-        <a href="#" style="text-decoration-style: dotted;">{{ name }}</a>
+        <span class="name-with-description">{{ name }}</span>
       </a-tooltip>
     </div>
     <div slot="expectedCost" slot-scope="cost">
@@ -190,5 +190,9 @@ export default {
       flex-shrink: 1;
     }
   }
+}
+
+.name-with-description:hover {
+  cursor: pointer !important;
 }
 </style>

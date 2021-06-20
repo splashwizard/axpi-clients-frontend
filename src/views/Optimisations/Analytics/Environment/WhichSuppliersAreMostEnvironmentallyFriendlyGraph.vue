@@ -28,6 +28,7 @@
 <script>
 import { Global } from 'viser-vue';
 import axios from "axios";
+import {mapGetters} from "vuex";
 
 const scale = [{
   dataKey: 'total_co2e',
@@ -79,6 +80,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('optimisationAnalyticsManager', {
+      filterBySupplier: 'filterBySupplier',
+      selectedSupplier: 'selectedSupplier',
+      filterBySpecification: 'filterBySpecification',
+      selectedSpecification: 'selectedSpecification'
+    }),
+
     colorMap() {
       return {
         'Asia': Global.colors[0],
@@ -87,6 +95,7 @@ export default {
         'Oceania': Global.colors[3],
       };
     },
+
     graphData() {
       return this.data;
     }
@@ -97,8 +106,21 @@ export default {
   methods: {
     fetch() {
       let vm = this;
+
+      let params = {
+        include_pricing_data: true
+      };
+
+      if (this.filterBySupplier && this.selectedSupplier) {
+        params['supplier_id'] = this.selectedSupplier.id;
+      }
+
+      if (this.filterBySpecification && this.selectedSpecification) {
+        params['optimisation_specification_id'] = this.selectedSpecification.id;
+      }
+
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/environmental-analytics?include_pricing_data=1').then(r => {
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/environmental-analytics', params).then(r => {
         vm.isLoading = false;
         vm.data = r.data;
       }).catch(e => {
@@ -106,6 +128,23 @@ export default {
         vm.isLoading = false;
         vm.$message.error('Error loading environmental analytics');
       });
+    }
+  },
+  watch: {
+    dateRange() {
+      this.fetch();
+    },
+    filterBySupplier() {
+      this.fetch();
+    },
+    selectedSupplier() {
+      this.fetch();
+    },
+    filterBySpecification() {
+      this.fetch();
+    },
+    selectedSpecification() {
+      this.fetch();
     }
   }
 }

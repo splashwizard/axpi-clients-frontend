@@ -16,6 +16,7 @@
 
 <script>
 import axios from "axios";
+import {mapGetters} from "vuex";
 const _ = require('lodash');
 
 const axis1Opts = {
@@ -78,6 +79,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('optimisationAnalyticsManager', {
+      filterBySupplier: 'filterBySupplier',
+      filterBySpecification: 'filterBySpecification',
+      selectedSupplier: 'selectedSupplier',
+      selectedSpecification: 'selectedSpecification'
+    }),
     // specifications() {
     //   if (this.data) {
     //     return _.map(this.data, 'specification');
@@ -123,8 +130,19 @@ export default {
 
     fetch() {
       let vm = this;
+
+      let params = {};
+
+      if (this.filterBySupplier && this.selectedSupplier) {
+        params['supplier_id'] = this.selectedSupplier.id;
+      }
+
+      if (this.filterBySpecification && this.selectedSpecification) {
+        params['optimisation_specification_id'] = this.selectedSpecification.id;
+      }
+
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/environmental-analytics').then(r => {
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/environmental-analytics', params).then(r => {
         vm.data = r.data;
         console.log(r);
         vm.isLoading = false;
@@ -133,6 +151,20 @@ export default {
         vm.isLoading = false;
         vm.$message.error('Error loading environmental breakdown');
       });
+    }
+  },
+  watch: {
+    filterBySupplier() {
+      this.fetch();
+    },
+    selectedSupplier() {
+      this.fetch();
+    },
+    filterBySpecification() {
+      this.fetch();
+    },
+    selectedSpecification() {
+      this.fetch();
     }
   }
 }

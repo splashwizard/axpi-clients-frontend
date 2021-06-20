@@ -59,7 +59,7 @@ export default {
       let vm = this;
       vm.data = null;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-spec-expected-prices').then(r => {
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-spec-expected-prices').then(r => {
         vm.isLoading = false;
         vm.data = r.data;
       }).catch(e => {

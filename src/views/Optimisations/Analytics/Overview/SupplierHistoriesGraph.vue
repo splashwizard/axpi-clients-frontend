@@ -41,6 +41,7 @@
 <script>
 import axios from "axios";
 import Orders from "../../../../mixins/Orders";
+import {mapGetters} from "vuex";
 
 const _ = require('lodash');
 
@@ -70,6 +71,11 @@ export default {
   },
   props: ['optimisationId'],
   computed: {
+    ...mapGetters('optimisationAnalyticsManager', {
+      filterBySupplier: 'filterBySupplier',
+      selectedSupplier: 'selectedSupplier',
+    }),
+
     selectedMetric() {
       return _.find(this.metricOptions, {
         value: this.metric
@@ -113,6 +119,12 @@ export default {
   watch: {
     dateRange() {
       this.fetch();
+    },
+    filterBySupplier() {
+      this.fetch();
+    },
+    selectedSupplier() {
+      this.fetch();
     }
   },
   methods: {
@@ -121,9 +133,14 @@ export default {
       vm.isLoading = true;
 
       let params = {};
+
       if (this.dateRange && this.dateRange.length === 2) {
         params['start_date'] = window.moment(this.dateRange[0]).format('YYYY-MM-DD');
         params['end_date'] = window.moment(this.dateRange[1]).format('YYYY-MM-DD');
+      }
+
+      if (this.filterBySupplier && this.selectedSupplier) {
+        params['supplier_id'] = this.selectedSupplier.id;
       }
 
       axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-analytics', params).then(r => {

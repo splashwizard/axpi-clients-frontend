@@ -38,6 +38,8 @@ import axios from "axios";
 const _ = require('lodash');
 import Orders from "../../../../mixins/Orders";
 
+import {mapGetters} from "vuex";
+
 export default {
   name: "WhatShouldBePayingForSpecificationGraph",
   props: ['optimisationId'],
@@ -50,6 +52,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('optimisationAnalyticsManager', {
+      filterBySupplier: 'filterBySupplier',
+      filterBySpecification: 'filterBySpecification',
+      selectedSupplier: 'selectedSupplier',
+      selectedSpecification: 'selectedSpecification'
+    }),
+
     graphData() {
       if (!this.data) {
         return [];
@@ -76,7 +85,7 @@ export default {
     priceMax() {
       let maxTrueprice = _.max(_.map(this.graphData, 'trueprice'));
       let maxMatchingOrderPrice = _.max(_.map(this.graphData, 'matching_order_price_max'));
-      
+
       return _.max([maxTrueprice, maxMatchingOrderPrice]);
     },
     scale() {
@@ -108,8 +117,19 @@ export default {
   methods: {
     fetch() {
       let vm = this;
+
+      let params = {};
+
+      if (this.filterBySupplier && this.selectedSupplier) {
+        params['supplier_id'] = this.selectedSupplier.id;
+      }
+
+      if (this.filterBySpecification && this.selectedSpecification) {
+        params['optimisation_specification_id'] = this.selectedSpecification.id;
+      }
+
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/price-analytics').then(r => {
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/price-analytics', params).then(r => {
         vm.isLoading = false;
         vm.data = r.data;
       }).catch(e => {
@@ -117,6 +137,20 @@ export default {
         vm.isLoading = false;
         vm.$message.error('Error loading price analytics');
       });
+    }
+  },
+  watch: {
+    filterBySupplier() {
+      this.fetch();
+    },
+    selectedSupplier() {
+      this.fetch();
+    },
+    filterBySpecification() {
+      this.fetch();
+    },
+    selectedSpecification() {
+      this.fetch();
     }
   }
 }

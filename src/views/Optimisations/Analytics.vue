@@ -9,7 +9,7 @@
           <h1 class="page-title">{{ optimisation.name }}</h1>
           <div class="actions">
 
-           <analytics-filters></analytics-filters>
+           <analytics-filters v-if="optimisation" :optimisation-id="optimisation.id"></analytics-filters>
 
             <a-tooltip placement="bottom">
               <template slot="title">

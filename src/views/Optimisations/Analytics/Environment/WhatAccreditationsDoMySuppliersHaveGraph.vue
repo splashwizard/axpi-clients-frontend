@@ -7,17 +7,18 @@
       <!--      <v-legend/>-->
       <v-tooltip/>
       <v-axis :title="{'text': 'Accreditation'}"
-          :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
+              :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
       <v-axis :title="{'text': 'Supplier'}"
-          :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
+              :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
       <v-polygon :position="seriesOpts.position" :color="seriesOpts.color" :label="seriesOpts.label"
                  :vStyle="seriesOpts.style"/>
     </v-chart>
   </div>
-</template>>
+</template>
 
 <script>
 import axios from "axios";
+import {mapGetters} from "vuex";
 
 const _ = require('lodash');
 
@@ -81,18 +82,25 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('optimisationAnalyticsManager', {
+      filterBySupplier: 'filterBySupplier',
+      selectedSupplier: 'selectedSupplier'
+    }),
+
     accreditations() {
       if (this.data) {
         return this.data.accreditations;
       }
       return [];
     },
+
     suppliers() {
       if (this.data) {
         return this.data.suppliers;
       }
       return [];
     },
+
     graphData() {
       let sourceData = [];
       _.each(this.accreditations, accreditation => {
@@ -108,6 +116,7 @@ export default {
       });
       return sourceData;
     },
+
     scale() {
       return [{
         dataKey: 'supplier',
@@ -121,13 +130,19 @@ export default {
     }
   },
   created() {
-   this.fetch();
+    this.fetch();
   },
   methods: {
     fetch() {
       let vm = this;
+
+      let params = {};
+      if (this.filterBySupplier && this.selectedSupplier) {
+        params['supplier_id'] = this.selectedSupplier.id;
+      }
+
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/suppliers/accreditations').then(r => {
+      axios.post(window.API_BASE + '/suppliers/accreditations', params).then(r => {
         vm.isLoading = false;
         vm.data = r.data;
       }).catch(e => {
@@ -135,6 +150,14 @@ export default {
         vm.isLoading = false;
         vm.$message.error('Error loading supplier accreditations');
       });
+    }
+  },
+  watch: {
+    filterBySupplier() {
+      this.fetch();
+    },
+    selectedSupplier() {
+      this.fetch();
     }
   }
 }

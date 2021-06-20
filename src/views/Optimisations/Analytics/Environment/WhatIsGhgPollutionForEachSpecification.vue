@@ -24,6 +24,7 @@
 
 <script>
 import axios from "axios";
+import {mapGetters} from "vuex";
 
 const _ = require('lodash');
 
@@ -53,6 +54,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('optimisationAnalyticsManager', {
+      filterBySupplier: 'filterBySupplier',
+      filterBySpecification: 'filterBySpecification',
+      selectedSupplier: 'selectedSupplier',
+      selectedSpecification: 'selectedSpecification'
+    }),
+
     suppliers() {
       return _.uniq(_.map(this.data, 'supplier'));
     },
@@ -100,8 +108,19 @@ export default {
   methods: {
     fetch() {
       let vm = this;
+
+      let params = {};
+
+      if (this.filterBySupplier && this.selectedSupplier) {
+        params['supplier_id'] = this.selectedSupplier.id;
+      }
+
+      if (this.filterBySpecification && this.selectedSpecification) {
+        params['optimisation_specification_id'] = this.selectedSpecification.id;
+      }
+
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/environmental-analytics').then(r => {
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/environmental-analytics', params).then(r => {
         vm.data = r.data;
         vm.selectedSupplierName = _.first(this.suppliers);
         console.log(r);
@@ -111,6 +130,20 @@ export default {
         vm.isLoading = false;
         vm.$message.error('Error loading GHG data');
       });
+    }
+  },
+  watch: {
+    filterBySupplier() {
+      this.fetch();
+    },
+    selectedSupplier() {
+      this.fetch();
+    },
+    filterBySpecification() {
+      this.fetch();
+    },
+    selectedSpecification() {
+      this.fetch();
     }
   }
 }

@@ -5,16 +5,19 @@
     </div>
     <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <v-tooltip/>
+
       <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
       <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
       <v-polygon :position="seriesOpts.position" :color="seriesOpts.color" :label="seriesOpts.label"
                  :vStyle="seriesOpts.style"/>
+
     </v-chart>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import {mapGetters} from "vuex";
 // const _ = require('lodash');
 
 const axis1Opts = {
@@ -78,6 +81,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('optimisationAnalyticsManager', {
+      filterBySupplier: 'filterBySupplier',
+      filterBySpecification: 'filterBySpecification',
+      selectedSupplier: 'selectedSupplier',
+      selectedSpecification: 'selectedSpecification'
+    }),
+
     graphData() {
       if (!this.data) {
         return [];
@@ -121,8 +131,19 @@ export default {
   methods: {
     fetch() {
       let vm = this;
+
+      let params = {};
+
+      if (this.filterBySupplier && this.selectedSupplier) {
+        params['supplier_id'] = this.selectedSupplier.id;
+      }
+
+      if (this.filterBySpecification && this.selectedSpecification) {
+        params['optimisation_specification_id'] = this.selectedSpecification.id;
+      }
+
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-spec-expected-prices').then(r => {
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-spec-expected-prices', params).then(r => {
         vm.isLoading = false;
         vm.data = r.data;
       }).catch(e => {
@@ -139,6 +160,20 @@ export default {
       let prices = _.map(dataForSpecification, 'expected_price');
       let max = _.max(prices);
       return specData.expected_price / max;
+    }
+  },
+  watch: {
+    filterBySupplier() {
+      this.fetch();
+    },
+    selectedSupplier() {
+      this.fetch();
+    },
+    filterBySpecification() {
+      this.fetch();
+    },
+    selectedSpecification() {
+      this.fetch();
     }
   }
 }

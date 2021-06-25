@@ -155,7 +155,7 @@
             <!--                            Option 10-->
             <!--                        </a-menu-item>-->
             <!--                    </a-sub-menu>-->
-            <a-menu-item key="developer" title="Developers">
+            <a-menu-item key="developers" title="Developers">
               <developers-icon class="nav-icon"></developers-icon>
               <span v-if="!menuCollapsed">Developers</span>
             </a-menu-item>

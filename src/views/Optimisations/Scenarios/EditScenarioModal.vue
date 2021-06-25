@@ -1,15 +1,14 @@
 <template>
   <div>
-    <a-button icon="plus" type="primary" @click.prevent="showModal">Create Scenario</a-button>
     <a-modal v-model="visible"
              class="fullscreen-modal"
              :centered="true"
-             title="Create Scenario"
+             title="Edit Scenario"
              :footer="null">
-      <loading-screen :is-loading="isSaving"></loading-screen>
+      <loading-screen :is-loading="isSaving||isLoading"></loading-screen>
 
       <!-- Loaded -->
-      <div>
+      <div v-if="scenario">
         <div class="axpi-form width-large">
           <optimisation-metrics :scenario="scenario"></optimisation-metrics>
           <constraints :optimisation-id="optimisationId" :scenario="scenario"></constraints>
@@ -41,38 +40,73 @@ import Constraints from "./Create/Constraints";
 import OtherDetails from "./Create/OtherDetails";
 import ScenarioDetails from "./Create/ScenarioDetails";
 import axios from 'axios';
+
 const _ = require('lodash');
 
 export default {
-  name: "CreateScenarioModal",
-  props: ['optimisationId'],
+  name: "EditScenarioModal",
+  props: ['optimisationId', 'scenarioId'],
   components: {ScenarioDetails, OptimisationMetrics, Constraints, OtherDetails},
   data() {
     return {
+      isLoading: false,
       isSaving: false,
-      visible: false,
-      scenario: {
-        optimisation_metric: 'best-price',
-        custom_metrics: [
-          {
-            id: 'cost',
-            label: 'Cost',
-            value: 0
-          }
-        ],
-        constraints: [],
-        maximum_number_of_suppliers: 1,
-        enable_search_beyond_existing_supplier_base: false,
-        enable_bundling: false,
-        name: '',
-        description: '',
-        tags: []
-      }
+      visible: true,
+      scenario: null
     }
   },
+  created() {
+    this.loadScenario();
+  },
   methods: {
-    showModal() {
-      this.visible = true;
+    loadScenario() {
+      let vm = this;
+      vm.isLoading = true;
+      axios.get(window.API_BASE + '/optimisations/' + this.optimisationId + '/scenarios/' + this.scenarioId).then(r => {
+        vm.scenario = r.data;
+
+        if (vm.scenario.weightings) {
+          vm.scenario.weightings = JSON.parse(vm.scenario.weightings);
+          let weightingTypes = Object.keys(vm.scenario.weightings);
+          if (weightingTypes.length === 1 && weightingTypes[0] === 'co2e') {
+            vm.scenario.optimisation_metric = 'environmentally-friendly';
+            vm.scenario.custom_metrics = [];
+          } else if (weightingTypes.length === 1 && weightingTypes[0] === 'cost') {
+            vm.scenario.optimisation_metric = 'best-price';
+            vm.scenario.custom_metrics = [];
+          } else {
+            vm.scenario.optimisation_metric = 'custom';
+            vm.scenario.custom_metrics = [];
+            _.each(vm.scenario.weightings, (weighting, id) => {
+              vm.scenario.custom_metrics.push({
+                id: id,
+                value: weighting
+              });
+            })
+          }
+        } else {
+          vm.scenario.weightings = [];
+        }
+
+        if (vm.scenario.constraints) {
+          vm.scenario.constraints = JSON.parse(vm.scenario.constraints);
+        } else {
+          vm.scenario.constraints = [];
+        }
+
+        if (vm.scenario.tags) {
+          vm.scenario.tags = JSON.parse(vm.scenario.tags);
+        } else {
+          vm.scenario.tags = [];
+        }
+
+        vm.isLoading = false;
+      }).catch(e => {
+        console.log(e);
+        vm.scenario = null;
+        vm.isLoading = false;
+        vm.$message.error('Error loading scenario');
+      });
     },
 
     getFormParams() {
@@ -107,16 +141,15 @@ export default {
     },
 
     saveAndQuit() {
-      this.visible = true;
       let vm = this;
       vm.isSaving = true;
-      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/scenarios', this.getFormParams()).then(() => {
+      axios.put(window.API_BASE + '/optimisations/' + this.optimisationId + '/scenarios/' + this.scenarioId, this.getFormParams()).then(() => {
         vm.isSaving = false;
-        vm.$message.success('Scenario added successfully!');
-        vm.$emit('scenario-created');
+        vm.$message.success('Scenario updated successfully!');
+        vm.$emit('scenario-updated');
       }).catch(e => {
         console.log(e);
-        vm.$message.error('Error saving scenario');
+        vm.$message.error('Error updating scenario');
         vm.isSaving = false;
       });
     }

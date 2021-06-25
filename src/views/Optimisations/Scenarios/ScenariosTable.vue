@@ -1,59 +1,70 @@
 <template>
-  <a-table :columns="columns" :data-source="data" class="axpi-table scenarios-table">
-    <div slot="name" slot-scope="name, row">
-      <span v-if="!row.description">{{ name }}</span>
-      <a-tooltip v-if="row.description">
-        <template slot="title">
-          {{  row.description }}
-        </template>
-        <span class="name-with-description">{{ name }}</span>
-      </a-tooltip>
-    </div>
-    <div slot="expectedCost" slot-scope="cost">
-      {{ formatCost({cost: cost / 100, cost_currency: 'USD'}) }}
-    </div>
-    <div slot="expectedCo2e" slot-scope="emission">
-      {{ emission }} kg
-    </div>
-    <div slot="items_allocated" slot-scope="items_allocated">
-      <div class="bullet-chart">
-        <div class="left">
-          <a-progress :percent="100" :show-info="false"/>
-        </div>
-        <div class="right">
-          {{ items_allocated }}/{{ optimisation.optimisation_specification_count }}
+  <div>
+    <loading-screen :is-loading="isDeleting||isDuplicating"></loading-screen>
+    <edit-scenario-modal v-if="editScenarioId" :optimisation-id="optimisation.id"
+                         @scenario-updated="handleScenarioUpdated"
+                         :scenario-id="editScenarioId"></edit-scenario-modal>
+    <a-table :columns="columns" :data-source="data" class="axpi-table scenarios-table">
+      <div slot="name" slot-scope="name, row">
+        <span v-if="!row.description">{{ name }}</span>
+        <a-tooltip v-if="row.description">
+          <template slot="title">
+            {{ row.description }}
+          </template>
+          <span class="name-with-description">{{ name }}</span>
+        </a-tooltip>
+      </div>
+      <div slot="expectedCost" slot-scope="cost">
+        {{ formatCost({cost: cost / 100, cost_currency: 'USD'}) }}
+      </div>
+      <div slot="expectedCo2e" slot-scope="emission">
+        {{ emission }} kg
+      </div>
+      <div slot="items_allocated" slot-scope="items_allocated">
+        <div class="bullet-chart">
+          <div class="left">
+            <a-progress :percent="100" :show-info="false"/>
+          </div>
+          <div class="right">
+            {{ items_allocated }}/{{ optimisation.optimisation_specification_count }}
+          </div>
         </div>
       </div>
-    </div>
-    <div slot="tags" slot-scope="tags">
-      <a-badge v-for="(tag, i) in decodeTags(tags)" :key="i"
-               :count="tag" :number-style="getTagBadgeStyle(tag)"></a-badge>
-      <span v-if="decodeTags(tags).length == 0">-</span>
-    </div>
-    <div slot="actions" class="table-actions" slot-scope="actions, record">
-      <a-button v-if="record.optimised" style="margin-right: 5px;" @click.prevent="reviewScenario(record.id)">Review</a-button>
-      <a-button type="primary" v-if="!record.optimised" style="margin-right: 5px;" @click.prevent="optimise">Optimise</a-button>
-      <a-dropdown :trigger="['click']">
-        <a-button icon="ellipsis" type="link" @click.prevent="e => e.preventDefault()"></a-button>
-        <a-menu slot="overlay">
-          <a-menu-item>
-            <a href="#">Edit</a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="#">Duplicate</a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="#"
-               class="text-danger">Delete</a>
-          </a-menu-item>
-        </a-menu>
-      </a-dropdown>
-    </div>
-  </a-table>
+      <div slot="tags" slot-scope="tags">
+        <a-badge v-for="(tag, i) in decodeTags(tags)" :key="i"
+                 :count="tag" :number-style="getTagBadgeStyle(tag)"></a-badge>
+        <span v-if="decodeTags(tags).length == 0">-</span>
+      </div>
+      <div slot="actions" class="table-actions" slot-scope="actions, record">
+        <a-button v-if="record.optimised" style="margin-right: 5px;" @click.prevent="reviewScenario(record.id)">Review
+        </a-button>
+        <a-button type="primary" v-if="!record.optimised" style="margin-right: 5px;" @click.prevent="optimise">Optimise
+        </a-button>
+        <a-dropdown :trigger="['click']">
+          <a-button icon="ellipsis" type="link" @click.prevent="e => e.preventDefault()"></a-button>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="#" @click.prevent="editScenario(record.id)"
+              >Edit</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="#" @click.prevent="duplicateScenario(record.id)">Duplicate</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="#" @click.prevent="deleteScenario(record.id)"
+                 class="text-danger">Delete</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+      </div>
+    </a-table>
+  </div>
 </template>
 
 <script>
 import Orders from "../../../mixins/Orders";
+import axios from 'axios';
+import EditScenarioModal from "./EditScenarioModal";
 
 const columns = [
   {
@@ -101,15 +112,59 @@ const columns = [
 
 export default {
   name: "ScenariosTable",
+  components: {EditScenarioModal},
   props: ['optimisation', 'scenarios'],
   data() {
     return {
-      columns
+      columns,
+      isDeleting: false,
+      isDuplicating: false,
+      editScenarioId: null
     }
   },
   methods: {
     reviewScenario(scenarioId) {
       this.$router.push('/optimisations/' + this.optimisation.id + '/scenarios/' + scenarioId + '/review');
+    },
+
+    editScenario(scenarioId) {
+      this.editScenarioId = null;
+      this.$nextTick(() => {
+        this.editScenarioId = scenarioId;
+      });
+    },
+
+    handleScenarioUpdated() {
+      this.editScenarioId = null;
+      this.$emit('scenario-updated');
+    },
+
+    deleteScenario(scenarioId) {
+      let vm = this;
+      vm.isDeleting = true;
+      axios.delete(window.API_BASE + '/optimisations/' + this.optimisation.id + '/scenarios/' + scenarioId).then(() => {
+        vm.isDeleting = false;
+        vm.$message.success('Scenario deleted successfully');
+        vm.$emit('scenario-deleted');
+      }).catch(e => {
+        console.log(e);
+        vm.isDeleting = false;
+        vm.$message.error('Error deleting scenario');
+      });
+    },
+
+    duplicateScenario(scenarioId) {
+      let vm = this;
+      vm.isDuplicating = true;
+      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/scenarios/' + scenarioId + '/duplicate').then(() => {
+        vm.isDuplicating = false;
+        vm.$message.success('Scenario duplicated successfully');
+        vm.$emit('scenario-duplicated');
+      }).catch(e => {
+        console.log(e);
+        vm.isDuplicating = false;
+        vm.$message.error('Error duplicating scenario');
+      });
     },
 
     getTagBadgeStyle() {
@@ -155,15 +210,15 @@ export default {
         // }
       ];
 
-      if (this.$route.query.saved) {
-        data.push({
-          key: 3,
-          name: 'Balanced',
-          expected_cost: '5385',
-          co2e: 1398,
-          itemsAllocated: '3/3'
-        });
-      }
+      // if (this.$route.query.saved) {
+      //   data.push({
+      //     key: 3,
+      //     name: 'Balanced',
+      //     expected_cost: '5385',
+      //     co2e: 1398,
+      //     itemsAllocated: '3/3'
+      //   });
+      // }
 
       return data;
     }

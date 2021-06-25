@@ -16,7 +16,7 @@
       {{ row.min_co2e }} kg
     </div>
     <div slot="actions" slot-scope="actions, row" class="table-actions">
-      <a-button style="margin-right: 5px;">Analyse</a-button>
+      <a-button @click="analyseSpecification(row)" style="margin-right: 5px;">Analyse</a-button>
       <a-button @click="reviewSpecification(row)">Review Specification</a-button>
     </div>
     <a-table slot="expandedRowRender"
@@ -36,6 +36,7 @@
 
 <script>
 import Orders from "../../../mixins/Orders";
+import {mapActions} from "vuex";
 
 const _ = require('lodash');
 
@@ -118,8 +119,18 @@ export default {
     }
   },
   methods: {
+   ...mapActions('optimisationAnalyticsManager', {
+     setFilterBySpecification: 'setFilterBySpecification',
+     setSelectedSpecification: 'setSelectedSpecification'
+   }),
+
+    analyseSpecification(specification) {
+      this.setFilterBySpecification(true);
+      this.setSelectedSpecification(specification.mappings[0].optimisation_specification);
+      this.$router.push('/optimisations/' + this.optimisation.id + '/analytics');
+    },
+
     reviewSpecification(specification) {
-      console.log(specification);
       this.$router.push('/optimisations/' + this.optimisation.id + '/specifications/' + specification.mappings[0].optimisation_specification_id);
     }
   },

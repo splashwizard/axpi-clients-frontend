@@ -63,7 +63,7 @@ export default {
     return {
       isLoading: true,
       data: null,
-      height: 500,
+      height: 449,
       metric: 'order_count',
       metricOptions: METRIC_OPTIONS,
       dateRange: null

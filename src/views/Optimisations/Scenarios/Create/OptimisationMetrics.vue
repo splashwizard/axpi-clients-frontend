@@ -46,7 +46,7 @@
     <div class="custom-metrics-wrapper" v-if="isSelected('custom')">
 
       <!-- Custom metric -->
-      <div class="custom-metric" v-for="(metric, i) in scenario.custom_metrics" :key="i">
+      <div class="custom-metric" v-for="(metric, i) in addLabelsToCustomMetrics(scenario.custom_metrics)" :key="i">
         <div class="metric-header">
           <b class="metric-label">{{ metric.label }}</b>
           <a-button type="link" icon="delete" @click.prevent="deleteMetric(metric)"></a-button>
@@ -185,6 +185,18 @@ export default {
 
     deleteMetric(metric) {
       this.scenario.custom_metrics = _.without(this.scenario.custom_metrics, metric);
+    },
+
+    addLabelsToCustomMetrics(customMetrics) {
+      return _.map(customMetrics, customMetric => {
+        if (customMetric.label) {
+          return customMetric;
+        } else {
+          let referenceMetric = _.find(this.availableMetrics, {id: customMetric.id});
+          customMetric.label = referenceMetric ? referenceMetric.label : customMetric.id;
+          return customMetric;
+        }
+      });
     }
   },
   computed: {

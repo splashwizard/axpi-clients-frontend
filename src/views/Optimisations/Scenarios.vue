@@ -20,7 +20,11 @@
           <a-tabs>
             <a-tab-pane key="scenarios" tab="Scenarios">
               <scenario-graphs v-if="scenarios && scenarios.length" :scenarios="scenarios"></scenario-graphs>
-              <scenarios-table v-if="scenarios" :scenarios="scenarios" :optimisation="optimisation"></scenarios-table>
+              <scenarios-table v-if="scenarios"
+                               @scenario-deleted="refresh"
+                               @scenario-duplicated="refresh"
+                               @scenario-updated="refresh"
+                               :scenarios="scenarios" :optimisation="optimisation"></scenarios-table>
             </a-tab-pane>
             <a-tab-pane key="overview" tab="Overview">
               Content of Tab Pane 2

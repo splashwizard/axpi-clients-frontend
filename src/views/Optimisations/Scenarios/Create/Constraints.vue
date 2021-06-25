@@ -4,8 +4,12 @@
       <h2>Constraints</h2>
     </div>
 
+    <!-- Loading Constraints -->
+    <a-spin v-if="isLoadingConstraints" />
+    <!-- / Loading Constraints -->
+
     <!-- Constraints -->
-    <a-row :gutter="20">
+    <a-row v-if="!isLoadingConstraints" :gutter="20">
       <a-col :span="8" v-for="(constraint, i) in scenario.constraints" :key="i">
         <!-- Constraint -->
         <div class="constraint" :key="i">
@@ -114,13 +118,13 @@
 
           <!-- NOT Editing -->
           <div v-if="!constraint.isEditing" class="view-constraint">
-           <div class="view-constraint-actions">
-             <a-button @click.prevent="editConstraint(constraint)" type="link"
-                       icon="edit"></a-button>
+            <div class="view-constraint-actions">
+              <a-button @click.prevent="editConstraint(constraint)" type="link"
+                        icon="edit"></a-button>
 
-             <a-button @click.prevent="deleteConstraint(constraint)" type="link"
-                       icon="delete"></a-button>
-           </div>
+              <a-button @click.prevent="deleteConstraint(constraint)" type="link"
+                        icon="delete"></a-button>
+            </div>
 
             <b>{{ getConstraintById(constraint.constraint).label }}</b>
             <div v-for="(dim, dimKey) in constraint.dimensions" :key="dimKey">
@@ -137,7 +141,7 @@
       </a-col>
       <a-col :span="8">
         <div>
-          <a-button  block class="add-constraint-button" :disabled="!canAddNewConstraint"
+          <a-button block class="add-constraint-button" :disabled="!canAddNewConstraint"
                     icon="plus" @click.prevent="addConstraint">Add constraint
           </a-button>
         </div>
@@ -149,6 +153,7 @@
 
 <script>
 const _ = require('lodash');
+import axios from 'axios';
 
 const CONSTRAINT_DATA_TEMPLATE = {
   constraint: null,
@@ -174,181 +179,213 @@ export default {
     return {
       updateKey: 1000,
       constraintDataTemplate: CONSTRAINT_DATA_TEMPLATE,
-      availableConstraints: [
-        {
-          id: 'suppliers',
-          label: 'All Suppliers',
-          type: 'categorical', // categorical or numerical,
-        },
-        {
-          id: 'items',
-          label: 'All Items',
-          type: 'categorical', // categorical or numerical,
-        }
-      ],
-      dimensionsAvailable: {
-        'suppliers': [
-          {
-            id: 'social-accreditation',
-            label: 'Social Accreditation',
-            valueOptions: [
-              {
-                label: 'Val 1',
-                value: 'val-1'
-              },
-              {
-                label: 'Val 2',
-                value: 'val-2'
-              }
-            ]
-          },
-          {
-            id: 'environmental-accreditation',
-            label: 'Environmental Accreditation',
-            valueOptions: [
-              {
-                label: 'Val 2',
-                value: 'val-2'
-              },
-              {
-                label: 'Val 3',
-                value: 'val-3'
-              }
-            ]
-          },
-          {
-            id: 'country',
-            label: 'Country',
-            valueOptions: [
-              {
-                label: 'Val 2',
-                value: 'val-2'
-              },
-              {
-                label: 'Val 3',
-                value: 'val-3'
-              }
-            ]
-          },
-          {
-            id: 'distance-from-delivery-location',
-            label: 'Distance from delivery location',
-            valueOptions: [
-              {
-                label: 'Val 2',
-                value: 'val-2'
-              },
-              {
-                label: 'Val 3',
-                value: 'val-3'
-              }
-            ]
-          },
-          {
-            id: 'spend-with-supplier-this-year',
-            label: 'Spend with supplier this year',
-            valueOptions: [
-              {
-                label: 'Val 2',
-                value: 'val-2'
-              },
-              {
-                label: 'Val 3',
-                value: 'val-3'
-              }
-            ]
-          },
-          {
-            id: 'orders-with-supplier-this-year',
-            label: 'Orders with supplier this year',
-            valueOptions: [
-              {
-                label: 'Val 2',
-                value: 'val-2'
-              },
-              {
-                label: 'Val 3',
-                value: 'val-3'
-              }
-            ]
-          }
-        ],
-        'items': [
-          {
-            id: 'environmental-accreditation',
-            label: 'Environmental Accreditation',
-            valueOptions: [
-              {
-                label: 'ISO 14001:2015',
-                value: 'ISO 14001:2015'
-              },
-              {
-                label: 'ISO 14053:2021',
-                value: 'ISO 14053:2021'
-              },
-              {
-                label: 'Carbon Trust Standard',
-                value: 'Carbon Trust Standard'
-              },
-              {
-                label: 'EMAS',
-                value: 'EMAS'
-              },
-              {
-                label: 'FSC',
-                value: 'FSC'
-              },
-              {
-                label: 'Blue Planet',
-                value: 'Blue Planet'
-              },
-              {
-                label: 'MCERTS',
-                value: 'MCERTS'
-              },
-              {
-                label: 'Paper Profile',
-                value: 'Paper Profile'
-              }
-            ]
-          },
-          {
-            id: 'material-sourcing-locations',
-            label: 'Material Sourcing Locations',
-            valueOptions: [
-              {
-                label: 'Val 1',
-                value: 'val-1'
-              },
-              {
-                label: 'Val 2',
-                value: 'val-2'
-              },
-              {
-                label: 'Val 3',
-                value: 'val-3'
-              }
-            ]
-          }
-        ]
-      }
+
+      isLoadingConstraints: false,
+      constraintsFromServer: [],
+
+      // availableConstraints: [
+      //   {
+      //     id: 'suppliers',
+      //     label: 'All Suppliers',
+      //     type: 'categorical', // categorical or numerical,
+      //   },
+      //   {
+      //     id: 'items',
+      //     label: 'All Items',
+      //     type: 'categorical', // categorical or numerical,
+      //   }
+      // ],
+      // dimensionsAvailable: {
+      //   'suppliers': [
+      //     {
+      //       id: 'social-accreditation',
+      //       label: 'Social Accreditation',
+      //       valueOptions: [
+      //         {
+      //           label: 'Val 1',
+      //           value: 'val-1'
+      //         },
+      //         {
+      //           label: 'Val 2',
+      //           value: 'val-2'
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 'environmental-accreditation',
+      //       label: 'Environmental Accreditation',
+      //       valueOptions: [
+      //         {
+      //           label: 'Val 2',
+      //           value: 'val-2'
+      //         },
+      //         {
+      //           label: 'Val 3',
+      //           value: 'val-3'
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 'country',
+      //       label: 'Country',
+      //       valueOptions: [
+      //         {
+      //           label: 'Val 2',
+      //           value: 'val-2'
+      //         },
+      //         {
+      //           label: 'Val 3',
+      //           value: 'val-3'
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 'distance-from-delivery-location',
+      //       label: 'Distance from delivery location',
+      //       valueOptions: [
+      //         {
+      //           label: 'Val 2',
+      //           value: 'val-2'
+      //         },
+      //         {
+      //           label: 'Val 3',
+      //           value: 'val-3'
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 'spend-with-supplier-this-year',
+      //       label: 'Spend with supplier this year',
+      //       valueOptions: [
+      //         {
+      //           label: 'Val 2',
+      //           value: 'val-2'
+      //         },
+      //         {
+      //           label: 'Val 3',
+      //           value: 'val-3'
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 'orders-with-supplier-this-year',
+      //       label: 'Orders with supplier this year',
+      //       valueOptions: [
+      //         {
+      //           label: 'Val 2',
+      //           value: 'val-2'
+      //         },
+      //         {
+      //           label: 'Val 3',
+      //           value: 'val-3'
+      //         }
+      //       ]
+      //     }
+      //   ],
+      //   'items': [
+      //     {
+      //       id: 'environmental-accreditation',
+      //       label: 'Environmental Accreditation',
+      //       valueOptions: [
+      //         {
+      //           label: 'ISO 14001:2015',
+      //           value: 'ISO 14001:2015'
+      //         },
+      //         {
+      //           label: 'ISO 14053:2021',
+      //           value: 'ISO 14053:2021'
+      //         },
+      //         {
+      //           label: 'Carbon Trust Standard',
+      //           value: 'Carbon Trust Standard'
+      //         },
+      //         {
+      //           label: 'EMAS',
+      //           value: 'EMAS'
+      //         },
+      //         {
+      //           label: 'FSC',
+      //           value: 'FSC'
+      //         },
+      //         {
+      //           label: 'Blue Planet',
+      //           value: 'Blue Planet'
+      //         },
+      //         {
+      //           label: 'MCERTS',
+      //           value: 'MCERTS'
+      //         },
+      //         {
+      //           label: 'Paper Profile',
+      //           value: 'Paper Profile'
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 'material-sourcing-locations',
+      //       label: 'Material Sourcing Locations',
+      //       valueOptions: [
+      //         {
+      //           label: 'Val 1',
+      //           value: 'val-1'
+      //         },
+      //         {
+      //           label: 'Val 2',
+      //           value: 'val-2'
+      //         },
+      //         {
+      //           label: 'Val 3',
+      //           value: 'val-3'
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // }
     }
   },
-  props: ['scenario'],
+  props: ['scenario', 'optimisationId'],
   computed: {
     canAddNewConstraint() {
       let canAdd = true;
 
-      _.each(this.scenario.constraints, function(constraint) {
+      _.each(this.scenario.constraints, function (constraint) {
         if (constraint.isEditing) {
           canAdd = false;
         }
       });
 
       return canAdd;
+    },
+
+    availableConstraints() {
+      return this.constraintsFromServer;
+    },
+
+    dimensionsAvailable() {
+      let dims = [];
+      _.each(this.constraintsFromServer, constraint => {
+        dims[constraint.id] = constraint.dimensions_available;
+      });
+      return dims;
     }
   },
+  created() {
+   this.fetchConstraints();
+  },
   methods: {
+    fetchConstraints() {
+      let vm = this;
+      vm.isLoadingConstraints = true;
+      axios.get(window.API_BASE + '/optimisations/' + vm.optimisationId + '/get-constraints').then(r => {
+        vm.isLoadingConstraints = false;
+        vm.constraintsFromServer = r.data;
+      }).catch(e => {
+        vm.isLoadingConstraints = false;
+        console.log(e);
+        vm.$message.error('Error loading constraints');
+      });
+    },
+
     isConstraintValid(constraint) {
       if (!constraint.constraint) {
         return false;

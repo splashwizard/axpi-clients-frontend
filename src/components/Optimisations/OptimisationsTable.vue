@@ -15,29 +15,19 @@
           {{ text }}
         </router-link>
       </template>
-      <template slot="scenarios" slot-scope="scenarios, optimisation">
-        <span v-if="optimisation.name === 'Customer C Campaign'">5</span>
-        <span v-if="optimisation.name === 'Drug B USA Campaign'">3</span>
-      </template>
-      <template slot="items" slot-scope="items, optimisation">
-        <span v-if="optimisation.name == 'Customer C Campaign'">8</span>
-        <span v-if="optimisation.name == 'Drug B USA Campaign'">21</span>
-      </template>
       <template slot="expectedCost" slot-scope="expectedCost,optimisation">
-      <span v-if="optimisation.name == 'Customer C Campaign'">
-        $11,137 - $14,839
-      </span>
-        <span v-if="optimisation.name == 'Drug B USA Campaign'">
-        $28,726 - $35,031
-      </span>
+        <div v-if="optimisation.min_expected_cost">
+          {{ formatCost({cost: optimisation.min_expected_cost / 100, cost_currency: 'USD'}) }}
+          <span v-if="optimisation.max_expected_cost"> - {{ formatCost({cost: optimisation.max_expected_cost / 100, cost_currency: 'USD'}) }}</span>
+        </div>
+        <div v-else>-</div>
       </template>
       <template slot="co2e" slot-scope="co2e,optimisation">
-      <span v-if="optimisation.name == 'Customer C Campaign'">
-        2,818kg - 3,614kg
-      </span>
-        <span v-if="optimisation.name == 'Drug B USA Campaign'">
-        7,183kg - 10,097kg
-      </span>
+        <div v-if="optimisation.min_co2e">
+          {{ optimisation.min_co2e }}kg
+          <span v-if="optimisation.max_co2e"> - {{ optimisation.max_co2e }}kg</span>
+        </div>
+        <div v-else>-</div>
       </template>
       <template slot="created-at" slot-scope="text">
         {{ formatDate(text) }}
@@ -65,6 +55,7 @@
 <script>
 import axios from 'axios';
 import Dates from "../../mixins/Dates";
+import Orders from "../../mixins/Orders";
 
 const columns = [
   {
@@ -77,19 +68,13 @@ const columns = [
   },
   {
     title: 'Scenarios',
-    dataIndex: 'scenarios',
-    sorter: true,
-    scopedSlots: {
-      customRender: 'scenarios'
-    }
+    dataIndex: 'optimisation_scenario_count',
+    sorter: true
   },
   {
     title: 'Items',
-    dataIndex: 'items',
-    sorter: true,
-    scopedSlots: {
-      customRender: 'items'
-    }
+    dataIndex: 'optimisation_specification_count',
+    sorter: true
   },
   {
     title: 'Expected Cost',
@@ -132,7 +117,7 @@ export default {
       isDeleting: false
     };
   },
-  mixins: [Dates],
+  mixins: [Dates, Orders],
   mounted() {
     this.fetch();
   },

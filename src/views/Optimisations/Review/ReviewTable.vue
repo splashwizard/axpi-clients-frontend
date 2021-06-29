@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" :data-source="data" class="axpi-table review-table" :pagination="false">
+  <a-table :columns="columns" :data-source="data" class="axpi-table review-table" :pagination="false" row-class-name="review-table-row">
     <div slot="expectedPrice" slot-scope="expectedPrice, row">
       {{ formatCost({cost: row.min_expected_price, cost_currency: 'USD'}) }} <span
         v-if="row.min_expected_price !== row.max_expected_price">- {{
@@ -20,12 +20,12 @@
       <a-button @click="reviewSpecification(row)">Review Specification</a-button>
     </div>
     <a-table slot="expandedRowRender"
-             slot-scope="text, row"
+             slot-scope="row"
              :columns="innerColumns"
              :data-source="row.mappings"
              :pagination="false">
       <div slot="expectedPrice" slot-scope="expectedPrice">
-        {{ formatCost({cost: expectedPrice, cost_currency: 'USD'}) }}
+        {{ formatCost({cost: expectedPrice / 100, cost_currency: 'USD'}) }}
       </div>
       <div slot="co2e" slot-scope="co2e">
         {{ co2e }} kg
@@ -91,7 +91,7 @@ const columns = [
 
 const innerColumns = [
   {
-    dataIndex: 'supplier',
+    dataIndex: 'supplier_name',
     title: 'Supplier',
     key: 'supplier'
   },
@@ -193,7 +193,11 @@ export default {
 }
 
 .review-table {
-  tbody tr:last-child {
+  tr.ant-table-expanded-row td > .ant-table-wrapper {
+    margin: -5px 0 10px 0 !important;
+  }
+
+  tbody tr.review-table-row:last-child {
     background: #f9f9f9;
 
     .ant-table-row-expand-icon {

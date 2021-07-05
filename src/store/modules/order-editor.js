@@ -1,5 +1,6 @@
 import axios from 'axios';
 import orders from "../../helpers/orders";
+import validator from "../../helpers/validator";
 
 let _ = require('lodash');
 // import router from "../../router";
@@ -14,7 +15,10 @@ export const state = {
     order: null,
     wizardStage: 0,
 
-    reloadOrdersKey: 1
+    reloadOrdersKey: 1,
+
+    validationErrors: [],
+    isValidating: false
 };
 
 export const mutations = {
@@ -60,6 +64,18 @@ export const mutations = {
 
     INCREMENT_RELOAD_ORDERS_KEY(state) {
         state.reloadOrdersKey += 1;
+    },
+
+    START_VALIDATING(state) {
+        state.isValidating = true;
+    },
+
+    STOP_VALIDATING(state) {
+        state.isValidating = false;
+    },
+
+    SET_VALIDATION_ERRORS(state, errors) {
+        state.validationErrors = errors;
     }
 };
 
@@ -90,6 +106,18 @@ export const getters = {
 
     reloadOrdersKey: (state) => {
         return state.reloadOrdersKey;
+    },
+
+    isValidating: (state) => {
+        return state.isValidating;
+    },
+
+    validationErrors: (state) => {
+        return state.validationErrors;
+    },
+
+    validationClean: (state) => {
+        return (!state.validationErrors || state.validationErrors.length === 0);
     }
 };
 
@@ -138,7 +166,7 @@ export const actions = {
         });
     },
 
-    loadOrder({commit}, id) {
+    loadOrder({commit, dispatch}, id) {
         commit('SET_TYPE', 'order');
         commit('START_LOADING');
         commit('SET_ERRORS', []);
@@ -146,6 +174,7 @@ export const actions = {
             commit('STOP_LOADING');
             commit('SET_ORDER', orders.decodeOrder(r.data));
             commit('SET_WIZARD_STAGE', 0);
+            dispatch('validateOrder', id);
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');
@@ -158,6 +187,19 @@ export const actions = {
                 errors = ['Something went wrong. Please try again.'];
             }
             commit('SET_ERRORS', errors);
+        });
+    },
+
+    validateOrder({commit}, id) {
+        commit('START_VALIDATING');
+        commit('SET_VALIDATION_ERRORS', []);
+        validator.validateOrder(id).then(errors => {
+            commit('STOP_VALIDATING');
+            commit('SET_VALIDATION_ERRORS', errors);
+        }).catch(e => {
+            commit('STOP_VALIDATING');
+            this._vm.$message.error('Error validating order');
+            console.log(e);
         });
     },
 
@@ -209,7 +251,7 @@ export const actions = {
         });
     },
 
-    saveOrder({commit, getters}, params) {
+    saveOrder({commit, getters, dispatch}, params) {
         const {order, quitAfterSave} = params;
 
         let resource;
@@ -227,6 +269,8 @@ export const actions = {
             commit('STOP_SAVING');
             if (quitAfterSave === true) {
                 commit('SET_ORDER', null)
+            } else {
+                dispatch('validateOrder', order.id);
             }
 
             if (getters.type === 'order') {

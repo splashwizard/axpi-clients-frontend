@@ -17,12 +17,21 @@
     <!-- Loaded -->
     <div v-if="!isLoading && orderLocal">
       <div class="modal-buttons">
-        <a-button @click.prevent="() => save(true)">Save</a-button>
+        <a-button style="margin-right: 8px;"
+                  @click.prevent="() => save(false)">Save
+        </a-button>
+        <a-button type="primary" @click.prevent="() => save(true)">Save And Quit</a-button>
       </div>
 
+      <!-- Progress bar -->
       <div class="progress-bar">
         <progress-bar></progress-bar>
       </div>
+      <!-- / Progress bar -->
+
+      <!-- Validation errors -->
+      <validation-errors></validation-errors>
+      <!-- / Validation errors -->
 
       <!-- Small form -->
       <div>
@@ -51,6 +60,7 @@ import ProgressBar from "./Edit/ProgressBar";
 import GeneralInformationEditor from "./Edit/GeneralInformationEditor";
 import SpecificationInformationEditor from "./Edit/SpecificationInformationEditor";
 import AdditionalInformationEditor from "./Edit/AdditionalInformationEditor";
+import ValidationErrors from "./Edit/ValidationErrors";
 
 export default {
   name: "EditOrderModal",
@@ -65,7 +75,8 @@ export default {
     ProgressBar,
     GeneralInformationEditor,
     SpecificationInformationEditor,
-    AdditionalInformationEditor
+    AdditionalInformationEditor,
+    ValidationErrors
   },
   computed: {
     ...mapGetters('orderEditor', {
@@ -116,7 +127,7 @@ export default {
       this.cancelOrderEdit();
     },
 
-    save(quitAfterSave=false) {
+    save(quitAfterSave = false) {
       this.saveOrder({
         order: this.orderLocal,
         quitAfterSave: quitAfterSave
@@ -128,7 +139,7 @@ export default {
 
 <style scoped lang="scss">
 .progress-bar {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .modal-buttons {

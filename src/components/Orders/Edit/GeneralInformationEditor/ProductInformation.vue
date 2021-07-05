@@ -9,7 +9,17 @@
           <a-input size="large" v-model="orderLocal.product_description" placeholder="Product Description"/>
         </a-form-item>
         <a-form-item v-if="type == 'order'" label="Reference Number">
-          <a-input size="large" v-model="orderLocal.reference_number" placeholder="Reference Number"/>
+         <a-input-group compact>
+           <a-input size="large" v-model="orderLocal.reference_number" style="width: 50%;" placeholder="Reference Number"/>
+            <a-select size="large" style="width: 50%" v-model="orderLocal.reference_type">
+              <a-select-option value="po-number">
+               PO Number
+              </a-select-option>
+              <a-select-option value="reference-number">
+                Reference Number
+              </a-select-option>
+            </a-select>
+         </a-input-group>
         </a-form-item>
       </a-form>
     </a-col>

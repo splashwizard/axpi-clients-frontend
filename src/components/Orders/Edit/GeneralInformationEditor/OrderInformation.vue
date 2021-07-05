@@ -12,28 +12,28 @@
         <a-form-item label="Order Date">
           <a-date-picker style="width: 100%" size="large" v-model="orderLocal.order_date" placeholder="Order Date"/>
         </a-form-item>
-        <a-form-item label="Price">
-          <a-input-group compact>
-            <a-input :addon-before="costCurrencyPrepend" size="large" class="order-cost-input" style="width: 70%" v-model="orderLocal.cost"/>
-            <a-select default-value="GBP" size="large" style="width: 30%" v-model="orderLocal.cost_currency">
-<!--              <a-select-option value="GBP">-->
-<!--                GBP-->
-<!--              </a-select-option>-->
-<!--              <a-select-option value="USD">-->
-<!--                USD-->
-<!--              </a-select-option>-->
-              <a-select-option v-for="currency in currencies" :value="currency.currency" :key="currency.currency">
-                {{currency.currency}}
-              </a-select-option>
-            </a-select>
-          </a-input-group>
+        <a-form-item label="Quantity">
+          <a-input size="large" type="large" style="width:100%;" v-model="orderLocal.quantity"></a-input>
         </a-form-item>
       </a-form>
     </a-col>
     <a-col :span="12">
       <a-form layout="vertical">
-        <a-form-item label="Quantity">
-          <a-input size="large" type="large" style="width:100%;" v-model="orderLocal.quantity"></a-input>
+        <a-form-item label="Price">
+          <a-input-group compact>
+            <a-input :addon-before="costCurrencyPrepend" size="large" class="order-cost-input" style="width: 70%" v-model="orderLocal.cost"/>
+            <a-select default-value="GBP" size="large" style="width: 30%" v-model="orderLocal.cost_currency">
+              <!--              <a-select-option value="GBP">-->
+              <!--                GBP-->
+              <!--              </a-select-option>-->
+              <!--              <a-select-option value="USD">-->
+              <!--                USD-->
+              <!--              </a-select-option>-->
+              <a-select-option v-for="currency in currencies" :value="currency.currency" :key="currency.currency">
+                {{currency.currency}}
+              </a-select-option>
+            </a-select>
+          </a-input-group>
         </a-form-item>
         <a-form-item label="Date Delivered">
           <a-date-picker style="width: 100%" size="large" v-model="orderLocal.delivery_date"

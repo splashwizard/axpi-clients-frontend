@@ -166,15 +166,19 @@ export const actions = {
         });
     },
 
-    loadOrder({commit, dispatch}, id) {
+    loadOrder({commit, dispatch, getters}, id) {
         commit('SET_TYPE', 'order');
         commit('START_LOADING');
         commit('SET_ERRORS', []);
+        commit('SET_VALIDATION_ERRORS', []);
         axios.get(window.API_BASE + '/orders/' + id).then(r => {
             commit('STOP_LOADING');
             commit('SET_ORDER', orders.decodeOrder(r.data));
             commit('SET_WIZARD_STAGE', 0);
-            dispatch('validateOrder', id);
+
+            if (getters.order.product_name !== 'Untitled') {
+                dispatch('validateOrder', id);
+            }
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');

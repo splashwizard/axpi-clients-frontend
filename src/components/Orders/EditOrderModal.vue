@@ -30,7 +30,7 @@
       <!-- / Progress bar -->
 
       <!-- Validation errors -->
-      <validation-errors></validation-errors>
+      <validation-errors v-if="false"></validation-errors>
       <!-- / Validation errors -->
 
       <!-- Small form -->

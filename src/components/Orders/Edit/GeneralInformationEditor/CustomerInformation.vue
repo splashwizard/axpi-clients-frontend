@@ -9,9 +9,9 @@
     <!--        <a-form-item label="Organisational Unit">-->
     <!--            <a-input size="large" :value="organisationalUnit.name" disabled placeholder="Organisation Unit"/>-->
     <!--        </a-form-item>-->
-    <a-form-item label="Name">
+    <validated-form-item label="Name" id="customer-information-name">
       <a-input size="large" :value="clientName" disabled placeholder="Name"/>
-    </a-form-item>
+    </validated-form-item>
     <!--      <a-form-item label="Country">-->
     <!--        <a-input size="large" :value="orderLocal.country" disabled placeholder="Country"/>-->
     <!--      </a-form-item>-->

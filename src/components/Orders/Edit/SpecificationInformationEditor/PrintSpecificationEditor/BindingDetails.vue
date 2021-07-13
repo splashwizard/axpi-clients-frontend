@@ -1,9 +1,12 @@
 <template>
-  <div class="pill-selector">
-    <a-button :class="{'selected': isSelected(bindingType)}" shape="round" :key="bindingType"
-              v-for="bindingType in bindingTypes" @click="select(bindingType)">
-      {{ getHumanReadableSubtype(bindingType) }}
-    </a-button>
+  <div class="binding-details-wrapper">
+    <inline-validation-errors id="print-detail-binding"></inline-validation-errors>
+    <div class="pill-selector">
+      <a-button :class="{'selected': isSelected(bindingType)}" shape="round" :key="bindingType"
+                v-for="bindingType in bindingTypes" @click="select(bindingType)">
+        {{ getHumanReadableSubtype(bindingType) }}
+      </a-button>
+    </div>
   </div>
 </template>
 

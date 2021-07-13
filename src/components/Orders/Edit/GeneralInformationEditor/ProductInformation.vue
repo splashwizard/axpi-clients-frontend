@@ -2,25 +2,26 @@
   <a-row :gutter="50">
     <a-col :span="12">
       <a-form layout="vertical">
-        <a-form-item label="Product Name">
+        <validated-form-item label="Product Name" id="product-information-product-name">
           <a-input size="large" v-model="orderLocal.product_name" placeholder="Product Name"/>
-        </a-form-item>
-        <a-form-item label="Product Description">
+        </validated-form-item>
+        <validated-form-item label="Product Description" id="product-information-product-description">
           <a-input size="large" v-model="orderLocal.product_description" placeholder="Product Description"/>
-        </a-form-item>
-        <a-form-item v-if="type == 'order'" label="Reference Number">
-         <a-input-group compact>
-           <a-input size="large" v-model="orderLocal.reference_number" style="width: 50%;" placeholder="Reference Number"/>
+        </validated-form-item>
+        <validated-form-item v-if="type == 'order'" label="Reference Number" id="product-information-reference-number,product-information-reference-type">
+          <a-input-group compact>
+            <a-input size="large" v-model="orderLocal.reference_number" style="width: 50%;"
+                     placeholder="Reference Number"/>
             <a-select size="large" style="width: 50%" v-model="orderLocal.reference_type">
               <a-select-option value="po-number">
-               PO Number
+                PO Number
               </a-select-option>
               <a-select-option value="reference-number">
                 Reference Number
               </a-select-option>
             </a-select>
-         </a-input-group>
-        </a-form-item>
+          </a-input-group>
+        </validated-form-item>
       </a-form>
     </a-col>
     <a-col :span="12" v-if="type == 'order'">

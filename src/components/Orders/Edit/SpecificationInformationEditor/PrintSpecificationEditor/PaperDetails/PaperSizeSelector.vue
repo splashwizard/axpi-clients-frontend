@@ -1,4 +1,8 @@
 <template>
+  <div class="page-size-selector-wrapper">
+    <inline-validation-errors
+        :conditions="[{field: 'section_name', value: sectionName}]"
+        id="paper-finished-page-size"></inline-validation-errors>
     <div class="page-size-selector">
 
         <div class="paper-selector" :class="{'has-selection': selected}">
@@ -42,12 +46,13 @@
             <!--        </div>-->
         </div>
     </div>
+  </div>
 </template>
 
 <script>
     export default {
         name: "PaperSizeSelector",
-        props: ['initialSize'],
+        props: ['initialSize', 'sectionName'],
         data() {
             return {
                 selected: this.initialSize

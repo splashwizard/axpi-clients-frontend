@@ -6,13 +6,15 @@
                <h2>Product Type</h2>
            </div>
             <div class="form-margin-bottom">
+                <inline-validation-errors id="product-type"></inline-validation-errors>
                 <product-type-selector :order-local="orderLocal"></product-type-selector>
             </div>
 
             <div class="form-header" v-if="orderLocal.product_type">
                 <h2>Product Subtype</h2>
             </div>
-            <product-subtype-selector v-if="orderLocal.product_type"
+          <inline-validation-errors v-if="orderLocal.product_type" id="product-subtype"></inline-validation-errors>
+          <product-subtype-selector v-if="orderLocal.product_type"
                 :order-local="orderLocal" @property-updated="incrementUpdateKey"></product-subtype-selector>
         </div>
         <!-- / Product Type -->

@@ -29,6 +29,12 @@
     }
   }
 
+  .has-error {
+    input, .ant-select-selection, .ant-input-group-addon {
+      box-shadow: #f5222d 0px 0px 0px 0px, #f5222d 0px 0px 0px 0px, #f5222d 0px 1px 1px 0px, #f5222d 0px 0px 0px 1px !important;
+    }
+  }
+
   label {
     padding-bottom: 25px !important;
   }

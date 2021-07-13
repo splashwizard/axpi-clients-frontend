@@ -2,16 +2,18 @@
   <a-row :gutter="50">
     <a-col :span="12">
       <a-form layout="vertical">
-        <a-form-item label="Supplier" v-if="suppliers && suppliers.length">
+        <validated-form-item label="Supplier"
+                             id="supplier"
+                             v-if="suppliers && suppliers.length">
           <a-select size="large" style="width: 100%" v-model="orderLocal.supplier_id">
             <a-select-option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
               {{ supplier.name }}
             </a-select-option>
           </a-select>
-        </a-form-item>
-        <a-form-item label="Order Date">
+        </validated-form-item>
+        <validated-form-item id="order-information-order-date" label="Order Date">
           <a-date-picker style="width: 100%" size="large" v-model="orderLocal.order_date" placeholder="Order Date"/>
-        </a-form-item>
+        </validated-form-item>
         <a-form-item label="Quantity">
           <a-input size="large" type="large" style="width:100%;" v-model="orderLocal.quantity"></a-input>
         </a-form-item>
@@ -19,7 +21,7 @@
     </a-col>
     <a-col :span="12">
       <a-form layout="vertical">
-        <a-form-item label="Price">
+        <validated-form-item id="order-information-price,order-information-price-currency" label="Price">
           <a-input-group compact>
             <a-input :addon-before="costCurrencyPrepend" size="large" class="order-cost-input" style="width: 70%" v-model="orderLocal.cost"/>
             <a-select default-value="GBP" size="large" style="width: 30%" v-model="orderLocal.cost_currency">
@@ -34,11 +36,11 @@
               </a-select-option>
             </a-select>
           </a-input-group>
-        </a-form-item>
-        <a-form-item label="Date Delivered">
+        </validated-form-item>
+        <validated-form-item id="order-information-delivery-date" label="Delivery Date">
           <a-date-picker style="width: 100%" size="large" v-model="orderLocal.delivery_date"
                          placeholder="Delivery Date"/>
-        </a-form-item>
+        </validated-form-item>
       </a-form>
     </a-col>
   </a-row>

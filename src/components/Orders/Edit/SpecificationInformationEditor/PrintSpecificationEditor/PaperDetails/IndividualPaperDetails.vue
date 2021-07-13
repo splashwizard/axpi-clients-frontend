@@ -4,8 +4,9 @@
       <a-col span="12">
         <!-- General Paper Details -->
         <a-form layout="vertical">
-          <a-form-item v-if="!hideNameOfSection"
-                       label="Name of Section">
+          <validated-form-item v-if="!hideNameOfSection"
+                               id="paper-section-name"
+                               label="Name of Section">
             <a-select v-model="paper.section_name"
                       show-search size="large"
                       @change="forceRefresh">
@@ -14,17 +15,21 @@
                 {{ name.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
 
-          <a-form-item label="Number of Pages">
+          <validated-form-item label="Number of Pages"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-number-of-pages">
             <a-input type="number" min="0"
                      v-model="paper.number_of_pages"
                      addon-after="pp"
                      @blur="forceRefresh"
                      size="large"></a-input>
-          </a-form-item>
+          </validated-form-item>
 
-          <a-form-item label="Paper Finish">
+          <validated-form-item label="Paper Finish"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-finish">
             <a-select v-model="paper.finish"
                       show-search size="large"
                       @change="forceRefresh">
@@ -37,9 +42,12 @@
                 </a-select-option>
               </a-select-opt-group>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
 
-          <a-form-item label="Fold Type" v-if="productSubtype === 'leaflet'">
+          <validated-form-item label="Fold Type"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-fold-type"
+                               v-if="productSubtype === 'leaflet'">
             <a-select v-model="paper.fold_type"
                       show-search size="large"
                       @change="forceRefresh">
@@ -49,9 +57,12 @@
                 {{ type.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
 
-          <a-form-item label="Paper Weight">
+          <validated-form-item label="Paper Weight"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-weight,paper-weight-unit"
+          >
             <a-input-group compact>
               <a-input @blur="forceRefresh"
                        size="large" type="number" style="width: 75%" v-model="paper.paper_weight"/>
@@ -65,9 +76,11 @@
                 </a-select-option>
               </a-select>
             </a-input-group>
-          </a-form-item>
+          </validated-form-item>
 
-          <a-form-item label="Paper Brand">
+          <validated-form-item label="Paper Brand"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-brand">
             <a-select v-model="paper.paper_brand"
                       show-search size="large"
                       @change="forceRefresh">
@@ -75,9 +88,12 @@
                 <v-nodes :vnodes="menu"/>
                 <a-divider style="margin: 4px 0;"/>
                 <div style="display: flex; flex-wrap: nowrap; padding: 8px;">
-                  <a-input @click.prevent.stop="e => e.preventDefault()"  placeholder="Add new item" type="text" style="flex: auto;"></a-input>
-                  <a-button @click.prevent.stop="e => e.preventDefault()" style="flex: none; display: block; margin-left: 10px;"
-                      icon="plus">Add item</a-button>
+                  <a-input @click.prevent.stop="e => e.preventDefault()" placeholder="Add new item" type="text"
+                           style="flex: auto;"></a-input>
+                  <a-button @click.prevent.stop="e => e.preventDefault()"
+                            style="flex: none; display: block; margin-left: 10px;"
+                            icon="plus">Add item
+                  </a-button>
                 </div>
               </div>
               <a-select-option v-for="paperBrand in paperBrandOptions"
@@ -86,9 +102,11 @@
                 {{ paperBrand.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
 
-          <a-form-item label="Paper Name">
+          <validated-form-item label="Paper Name"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-name">
             <a-select v-model="paper.paper_name"
                       show-search size="large"
                       @change="forceRefresh">
@@ -96,9 +114,12 @@
                 <v-nodes :vnodes="menu"/>
                 <a-divider style="margin: 4px 0;"/>
                 <div style="display: flex; flex-wrap: nowrap; padding: 8px;">
-                  <a-input @click.prevent.stop="e => e.preventDefault()"  placeholder="Add new item" type="text" style="flex: auto;"></a-input>
-                  <a-button @click.prevent.stop="e => e.preventDefault()" style="flex: none; display: block; margin-left: 10px;"
-                            icon="plus">Add item</a-button>
+                  <a-input @click.prevent.stop="e => e.preventDefault()" placeholder="Add new item" type="text"
+                           style="flex: auto;"></a-input>
+                  <a-button @click.prevent.stop="e => e.preventDefault()"
+                            style="flex: none; display: block; margin-left: 10px;"
+                            icon="plus">Add item
+                  </a-button>
                 </div>
               </div>
               <a-select-option v-for="paperName in paperNameOptions" :value="paperName.value"
@@ -106,7 +127,7 @@
                 {{ paperName.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
         </a-form>
         <!-- / General Paper Details -->
       </a-col>
@@ -133,6 +154,7 @@
 
         <!-- Paper size selector (standard) -->
         <paper-size-selector v-show="paper.paper_size_type === 'standard'"
+                             :section-name="paper.section_name"
                              :initial-size="paper.paper_size"
                              @paper-size-selected="size => handlePaperSizeSelected(size)"></paper-size-selector>
         <!-- / Paper size selector -->
@@ -141,7 +163,9 @@
         <div v-show="paper.paper_size_type === 'custom'">
           <a-form layout="vertical">
             <!-- Width -->
-            <a-form-item label="Width">
+            <validated-form-item label="Width"
+                                 :conditions="[{field: 'section_name', value: paper.section_name}]"
+                                 id="paper-custom-paper-size-width,paper-custom-paper-size-width-unit">
               <a-input-group compact>
                 <a-input @blur="forceRefresh"
                          size="large" style="width: 60%"
@@ -157,11 +181,12 @@
                   </a-select-option>
                 </a-select>
               </a-input-group>
-            </a-form-item>
+            </validated-form-item>
             <!-- / Width -->
 
             <!-- Height -->
-            <a-form-item label="Height">
+            <validated-form-item label="Height" :conditions="[{field: 'section_name', value: paper.section_name}]"
+                                 id="paper-custom-paper-size-height,paper-custom-paper-size-height-unit">
               <a-input-group compact>
                 <a-input @blur="forceRefresh"
                          size="large" style="width: 60%"
@@ -177,7 +202,7 @@
                   </a-select-option>
                 </a-select>
               </a-input-group>
-            </a-form-item>
+            </validated-form-item>
             <!-- / Height -->
           </a-form>
         </div>
@@ -190,7 +215,10 @@
       <a-form layout="vertical">
         <a-row :gutter="70">
           <a-col :span="12">
-            <a-form-item label="Colour Type">
+            <validated-form-item
+                label="Colour Type"
+                :conditions="[{field: 'section_name', value: paper.section_name}]"
+                id="paper-colour-type">
               <a-radio-group @change="forceRefresh" v-model="paper.colour_type"
                              button-style="solid">
                 <a-radio-button value="process">
@@ -203,45 +231,53 @@
                   Process & Spot
                 </a-radio-button>
               </a-radio-group>
-            </a-form-item>
+            </validated-form-item>
 
-            <a-form-item
+            <validated-form-item
                 v-if="paper.colour_type === 'process'"
-                label="Number Of Process Colours">
+                label="Number Of Process Colours"
+                :conditions="[{field: 'section_name', value: paper.section_name}]"
+                id="paper-number-of-process-colours">
               <a-input type="number" min="0"
                        v-model="paper.number_of_process_colours"
                        @blur="forceRefresh"
                        size="large"></a-input>
-            </a-form-item>
+            </validated-form-item>
 
-            <a-form-item
+            <validated-form-item
                 v-if="paper.colour_type === 'spot'"
+                :conditions="[{field: 'section_name', value: paper.section_name}]"
+                id="paper-number-of-spot-colours"
                 label="Number Of Spot Colours">
               <a-input type="number" min="0"
                        v-model="paper.number_of_spot_colours"
                        @blur="forceRefresh"
                        size="large"></a-input>
-            </a-form-item>
+            </validated-form-item>
           </a-col>
         </a-row>
 
         <!-- Process and spot -->
         <a-row :gutter="70" v-if="paper.colour_type === 'process-and-spot'">
           <a-col span="12">
-            <a-form-item label="Number Of Process Colours">
+            <validated-form-item label="Number Of Process Colours"
+                                 :conditions="[{field: 'section_name', value: paper.section_name}]"
+                                 id="paper-number-of-process-colours">
               <a-input type="number" min="0"
                        v-model="paper.number_of_process_colours"
                        @blur="forceRefresh"
                        size="large"></a-input>
-            </a-form-item>
+            </validated-form-item>
           </a-col>
           <a-col span="12">
-            <a-form-item label="Number Of Spot Colours">
+            <validated-form-item label="Number Of Spot Colours"
+                                 :conditions="[{field: 'section_name', value: paper.section_name}]"
+                                 id="paper-number-of-spot-colours">
               <a-input type="number" min="0"
                        v-model="paper.number_of_spot_colours"
                        @blur="forceRefresh"
                        size="large"></a-input>
-            </a-form-item>
+            </validated-form-item>
           </a-col>
         </a-row>
         <!-- / Process and spot -->
@@ -251,7 +287,9 @@
 
     <!-- Coating Applied -->
     <a-form layout="vertical">
-      <a-form-item label="Coating Applied">
+      <validated-form-item label="Coating Applied"
+                           :conditions="[{field: 'section_name', value: paper.section_name}]"
+                           id="paper-is-coating-applied">
         <a-radio-group @change="forceRefresh" v-model="paper.is_coating_applied"
                        button-style="solid">
           <a-radio-button :value="true">
@@ -261,13 +299,15 @@
             No
           </a-radio-button>
         </a-radio-group>
-      </a-form-item>
+      </validated-form-item>
     </a-form>
 
     <a-form layout="vertical" v-if="paper.is_coating_applied === true">
       <a-row :gutter="60">
         <a-col span="12">
-          <a-form-item label="Coating Type">
+          <validated-form-item label="Coating Type"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-coating-type">
             <a-select v-model="paper.coating_type"
                       show-search size="large"
                       style="width: 100%"
@@ -278,9 +318,11 @@
                 {{ coatingType.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
 
-          <a-form-item label="Coating Applied">
+          <validated-form-item label="Coating Applied"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-coating-applied">
             <a-select v-model="paper.coating_applied"
                       show-search size="large"
                       style="width: 100%"
@@ -291,9 +333,11 @@
                 {{ coatingApplied.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
 
-          <a-form-item label="Sides Coated">
+          <validated-form-item label="Sides Coated"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-sides-coated">
             <a-select v-model="paper.sides_coated"
                       show-search size="large"
                       style="width: 100%"
@@ -304,7 +348,7 @@
                 {{ sidesCoated.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
         </a-col>
       </a-row>
     </a-form>
@@ -312,7 +356,9 @@
 
     <!-- Embellishments -->
     <a-form layout="vertical">
-      <a-form-item label="Is Embellished">
+      <validated-form-item label="Is Embellished"
+                           :conditions="[{field: 'section_name', value: paper.section_name}]"
+                           id="paper-is-embellished">
         <a-radio-group @change="forceRefresh" v-model="paper.is_embellished"
                        button-style="solid">
           <a-radio-button :value="true">
@@ -322,13 +368,15 @@
             No
           </a-radio-button>
         </a-radio-group>
-      </a-form-item>
+      </validated-form-item>
     </a-form>
 
     <a-form layout="vertical" v-if="paper.is_embellished">
       <a-row :gutter="60">
         <a-col span="12">
-          <a-form-item label="Embellishment Type">
+          <validated-form-item label="Embellishment Type"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-embellishment-type">
             <a-select v-model="paper.embellishment_type"
                       show-search size="large"
                       style="width: 100%"
@@ -339,7 +387,7 @@
                 {{ embellishmentType.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
+          </validated-form-item>
         </a-col>
       </a-row>
     </a-form>
@@ -349,7 +397,9 @@
     <a-form layout="vertical">
       <a-row :gutter="60">
         <a-col span="12">
-          <a-form-item label="Die Cutting Required">
+          <validated-form-item label="Die Cutting Required"
+                               :conditions="[{field: 'section_name', value: paper.section_name}]"
+                               id="paper-die-cutting-required">
             <a-radio-group @change="forceRefresh"
                            v-model="paper.die_cutting_required"
                            button-style="solid">
@@ -358,7 +408,7 @@
                 {{ option.label }}
               </a-radio-button>
             </a-radio-group>
-          </a-form-item>
+          </validated-form-item>
         </a-col>
       </a-row>
     </a-form>

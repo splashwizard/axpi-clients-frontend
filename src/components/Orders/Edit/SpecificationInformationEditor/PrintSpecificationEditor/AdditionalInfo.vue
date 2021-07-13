@@ -2,7 +2,8 @@
     <a-row :gutter="70">
         <a-col span="12">
             <a-form layout="vertical">
-                <a-form-item label="Printing Method">
+                <validated-form-item id="print-detail-printing-method"
+                    label="Printing Method">
                     <a-cascader
                             size="large"
                             :options="printingMethodTypeOptions"
@@ -11,11 +12,12 @@
                             @change="forceRefresh"
                             v-model="orderLocal.print_printing_method"
                     />
-                </a-form-item>
+                </validated-form-item>
 
               <a-row>
                 <a-col :span="12">
-                  <a-form-item label="Artwork Supplied">
+                  <validated-form-item id="print-detail-artwork-supplied"
+                      label="Artwork Supplied">
                     <a-radio-group @change="forceRefresh" v-model="orderLocal.print_artwork_supplied"
                                    button-style="solid">
                       <a-radio-button v-for="option in artworkSuppliedOptions" :key="option.value"
@@ -23,17 +25,18 @@
                         {{ option.label }}
                       </a-radio-button>
                     </a-radio-group>
-                  </a-form-item>
+                  </validated-form-item>
                 </a-col>
                 <a-col :span="12">
-                  <a-form-item label="Proof Made">
+                  <validated-form-item  id="print-detail-proof-made"
+                      label="Proof Made">
                     <a-radio-group @change="forceRefresh" v-model="orderLocal.print_proof_made"
                                    button-style="solid">
                       <a-radio-button v-for="option in proofMadeOptions" :key="option.value" :value="option.value">
                         {{ option.label }}
                       </a-radio-button>
                     </a-radio-group>
-                  </a-form-item>
+                  </validated-form-item>
                 </a-col>
               </a-row>
             </a-form>

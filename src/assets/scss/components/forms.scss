@@ -30,8 +30,12 @@
   }
 
   .has-error {
-    input, .ant-select-selection, .ant-input-group-addon {
+    input, .ant-select-selection, .ant-input-group-addon, .ant-radio-button-wrapper {
       box-shadow: #f5222d 0px 0px 0px 0px, #f5222d 0px 0px 0px 0px, #f5222d 0px 1px 1px 0px, #f5222d 0px 0px 0px 1px !important;
+
+      input {
+        box-shadow: none !important;
+      }
     }
   }
 

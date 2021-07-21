@@ -14,9 +14,9 @@
         <validated-form-item id="order-information-order-date" label="Order Date">
           <a-date-picker style="width: 100%" size="large" v-model="orderLocal.order_date" placeholder="Order Date"/>
         </validated-form-item>
-        <a-form-item label="Quantity">
+        <validated-form-item id="order-information-quantity" label="Quantity">
           <a-input size="large" type="large" style="width:100%;" v-model="orderLocal.quantity"></a-input>
-        </a-form-item>
+        </validated-form-item>
       </a-form>
     </a-col>
     <a-col :span="12">

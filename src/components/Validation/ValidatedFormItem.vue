@@ -1,7 +1,11 @@
 <template>
   <a-form-item
-      :validate-status="validateStatus"
-      :label="label">
+      :validate-status="validateStatus">
+<!--      :label="label">-->
+    <div class="validated-form-item-label">
+      <span class="label-lhs">{{ label }}</span>
+      <infobox :id="id"></infobox>
+    </div>
     <slot></slot>
   </a-form-item>
 </template>
@@ -69,6 +73,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.label-lhs {
+  margin-right: 8px;
+}
 
+.validated-form-item-label {
+  margin-bottom: 10px !important;
+}
 </style>

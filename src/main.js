@@ -51,6 +51,7 @@ Vue.component('metric-card', require('./components/Analytics/MetricCard').defaul
 Vue.component('swooshy-selector', require('./components/SwooshySelector').default);
 Vue.component('validated-form-item', require('./components/Validation/ValidatedFormItem').default);
 Vue.component('inline-validation-errors', require('./components/Validation/InlineValidationErrors').default);
+Vue.component('infobox', require('./components/Infobox').default);
 
 // Custom styles
 import '@/assets/scss/main.scss';

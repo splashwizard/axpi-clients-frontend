@@ -70,7 +70,7 @@
       "Help Section 9 Text": ""
     },
     {
-      "Field": "production-information-reference-number",
+      "Field": "product-information-reference-number",
       "Displayed": "Yes",
       "Optional": "No",
       "Help Section 1 Title": "What's a reference number?",
@@ -116,7 +116,7 @@
       "Help Section 9 Text": ""
     },
     {
-      "Field": "order-information-supplier",
+      "Field": "supplier",
       "Displayed": "Yes",
       "Optional": "No",
       "Help Section 1 Title": "I can't find my supplier?",
@@ -185,7 +185,7 @@
       "Help Section 9 Text": ""
     },
     {
-      "Field": "order-information-date-delivered",
+      "Field": "order-information-delivery-date",
       "Displayed": "Yes",
       "Optional": "No",
       "Help Section 1 Title": "Date Delivered",

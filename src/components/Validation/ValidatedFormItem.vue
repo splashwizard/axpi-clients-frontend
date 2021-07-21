@@ -4,7 +4,8 @@
 <!--      :label="label">-->
     <div class="validated-form-item-label">
       <span class="label-lhs">{{ label }}</span>
-      <infobox :id="id"></infobox>
+      <infobox v-for="(singularId, i) in ids" :key="i"
+               :id="singularId"></infobox>
     </div>
     <slot></slot>
   </a-form-item>

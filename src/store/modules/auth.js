@@ -8,7 +8,9 @@ export const state = {
     serverErrors: [],
 
     apiToken: null,
-    user: null
+    user: null,
+
+    selectedOrganisationalUnit: null
 };
 
 export const mutations = {
@@ -30,6 +32,10 @@ export const mutations = {
 
     SET_ERRORS(state, errors) {
         state.serverErrors = errors;
+    },
+
+    SET_ORGANISATIONAL_UNIT(state, orgUnit) {
+        state.selectedOrganisationalUnit = orgUnit;
     }
 };
 
@@ -48,6 +54,14 @@ export const getters = {
 
     loggedIn: (state) => {
         return state.apiToken !== null;
+    },
+
+    organisationalUnits: (state) => {
+        return state.user ? state.user.organisational_units : [];
+    },
+
+    selectedOrganisationalUnit: (state) => {
+        return state.selectedOrganisationalUnit;
     }
 };
 
@@ -63,6 +77,7 @@ export const actions = {
             commit('STOP_LOADING');
             commit('SET_API_TOKEN', r.data.token);
             commit('SET_USER', r.data.user);
+            commit('SET_ORGANISATIONAL_UNIT', _.first(r.data.user.organisational_units));
             router.push(params.to ? params.to : '/');
         }).catch(e => {
             commit('STOP_LOADING');
@@ -83,5 +98,9 @@ export const actions = {
         commit('SET_USER', null);
         router.push('/login');
         this._vm.$message.success('Logged out successfully');
+    },
+
+    selectOrganisationalUnit({commit}, orgUnit) {
+       commit('SET_ORGANISATIONAL_UNIT', orgUnit);
     }
 };

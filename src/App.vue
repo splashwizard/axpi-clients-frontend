@@ -10,16 +10,30 @@
             <div class="logo-circle">
               <img src="/img/axiom-tab-icon.svg" alt="">
             </div>
-            <span>
-                        {{ user.client.name }}
-                    </span>
-            <a-icon class="org-group-selector-arrow" type="down"/>
+
+            <div class="organisation-unit-selector">
+              <a-dropdown :trigger="['click']">
+                <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+                  {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : 'Please select a unit' }} <a-icon type="down" />
+                </a>
+                <a-menu slot="overlay">
+                  <a-menu-item v-for="(unit, key) in organisationalUnits" :key="key">
+                    <a href="#" @click.prevent="selectOrganisationalUnit(unit)">{{ unit.name }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
+            </div>
+
+<!--            <span>-->
+<!--                        {{ user.client.name }}-->
+<!--                    </span>-->
+<!--            <a-icon class="org-group-selector-arrow" type="down"/>-->
           </div>
-          <div class="top-nav-search-bar">
-            <a-input ref="userNameInput" placeholder="Search..." size="large">
-              <a-icon slot="prefix" type="search"/>
-            </a-input>
-          </div>
+<!--          <div class="top-nav-search-bar">-->
+<!--            <a-input ref="userNameInput" placeholder="Search..." size="large">-->
+<!--              <a-icon slot="prefix" type="search"/>-->
+<!--            </a-input>-->
+<!--          </div>-->
           <div class="top-nav-links">
             <div id="nav">
               <a-button class="feedback-icon">
@@ -100,7 +114,8 @@
               <span v-if="!menuCollapsed">Past Orders</span>
             </a-menu-item>
             <a-menu-item title="Specifications" key="specifications">
-              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save" theme="filled"></a-icon>
+              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save"
+                      theme="filled"></a-icon>
               <span v-if="!menuCollapsed">Specifications</span>
             </a-menu-item>
             <a-menu-item title="Suppliers" key="suppliers">
@@ -222,7 +237,8 @@ export default {
   },
   methods: {
     ...mapActions('auth', {
-      logout: 'logout'
+      logout: 'logout',
+      selectOrganisationalUnit: 'selectOrganisationalUnit'
     }),
     onCollapse(collapsed, type) {
       console.log(collapsed, type);
@@ -233,12 +249,14 @@ export default {
     handleMenuItemClicked(e) {
       let navigateTo = e.key;
       this.$router.push("/" + navigateTo);
-    }
+    },
   },
   computed: {
     ...mapGetters('auth', {
       loggedIn: 'loggedIn',
-      user: 'user'
+      user: 'user',
+      selectedOrganisationalUnit: 'selectedOrganisationalUnit',
+      organisationalUnits: 'organisationalUnits'
     }),
 
     noPadding() {
@@ -264,18 +282,18 @@ export default {
   .top-nav {
     display: flex;
 
-    .top-nav-search-bar {
-      flex-grow: 1;
-
-      input {
-        border: 0;
-        font-size: 15px;
-
-        &:hover, &:focus {
-          box-shadow: none;
-        }
-      }
-    }
+    //.top-nav-search-bar {
+    //  flex-grow: 1;
+    //
+    //  input {
+    //    border: 0;
+    //    font-size: 15px;
+    //
+    //    &:hover, &:focus {
+    //      box-shadow: none;
+    //    }
+    //  }
+    //}
 
     .top-nav-links {
       flex-shrink: 1;
@@ -312,6 +330,7 @@ export default {
 }
 
 .logo {
+  flex: 1;
   text-align: left;
   //padding-left: 20px;
   //padding-top: 16px;
@@ -415,8 +434,15 @@ export default {
   }
 }
 
-.org-group-selector-arrow {
-  margin-left: 10px;
-  font-size: 11px;
+.organisation-unit-selector {
+  padding-left: 15px;
+
+  .ant-dropdown-trigger {
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  .ant-dropdown-link {
+    font-size: 17px;
+  }
 }
 </style>

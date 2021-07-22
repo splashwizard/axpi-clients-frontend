@@ -77,6 +77,7 @@ export default {
 <style>
 .label-lhs {
   margin-right: 8px;
+  font-weight: 500;
 }
 
 .validated-form-item-label {

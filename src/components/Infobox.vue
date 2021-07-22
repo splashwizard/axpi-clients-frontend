@@ -18,8 +18,11 @@
         {{ currentStageText }}
       </div>
     </template>
-    <div class="infobox-btn">
-      <a-button size="small" shape="circle" icon="question"/>
+    <div class="infobox-btn-wrapper">
+      <div class="infobox-btn">
+        <span>?</span>
+<!--        <a-icon type="question"></a-icon>-->
+      </div>
     </div>
   </a-popover>
 </template>
@@ -97,17 +100,31 @@ export default {
   padding-right: 4px !important;
 }
 
+.infobox-btn-wrapper {
+  display: inline-block;
+}
+
 .infobox-btn {
-  display: inline;
+  border-radius: 3px;
+  background: #1890ff;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.infobox-btn .ant-btn {
-  width: 23px;
-  height: 23px;
+.infobox-btn:hover {
+  background: #5469d4;
 }
 
-.infobox-btn .ant-btn i {
-  font-size: 12px;
+.infobox-btn i, .infobox-btn span {
+  font-size: 11px;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
 }
 
 .infobox-header {

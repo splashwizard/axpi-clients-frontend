@@ -36,12 +36,7 @@
 <!--          </div>-->
           <div class="top-nav-links">
             <div id="nav">
-              <a-button class="feedback-icon">
-                <div>
-                  <feedback-icon></feedback-icon>
-                  <span>Feedback?</span>
-                </div>
-              </a-button>
+              <feedback-popup></feedback-popup>
               <a-popover title="Notifications" trigger="click" placement="bottomRight">
                 <div slot="content">
                   <div>
@@ -204,7 +199,7 @@ import AccountIcon from "./components/Icons/AccountIcon";
 import UserIcon from "./components/Icons/UserIcon";
 import QuestionMarkIcon from "./components/Icons/QuestionMarkIcon";
 import BellIcon from "./components/Icons/BellIcon";
-import FeedbackIcon from "./components/Icons/FeedbackIcon";
+import FeedbackPopup from "./components/FeedbackPopup";
 
 export default {
   components: {
@@ -220,7 +215,7 @@ export default {
     UserIcon,
     QuestionMarkIcon,
     BellIcon,
-    FeedbackIcon
+    FeedbackPopup
   },
   data() {
     return {

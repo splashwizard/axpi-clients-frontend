@@ -66,5 +66,6 @@ export default {
 <style scoped lang="scss">
 .page-body {
   margin-top: 25px;
+  padding-bottom: 10px;
 }
 </style>

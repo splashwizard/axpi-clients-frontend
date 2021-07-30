@@ -38,6 +38,13 @@
         {{ formatSubtype(orderLocal.product_subtype) }}
       </a-descriptions-item>
     </a-descriptions>
+
+    <a-descriptions :column="1" title="Emissions" bordered>
+      <a-descriptions-item label="CO2">
+        <a-spin v-if="isLoadingEmissions" />
+        <span>{{ emissions }} kg</span>
+      </a-descriptions-item>
+    </a-descriptions>
   </div>
 </template>
 
@@ -45,11 +52,34 @@
 import orders from "../../../helpers/orders";
 import Dates from "../../../mixins/Dates";
 import Orders from "../../../mixins/Orders";
+import axios from 'axios';
 
 export default {
   name: "OrderDescription",
   props: ['order'],
   mixins: [Dates, Orders],
+  data() {
+    return {
+      isLoadingEmissions: false,
+      emissions: null
+    }
+  },
+  created() {
+    this.loadEmissions();
+  },
+  methods: {
+    loadEmissions() {
+      let vm = this;
+      vm.isLoadingEmissions = true;
+      axios.get(window.API_BASE + '/orders/' + vm.order.id + '/environmental-data').then(r => {
+        vm.isLoadingEmissions = false;
+        vm.emissions = r.data;
+      }).catch(e => {
+        vm.isLoadingEmissions = false;
+        console.log(e);
+      });
+    }
+  },
   computed: {
     orderLocal() {
       return orders.decodeOrder(this.order);

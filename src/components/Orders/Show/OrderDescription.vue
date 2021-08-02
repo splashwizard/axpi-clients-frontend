@@ -42,9 +42,11 @@
     <a-descriptions :column="1" title="Emissions" bordered>
       <a-descriptions-item label="CO2">
         <a-spin v-if="isLoadingEmissions" />
-        <span>{{ emissions }} kg</span>
+        <span v-if="!isLoadingEmissions">{{ emissions ? emissions['total'] : '-' }} kg</span>
+        <emission-breakdown-modal-and-button :is-loading="isLoadingEmissions" :emissions="emissions"></emission-breakdown-modal-and-button>
       </a-descriptions-item>
     </a-descriptions>
+
   </div>
 </template>
 
@@ -52,6 +54,7 @@
 import orders from "../../../helpers/orders";
 import Dates from "../../../mixins/Dates";
 import Orders from "../../../mixins/Orders";
+import EmissionBreakdownModalAndButton from "./EmissionBreakdownModalAndButton";
 import axios from 'axios';
 
 export default {
@@ -64,6 +67,7 @@ export default {
       emissions: null
     }
   },
+  components: {EmissionBreakdownModalAndButton},
   created() {
     this.loadEmissions();
   },

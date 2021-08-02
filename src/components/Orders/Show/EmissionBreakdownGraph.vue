@@ -32,6 +32,10 @@ export default {
     }
   },
   methods: {
+    formatFloat(val) {
+      return Math.round( val * 100 + Number.EPSILON ) / 100;
+    },
+
     generateGraphData(node, id = 1, parent=null) {
       let percentageOfParent = (parent ? node['total'] / parent['total'] : 1);
       if (isNaN(percentageOfParent)) {
@@ -41,12 +45,12 @@ export default {
       let data = {
         id: String(id),
         name: node['label'],
-        count: node['total'],
-        label: node['total'] + 'kg',
+        count: this.formatFloat(node['total']),
+        label: this.formatFloat(node['total']) + 'kg',
         rate: percentageOfParent,
         status: 'B',
         variableName: 'Percentage Of Parent',
-        variableValue: percentageOfParent,
+        variableValue: this.formatFloat(percentageOfParent),
         variableUp: false,
         children: []
       };

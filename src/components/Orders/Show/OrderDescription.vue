@@ -42,7 +42,7 @@
     <a-descriptions :column="1" title="Emissions" bordered>
       <a-descriptions-item label="CO2">
         <a-spin v-if="isLoadingEmissions" />
-        <span v-if="!isLoadingEmissions">{{ emissions ? emissions['total'] : '-' }} kg</span>
+        <span v-if="!isLoadingEmissions">{{ emissions ? formatFloat(emissions['total']) : '-' }} kg</span>
         <emission-breakdown-modal-and-button :is-loading="isLoadingEmissions" :emissions="emissions"></emission-breakdown-modal-and-button>
       </a-descriptions-item>
     </a-descriptions>
@@ -82,6 +82,10 @@ export default {
         vm.isLoadingEmissions = false;
         console.log(e);
       });
+    },
+
+    formatFloat(val) {
+      return Math.round( val * 100 + Number.EPSILON ) / 100;
     }
   },
   computed: {

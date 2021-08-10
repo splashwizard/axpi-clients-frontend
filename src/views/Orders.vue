@@ -7,7 +7,8 @@
       <div class="actions">
         <a-input-search placeholder="Search orders" style="width: 200px" v-model="searchQuery" />
 
-        <a-button icon="filter">Filter</a-button>
+        <orders-filters :filters="filters"></orders-filters>
+
         <a-button icon="export">Export</a-button>
         <a-button icon="form" @click="requestInformation" :loading="isRequestingInformation"
                   :disabled="selectedOrderIds.length == 0">Request Information
@@ -31,6 +32,7 @@
 <script>
 import OrdersTable from "../components/Orders/OrdersTable";
 import EditOrderModal from "../components/Orders/EditOrderModal";
+import OrdersFilters from "../components/Orders/OrdersFilters";
 
 import {mapGetters, mapActions} from "vuex";
 import axios from 'axios';
@@ -45,7 +47,7 @@ export default {
       isLoading: 'isLoading'
     })
   },
-  components: {OrdersTable, EditOrderModal},
+  components: {OrdersTable, EditOrderModal, OrdersFilters},
   data() {
     return {
       suppliers: [],
@@ -53,7 +55,8 @@ export default {
       isRequestingInformation: false,
       selectedOrderIds: [],
       isDeleting: false,
-      searchQuery: ''
+      searchQuery: '',
+      filters: {}
     }
   },
   created() {

@@ -7,7 +7,7 @@
       <div class="actions">
         <a-input-search placeholder="Search orders" style="width: 200px" v-model="searchQuery" />
 
-        <orders-filters :filters="filters"></orders-filters>
+        <orders-filters @filter-updated="handleFilterUpdated" :filters="filters"></orders-filters>
 
         <a-button icon="export">Export</a-button>
         <a-button icon="form" @click="requestInformation" :loading="isRequestingInformation"
@@ -22,6 +22,7 @@
     <orders-table @set-selected-order-ids="setSelectedOrderIds"
                   @delete-order="deleteOrder"
                   :search-query="searchQuery"
+                  :filters="filters"
                   :reload-key="reloadOrdersKey" @selected="handleOrderSelected"></orders-table>
 
     <edit-order-modal :suppliers="suppliers" v-if="order && type === 'order'">
@@ -56,7 +57,9 @@ export default {
       selectedOrderIds: [],
       isDeleting: false,
       searchQuery: '',
-      filters: {}
+      filters: {
+        filters_enabled: {}
+      }
     }
   },
   created() {
@@ -125,6 +128,10 @@ export default {
       this.loadOrder(
           order.id
       );
+    },
+
+    handleFilterUpdated() {
+      this.incrementReloadOrdersKey();
     }
   }
 }

@@ -109,7 +109,7 @@ const columns = [
 ];
 
 export default {
-  props: ['reloadKey', 'searchQuery'],
+  props: ['reloadKey', 'searchQuery', 'filters'],
   data() {
     return {
       data: [],
@@ -171,14 +171,31 @@ export default {
       });
     },
 
-    fetch: _.debounce(function (params = {}) {
-      this.loading = true;
-      axios.post(window.API_BASE + '/orders/search', {
+    determineSearchParams(params) {
+      let search = {
         results_per_page: 10,
         status: this.statusToShow,
-        q: this.searchQuery,
+        q: this.searchQuery
+      };
+
+      if (this.filters && this.filters.filters_enabled.length) {
+        search.filters = {};
+        _.each(this.filters.filters_enabled, filter => {
+          search.filters[filter] = this.filters[filter];
+        });
+      }
+
+      console.log(search);
+
+      return {
+        ...search,
         ...params
-      }).then(r => {
+      }
+    },
+
+    fetch: _.debounce(function (params = {}) {
+      this.loading = true;
+      axios.post(window.API_BASE + '/orders/search', this.determineSearchParams(params)).then(r => {
         const pagination = {...this.pagination};
         // Read total count from server
         pagination.total = r.data.total;

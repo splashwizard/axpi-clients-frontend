@@ -2,17 +2,20 @@
   <div class="optimisations">
     <loading-screen :is-loading="isLoading||isOptimising"></loading-screen>
 
-    <div class="page-header" v-if="optimisation">
-      <h1 class="page-title">{{ optimisation.name }}</h1>
-      <a-button icon="arrow-left" @click="backToAllOptimisations">Back to all optimisations</a-button>
-      <div style="margin-left: 8px">
-        <a-button :disabled="hasNoSpecs" class="" type="primary" @click.prevent="runOptimisation">Optimise</a-button>
-      </div>
-      <add-specification-to-optimisation-button-and-modal style="margin-left: 8px;"
-                                                          :optimisation="optimisation"
-                                                          @refresh-optimisation="refresh"
-      ></add-specification-to-optimisation-button-and-modal>
-    </div>
+    <a-page-header v-if="optimisation"
+                   :title="optimisation.name"
+                   @back="backToAllOptimisations"
+    >
+      <template slot="extra">
+        <div style="margin-left: 8px; display: inline;">
+          <a-button :disabled="hasNoSpecs" class="" type="primary" @click.prevent="runOptimisation">Optimise</a-button>
+        </div>
+        <add-specification-to-optimisation-button-and-modal style="margin-left: 8px;"
+                                                            :optimisation="optimisation"
+                                                            @refresh-optimisation="refresh"
+        ></add-specification-to-optimisation-button-and-modal>
+      </template>
+    </a-page-header>
 
     <div v-if="optimisation">
       <optimisation-specifications-table :optimisation="optimisation"

@@ -44,7 +44,7 @@
                         <a-button type="primary" size="large" html-type="submit" class="login-form-button" :loading="isLoading">
                             Log In
                         </a-button>
-                        <a href="">
+                        <a href="/forgot-password">
                             Forgot password
                         </a>
                     </a-form-item>

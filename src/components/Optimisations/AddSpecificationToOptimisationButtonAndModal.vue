@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: inline !important;">
     <a-button type="primary" icon="plus" @click.prevent="showMethodSelectorModal">Add Specifications</a-button>
 
     <a-modal title="Add Specifications" :visible="methodSelectorModalVisible" @cancel="handleMethodSelectorCancel"

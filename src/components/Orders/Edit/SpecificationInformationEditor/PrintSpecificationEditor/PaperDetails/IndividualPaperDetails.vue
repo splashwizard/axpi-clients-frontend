@@ -81,29 +81,28 @@
           <validated-form-item label="Paper Brand"
                                :conditions="[{field: 'section_name', value: paper.section_name}]"
                                id="paper-brand">
-            <a-select v-model="paper.paper_brand"
-                      show-search size="large"
-                      @change="forceRefresh">
-              <div slot="dropdownRender" slot-scope="menu">
-                <v-nodes :vnodes="menu"/>
-                <a-divider style="margin: 4px 0;"/>
-                <div style="display: flex; flex-wrap: nowrap; padding: 8px;">
-                  <a-input @click.prevent.stop="e => e.preventDefault()" placeholder="Add new item" type="text"
-                           style="flex: auto;"></a-input>
-                  <a-button @click.prevent.stop="e => e.preventDefault()"
-                            style="flex: none; display: block; margin-left: 10px;"
-                            icon="plus">Add item
-                  </a-button>
-                </div>
-              </div>
-              <a-select-option v-for="paperBrand in paperBrandOptions"
-                               :value="paperBrand.value"
-                               :key="paperBrand.value">
-                {{ paperBrand.label }}
-              </a-select-option>
-            </a-select>
+                        <a-select v-model="paper.paper_brand"
+                                  show-search size="large"
+                                  @change="forceRefresh">
+                          <div slot="dropdownRender" slot-scope="menu">
+                            <v-nodes :vnodes="menu"/>
+                            <a-divider style="margin: 4px 0;"/>
+                            <div style="display: flex; flex-wrap: nowrap; padding: 8px;">
+                              <a-input @click.prevent.stop="e => e.preventDefault()" placeholder="Add new item" type="text"
+                                       style="flex: auto;"></a-input>
+                              <a-button @click.prevent.stop="e => e.preventDefault()"
+                                        style="flex: none; display: block; margin-left: 10px;"
+                                        icon="plus">Add item
+                              </a-button>
+                            </div>
+                          </div>
+                          <a-select-option v-for="paperBrand in paperBrandOptions"
+                                           :value="paperBrand.value"
+                                           :key="paperBrand.value">
+                            {{ paperBrand.label }}
+                          </a-select-option>
+                        </a-select>
           </validated-form-item>
-
           <validated-form-item label="Paper Name"
                                :conditions="[{field: 'section_name', value: paper.section_name}]"
                                id="paper-name">
@@ -418,6 +417,8 @@
 
 <script>
 import PaperSizeSelector from "./PaperSizeSelector";
+
+const _ = require('lodash');
 
 const PAPER_FINISH_OPTIONS = [
   {
@@ -990,7 +991,8 @@ export default {
     'paper',
     'propagateForceRefresh',
     'sectionNameOptions',
-    'hideNameOfSection'
+    'hideNameOfSection',
+    'paperBrands'
   ],
   methods: {
     forceRefresh() {
@@ -1017,6 +1019,7 @@ export default {
       paperFinishOptions: PAPER_FINISH_OPTIONS,
       paperWeightOptions: PAPER_WEIGHT_OPTIONS,
       paperBrandOptions: PAPER_BRAND_OPTIONS,
+      // paperBrandNames: _.map(PAPER_BRAND_OPTIONS, 'label'),
       paperNameOptions: PAPER_NAME_OPTIONS,
       coatingTypeOptions: COATING_TYPE_OPTIONS,
       coatingFinishOptions: COATING_FINISH_OPTIONS,
@@ -1025,6 +1028,16 @@ export default {
       embellishmentTypeOptions: EMBELLISHMENT_TYPE_OPTIONS,
       dieCuttingRequiredOptions: DIE_CUTTING_REQUIRED_OPTIONS,
       paperFoldTypeOptions: PAPER_FOLD_TYPE_OPTIONS
+    }
+  },
+  computed: {
+    paperBrandNames() {
+      let fromDb = _.map(this.paperBrands, 'name');
+      let currentPaperBrand = this.paper.paper_brand;
+      if (currentPaperBrand.length !== 0 && !fromDb.includes(currentPaperBrand)) {
+        fromDb.push(currentPaperBrand);
+      }
+      return fromDb;
     }
   }
 }

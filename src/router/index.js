@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
 import store from "../store";
+import ForgotPassword from "../views/ForgotPassword";
+import ResetPassword from "../views/ResetPassword";
 
 Vue.use(VueRouter)
 
@@ -11,6 +13,16 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/forgot-password',
+        name: 'Forgot Password',
+        component: ForgotPassword
+    },
+    {
+        path: '/reset-password',
+        name: 'Reset Password',
+        component: ResetPassword
     },
     {
         path: '/',
@@ -146,6 +158,14 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    },
+    {
+        path: '/account',
+        name: 'Account',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "account" */ '../views/Account.vue')
     }
 ]
 

@@ -2,12 +2,10 @@
   <div class="home">
     <loading-screen :is-loading="isLoading"></loading-screen>
 
-    <div class="page-header" v-if="order">
-      <h1 class="page-title">{{ order.product_name }}</h1>
-      <a-button type="primary"
-                icon="arrow-left" @click="backToAllOrders">Back to all orders
-      </a-button>
-    </div>
+    <a-page-header v-if="order"
+        :title="order.product_name"
+        @back="backToAllOrders"
+    />
 
     <div class="page-body" v-if="order">
       <order-description :order="order"></order-description>

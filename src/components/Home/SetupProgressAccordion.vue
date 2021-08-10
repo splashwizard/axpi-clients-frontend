@@ -2,12 +2,12 @@
     <a-collapse v-model="activeSetupStep" accordion>
         <a-collapse-panel key="1" header="Build Your Data Integrations">
             <p>Browse our developer documentation to integrate Axiom into your datasources.</p>
-            <router-link to="/suppliers">
+            <a href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core" target="_blank">
                 <a-button type="primary">
                    View Documentation
                     <a-icon type="arrow-right"/>
                 </a-button>
-            </router-link>
+            </a>
         </a-collapse-panel>
         <a-collapse-panel key="2" header="Get Your API Keys" :disabled="false">
             <p>

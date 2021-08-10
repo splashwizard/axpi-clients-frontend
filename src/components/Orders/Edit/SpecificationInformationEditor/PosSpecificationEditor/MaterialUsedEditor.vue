@@ -10,12 +10,15 @@
                             <a-form layout="vertical">
                                 <!-- Material -->
                                 <a-form-item label="Material">
-                                    <a-cascader size="large"
+                                    <a-select size="large"
                                                 style="width: 100%"
                                                 @change="forceRefresh"
                                                 :options="materialOptions"
                                                 v-model="orderLocal.pos_material[i].material">
-                                    </a-cascader>
+                                      <a-select-option v-for="(m,i) in materialOptions" :key="i" :value="m.value">
+                                        {{ m.label }}
+                                      </a-select-option>
+                                    </a-select>
                                 </a-form-item>
                                 <!-- / Material -->
 
@@ -139,7 +142,8 @@
                 if (!value) {
                     return 'Please select a material';
                 }
-                return value.join(' / ');
+                return value;
+                // return value.join(' / ');
             }
         }
     }

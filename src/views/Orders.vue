@@ -5,6 +5,8 @@
     <div class="page-header">
       <h1 class="page-title">Orders</h1>
       <div class="actions">
+        <a-input-search placeholder="Search orders" style="width: 200px" v-model="searchQuery" />
+
         <a-button icon="filter">Filter</a-button>
         <a-button icon="export">Export</a-button>
         <a-button icon="form" @click="requestInformation" :loading="isRequestingInformation"
@@ -18,6 +20,7 @@
 
     <orders-table @set-selected-order-ids="setSelectedOrderIds"
                   @delete-order="deleteOrder"
+                  :search-query="searchQuery"
                   :reload-key="reloadOrdersKey" @selected="handleOrderSelected"></orders-table>
 
     <edit-order-modal :suppliers="suppliers" v-if="order && type === 'order'">
@@ -49,7 +52,8 @@ export default {
       isLoadingSuppliers: false,
       isRequestingInformation: false,
       selectedOrderIds: [],
-      isDeleting: false
+      isDeleting: false,
+      searchQuery: ''
     }
   },
   created() {

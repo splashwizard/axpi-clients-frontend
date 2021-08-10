@@ -44,6 +44,38 @@ export default {
             order.print_proof_made = orderFromServer.print_detail.proof_made;
         }
 
+        // POS
+        if (orderFromServer.pos_detail && typeof orderFromServer.pos_detail === 'object') {
+            // Materials Used
+            if (orderFromServer.pos_detail.pos_materials_used && orderFromServer.pos_detail.pos_materials_used.length) {
+                order.pos_material = _.cloneDeep(orderFromServer.pos_detail.pos_materials_used);
+            }
+
+            // Additional Information
+            order.pos_product_type = orderFromServer.pos_detail.product_type;
+            order.pos_product_width = orderFromServer.pos_detail.width;
+            order.pos_product_width_unit = orderFromServer.pos_detail.width_unit;
+            order.pos_product_depth = orderFromServer.pos_detail.depth;
+            order.pos_product_depth_unit = orderFromServer.pos_detail.depth_unit;
+            order.pos_product_height = orderFromServer.pos_detail.height;
+            order.pos_product_height_unit = orderFromServer.pos_detail.height_unit;
+            order.pos_weight_supported = orderFromServer.pos_detail.weight_supported;
+            order.pos_weight_supported_unit = orderFromServer.pos_detail.weight_supported_unit;
+            order.pos_usable_area_of_shelves = orderFromServer.pos_detail.usable_area_of_shelves;
+            order.pos_usable_area_of_shelves_unit = orderFromServer.pos_detail.usable_area_of_shelves_unit;
+            order.pos_product_type_supported = orderFromServer.pos_detail.product_type_supported;
+            order.pos_product_supported_width = orderFromServer.pos_detail.product_supported_width;
+            order.pos_product_supported_width_unit = orderFromServer.pos_detail.product_supported_width_unit;
+            order.pos_product_supported_depth = orderFromServer.pos_detail.product_supported_depth;
+            order.pos_product_supported_depth_unit = orderFromServer.pos_detail.product_supported_depth_unit;
+            order.pos_product_supported_height = orderFromServer.pos_detail.product_supported_height;
+            order.pos_product_supported_height_unit = orderFromServer.pos_detail.product_supported_height_unit;
+
+            order.pos_printing_method = orderFromServer.pos_detail.printing_method ?  orderFromServer.pos_detail.printing_method.split('/') : null;
+            order.pos_artwork_supplied = orderFromServer.pos_detail.artwork_supplied;
+            order.pos_proof_made = orderFromServer.pos_detail.proof_made;
+        }
+
         return order;
     },
 
@@ -79,6 +111,38 @@ export default {
         order.print_detail.printing_method = localOrder.print_printing_method ? localOrder.print_printing_method.join('/') : null;
         order.print_detail.artwork_supplied = localOrder.print_artwork_supplied;
         order.print_detail.proof_made = localOrder.print_proof_made;
+
+        // POS
+        order.pos_detail = {};
+
+        // POS - Materials Used
+        if (localOrder.pos_material) {
+            order.pos_detail.pos_materials_used = _.cloneDeep(localOrder.pos_material);
+        }
+
+        // POS - Additional Sections
+        order.pos_detail.product_type = localOrder.pos_product_type;
+        order.pos_detail.width = localOrder.pos_product_width;
+        order.pos_detail.width_unit = localOrder.pos_product_width_unit;
+        order.pos_detail.depth = localOrder.pos_product_depth;
+        order.pos_detail.depth_unit = localOrder.pos_product_depth_unit;
+        order.pos_detail.height = localOrder.pos_product_height;
+        order.pos_detail.height_unit = localOrder.pos_product_height_unit;
+        order.pos_detail.weight_supported = localOrder.pos_weight_supported;
+        order.pos_detail.weight_supported_unit = localOrder.pos_weight_supported_unit;
+        order.pos_detail.usable_area_of_shelves = localOrder.pos_usable_area_of_shelves;
+        order.pos_detail.usable_area_of_shelves_unit = localOrder.pos_usable_area_of_shelves_unit;
+        order.pos_detail.product_type_supported = localOrder.pos_product_type_supported;
+        order.pos_detail.product_supported_width = localOrder.pos_product_supported_width;
+        order.pos_detail.product_supported_width_unit = localOrder.pos_product_supported_width_unit;
+        order.pos_detail.product_supported_depth = localOrder.pos_product_supported_depth;
+        order.pos_detail.product_supported_depth_unit = localOrder.pos_product_supported_depth_unit;
+        order.pos_detail.product_supported_height = localOrder.pos_product_supported_height;
+        order.pos_detail.product_supported_height_unit = localOrder.pos_product_supported_height_unit;
+
+        order.pos_detail.printing_method = localOrder.pos_printing_method ? localOrder.pos_printing_method.join('/') : null;
+        order.pos_detail.artwork_supplied = localOrder.pos_artwork_supplied;
+        order.pos_detail.proof_made = localOrder.pos_proof_made;
 
         return order;
     }

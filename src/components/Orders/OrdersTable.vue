@@ -15,7 +15,7 @@
              :row-key="record => record.id"
              :data-source="data"
              :pagination="pagination"
-             :loading="loading"
+             :loading="loading||searchQueryIsDirty"
              @change="handleTableChange"
     >
       <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{
@@ -56,6 +56,8 @@
 import axios from 'axios';
 import Orders from "../../mixins/Orders";
 import Dates from "../../mixins/Dates";
+
+const _ = require('lodash');
 
 const columns = [
   {
@@ -107,11 +109,12 @@ const columns = [
 ];
 
 export default {
-  props: ['reloadKey'],
+  props: ['reloadKey', 'searchQuery'],
   data() {
     return {
       data: [],
       pagination: {},
+      searchQueryIsDirty: false,
       loading: false,
       statusToShow: null,
       columns,
@@ -132,6 +135,10 @@ export default {
     },
     selectedOrderIds(newSelection) {
       this.$emit('set-selected-order-ids', newSelection);
+    },
+    searchQuery: function () {
+      this.searchQueryIsDirty = true;
+      this.fetch();
     }
   },
   computed: {
@@ -164,11 +171,12 @@ export default {
       });
     },
 
-    fetch(params = {}) {
+    fetch: _.debounce(function (params = {}) {
       this.loading = true;
       axios.post(window.API_BASE + '/orders/search', {
         results_per_page: 10,
         status: this.statusToShow,
+        q: this.searchQuery,
         ...params
       }).then(r => {
         const pagination = {...this.pagination};
@@ -177,11 +185,12 @@ export default {
         this.loading = false;
         this.data = r.data.data;
         this.pagination = pagination;
+        this.searchQueryIsDirty = false;
       }).catch(e => {
         console.log(e);
         this.$message.error('Error loading orders');
       });
-    },
+    }, 500),
 
     handleRecordSelected(order) {
       // this.$emit('selected', order);

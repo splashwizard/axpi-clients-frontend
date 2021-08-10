@@ -1,15 +1,15 @@
 <template>
   <div class="axpi-form width-medium">
     <!-- Customer Information -->
-    <div class="form-section" v-if="user.supplier">
-      <div class="form-header">
-        <h2>Customer Information</h2>
-      </div>
-      <customer-information
-          :client="orderLocal.client"
-          :order-local="orderLocal"
-          :organisational-unit="orderLocal.organisational_unit"></customer-information>
-    </div>
+<!--    <div class="form-section" v-if="user.supplier">-->
+<!--      <div class="form-header">-->
+<!--        <h2>Customer Information</h2>-->
+<!--      </div>-->
+<!--      <customer-information-->
+<!--          :client="orderLocal.client"-->
+<!--          :order-local="orderLocal"-->
+<!--          :organisational-unit="orderLocal.organisational_unit"></customer-information>-->
+<!--    </div>-->
     <!-- /Customer Information -->
 
     <!-- Product Information -->
@@ -44,14 +44,13 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 
-import CustomerInformation from "./GeneralInformationEditor/CustomerInformation";
 import ProductInformation from "./GeneralInformationEditor/ProductInformation";
 import OrderInformation from "./GeneralInformationEditor/OrderInformation";
 
 export default {
   name: "GeneralInformationEditor",
   props: ['orderLocal', 'suppliers'],
-  components: {CustomerInformation, ProductInformation, OrderInformation},
+  components: {ProductInformation, OrderInformation},
   computed: {
     ...mapGetters('auth', {
       user: 'user'

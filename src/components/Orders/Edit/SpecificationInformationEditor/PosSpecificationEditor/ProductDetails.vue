@@ -72,8 +72,8 @@
 
         <a-form-item label="Usable Area of Shelves">
           <a-input-group compact>
-            <a-input size="large" style="width: 75%" v-model="orderLocal.usable_area"/>
-            <a-select default-value="g" style="width: 25%" size="large" v-model="orderLocal.usable_area_unit">
+            <a-input size="large" style="width: 75%" v-model="orderLocal.pos_usable_area_of_shelves"/>
+            <a-select default-value="g" style="width: 25%" size="large" v-model="orderLocal.pos_usable_area_of_shelves_unit">
               <a-select-option value="m2">
                 m&sup2;
               </a-select-option>

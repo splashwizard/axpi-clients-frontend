@@ -9,12 +9,12 @@
                             :show-search="{ filter }"
                             placeholder="Please select a printing type"
                             @change="forceRefresh"
-                            v-model="orderLocal.printing_method"
+                            v-model="orderLocal.pos_printing_method"
                     />
                 </a-form-item>
 
                 <a-form-item label="Artwork Supplied">
-                    <a-radio-group @change="forceRefresh" v-model="orderLocal.artwork_supplied"
+                    <a-radio-group @change="forceRefresh" v-model="orderLocal.pos_artwork_supplied"
                                    button-style="solid">
                         <a-radio-button v-for="option in artworkSuppliedOptions" :key="option.value"
                                         :value="option.value">
@@ -24,7 +24,7 @@
                 </a-form-item>
 
                 <a-form-item label="Proof Made">
-                    <a-radio-group @change="forceRefresh" v-model="orderLocal.proof_made"
+                    <a-radio-group @change="forceRefresh" v-model="orderLocal.pos_proof_made"
                                    button-style="solid">
                         <a-radio-button v-for="option in proofMadeOptions" :key="option.value" :value="option.value">
                             {{ option.label }}

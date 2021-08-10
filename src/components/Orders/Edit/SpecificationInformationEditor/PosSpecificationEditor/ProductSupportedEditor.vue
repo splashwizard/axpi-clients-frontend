@@ -3,11 +3,11 @@
         <a-col :span="12">
             <a-form layout="vertical">
                 <a-form-item label="Product Type Supported">
-                    <a-cascader :options="productTypeSupportedOptions"
-                                v-model="orderLocal.pos_product_type_supported"
-                                :show-search="{ filter }"
-                                size="large">
-                    </a-cascader>
+                  <a-select v-model="orderLocal.pos_product_type_supported" size="large">
+                    <a-select-option v-for="(type,i) in productTypeSupportedOptions" :key="i" :value="type.value">
+                      {{ type.label }}
+                    </a-select-option>
+                  </a-select>
                 </a-form-item>
 
                 <a-form-item label="Width">

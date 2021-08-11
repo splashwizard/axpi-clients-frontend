@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="form-header">
-      <h2 class="form-header-title">
-        <a-button v-if="selectedModel" icon="arrow-left" style="margin-right: 10px;"
-                  @click="selectModel(null)">
-        </a-button>
-        Model
-      </h2>
+
+      <a-page-header v-if="selectedModel"
+                     title="Model"
+                     @back="selectModel(null)"
+      />
+
       <div class="form-actions" v-if="!selectedModel">
         <a-select placeholder="Please select a model"
                   v-model="selectedCategory" style="width: 250px; margin-right: 10px; top: -1px;">

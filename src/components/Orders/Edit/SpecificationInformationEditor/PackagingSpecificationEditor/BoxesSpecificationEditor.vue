@@ -42,23 +42,6 @@
           <a-col :span="12">
             <a-form layout="vertical">
 
-              <!-- Type of cardboard -->
-              <a-form-item label="Type of Cardboard">
-                <a-select @change="forceRefresh"
-                    style="width: 70%;" v-model="orderLocal.packaging_box_specification.type_of_cardboard" size="large">
-                  <a-select-option value="corrugated-cardboard">
-                    Corrugated Cardboard
-                  </a-select-option>
-                  <a-select-option value="paper-board">
-                    Paper Board
-                  </a-select-option>
-                  <a-select-option value="matt-board">
-                    Matt Board
-                  </a-select-option>
-                </a-select>
-              </a-form-item>
-              <!-- / Type of Cardboard -->
-
               <!-- Length -->
               <a-form-item v-if="selectedModel.length" label="Length">
                 <a-input size="large" addon-after="mm" style="width: 70%"
@@ -174,6 +157,14 @@
 
       </div>
       <!-- / Model selected -->
+
+      <!-- Cardboard Details -->
+      <div class="cardboard-details" v-if="selectedModel" :key="cardboardUpdateKey">
+        <corrugated-cardboard-properties :cardboard="orderLocal.packaging_box_specification.cardboard"
+        @property-changed="incrementCardboardUpdateKey">
+        </corrugated-cardboard-properties>
+      </div>
+      <!-- / Cardboard Details -->
     </div>
   </div>
 </template>
@@ -182,6 +173,7 @@
 import axios from "axios";
 import ModelSelector from "./BoxesSpecificationEditor/ModelSelector";
 import Images from "../../../../../mixins/Images";
+import CorrugatedCardboardProperties from "../PosSpecificationEditor/CardboardUsedEditor/CorrugatedCardboardProperties";
 
 export default {
   name: "BoxesSpecificationEditor",
@@ -192,11 +184,12 @@ export default {
       packagingSpecs: [],
       selectedModel: null,
       selectedCategory: null,
-      searchQuery: ''
+      searchQuery: '',
+      cardboardUpdateKey: 1
     }
   },
   mixins: [Images],
-  components: {ModelSelector},
+  components: {ModelSelector, CorrugatedCardboardProperties},
   mounted() {
     if (!this.orderLocal.packaging_box_specification) {
       this.orderLocal.packaging_box_specification = {
@@ -212,12 +205,28 @@ export default {
         angle: null,
         radius: null,
         sw_thickness: null,
-        dimension_type: null
+        dimension_type: null,
+        cardboard: {
+          cardboard_type: null,
+          area_used: null,
+          area_used_unit: 'm2',
+          lining_one_details: {},
+          fluting_one_details: {},
+          lining_two_details: {},
+          fluting_two_details: {},
+          lining_three_details: {},
+          fluting_three_details: {},
+          lining_four_details: {}
+        }
       }
     }
     this.loadTemplates();
   },
   methods: {
+    incrementCardboardUpdateKey() {
+     this.cardboardUpdateKey += 1;
+    },
+
     loadTemplates() {
       let vm = this;
       vm.isLoadingTemplates = true;
@@ -288,8 +297,9 @@ export default {
 }
 
 .flat-image {
-  width: auto;
-  height: 300px;
+  /*width: auto;*/
+  /*height: 300px;*/
+  width: 100%;
   object-fit: contain;
   margin: 0 auto;
 }

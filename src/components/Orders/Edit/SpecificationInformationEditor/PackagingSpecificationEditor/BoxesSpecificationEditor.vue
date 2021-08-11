@@ -160,7 +160,22 @@
 
       <!-- Cardboard Details -->
       <div class="cardboard-details" v-if="selectedModel" :key="cardboardUpdateKey">
-        <h4>Cardboard Used</h4>
+        <h2>Cardboard Used</h2>
+
+        <a-form-item label="Type of Cardboard">
+          <a-select v-model="orderLocal.packaging_box_specification.cardboard.cardboard_type" size="large"
+                    @change="incrementCardboardUpdateKey">
+            <a-select-option value="corrugated-cardboard">
+              Corrugated Cardboard
+            </a-select-option>
+            <a-select-option value="paper-board">
+              Paper Board
+            </a-select-option>
+            <a-select-option value="matt-board">
+              Matt Board
+            </a-select-option>
+          </a-select>
+        </a-form-item>
 
         <corrugated-cardboard-properties :cardboard="orderLocal.packaging_box_specification.cardboard"
         @property-changed="incrementCardboardUpdateKey">
@@ -310,7 +325,7 @@ export default {
   padding-top: 30px;
 }
 
-.cardboard-details h4 {
-  padding-bottom: 20px;
+.cardboard-details h2 {
+  padding-bottom: 15px;
 }
 </style>

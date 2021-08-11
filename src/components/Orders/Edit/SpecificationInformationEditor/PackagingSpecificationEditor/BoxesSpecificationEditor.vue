@@ -160,6 +160,8 @@
 
       <!-- Cardboard Details -->
       <div class="cardboard-details" v-if="selectedModel" :key="cardboardUpdateKey">
+        <h4>Cardboard Used</h4>
+
         <corrugated-cardboard-properties :cardboard="orderLocal.packaging_box_specification.cardboard"
         @property-changed="incrementCardboardUpdateKey">
         </corrugated-cardboard-properties>
@@ -302,5 +304,13 @@ export default {
   width: 100%;
   object-fit: contain;
   margin: 0 auto;
+}
+
+.cardboard-details {
+  padding-top: 30px;
+}
+
+.cardboard-details h4 {
+  padding-bottom: 20px;
 }
 </style>

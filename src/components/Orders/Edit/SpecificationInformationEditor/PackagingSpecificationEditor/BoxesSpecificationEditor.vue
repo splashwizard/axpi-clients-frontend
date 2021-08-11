@@ -164,6 +164,7 @@
 
         <a-form-item label="Type of Cardboard">
           <a-select v-model="orderLocal.packaging_box_specification.cardboard.cardboard_type" size="large"
+                    style="width: 500px;"
                     @change="incrementCardboardUpdateKey">
             <a-select-option value="corrugated-cardboard">
               Corrugated Cardboard

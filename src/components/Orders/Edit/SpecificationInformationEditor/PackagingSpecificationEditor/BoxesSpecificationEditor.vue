@@ -7,22 +7,22 @@
         </a-button>
         Model
       </h2>
-      <div class="form-actions" v-if="!selectedModel" >
+      <div class="form-actions" v-if="!selectedModel">
         <a-select placeholder="Please select a model"
-             v-model="selectedCategory" style="width: 250px; margin-right: 10px; top: -1px;">
+                  v-model="selectedCategory" style="width: 250px; margin-right: 10px; top: -1px;">
           <a-select-option :value="null">Show all</a-select-option>
           <a-select-option value="ecma">ECMA (Folding carton)</a-select-option>
           <a-select-option value="fefco">FEFCO (Corrugated containers)</a-select-option>
           <a-select-option value="envelopes-folders-bags">Envelopes, Folders, Bags</a-select-option>
         </a-select>
-        <a-input-search placeholder="Search models" style="width: 200px" v-model="searchQuery" />
+        <a-input-search placeholder="Search models" style="width: 200px" v-model="searchQuery"/>
       </div>
     </div>
-<!--    <div class="change-model-button-wrapper">-->
-<!--      <a-button v-if="selectedModel" icon="arrow-left"-->
-<!--                @click="selectModel(null)">Change model-->
-<!--      </a-button>-->
-<!--    </div>-->
+    <!--    <div class="change-model-button-wrapper">-->
+    <!--      <a-button v-if="selectedModel" icon="arrow-left"-->
+    <!--                @click="selectModel(null)">Change model-->
+    <!--      </a-button>-->
+    <!--    </div>-->
 
     <div class="loading-screen" v-if="isLoadingTemplates">
       <a-spin/>
@@ -42,113 +42,109 @@
           <a-col :span="12">
             <a-form layout="vertical">
 
+              <!-- Type of cardboard -->
+              <a-form-item label="Type of Cardboard">
+                <a-select @change="forceRefresh"
+                    style="width: 70%;" v-model="orderLocal.packaging_box_specification.type_of_cardboard" size="large">
+                  <a-select-option value="corrugated-cardboard">
+                    Corrugated Cardboard
+                  </a-select-option>
+                  <a-select-option value="paper-board">
+                    Paper Board
+                  </a-select-option>
+                  <a-select-option value="matt-board">
+                    Matt Board
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+              <!-- / Type of Cardboard -->
+
               <!-- Length -->
-              <a-form-item v-if="selectedModel.length" label="Length (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.length"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel.length" label="Length">
+                <a-input size="large" addon-after="mm" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.length"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Length -->
 
               <!-- Width -->
-              <a-form-item v-if="selectedModel.width" label="Width (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.width"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel.width" label="Width">
+                <a-input addon-after="mm" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.width"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Width -->
 
               <!-- Depth -->
-              <a-form-item v-if="selectedModel.depth" label="Depth (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.depth"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel.depth" label="Depth">
+                <a-input addon-after="mm" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.depth"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Depth -->
 
               <!-- Diameter -->
-              <a-form-item v-if="selectedModel.diameter" label="Diameter (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.diameter"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel.diameter" label="Diameter">
+                <a-input addon-after="mm" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.diameter"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Diameter -->
 
               <!-- Breadth -->
-              <a-form-item v-if="selectedModel.breadth" label="Breadth (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.breadth"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel.breadth" label="Breadth">
+                <a-input addon-after="mm" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.breadth"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Breadth -->
 
               <!-- Th - Thickness -->
-              <a-form-item v-if="selectedModel['th-thickness']" label="Th (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.th_thickness"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel['th-thickness']" label="Th">
+                <a-input addon-after="mm" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.th_thickness"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Th - Thickness -->
 
               <!-- C -->
-              <a-form-item v-if="selectedModel['c-thickness']" label="C (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.c"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel['c-thickness']" label="C">
+                <a-input addon-after="mm" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.c"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / C -->
 
               <!-- h -->
-              <a-form-item v-if="selectedModel['h']" label="h (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.h"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel['h']" label="h">
+                <a-input addon-after="mm" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.h"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / h -->
 
               <!-- Angle -->
-              <a-form-item v-if="selectedModel['angle']" label="Angle (deg)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.angle"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel['angle']" label="Angle">
+                <a-input addon-after="deg" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.angle"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Angle -->
 
               <!-- Radius -->
-              <a-form-item v-if="selectedModel['radius']" label="Radius (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.radius"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+              <a-form-item v-if="selectedModel['radius']" label="Radius">
+                <a-input addon-after="mm" size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.radius"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Radius -->
 
               <!-- Sw thickness -->
               <a-form-item v-if="selectedModel['sw-thickness']" label="Sw Thickness (mm)">
-                <a-input-group compact>
-                  <a-input size="large" style="width: 70%"
-                           v-model="orderLocal.packaging_box_specification.radius"
-                           @blur="forceRefresh"/>
-                </a-input-group>
+                <a-input addon-after="mm"
+                         size="large" style="width: 70%"
+                         v-model="orderLocal.packaging_box_specification.radius"
+                         @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Sw thickness -->
 

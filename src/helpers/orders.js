@@ -1,4 +1,5 @@
 const _ = require('lodash');
+import moment from 'moment';
 
 export default {
     decodeOrder(orderFromServer) {
@@ -76,6 +77,17 @@ export default {
             order.pos_proof_made = orderFromServer.pos_detail.proof_made;
         }
 
+        // Delivery locations
+        if (orderFromServer.delivery_locations) {
+            order.delivery_locations = _.map(orderFromServer.delivery_locations, location => {
+                if (location['date_shipped']) {
+                    location['date_shipped'] = moment(location.date_shipped, 'YYYY-MM-DD');
+                }
+
+                return location;
+            });
+        }
+
         return order;
     },
 
@@ -143,6 +155,16 @@ export default {
         order.pos_detail.printing_method = localOrder.pos_printing_method ? localOrder.pos_printing_method.join('/') : null;
         order.pos_detail.artwork_supplied = localOrder.pos_artwork_supplied;
         order.pos_detail.proof_made = localOrder.pos_proof_made;
+
+        // Delivery locations
+        if (localOrder.delivery_locations) {
+           order.delivery_locations = _.map(localOrder.delivery_locations, deliveryLocation => {
+               if (deliveryLocation.date_shipped && moment(deliveryLocation.date_shipped).isValid()) {
+                   deliveryLocation.date_shipped = moment(deliveryLocation.date_shipped).format('YYYY-MM-DD')
+               }
+               return deliveryLocation;
+           });
+        }
 
         return order;
     }

@@ -22,8 +22,11 @@
          class="multi-section">
       <el-collapse v-model="activePanel" accordion :key="updateKey">
         <el-collapse-item v-for="(paper, i) in orderLocal.paper" :key="i"
-                          :title="getSectionNameLabel(paper.section_name)" :name="i">
+                          :title="getSectionNameLabel(paper.section_name)" :name="i" style="position: relative;">
           <!-- Update wrapper -->
+          <a-button style="position:absolute; right: 40px; top: 18px;" @click.prevent="deletePaper(i)">
+            Delete section
+          </a-button>
           <div class="collapse-inner-section">
 
             <individual-paper-details

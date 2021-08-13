@@ -2,7 +2,11 @@
     <div>
         <el-collapse v-model="activePanel" accordion>
             <el-collapse-item v-for="(material, i) in orderLocal.apparel_material_used" :key="i"
-                              :title="getSectionNameLabel(material.material_type)">
+                              :title="getSectionNameLabel(material.material_type)" style="position: relative;">
+              <a-button style="position:absolute; right: 40px; top: 18px;" @click.prevent="deleteMaterial(i)">
+                Delete section
+              </a-button>
+
                 <div class="collapse-inner-section">
                     <a-row :gutter="70">
                         <a-col :span="12">
@@ -46,6 +50,7 @@
 
 <script>
     import country from 'country-list-js';
+    const _ = require('lodash');
 
     const MATERIAL_USED_DATA_TEMPLATE = {
         material_type: null,
@@ -128,6 +133,13 @@
                 this.forceRefresh();
                 this.activePanel = Number(this.orderLocal.apparel_material_used.length - 1);
             },
+
+          deleteMaterial(i) {
+            this.orderLocal.apparel_material_used = _.filter(this.orderLocal.apparel_material_used, function (material, ii) {
+              return String(ii) !== String(i);
+            })
+            this.forceRefresh();
+          },
 
             forceRefresh() {
                 this.$nextTick(() => {

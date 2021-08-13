@@ -17,7 +17,10 @@
 
             <el-collapse v-if="!isLoading" v-model="activePanel" accordion>
                 <el-collapse-item v-for="(location, i) in orderLocal.delivery_locations" :key="i"
-                                  :title="getSectionNameLabel(i)">
+                                  :title="getSectionNameLabel(i)" style="position: relative;">
+                  <a-button style="position:absolute; right: 40px; top: 18px;" @click.prevent="deleteLocation(i)">
+                    Delete location
+                  </a-button>
                     <div class="collapse-inner-section">
                         <location-editor :addresses="addresses"
                                          :location="location"></location-editor>
@@ -34,6 +37,7 @@
     import LocationEditor from "./DeliveryInformationEditor/LocationEditor";
     import axios from "axios";
     import UploadCsvButtonAndModal from "./DeliveryInformationEditor/UploadCsvButtonAndModal";
+    const _ = require('lodash');
 
     const DELIVERY_LOCATION_DATA_TEMPLATE = {
         quantity: null,
@@ -95,6 +99,13 @@
                 this.activePanel = Number(this.orderLocal.delivery_locations.length - 1);
                 this.incrementUpdateKey();
             },
+
+          deleteLocation(i) {
+            this.orderLocal.delivery_locations = _.filter(this.orderLocal.delivery_locations, function (location, ii) {
+              return String(ii) !== String(i);
+            })
+            this.forceRefresh();
+          },
 
             incrementUpdateKey() {
                 this.updateKey += 1;

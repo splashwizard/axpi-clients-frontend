@@ -24,9 +24,15 @@
         <el-collapse-item v-for="(paper, i) in orderLocal.paper" :key="i"
                           :title="getSectionNameLabel(paper.section_name)" :name="i" style="position: relative;">
           <!-- Update wrapper -->
-          <a-button style="position:absolute; right: 40px; top: 18px;" @click.prevent="deletePaper(i)">
-            Delete section
-          </a-button>
+          <a-dropdown style="position:absolute; right: 40px; top: 18px;" :trigger="['click']">
+            <a-button type="link" icon="ellipsis"></a-button>
+            <a-menu slot="overlay">
+              <a-menu-item>
+                <a href="#" v-if="orderLocal.paper.length > 1"  @click.prevent="deletePaper(i)">Delete section</a>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
+
           <div class="collapse-inner-section">
 
             <individual-paper-details

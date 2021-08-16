@@ -18,9 +18,16 @@
             <el-collapse v-if="!isLoading" v-model="activePanel" accordion>
                 <el-collapse-item v-for="(location, i) in orderLocal.delivery_locations" :key="i"
                                   :title="getSectionNameLabel(i)" style="position: relative;">
-                  <a-button style="position:absolute; right: 40px; top: 18px;" @click.prevent="deleteLocation(i)">
-                    Delete location
-                  </a-button>
+
+                  <a-dropdown style="position:absolute; right: 40px; top: 18px;" :trigger="['click']">
+                    <a-button type="link" icon="ellipsis"></a-button>
+                    <a-menu slot="overlay">
+                      <a-menu-item>
+                        <a href="#" v-if="orderLocal.delivery_locations.length > 1"  @click.prevent="deleteLocation(i)">Delete location</a>
+                      </a-menu-item>
+                    </a-menu>
+                  </a-dropdown>
+
                     <div class="collapse-inner-section">
                         <location-editor :addresses="addresses"
                                          :location="location"></location-editor>

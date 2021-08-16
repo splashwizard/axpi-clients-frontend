@@ -3,11 +3,17 @@
         <el-collapse v-model="activePanel" accordion>
             <el-collapse-item v-for="(material, i) in orderLocal.apparel_material_used" :key="i"
                               :title="getSectionNameLabel(material.material_type)" style="position: relative;">
-              <a-button style="position:absolute; right: 40px; top: 18px;" @click.prevent="deleteMaterial(i)">
-                Delete section
-              </a-button>
+              <a-dropdown style="position:absolute; right: 40px; top: 18px;" :trigger="['click']">
+                <a-button type="link" icon="ellipsis"></a-button>
+                <a-menu slot="overlay">
+                  <a-menu-item>
+                    <a href="#" v-if="orderLocal.apparel_material_used.length > 1"  @click.prevent="deleteMaterial(i)">Delete section</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
 
-                <div class="collapse-inner-section">
+
+              <div class="collapse-inner-section">
                     <a-row :gutter="70">
                         <a-col :span="12">
                             <a-form layout="vertical">

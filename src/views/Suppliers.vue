@@ -4,9 +4,7 @@
         <div class="page-header">
             <h1 class="page-title">Suppliers</h1>
             <div class="actions">
-                <router-link to="/suppliers/invite">
-                    <a-button type="primary" icon="plus">Invite Supplier</a-button>
-                </router-link>
+              <invite-suppliers-button-and-modal></invite-suppliers-button-and-modal>
             </div>
         </div>
 
@@ -17,6 +15,7 @@
 <script>
     import {mapGetters} from "vuex";
     import SuppliersTable from "../components/Suppliers/SuppliersTable";
+    import InviteSuppliersButtonAndModal from "../components/Suppliers/InviteSuppliersButtonAndModal";
 
     export default {
         name: 'Suppliers',
@@ -25,7 +24,7 @@
                 user: 'user'
             })
         },
-        components: {SuppliersTable},
+        components: {InviteSuppliersButtonAndModal, SuppliersTable},
         data() {
             return {
                 activeSetupStep: 1

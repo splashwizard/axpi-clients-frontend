@@ -54,14 +54,14 @@ const columns = [
   //         customRender: 'rating'
   //     }
   // },
-  {
-    title: 'Last Order',
-    dataIndex: 'last_order',
-    sorter: true,
-    scopedSlots: {
-      customRender: 'last-order'
-    }
-  }
+  // {
+  //   title: 'Last Order',
+  //   dataIndex: 'last_order',
+  //   sorter: true,
+  //   scopedSlots: {
+  //     customRender: 'last-order'
+  //   }
+  // }
 ];
 
 export default {

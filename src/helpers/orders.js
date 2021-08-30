@@ -88,6 +88,16 @@ export default {
             });
         }
 
+        // Chemicals
+        if (orderFromServer.order_chemicals) {
+           order.chemicals = _.cloneDeep(orderFromServer.order_chemicals);
+        }
+
+        // Packaging components
+        if (orderFromServer.packaging_components) {
+           order.packaging_components = _.cloneDeep(orderFromServer.packaging_components);
+        }
+
         return order;
     },
 
@@ -165,6 +175,12 @@ export default {
                return deliveryLocation;
            });
         }
+
+        // Chemicals
+        order.chemicals_used = _.cloneDeep(localOrder.chemicals);
+
+        // Packaging components
+        order.packaging_components = _.cloneDeep(localOrder.packaging_components);
 
         return order;
     }

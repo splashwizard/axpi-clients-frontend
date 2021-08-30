@@ -16,7 +16,7 @@
       <div class="form-header">
         <h2>Chemicals</h2>
       </div>
-      <chemicals-editor :chemicals="orderLocal.chemicals" @set-chemicals="setChemicals"></chemicals-editor>
+      <chemicals-editor :chemicals="orderLocal.chemicals" @chemicals-updated="setChemicals"></chemicals-editor>
     </div>
     <!-- / Chemicals -->
 

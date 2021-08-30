@@ -10,11 +10,11 @@
                 <product-type-selector :order-local="orderLocal"></product-type-selector>
             </div>
 
-            <div class="form-header" v-if="orderLocal.product_type">
+            <div class="form-header" v-if="orderLocal.product_type && orderLocal.product_type !== 'packaging'">
                 <h2>Product Subtype</h2>
             </div>
-          <inline-validation-errors v-if="orderLocal.product_type" id="product-subtype"></inline-validation-errors>
-          <product-subtype-selector v-if="orderLocal.product_type"
+          <inline-validation-errors v-if="orderLocal.product_type && orderLocal.product_type !== 'packaging'" id="product-subtype"></inline-validation-errors>
+          <product-subtype-selector v-if="orderLocal.product_type && orderLocal.product_type !== 'packaging'"
                 :order-local="orderLocal" @property-updated="incrementUpdateKey"></product-subtype-selector>
         </div>
         <!-- / Product Type -->
@@ -34,7 +34,7 @@
             <!-- / Apparel Specification Editor -->
 
             <!-- Packaging Specification Editor -->
-            <packaging-specification-editor v-if="orderLocal.product_type === 'packaging' && orderLocal.product_subtype" :order-local="orderLocal"></packaging-specification-editor>
+            <packaging-specification-editor v-if="orderLocal.product_type === 'packaging'" :order-local="orderLocal"></packaging-specification-editor>
             <!-- / Packaging Specification Editor -->
         </div>
         <!-- / Details -->

@@ -3,7 +3,7 @@
     <div class="form-header">
 
       <a-page-header v-if="selectedModel"
-                     title="Model"
+                     :title="selectedModel.name"
                      @back="selectModel(null)"
       />
 
@@ -45,7 +45,7 @@
               <!-- Length -->
               <a-form-item v-if="selectedModel.length" label="Length">
                 <a-input size="large" addon-after="mm" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.length"
+                         v-model="spec.box.length"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Length -->
@@ -53,7 +53,7 @@
               <!-- Width -->
               <a-form-item v-if="selectedModel.width" label="Width">
                 <a-input addon-after="mm" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.width"
+                         v-model="spec.box.width"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Width -->
@@ -61,7 +61,7 @@
               <!-- Depth -->
               <a-form-item v-if="selectedModel.depth" label="Depth">
                 <a-input addon-after="mm" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.depth"
+                         v-model="spec.box.depth"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Depth -->
@@ -69,7 +69,7 @@
               <!-- Diameter -->
               <a-form-item v-if="selectedModel.diameter" label="Diameter">
                 <a-input addon-after="mm" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.diameter"
+                         v-model="spec.box.diameter"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Diameter -->
@@ -77,7 +77,7 @@
               <!-- Breadth -->
               <a-form-item v-if="selectedModel.breadth" label="Breadth">
                 <a-input addon-after="mm" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.breadth"
+                         v-model="spec.box.breadth"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Breadth -->
@@ -85,7 +85,7 @@
               <!-- Th - Thickness -->
               <a-form-item v-if="selectedModel['th-thickness']" label="Th">
                 <a-input addon-after="mm" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.th_thickness"
+                         v-model="spec.box.th_thickness"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Th - Thickness -->
@@ -93,7 +93,7 @@
               <!-- C -->
               <a-form-item v-if="selectedModel['c-thickness']" label="C">
                 <a-input addon-after="mm" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.c"
+                         v-model="spec.box.c"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / C -->
@@ -101,7 +101,7 @@
               <!-- h -->
               <a-form-item v-if="selectedModel['h']" label="h">
                 <a-input addon-after="mm" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.h"
+                         v-model="spec.box.h"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / h -->
@@ -109,7 +109,7 @@
               <!-- Angle -->
               <a-form-item v-if="selectedModel['angle']" label="Angle">
                 <a-input addon-after="deg" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.angle"
+                         v-model="spec.box.angle"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Angle -->
@@ -117,7 +117,7 @@
               <!-- Radius -->
               <a-form-item v-if="selectedModel['radius']" label="Radius">
                 <a-input addon-after="mm" size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.radius"
+                         v-model="spec.box.radius"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Radius -->
@@ -126,7 +126,7 @@
               <a-form-item v-if="selectedModel['sw-thickness']" label="Sw Thickness (mm)">
                 <a-input addon-after="mm"
                          size="large" style="width: 70%"
-                         v-model="orderLocal.packaging_box_specification.radius"
+                         v-model="spec.box.radius"
                          @blur="forceRefresh"/>
               </a-form-item>
               <!-- / Sw thickness -->
@@ -163,7 +163,7 @@
         <h2>Cardboard Used</h2>
 
         <a-form-item label="Type of Cardboard">
-          <a-select v-model="orderLocal.packaging_box_specification.cardboard.cardboard_type" size="large"
+          <a-select v-model="spec.box.cardboard.cardboard_type" size="large"
                     style="width: 280px;"
                     @change="incrementCardboardUpdateKey">
             <a-select-option value="corrugated-cardboard">
@@ -178,7 +178,7 @@
           </a-select>
         </a-form-item>
 
-        <corrugated-cardboard-properties :cardboard="orderLocal.packaging_box_specification.cardboard"
+        <corrugated-cardboard-properties :cardboard="spec.box.cardboard"
         @property-changed="incrementCardboardUpdateKey">
         </corrugated-cardboard-properties>
       </div>
@@ -192,10 +192,11 @@ import axios from "axios";
 import ModelSelector from "./BoxesSpecificationEditor/ModelSelector";
 import Images from "../../../../../mixins/Images";
 import CorrugatedCardboardProperties from "../PosSpecificationEditor/CardboardUsedEditor/CorrugatedCardboardProperties";
+const _ = require('lodash');
 
 export default {
   name: "BoxesSpecificationEditor",
-  props: ['orderLocal'],
+  props: ['spec'],
   data() {
     return {
       isLoadingTemplates: true,
@@ -209,8 +210,8 @@ export default {
   mixins: [Images],
   components: {ModelSelector, CorrugatedCardboardProperties},
   mounted() {
-    if (!this.orderLocal.packaging_box_specification) {
-      this.orderLocal.packaging_box_specification = {
+    if (!this.spec.box) {
+      this.spec.box = {
         model_id: null,
         length: null,
         width: null,
@@ -251,6 +252,9 @@ export default {
       axios.get(window.API_COMMON_BASE + '/packaging-specs').then(r => {
         vm.packagingSpecs = r.data;
         vm.isLoadingTemplates = false;
+        if (vm.spec.box.model_id) {
+          vm.selectedModel = _.find(vm.packagingSpecs, {id: vm.spec.box.model_id});
+        }
       }).catch(e => {
         console.log(e);
         vm.$message.error('Error loading packaging specs');
@@ -259,7 +263,7 @@ export default {
 
     selectModel(model) {
       this.selectedModel = model;
-      this.orderLocal.packaging_box_specification.model_id = (model ? model.id : null);
+      this.spec.box.model_id = (model ? model.id : null);
     },
 
     forceRefresh() {

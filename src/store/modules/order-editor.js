@@ -128,7 +128,6 @@ export const actions = {
         axios.post(window.API_BASE + '/orders/').then(r => {
             commit('STOP_LOADING');
             commit('INCREMENT_RELOAD_ORDERS_KEY');
-            // commit('SET_ORDER', orders.decodeOrder(r.data));
             dispatch('loadOrder', r.data.id);
         }).catch(e => {
             commit('STOP_LOADING');

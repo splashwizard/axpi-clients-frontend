@@ -21,12 +21,12 @@
                 <!-- Material -->
                 <a-form-item label="Material">
                   <a-select size="large"
+                            :disabled="isDropdownLoading('pos-material')"
                             style="width: 100%"
                             @change="forceRefresh"
-                            :options="materialOptions"
                             v-model="orderLocal.pos_material[i].material">
-                    <a-select-option v-for="(m,i) in materialOptions" :key="i" :value="m.value">
-                      {{ m.label }}
+                    <a-select-option v-for="opt in materialOptions" :key="opt.name" :value="opt.name">
+                      {{ opt.name }}
                     </a-select-option>
                   </a-select>
                 </a-form-item>
@@ -73,42 +73,44 @@ const MATERIAL_DATA_TEMPLATE = {
   mass_unit: 'g'
 };
 
-const MATERIAL_OPTIONS = [
-  {
-    label: 'Aluminum',
-    value: 'Aluminium'
-  },
-  {
-    label: 'Steel',
-    value: 'Steel'
-  },
-  {
-    label: 'Wood',
-    value: 'Wood'
-  },
-  {
-    label: 'Fiberboard',
-    value: 'Fiberboard'
-  },
-  {
-    label: 'PVC',
-    value: 'PVC'
-  },
-  {
-    label: 'Acrylic',
-    value: 'Acrylic'
-  }
-];
+// const MATERIAL_OPTIONS = [
+//   {
+//     label: 'Aluminum',
+//     value: 'Aluminium'
+//   },
+//   {
+//     label: 'Steel',
+//     value: 'Steel'
+//   },
+//   {
+//     label: 'Wood',
+//     value: 'Wood'
+//   },
+//   {
+//     label: 'Fiberboard',
+//     value: 'Fiberboard'
+//   },
+//   {
+//     label: 'PVC',
+//     value: 'PVC'
+//   },
+//   {
+//     label: 'Acrylic',
+//     value: 'Acrylic'
+//   }
+// ];
 
+import Forms from "../../../../../mixins/Forms";
 export default {
   name: "MaterialUsedEditor",
   props: ['orderLocal'],
+  mixins: [Forms],
   data() {
     return {
       updateKey: 1,
       activePanel: undefined,
 
-      materialOptions: MATERIAL_OPTIONS
+      materialOptions: []
     }
   },
   mounted() {
@@ -120,6 +122,9 @@ export default {
       ];
       this.incrementUpdateKey();
     }
+  },
+  created() {
+    this.getDropdownOptions('pos-material', 'materialOptions');
   },
   methods: {
     incrementUpdateKey() {

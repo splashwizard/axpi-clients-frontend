@@ -32,13 +32,14 @@
                                id="paper-finish">
             <a-select v-model="paper.finish"
                       show-search size="large"
+                      :disabled="isDropdownLoading('paper-finish')"
                       @change="forceRefresh">
               <a-select-opt-group v-for="(group, i) in paperFinishOptions" :key="i">
                 <span slot="label">{{ group.group }}</span>
                 <a-select-option v-for="paperFinish in group.options"
-                                 :value="paperFinish.value"
-                                 :key="paperFinish.value">
-                  {{ paperFinish.label }}
+                                 :value="paperFinish.name"
+                                 :key="paperFinish.name">
+                  {{ paperFinish.name }}
                 </a-select-option>
               </a-select-opt-group>
             </a-select>
@@ -50,11 +51,12 @@
                                v-if="productSubtype === 'leaflet'">
             <a-select v-model="paper.fold_type"
                       show-search size="large"
+                      :disabled="isDropdownLoading('paper-fold-type')"
                       @change="forceRefresh">
               <a-select-option v-for="type in paperFoldTypeOptions"
-                               :value="type.value"
-                               :key="type.value">
-                {{ type.label }}
+                               :value="type.name"
+                               :key="type.name">
+                {{ type.name }}
               </a-select-option>
             </a-select>
           </validated-form-item>
@@ -417,61 +419,62 @@
 
 <script>
 import PaperSizeSelector from "./PaperSizeSelector";
+import Forms from "../../../../../../mixins/Forms";
 
 const _ = require('lodash');
 
-const PAPER_FINISH_OPTIONS = [
-  {
-    group: 'Coated Paper',
-    options: [
-      {
-        value: 'Gloss',
-        label: 'Gloss'
-      },
-      {
-        value: 'Satin',
-        label: 'Satin'
-      },
-      {
-        value: 'Matte',
-        label: 'Matte'
-      },
-      {
-        value: 'Silk',
-        label: 'Silk'
-      }
-    ]
-  },
-  {
-    group: 'Uncoated Paper',
-    options: [
-      {
-        value: 'Wove',
-        label: 'Wove'
-      },
-      {
-        value: 'Laid',
-        label: 'Laid'
-      },
-      {
-        value: 'Linen',
-        label: 'Linen'
-      }
-    ]
-  }
-  // {
-  //     value: 'bond',
-  //     label: 'Bond'
-  // },
-  // {
-  //     value: 'coated-paper',
-  //     label: 'Coated Paper'
-  // },
-  // {
-  //     value: 'uncoated-paper',
-  //     label: 'Uncoated Paper'
-  // }
-];
+// const PAPER_FINISH_OPTIONS = [
+//   {
+//     group: 'Coated Paper',
+//     options: [
+//       {
+//         value: 'Gloss',
+//         label: 'Gloss'
+//       },
+//       {
+//         value: 'Satin',
+//         label: 'Satin'
+//       },
+//       {
+//         value: 'Matte',
+//         label: 'Matte'
+//       },
+//       {
+//         value: 'Silk',
+//         label: 'Silk'
+//       }
+//     ]
+//   },
+//   {
+//     group: 'Uncoated Paper',
+//     options: [
+//       {
+//         value: 'Wove',
+//         label: 'Wove'
+//       },
+//       {
+//         value: 'Laid',
+//         label: 'Laid'
+//       },
+//       {
+//         value: 'Linen',
+//         label: 'Linen'
+//       }
+//     ]
+//   }
+//   // {
+//   //     value: 'bond',
+//   //     label: 'Bond'
+//   // },
+//   // {
+//   //     value: 'coated-paper',
+//   //     label: 'Coated Paper'
+//   // },
+//   // {
+//   //     value: 'uncoated-paper',
+//   //     label: 'Uncoated Paper'
+//   // }
+// ];
 
 const PAPER_WEIGHT_OPTIONS = [
   {
@@ -945,47 +948,48 @@ const DIE_CUTTING_REQUIRED_OPTIONS = [
   }
 ];
 
-const PAPER_FOLD_TYPE_OPTIONS = [
-  {
-    value: 'letter-fold-c-fold',
-    label: 'Leter Fold (C Fold)'
-  },
-  {
-    value: 'tri-fold',
-    label: 'Tri Fold'
-  },
-  {
-    value: 'gate-fold',
-    label: 'Gate Fold'
-  },
-  {
-    value: 'accordion-fold-z-fold',
-    label: 'Accordion Fold (Z Fold)'
-  },
-  {
-    value: 'single-fold-v-fold',
-    label: 'Single Fold (V Fold)'
-  },
-  {
-    value: 'double-parallel-fold',
-    label: 'Double Parallel Fold'
-  },
-  {
-    value: 'engineering-fold-half-accordion',
-    label: 'Engineering Fold (Half Accordion)'
-  },
-  {
-    value: 'cross-fold-french-fold',
-    label: 'Cross Fold (French Fold)'
-  },
-  {
-    value: 'baronial-fold',
-    label: 'Baronial Fold'
-  }
-];
+// const PAPER_FOLD_TYPE_OPTIONS = [
+//   {
+//     value: 'letter-fold-c-fold',
+//     label: 'Letter Fold (C Fold)'
+//   },
+//   {
+//     value: 'tri-fold',
+//     label: 'Tri Fold'
+//   },
+//   {
+//     value: 'gate-fold',
+//     label: 'Gate Fold'
+//   },
+//   {
+//     value: 'accordion-fold-z-fold',
+//     label: 'Accordion Fold (Z Fold)'
+//   },
+//   {
+//     value: 'single-fold-v-fold',
+//     label: 'Single Fold (V Fold)'
+//   },
+//   {
+//     value: 'double-parallel-fold',
+//     label: 'Double Parallel Fold'
+//   },
+//   {
+//     value: 'engineering-fold-half-accordion',
+//     label: 'Engineering Fold (Half Accordion)'
+//   },
+//   {
+//     value: 'cross-fold-french-fold',
+//     label: 'Cross Fold (French Fold)'
+//   },
+//   {
+//     value: 'baronial-fold',
+//     label: 'Baronial Fold'
+//   }
+// ];
 
 export default {
   name: "IndividualPaperDetails",
+  mixins: [Forms],
   props: [
     'productSubtype',
     'paper',
@@ -1016,7 +1020,7 @@ export default {
   },
   data() {
     return {
-      paperFinishOptions: PAPER_FINISH_OPTIONS,
+      paperFinishOptions: [],
       paperWeightOptions: PAPER_WEIGHT_OPTIONS,
       paperBrandOptions: PAPER_BRAND_OPTIONS,
       // paperBrandNames: _.map(PAPER_BRAND_OPTIONS, 'label'),
@@ -1027,8 +1031,12 @@ export default {
       sidesCoatedOptions: SIDES_COATED_OPTIONS,
       embellishmentTypeOptions: EMBELLISHMENT_TYPE_OPTIONS,
       dieCuttingRequiredOptions: DIE_CUTTING_REQUIRED_OPTIONS,
-      paperFoldTypeOptions: PAPER_FOLD_TYPE_OPTIONS
+      paperFoldTypeOptions: []
     }
+  },
+  mounted() {
+    this.getDropdownOptions('paper-finish', 'paperFinishOptions');
+    this.getDropdownOptions('paper-fold-type', 'paperFoldTypeOptions');
   },
   computed: {
     paperBrandNames() {

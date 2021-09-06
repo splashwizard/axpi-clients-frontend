@@ -3,10 +3,12 @@
     <a-col :span="12">
       <a-form layout="vertical">
         <a-form-item label="Product Type">
-          <a-select show-search v-model="orderLocal.pos_product_type" size="large">
-            <a-select-option v-for="type in productTypeOptions" :value="type.value"
-                             :key="type.value">
-              {{ type.label }}
+          <a-select show-search v-model="orderLocal.pos_product_type"
+                    :disabled="isDropdownLoading('pos-product-type')"
+                    size="large">
+            <a-select-option v-for="type in productTypeOptions" :value="type.name"
+                             :key="type.name">
+              {{ type.name }}
             </a-select-option>
           </a-select>
         </a-form-item>
@@ -89,56 +91,61 @@
 </template>
 
 <script>
-const PRODUCT_TYPE_OPTIONS = [
-  {
-    label: 'Floor Sticker',
-    value: 'Floor Sticker'
-  },
-  {
-    label: 'Leaflet Holder',
-    value: 'Leaflet Holder'
-  },
-  {
-    label: 'Bollard Cover',
-    value: 'Bollard Cover'
-  },
-  {
-    label: 'FSDU',
-    value: 'FSDU'
-  },
-  {
-    label: 'POS Display',
-    value: 'POS Display'
-  },
-  {
-    label: 'Window Sticker',
-    value: 'Window Sticker'
-  },
-  {
-    label: 'Hanging Sign',
-    value: 'Hanging Sign'
-  },
-  {
-    label: 'Shelf Wobbler',
-    value: 'Shelf Wobbler'
-  },
-  {
-    label: 'Counter Display Unit',
-    value: 'Counter Display Unit'
-  },
-  {
-    label: 'Product Dump Bin',
-    value: 'Product Dump Bin'
-  }
-];
+// const PRODUCT_TYPE_OPTIONS = [
+//   {
+//     label: 'Floor Sticker',
+//     value: 'Floor Sticker'
+//   },
+//   {
+//     label: 'Leaflet Holder',
+//     value: 'Leaflet Holder'
+//   },
+//   {
+//     label: 'Bollard Cover',
+//     value: 'Bollard Cover'
+//   },
+//   {
+//     label: 'FSDU',
+//     value: 'FSDU'
+//   },
+//   {
+//     label: 'POS Display',
+//     value: 'POS Display'
+//   },
+//   {
+//     label: 'Window Sticker',
+//     value: 'Window Sticker'
+//   },
+//   {
+//     label: 'Hanging Sign',
+//     value: 'Hanging Sign'
+//   },
+//   {
+//     label: 'Shelf Wobbler',
+//     value: 'Shelf Wobbler'
+//   },
+//   {
+//     label: 'Counter Display Unit',
+//     value: 'Counter Display Unit'
+//   },
+//   {
+//     label: 'Product Dump Bin',
+//     value: 'Product Dump Bin'
+//   }
+// ];
 
+import Forms from "../../../../../mixins/Forms";
 export default {
   name: "ProductDetails",
   props: ['orderLocal'],
+  mixins: [Forms],
   data() {
     return {
-      productTypeOptions: PRODUCT_TYPE_OPTIONS
+      productTypeOptions: []
     }
+  },
+  mounted() {
+    this.getDropdownOptions('pos-product-type', 'productTypeOptions');
   }
 }
 </script>

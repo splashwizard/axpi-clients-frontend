@@ -2,7 +2,7 @@
   <div>
     <!-- Semi Permanent & Permanent Product Details -->
 <!--    <div class="form-section" v-if="orderLocal.product_subtype === 'semi_permanent'">-->
-      <div class="form-section">
+      <div class="form-section" v-if="orderLocal.product_subtype === 'semi_permanent' || orderLocal.product_subtype === 'permanent'">
       <div class="form-header">
         <h2>Product Details</h2>
       </div>

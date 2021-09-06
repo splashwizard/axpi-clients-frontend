@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "4255dece6d17b211ae7d",
+    "revision": "ebb5e7cc2997f0b67e2a",
     "url": "/css/app.48b3c203.css"
   },
   {
@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/optimisations.df260471.css"
   },
   {
-    "revision": "aca3c6035ce10c875309",
+    "revision": "61606e6099748665f880",
     "url": "/css/optimisation~orders.bea6e713.css"
   },
   {
@@ -40,8 +40,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "ce04bba45d8a72be7932",
+    "revision": "03e5a391ffcb69539a61",
     "url": "/css/suppliers.667b8801.css"
+  },
+  {
+    "revision": "389c5db0a13bee268c30",
+    "url": "/css/view-supplier.d78aa6a3.css"
   },
   {
     "revision": "c07f9b1fe332fe65ac19329c54cefd4d",
@@ -268,7 +272,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "483d3cb8acf98835986459b4fba521e2",
+    "revision": "04b395636d6a473266570d9676c88923",
     "url": "/index.html"
   },
   {
@@ -288,8 +292,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.74f685eb.js"
   },
   {
-    "revision": "4255dece6d17b211ae7d",
-    "url": "/js/app.634f6392.js"
+    "revision": "ebb5e7cc2997f0b67e2a",
+    "url": "/js/app.1d5d3114.js"
   },
   {
     "revision": "71daf122b7d9bd5d3243",
@@ -304,8 +308,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/optimisations.c3c4c61a.js"
   },
   {
-    "revision": "aca3c6035ce10c875309",
-    "url": "/js/optimisation~orders.00731c84.js"
+    "revision": "61606e6099748665f880",
+    "url": "/js/optimisation~orders.2b96e7c5.js"
   },
   {
     "revision": "973793b8769df4d543b6",
@@ -324,8 +328,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.caa2f409.js"
   },
   {
-    "revision": "ce04bba45d8a72be7932",
-    "url": "/js/suppliers.4dfd3854.js"
+    "revision": "03e5a391ffcb69539a61",
+    "url": "/js/suppliers.bf2e8626.js"
+  },
+  {
+    "revision": "389c5db0a13bee268c30",
+    "url": "/js/view-supplier.ad00f064.js"
   },
   {
     "revision": "0b4936c234cefe9085d74937569e8eed",

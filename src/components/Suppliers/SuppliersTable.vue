@@ -7,6 +7,9 @@
            :loading="loading"
            @change="handleTableChange"
   >
+    <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{
+        name
+      }}</a>
     <template slot="country" slot-scope="country, record">
       {{ getCountry(record.name) }}
     </template>
@@ -29,6 +32,7 @@ const columns = [
     title: 'Name',
     dataIndex: 'name',
     sorter: true,
+    scopedSlots: {customRender: 'name'}
   },
   {
     title: 'Country',
@@ -161,7 +165,12 @@ export default {
         default:
           return 'Print';
       }
-    }
+    },
+
+    handleRecordSelected(supplier) {
+      // this.$emit('selected', order);
+      this.$router.push('/suppliers/' + supplier.id);
+    },
   },
 };
 </script>

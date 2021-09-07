@@ -85,6 +85,7 @@
                                id="paper-brand">
                         <a-select v-model="paper.paper_brand"
                                   show-search size="large"
+                                  :disabled="isDropdownLoading('paper-brand')"
                                   @change="forceRefresh">
                           <div slot="dropdownRender" slot-scope="menu">
                             <v-nodes :vnodes="menu"/>
@@ -99,9 +100,9 @@
                             </div>
                           </div>
                           <a-select-option v-for="paperBrand in paperBrandOptions"
-                                           :value="paperBrand.value"
-                                           :key="paperBrand.value">
-                            {{ paperBrand.label }}
+                                           :value="paperBrand.name"
+                                           :key="paperBrand.name">
+                            {{ paperBrand.name }}
                           </a-select-option>
                         </a-select>
           </validated-form-item>
@@ -123,9 +124,9 @@
                   </a-button>
                 </div>
               </div>
-              <a-select-option v-for="paperName in paperNameOptions" :value="paperName.value"
-                               :key="paperName.value">
-                {{ paperName.label }}
+              <a-select-option v-for="paperName in paperNameOptions" :value="paperName.name"
+                               :key="paperName.name">
+                {{ paperName.name }}
               </a-select-option>
             </a-select>
           </validated-form-item>
@@ -515,344 +516,344 @@ const PAPER_WEIGHT_OPTIONS = [
   }
 ];
 
-const PAPER_BRAND_OPTIONS = [
-  {
-    value: 'Ecostar',
-    label: 'Ecostar'
-  },
-  {
-    value: 'Envirocare',
-    label: 'Envirocare'
-  },
-  {
-    value: 'Grange',
-    label: 'Grange'
-  },
-  {
-    value: 'Hannoart',
-    label: 'Hannoart'
-  },
-  {
-    value: 'Novalite',
-    label: 'Novalite'
-  },
-  {
-    value: 'Magno',
-    label: 'Magno'
-  },
-  {
-    value: 'Maine',
-    label: 'Maine'
-  },
-  {
-    value: 'Alpine',
-    label: 'Alpine'
-  },
-  {
-    value: 'Impress',
-    label: 'Impress'
-  },
-  {
-    value: 'Fresh',
-    label: 'Fresh'
-  },
-  {
-    value: 'Monza',
-    label: 'Monza'
-  },
-  {
-    value: 'Pacesetter',
-    label: 'Pacesetter'
-  },
-  {
-    value: 'Titan',
-    label: 'Titan'
-  },
-  {
-    value: 'Splendorgel',
-    label: 'Splendorgel'
-  },
-  {
-    value: 'Optix',
-    label: 'Optix'
-  },
-  {
-    value: 'Precision',
-    label: 'Precision'
-  },
-  {
-    value: 'Reflex',
-    label: 'Reflex'
-  },
-  {
-    value: 'Publishers',
-    label: 'Publishers'
-  },
-  {
-    value: 'Revive',
-    label: 'Revive'
-  },
-  {
-    value: 'Silk',
-    label: 'Silk'
-  },
-  {
-    value: 'Impact',
-    label: 'Impact'
-  },
-  {
-    value: 'Sovereign',
-    label: 'Sovereign'
-  },
-  {
-    value: 'Freshzero',
-    label: 'Freshzero'
-  },
-  {
-    value: 'Saxton',
-    label: 'Saxton'
-  },
-  {
-    value: 'Sumo',
-    label: 'Sumo'
-  },
-  {
-    value: 'Supreme',
-    label: 'Supreme'
-  },
-  {
-    value: 'Yupo',
-    label: 'Yupo'
-  },
-  {
-    value: 'Barry',
-    label: 'Barry'
-  },
-  {
-    value: 'Pvc',
-    label: 'Pvc'
-  },
-  {
-    value: 'Knitted',
-    label: 'Knitted'
-  },
-  {
-    value: 'Buffalo',
-    label: 'Buffalo'
-  },
-  {
-    value: 'Colourplan',
-    label: 'Colourplan'
-  },
-  {
-    value: 'Colorplan',
-    label: 'Colorplan'
-  },
-  {
-    value: 'Conqueror',
-    label: 'Conqueror'
-  },
-  {
-    value: 'Curious',
-    label: 'Curious'
-  },
-  {
-    value: 'Xerox',
-    label: 'Xerox'
-  },
-  {
-    value: 'Mactac',
-    label: 'Mactac'
-  },
-  {
-    value: 'Europe',
-    label: 'Europe'
-  },
-  {
-    value: 'Opal',
-    label: 'Opal'
-  },
-  {
-    value: 'Envi',
-    label: 'Envi'
-  },
-  {
-    value: 'Enviro',
-    label: 'Enviro'
-  },
-  {
-    value: 'Colortech',
-    label: 'Colortech'
-  },
-  {
-    value: 'Novatech',
-    label: 'Novatech'
-  },
-  {
-    value: 'Greyback',
-    label: 'Greyback'
-  },
-  {
-    value: 'Incada',
-    label: 'Incada'
-  },
-  {
-    value: 'Keaykolour',
-    label: 'Keaykolour'
-  },
-  {
-    value: 'Keaycolour',
-    label: 'Keaycolour'
-  },
-  {
-    value: 'Knight',
-    label: 'Knight'
-  },
-  {
-    value: 'Pearl',
-    label: 'Pearl'
-  },
-  {
-    value: 'Kaskad',
-    label: 'Kaskad'
-  },
-  {
-    value: 'Atlas',
-    label: 'Atlas'
-  },
-  {
-    value: 'Backlit',
-    label: 'Backlit'
-  },
-  {
-    value: 'Carta',
-    label: 'Carta'
-  },
-  {
-    value: 'Snowflake',
-    label: 'Snowflake'
-  },
-  {
-    value: 'Canvas',
-    label: 'Canvas'
-  },
-  {
-    value: 'Zoda',
-    label: 'Zoda'
-  },
-  {
-    value: 'Tablex',
-    label: 'Tablex'
-  },
-  {
-    value: 'Vantage',
-    label: 'Vantage'
-  },
-  {
-    value: 'Lotus',
-    label: 'Lotus'
-  },
-  {
-    value: 'Toro',
-    label: 'Toro'
-  },
-  {
-    value: 'Neo',
-    label: 'Neo'
-  },
-  {
-    value: 'Lumi',
-    label: 'Lumi'
-  },
-  {
-    value: 'Bjball',
-    label: 'Bjball'
-  },
-  {
-    value: 'Fuji',
-    label: 'Fuji'
-  },
-  {
-    value: 'Manilla',
-    label: 'Manilla'
-  },
-  {
-    value: 'Extraprint',
-    label: 'Extraprint'
-  },
-  {
-    value: 'Ferrous',
-    label: 'Ferrous'
-  },
-  {
-    value: 'Neenah',
-    label: 'Neenah'
-  },
-  {
-    value: 'Heavy',
-    label: 'Heavy'
-  },
-  {
-    value: 'Magnegrip',
-    label: 'Magnegrip'
-  },
-  {
-    value: 'Mowhawk',
-    label: 'Mowhawk'
-  },
-  {
-    value: 'Mohawk',
-    label: 'Mohawk'
-  },
-  {
-    value: 'Any',
-    label: 'Any'
-  },
-  {
-    value: 'Nordset',
-    label: 'Nordset'
-  },
-  {
-    value: 'Crystal',
-    label: 'Crystal'
-  },
-  {
-    value: 'Paceseetter',
-    label: 'Paceseetter'
-  }
-];
+// const PAPER_BRAND_OPTIONS = [
+//   {
+//     value: 'Ecostar',
+//     label: 'Ecostar'
+//   },
+//   {
+//     value: 'Envirocare',
+//     label: 'Envirocare'
+//   },
+//   {
+//     value: 'Grange',
+//     label: 'Grange'
+//   },
+//   {
+//     value: 'Hannoart',
+//     label: 'Hannoart'
+//   },
+//   {
+//     value: 'Novalite',
+//     label: 'Novalite'
+//   },
+//   {
+//     value: 'Magno',
+//     label: 'Magno'
+//   },
+//   {
+//     value: 'Maine',
+//     label: 'Maine'
+//   },
+//   {
+//     value: 'Alpine',
+//     label: 'Alpine'
+//   },
+//   {
+//     value: 'Impress',
+//     label: 'Impress'
+//   },
+//   {
+//     value: 'Fresh',
+//     label: 'Fresh'
+//   },
+//   {
+//     value: 'Monza',
+//     label: 'Monza'
+//   },
+//   {
+//     value: 'Pacesetter',
+//     label: 'Pacesetter'
+//   },
+//   {
+//     value: 'Titan',
+//     label: 'Titan'
+//   },
+//   {
+//     value: 'Splendorgel',
+//     label: 'Splendorgel'
+//   },
+//   {
+//     value: 'Optix',
+//     label: 'Optix'
+//   },
+//   {
+//     value: 'Precision',
+//     label: 'Precision'
+//   },
+//   {
+//     value: 'Reflex',
+//     label: 'Reflex'
+//   },
+//   {
+//     value: 'Publishers',
+//     label: 'Publishers'
+//   },
+//   {
+//     value: 'Revive',
+//     label: 'Revive'
+//   },
+//   {
+//     value: 'Silk',
+//     label: 'Silk'
+//   },
+//   {
+//     value: 'Impact',
+//     label: 'Impact'
+//   },
+//   {
+//     value: 'Sovereign',
+//     label: 'Sovereign'
+//   },
+//   {
+//     value: 'Freshzero',
+//     label: 'Freshzero'
+//   },
+//   {
+//     value: 'Saxton',
+//     label: 'Saxton'
+//   },
+//   {
+//     value: 'Sumo',
+//     label: 'Sumo'
+//   },
+//   {
+//     value: 'Supreme',
+//     label: 'Supreme'
+//   },
+//   {
+//     value: 'Yupo',
+//     label: 'Yupo'
+//   },
+//   {
+//     value: 'Barry',
+//     label: 'Barry'
+//   },
+//   {
+//     value: 'Pvc',
+//     label: 'Pvc'
+//   },
+//   {
+//     value: 'Knitted',
+//     label: 'Knitted'
+//   },
+//   {
+//     value: 'Buffalo',
+//     label: 'Buffalo'
+//   },
+//   {
+//     value: 'Colourplan',
+//     label: 'Colourplan'
+//   },
+//   {
+//     value: 'Colorplan',
+//     label: 'Colorplan'
+//   },
+//   {
+//     value: 'Conqueror',
+//     label: 'Conqueror'
+//   },
+//   {
+//     value: 'Curious',
+//     label: 'Curious'
+//   },
+//   {
+//     value: 'Xerox',
+//     label: 'Xerox'
+//   },
+//   {
+//     value: 'Mactac',
+//     label: 'Mactac'
+//   },
+//   {
+//     value: 'Europe',
+//     label: 'Europe'
+//   },
+//   {
+//     value: 'Opal',
+//     label: 'Opal'
+//   },
+//   {
+//     value: 'Envi',
+//     label: 'Envi'
+//   },
+//   {
+//     value: 'Enviro',
+//     label: 'Enviro'
+//   },
+//   {
+//     value: 'Colortech',
+//     label: 'Colortech'
+//   },
+//   {
+//     value: 'Novatech',
+//     label: 'Novatech'
+//   },
+//   {
+//     value: 'Greyback',
+//     label: 'Greyback'
+//   },
+//   {
+//     value: 'Incada',
+//     label: 'Incada'
+//   },
+//   {
+//     value: 'Keaykolour',
+//     label: 'Keaykolour'
+//   },
+//   {
+//     value: 'Keaycolour',
+//     label: 'Keaycolour'
+//   },
+//   {
+//     value: 'Knight',
+//     label: 'Knight'
+//   },
+//   {
+//     value: 'Pearl',
+//     label: 'Pearl'
+//   },
+//   {
+//     value: 'Kaskad',
+//     label: 'Kaskad'
+//   },
+//   {
+//     value: 'Atlas',
+//     label: 'Atlas'
+//   },
+//   {
+//     value: 'Backlit',
+//     label: 'Backlit'
+//   },
+//   {
+//     value: 'Carta',
+//     label: 'Carta'
+//   },
+//   {
+//     value: 'Snowflake',
+//     label: 'Snowflake'
+//   },
+//   {
+//     value: 'Canvas',
+//     label: 'Canvas'
+//   },
+//   {
+//     value: 'Zoda',
+//     label: 'Zoda'
+//   },
+//   {
+//     value: 'Tablex',
+//     label: 'Tablex'
+//   },
+//   {
+//     value: 'Vantage',
+//     label: 'Vantage'
+//   },
+//   {
+//     value: 'Lotus',
+//     label: 'Lotus'
+//   },
+//   {
+//     value: 'Toro',
+//     label: 'Toro'
+//   },
+//   {
+//     value: 'Neo',
+//     label: 'Neo'
+//   },
+//   {
+//     value: 'Lumi',
+//     label: 'Lumi'
+//   },
+//   {
+//     value: 'Bjball',
+//     label: 'Bjball'
+//   },
+//   {
+//     value: 'Fuji',
+//     label: 'Fuji'
+//   },
+//   {
+//     value: 'Manilla',
+//     label: 'Manilla'
+//   },
+//   {
+//     value: 'Extraprint',
+//     label: 'Extraprint'
+//   },
+//   {
+//     value: 'Ferrous',
+//     label: 'Ferrous'
+//   },
+//   {
+//     value: 'Neenah',
+//     label: 'Neenah'
+//   },
+//   {
+//     value: 'Heavy',
+//     label: 'Heavy'
+//   },
+//   {
+//     value: 'Magnegrip',
+//     label: 'Magnegrip'
+//   },
+//   {
+//     value: 'Mowhawk',
+//     label: 'Mowhawk'
+//   },
+//   {
+//     value: 'Mohawk',
+//     label: 'Mohawk'
+//   },
+//   {
+//     value: 'Any',
+//     label: 'Any'
+//   },
+//   {
+//     value: 'Nordset',
+//     label: 'Nordset'
+//   },
+//   {
+//     value: 'Crystal',
+//     label: 'Crystal'
+//   },
+//   {
+//     value: 'Paceseetter',
+//     label: 'Paceseetter'
+//   }
+// ];
 
 
-const PAPER_NAME_OPTIONS = [
-  {
-    value: 'Magno Gloss',
-    label: 'Magno Gloss'
-  },
-  {
-    value: 'Magno Plus Gloss',
-    label: 'Magno Plus Gloss'
-  },
-  {
-    value: 'Magno Satin',
-    label: 'Magno Satin'
-  },
-  {
-    value: 'Magno Plus Silk',
-    label: 'Magno Plus Silk'
-  },
-  {
-    value: 'Magno Matt',
-    label: 'Magno Matt'
-  },
-  {
-    value: 'Magno Volume',
-    label: 'Magno Volume'
-  },
-  {
-    value: 'Magno Natural',
-    label: 'Magno Natural'
-  }
-];
+// const PAPER_NAME_OPTIONS = [
+//   {
+//     value: 'Magno Gloss',
+//     label: 'Magno Gloss'
+//   },
+//   {
+//     value: 'Magno Plus Gloss',
+//     label: 'Magno Plus Gloss'
+//   },
+//   {
+//     value: 'Magno Satin',
+//     label: 'Magno Satin'
+//   },
+//   {
+//     value: 'Magno Plus Silk',
+//     label: 'Magno Plus Silk'
+//   },
+//   {
+//     value: 'Magno Matt',
+//     label: 'Magno Matt'
+//   },
+//   {
+//     value: 'Magno Volume',
+//     label: 'Magno Volume'
+//   },
+//   {
+//     value: 'Magno Natural',
+//     label: 'Magno Natural'
+//   }
+// ];
 
 const COATING_TYPE_OPTIONS = [
   {
@@ -1022,9 +1023,9 @@ export default {
     return {
       paperFinishOptions: [],
       paperWeightOptions: PAPER_WEIGHT_OPTIONS,
-      paperBrandOptions: PAPER_BRAND_OPTIONS,
+      paperBrandOptions: [],
       // paperBrandNames: _.map(PAPER_BRAND_OPTIONS, 'label'),
-      paperNameOptions: PAPER_NAME_OPTIONS,
+      // paperNameOptions: PAPER_NAME_OPTIONS,
       coatingTypeOptions: COATING_TYPE_OPTIONS,
       coatingFinishOptions: COATING_FINISH_OPTIONS,
       coatingAppliedOptions: COATING_APPLIED_OPTIONS,
@@ -1035,17 +1036,28 @@ export default {
     }
   },
   mounted() {
+    this.getDropdownOptions('paper-brand', 'paperBrandOptions');
     this.getDropdownOptions('paper-finish', 'paperFinishOptions');
     this.getDropdownOptions('paper-fold-type', 'paperFoldTypeOptions');
   },
   computed: {
-    paperBrandNames() {
-      let fromDb = _.map(this.paperBrands, 'name');
-      let currentPaperBrand = this.paper.paper_brand;
-      if (currentPaperBrand.length !== 0 && !fromDb.includes(currentPaperBrand)) {
-        fromDb.push(currentPaperBrand);
+    // paperBrandNames() {
+    //   let fromDb = _.map(this.paperBrands, 'name');
+    //   let currentPaperBrand = this.paper.paper_brand;
+    //   if (currentPaperBrand.length !== 0 && !fromDb.includes(currentPaperBrand)) {
+    //     fromDb.push(currentPaperBrand);
+    //   }
+    //   return fromDb;
+    // }
+
+    paperNameOptions() {
+      let paperBrand = _.find(this.paperBrandOptions, {
+        name: this.paper.paper_brand
+      });
+      if (paperBrand) {
+        return paperBrand.profiles
       }
-      return fromDb;
+      return [];
     }
   }
 }

@@ -6,7 +6,7 @@
           {{ formatAddress(address) }}
         </div>
         <div v-if="factory.addresses.length === 0">
-          No addresses
+          No address provided
         </div>
       </a-descriptions-item>
       <a-descriptions-item label="Accreditations">

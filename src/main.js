@@ -36,11 +36,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 locale.use(lang);
-import {Collapse, CollapseItem, Select, Option} from "element-ui";
+import {Collapse, CollapseItem, Select, Option, Input} from "element-ui";
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(Select);
 Vue.use(Option);
+Vue.use(Input);
 
 // Viser
 import Viser from 'viser-vue';

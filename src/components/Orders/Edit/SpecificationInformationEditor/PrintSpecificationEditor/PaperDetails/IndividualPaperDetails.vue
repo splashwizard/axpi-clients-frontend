@@ -83,28 +83,27 @@
           <validated-form-item label="Paper Brand"
                                :conditions="[{field: 'section_name', value: paper.section_name}]"
                                id="paper-brand">
-                        <a-select v-model="paper.paper_brand"
-                                  show-search size="large"
-                                  :disabled="isDropdownLoading('paper-brand')"
-                                  @change="forceRefresh">
-                          <div slot="dropdownRender" slot-scope="menu">
-                            <v-nodes :vnodes="menu"/>
-                            <a-divider style="margin: 4px 0;"/>
-                            <div style="display: flex; flex-wrap: nowrap; padding: 8px;">
-                              <a-input @click.prevent.stop="e => e.preventDefault()" placeholder="Add new item" type="text"
-                                       style="flex: auto;"></a-input>
-                              <a-button @click.prevent.stop="e => e.preventDefault()"
-                                        style="flex: none; display: block; margin-left: 10px;"
-                                        icon="plus">Add item
-                              </a-button>
-                            </div>
-                          </div>
-                          <a-select-option v-for="paperBrand in paperBrandOptions"
-                                           :value="paperBrand.name"
-                                           :key="paperBrand.name">
-                            {{ paperBrand.name }}
-                          </a-select-option>
-                        </a-select>
+            <a-select v-model="paper.paper_brand"
+                      show-search size="large"
+                      :disabled="isDropdownLoading('paper-brand')"
+                      @change="forceRefresh">
+              <div slot="dropdownRender" slot-scope="menu">
+                <v-nodes :vnodes="menu"/>
+                <a-divider style="margin: 4px 0;"/>
+                <div style="display: flex; flex-wrap: nowrap; padding: 4px 8px 8px 8px;">
+                  <a-button block
+                            @click.prevent="setCustomPaperBrand"
+                      style="flex: none; display: block "
+                      icon="plus">Add custom paper brand
+                  </a-button>
+                </div>
+              </div>
+              <a-select-option v-for="paperBrand in paperBrandOptions"
+                               :value="paperBrand.name"
+                               :key="paperBrand.name">
+                {{ paperBrand.name }}
+              </a-select-option>
+            </a-select>
           </validated-form-item>
           <validated-form-item label="Paper Name"
                                :conditions="[{field: 'section_name', value: paper.section_name}]"
@@ -115,12 +114,11 @@
               <div slot="dropdownRender" slot-scope="menu">
                 <v-nodes :vnodes="menu"/>
                 <a-divider style="margin: 4px 0;"/>
-                <div style="display: flex; flex-wrap: nowrap; padding: 8px;">
-                  <a-input @click.prevent.stop="e => e.preventDefault()" placeholder="Add new item" type="text"
-                           style="flex: auto;"></a-input>
-                  <a-button @click.prevent.stop="e => e.preventDefault()"
-                            style="flex: none; display: block; margin-left: 10px;"
-                            icon="plus">Add item
+                <div style="display: flex; flex-wrap: nowrap; padding: 4px 8px 8px 8px;">
+                  <a-button block
+                            @click.prevent="setCustomPaperName"
+                            style="flex: none; display: block "
+                            icon="plus">Add custom paper name
                   </a-button>
                 </div>
               </div>
@@ -1010,6 +1008,20 @@ export default {
     handlePaperSizeSelected(size) {
       this.paper.paper_size = size;
       this.forceRefresh();
+    },
+
+    setCustomPaperBrand() {
+      let custom = prompt("Please enter the paper brand");
+      if (custom) {
+        this.paper.paper_brand = custom;
+      }
+    },
+
+    setCustomPaperName() {
+      let custom = prompt("Please enter the paper name");
+      if (custom) {
+        this.paper.paper_name = custom;
+      }
     }
   },
   components: {

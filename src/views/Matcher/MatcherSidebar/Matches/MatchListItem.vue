@@ -1,0 +1,94 @@
+<template>
+  <a-list-item>
+    <template v-if="item">
+      <toggle-match-selected-button slot="actions" :match="item"></toggle-match-selected-button>
+      <a-list-item-meta>
+        <div slot="title">{{ item['Name'] }}</div>
+        <div slot="description" class="product-description">
+          <div v-if="showMoreDetails">
+            <b>Manufacturer: </b>{{ item['Manufacturer'] }} <br>
+            <b>Product Code: </b>{{ item['Product_Code'] }} <br>
+            <b>Catalog Code: </b>{{ item['Catalog_Code'] }} <br>
+            <a href="#" style="margin-top: 5px;" @click.prevent="toggleShowMoreDetails">View less
+              <a-icon :style="{fontSize: '10px'}" type="up"/>
+            </a>
+          </div>
+          <div v-else>
+            <a href="#" @click.prevent="toggleShowMoreDetails">View more
+              <a-icon type="down" :style="{fontSize: '10px'}"/>
+            </a>
+          </div>
+        </div>
+        <a-avatar
+            size="large"
+            slot="avatar"
+            :src="getImageSrc(item)"
+        />
+      </a-list-item-meta>
+    </template>
+    <template v-else>
+      <a-spin v-if="isLoadingItem"></a-spin>
+    </template>
+  </a-list-item>
+</template>
+
+<script>
+import ToggleMatchSelectedButton from "../ToggleMatchSelectedButton";
+import axios from 'axios';
+
+export default {
+  name: "MatchListItem",
+  props: ['listItem'],
+  data() {
+    return {
+      showMoreDetails: false,
+      loadedItem: null,
+      isLoadingItem: false
+    }
+  },
+  computed: {
+    item() {
+      if (this.listItem.type === 'product') {
+        return this.listItem.value;
+      }
+      return this.loadedItem;
+    }
+  },
+  created() {
+    console.log(this.listItem);
+    if (this.listItem.type == 'id') {
+      this.loadItem();
+    }
+  },
+  components: {ToggleMatchSelectedButton},
+  methods: {
+    getImageSrc(order) {
+      if (order['Images'] && order['Images'].length) {
+        return order['Images'][0];
+      }
+    },
+
+    toggleShowMoreDetails() {
+      this.showMoreDetails = !this.showMoreDetails;
+    },
+
+    loadItem() {
+      let vm = this;
+      vm.isLoadingItem = true;
+      axios.post(window.API_BASE + '/matcher/get-product-by-id', {
+        id: this.listItem.value
+      }).then(r => {
+        this.isLoadingItem = false;
+        this.loadedItem = r.data;
+      }).catch(e => {
+        console.log(e);
+        this.$message.error('Error loading item');
+      });
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

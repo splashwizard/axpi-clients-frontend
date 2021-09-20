@@ -113,6 +113,11 @@
                       theme="filled"></a-icon>
               <span v-if="!menuCollapsed">Specifications</span>
             </a-menu-item>
+            <a-menu-item title="Matcher" key="matcher">
+              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="pushpin"
+                      theme="filled"></a-icon>
+              <span v-if="!menuCollapsed">Matcher</span>
+            </a-menu-item>
             <a-menu-item title="Suppliers" key="suppliers">
               <suppliers-icon class="nav-icon"></suppliers-icon>
               <span v-if="!menuCollapsed">Suppliers</span>
@@ -255,11 +260,11 @@ export default {
     }),
 
     noPadding() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details'].includes(this.$route.name);
+      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher'].includes(this.$route.name);
     },
 
     menuCollapsed() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details'].includes(this.$route.name);
+      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher'].includes(this.$route.name);
     }
   }
 }

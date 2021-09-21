@@ -24,6 +24,7 @@ import axios from 'axios';
 
 const _ = require('lodash');
 import {mapActions} from 'vuex';
+import eventBus from "../../event-bus";
 
 const columns = [
   {
@@ -76,10 +77,27 @@ export default {
   },
   mounted() {
     this.fetch();
+    eventBus.$on('order-matched', (params) => {
+      let {erp_order_id, matches, matches_selected_from_suggestion, matches_selected_manually} = params;
+      this.data = _.map(this.data, d => {
+        if (d['_id'] === erp_order_id) {
+          return {
+            ...d,
+            matches,
+            matches_selected_from_suggestion,
+            matches_selected_manually
+          };
+        }
+        return d;
+      });
+    });
+  },
+  beforeDestroy() {
+    eventBus.$off('order-matched');
   },
   watch: {
     reloadKey() {
-      this.fetch();
+      // this.fetch();
     }
   },
   methods: {

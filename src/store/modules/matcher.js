@@ -1,4 +1,5 @@
 import axios from 'axios';
+import eventBus from "../../event-bus";
 
 let _ = require('lodash');
 // import router from "../../router";
@@ -175,17 +176,18 @@ export const actions = {
 
     saveMatches({commit, getters}) {
         commit('START_SAVING');
-        axios.post(window.API_BASE + '/matcher/save-matches', {
+        let params = {
             erp_order_id: getters.selectedErpOrder['_id'],
-            // matches: _.map(getters.selectedMatches, '_id')
             matches: getters.selectedMatches,
             matches_selected_from_suggestion: getters.matchesSelectedFromSuggestions,
             matches_selected_manually: getters.matchesSelectedManually
-        }).then(() => {
+        };
+        axios.post(window.API_BASE + '/matcher/save-matches', params).then(() => {
             commit('STOP_SAVING');
-            commit('SET_SELECTED_ERP_ORDER', null);
             commit('INCREMENT_RELOAD_KEY');
             this._vm.$message.success('Match saved successfully');
+            eventBus.$emit('order-matched', params);
+            commit('SET_SELECTED_ERP_ORDER', null);
         }).catch(e => {
             console.log(e);
             commit('STOP_SAVING');

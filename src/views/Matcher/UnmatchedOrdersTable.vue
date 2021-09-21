@@ -17,6 +17,7 @@
 
 <script>
 import axios from 'axios';
+import eventBus from "../../event-bus";
 
 const _ = require('lodash');
 import {mapActions} from 'vuex';
@@ -68,10 +69,25 @@ export default {
   },
   mounted() {
     this.fetch();
+    eventBus.$on('order-matched', (params) => {
+      let {erp_order_id, matches} = params;
+      this.data = _.reject(this.data, d => {
+        if (d['_id'] === erp_order_id && matches.length > 0) {
+          return true;
+        }
+        return false;
+      });
+      if (this.data.length === 0) {
+       this.fetch();
+      }
+    });
+  },
+  beforeDestroy() {
+    eventBus.$off('order-matched');
   },
   watch: {
     reloadKey() {
-      this.fetch();
+      // this.fetch();
     }
   },
   methods: {

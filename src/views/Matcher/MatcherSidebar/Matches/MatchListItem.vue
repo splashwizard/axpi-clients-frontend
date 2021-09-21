@@ -19,11 +19,12 @@
             </a>
           </div>
         </div>
-        <a-avatar
-            size="large"
-            slot="avatar"
-            :src="getImageSrc(item)"
-        />
+        <a slot="avatar" target="_blank" :href="item['URL']">
+          <a-avatar
+              size="large"
+              :src="getImageSrc(item)"
+          />
+        </a>
       </a-list-item-meta>
     </template>
     <template v-else>

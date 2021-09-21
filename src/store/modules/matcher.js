@@ -96,6 +96,11 @@ export const getters = {
         return _.difference(state.selectedMatches, idsOfSuggestedMatches);
     },
 
+    matchesSelectedFromSuggestions: (state) => {
+        let idsOfSuggestedMatches = _.map(state.suggestedMatches, '_id');
+        return _.intersection(state.selectedMatches, idsOfSuggestedMatches);
+    },
+
     isLoadingSuggestedMatches: (state) => {
         return state.isLoadingSuggestedMatches;
     },
@@ -173,7 +178,9 @@ export const actions = {
         axios.post(window.API_BASE + '/matcher/save-matches', {
             erp_order_id: getters.selectedErpOrder['_id'],
             // matches: _.map(getters.selectedMatches, '_id')
-            matches: getters.selectedMatches
+            matches: getters.selectedMatches,
+            matches_selected_from_suggestion: getters.matchesSelectedFromSuggestions,
+            matches_selected_manually: getters.matchesSelectedManually
         }).then(() => {
             commit('STOP_SAVING');
             commit('SET_SELECTED_ERP_ORDER', null);

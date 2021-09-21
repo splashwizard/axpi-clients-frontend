@@ -10,7 +10,7 @@
 
           <a-tabs v-model="currentTab">
             <a-tab-pane key="overview" tab="Overview">
-
+              <matcher-overview></matcher-overview>
             </a-tab-pane>
             <a-tab-pane key="uncategorized" tab="Unmatched Orders">
               <unmatched-orders-table :reload-key="reloadKey"></unmatched-orders-table>
@@ -36,6 +36,7 @@ import {mapGetters, mapActions} from "vuex";
 import UnmatchedOrdersTable from "./Matcher/UnmatchedOrdersTable";
 import AllOrdersTable from "./Matcher/AllOrdersTable";
 import MatcherSidebar from "./Matcher/MatcherSidebar";
+import MatcherOverview from "./Matcher/MatcherOverview";
 
 export default {
   name: "Specifications",
@@ -50,7 +51,7 @@ export default {
     }
   },
   components: {
-    UnmatchedOrdersTable, AllOrdersTable, MatcherSidebar
+    UnmatchedOrdersTable, AllOrdersTable, MatcherSidebar, MatcherOverview
   },
   data() {
     return {

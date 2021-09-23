@@ -27,12 +27,16 @@
         <h2>Classified Vendor Spend</h2>
 
         <a-card>
-          <a-row :gutter="20">
+          <a-row type="flex" :gutter="20">
             <a-col :span="20">
-              <classified-vendor-spend :overview="overview"></classified-vendor-spend>
+                <classified-vendor-spend
+                  :overview="overview"
+                ></classified-vendor-spend>
             </a-col>
             <a-col :span="4">
-              <stats-sidebar :overview="overview"></stats-sidebar>
+              <div class="sidebar-wrapper">
+                <stats-sidebar :overview="overview"></stats-sidebar>
+              </div>
             </a-col>
           </a-row>
         </a-card>
@@ -44,7 +48,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import TotalSpend from "./MatcherOverview/TotalSpend";
 import TotalClassifiedSpend from "./MatcherOverview/TotalClassifiedSpend";
 import ClassifiedVendorSpend from "./MatcherOverview/ClassifiedVendorSpend";
@@ -52,32 +56,40 @@ import StatsSidebar from "./MatcherOverview/StatsSidebar";
 
 export default {
   name: "MatcherOverview",
-  components: {ClassifiedVendorSpend, TotalClassifiedSpend, TotalSpend, StatsSidebar},
+  components: {
+    ClassifiedVendorSpend,
+    TotalClassifiedSpend,
+    TotalSpend,
+    StatsSidebar,
+  },
   created() {
     this.fetch();
   },
   data() {
     return {
       overview: null,
-      isLoading: false
-    }
+      isLoading: false,
+    };
   },
   methods: {
     fetch() {
       let vm = this;
       vm.isLoading = true;
       vm.overview = null;
-      axios.get(window.API_BASE + '/matcher/overview').then(r => {
-        vm.overview = r.data;
-        vm.isLoading = false;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        this.$message.error('Error loading overview');
-      });
-    }
-  }
-}
+      axios
+        .get(window.API_BASE + "/matcher/overview")
+        .then((r) => {
+          vm.overview = r.data;
+          vm.isLoading = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          this.$message.error("Error loading overview");
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -87,5 +99,10 @@ export default {
 
 .body {
   padding-top: 30px;
+}
+
+.sidebar-wrapper {
+  border-left: 1px solid #eee;
+  height: 100%;
 }
 </style>

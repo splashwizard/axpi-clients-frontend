@@ -23,7 +23,7 @@
       </a-layout>
       <a-layout-sider width="500" theme="dark"
                       :style="{ background: '#f7fafc', borderLeft: '1px solid #e3e8ee' }"
-                      :collapsed-width="0" v-model="shouldHideSidebar" :trigger="null" collapsibl>
+                      :collapsed-width="0" v-model="shouldHideSidebar" :trigger="null" collapsible>
           <matcher-sidebar></matcher-sidebar>
       </a-layout-sider>
     </a-layout>

@@ -136,6 +136,21 @@ const routes = [
         component: () => import(/* webpackChunkName: "matcher" */ '../views/Matcher.vue')
     },
     {
+        path: '/intelligence',
+        name: 'Intelligence',
+        component: () => import(/* webpackChunkName: "intelligence" */ '../views/Intelligence.vue')
+    },
+    {
+        path: '/intelligence/clusters',
+        name: 'Clusters',
+        component: () => import(/* webpackChunkName: "clusters" */ '../views/Intelligence/Clusters/Index.vue')
+    },
+    {
+        path: '/intelligence/clusters/:id',
+        name: 'View Cluster',
+        component: () => import(/* webpackChunkName: "view-cluster" */ '../views/Intelligence/Clusters/Show.vue')
+    },
+    {
         path: '/developers',
         name: 'Developers',
         // route level code-splitting

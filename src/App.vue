@@ -118,14 +118,19 @@
                       theme="filled"></a-icon>
               <span v-if="!menuCollapsed">Matcher</span>
             </a-menu-item>
+            <a-menu-item title="Intelligence" key="intelligence">
+              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="bulb"
+                      theme="filled"></a-icon>
+              <span v-if="!menuCollapsed">Intelligence</span>
+            </a-menu-item>
             <a-menu-item title="Suppliers" key="suppliers">
               <suppliers-icon class="nav-icon"></suppliers-icon>
               <span v-if="!menuCollapsed">Suppliers</span>
             </a-menu-item>
-            <a-menu-item title="Strategy" key="goals">
+            <!-- <a-menu-item title="Strategy" key="goals">
               <goals-icon class="nav-icon"></goals-icon>
               <span v-if="!menuCollapsed">Strategy</span>
-            </a-menu-item>
+            </a-menu-item> -->
             <a-menu-item title="Optimisations" key="optimisations">
               <optimise-icon class="nav-icon"></optimise-icon>
               <span v-if="!menuCollapsed">Optimisations</span>
@@ -195,7 +200,7 @@ import {mapGetters, mapActions} from "vuex";
 import HomeIcon from "./components/Icons/HomeIcon";
 import OrdersIcon from "./components/Icons/OrdersIcon";
 import SuppliersIcon from "./components/Icons/SuppliersIcon";
-import GoalsIcon from "./components/Icons/GoalsIcon";
+// import GoalsIcon from "./components/Icons/GoalsIcon";
 import OptimiseIcon from "./components/Icons/OptimiseIcon";
 import AnalyticsIcon from "./components/Icons/AnalyticsIcon";
 import ReportsIcon from "./components/Icons/ReportsIcon";
@@ -211,7 +216,7 @@ export default {
     HomeIcon,
     OrdersIcon,
     SuppliersIcon,
-    GoalsIcon,
+    // GoalsIcon,
     OptimiseIcon,
     AnalyticsIcon,
     ReportsIcon,
@@ -260,11 +265,11 @@ export default {
     }),
 
     noPadding() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher'].includes(this.$route.name);
+      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster'].includes(this.$route.name);
     },
 
     menuCollapsed() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher'].includes(this.$route.name);
+      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster'].includes(this.$route.name);
     }
   }
 }

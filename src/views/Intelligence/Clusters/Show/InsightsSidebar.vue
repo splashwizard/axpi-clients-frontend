@@ -3,16 +3,21 @@
     <!-- Top -->
     <div class="top">
       <!-- Header -->
-      <a-page-header title="Insights" @back="$emit('close')"></a-page-header>
+      <a-page-header :title="headerTitle" @back="handleBack"></a-page-header>
       <!-- / Header -->
 
       <b style="display: block; padding-bottom: 20px;">Not showing properly where refactoring to be like Lucidchart</b>
 
       <b style="display: block; padding-bottom: 20px;">Showing insights for ERP order ID: {{ erpOrderId }}</b>
 
-      <insights-table :insights="insights" :selected-order-id="erpOrderId"></insights-table>
+      <insights-table @set-insight-type="setInsightType"
+                      v-if="insightType === null" :insights="insights" :selected-order-id="erpOrderId"></insights-table>
 
-<!--      <insight v-for="(theInsight, i) in insights" :key="i" :insight="theInsight"></insight>-->
+      <div v-if="insightType">
+        Viewing {{ insightType }} insights...
+      </div>
+
+      <!--      <insight v-for="(theInsight, i) in insights" :key="i" :insight="theInsight"></insight>-->
     </div>
     <!-- / Top -->
 
@@ -30,22 +35,45 @@
 // const _ = require("lodash");
 // import Insight from "./InsightsSidebar/Insight";
 import InsightsTable from "./InsightsSidebar/InsightsTable";
+
 export default {
   name: "InsightsSidebar",
   props: ["clusterId", "insights", "erpOrderId"],
   components: {InsightsTable},
   data() {
-    return {};
+    return {
+      insightType: null
+    };
   },
   watch: {
-    searchQuery: function () {
+    erpOrderId: function () {
+      this.insightType = null;
     },
   },
   created() {
   },
-  methods: {},
+  methods: {
+    setInsightType(type) {
+      this.insightType = type;
+    },
 
-  computed: {},
+    handleBack() {
+      if (this.insightType) {
+        this.insightType = null;
+      } else {
+        this.$emit('close');
+      }
+    }
+  },
+
+  computed: {
+    headerTitle() {
+      if (this.insightType) {
+        return this.insightType.charAt(0).toUpperCase() + this.insightType.slice(1) + ' Insights';
+      }
+      return 'Insights';
+    }
+  },
 };
 </script>
 

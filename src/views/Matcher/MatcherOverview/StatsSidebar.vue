@@ -28,6 +28,10 @@ export default {
         {
           title: 'Spend Classified',
           value: 'spend_classified'
+        },
+        {
+          title: 'Orders Classified',
+          value: 'orders_classified'
         }
       ]
     }

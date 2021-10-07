@@ -14,7 +14,7 @@
       <div>
         <div style="margin-bottom: 20px; text-align: left">
           <a-input-search
-            placeholder="Search ERP orders"
+            placeholder="Search orders"
             v-model="searchQuery"
             style="width: 100%;"
             @search="fetch"

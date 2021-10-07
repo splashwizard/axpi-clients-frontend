@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "71b528c5b6c5096f25af",
+    "revision": "65dcdc8444f85e72e52f",
     "url": "/css/app.48b3c203.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/intelligence.5b489c7a.css"
   },
   {
-    "revision": "e2bca78768839e914c16",
-    "url": "/css/matcher.89ade467.css"
+    "revision": "684f371596a5c072b8a4",
+    "url": "/css/matcher.357cd3ce.css"
   },
   {
     "revision": "498635c2330d827134b4",
@@ -52,8 +52,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/suppliers.667b8801.css"
   },
   {
-    "revision": "837e170130baf597d21e",
-    "url": "/css/view-cluster.a460c01e.css"
+    "revision": "0dde6ee0b740a368042e",
+    "url": "/css/view-cluster.d3f152ef.css"
   },
   {
     "revision": "05b6801ba57df29ca0d5",
@@ -284,7 +284,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "fe88252636bb67ddc341a4e2d30bb661",
+    "revision": "529c4d7899a0837c5de153fa30745f8d",
     "url": "/index.html"
   },
   {
@@ -304,8 +304,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.74f685eb.js"
   },
   {
-    "revision": "71b528c5b6c5096f25af",
-    "url": "/js/app.acc3aece.js"
+    "revision": "65dcdc8444f85e72e52f",
+    "url": "/js/app.64957c6e.js"
   },
   {
     "revision": "3cdd8355fd555a0aea97",
@@ -320,8 +320,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/intelligence.63199be8.js"
   },
   {
-    "revision": "e2bca78768839e914c16",
-    "url": "/js/matcher.ca65cd9e.js"
+    "revision": "684f371596a5c072b8a4",
+    "url": "/js/matcher.2e69ff76.js"
   },
   {
     "revision": "498635c2330d827134b4",
@@ -360,8 +360,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/suppliers.bf2e8626.js"
   },
   {
-    "revision": "837e170130baf597d21e",
-    "url": "/js/view-cluster.05c7c1ec.js"
+    "revision": "0dde6ee0b740a368042e",
+    "url": "/js/view-cluster.c2cb3167.js"
   },
   {
     "revision": "05b6801ba57df29ca0d5",

@@ -7,28 +7,28 @@
     <!-- / No matches -->
 
     <!-- Insights -->
-<!--    <table v-if="insightsToShow.length" class="axpi-basic-table">-->
-<!--      <thead>-->
-<!--      <tr>-->
-<!--        <th>Name</th>-->
-<!--        <th>Potential Savings</th>-->
-<!--        <th></th>-->
-<!--      </tr>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-<!--      <tr>-->
-<!--        <td>-->
-<!--          Pricing-->
-<!--        </td>-->
-<!--        <td>-->
-<!--          £1,000,000-->
-<!--        </td>-->
-<!--        <td class="action">-->
-<!--          <a-button type="primary">View</a-button>-->
-<!--        </td>-->
-<!--      </tr>-->
-<!--      </tbody>-->
-<!--    </table>-->
+    <table v-if="insightsToShow.length" class="axpi-basic-table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Potential Savings</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(insights, type) in insightsGroupedByType" :key="type">
+        <td>
+          {{ formatType(type) }}
+        </td>
+        <td>
+          tbd
+        </td>
+        <td class="action">
+          <a-button type="primary">View</a-button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
     <!-- / Insights -->
 
     <div class="wrapper insights-list-wrapper">
@@ -53,7 +53,12 @@ export default {
     },
 
     insightsGroupedByType() {
-      return _.groupBy(this.insights);
+      return _.groupBy(this.insights, 'insight_type');
+    }
+  },
+  methods: {
+    formatType(type) {
+     return type.charAt(0).toUpperCase() + type.slice(1);
     }
   }
 }

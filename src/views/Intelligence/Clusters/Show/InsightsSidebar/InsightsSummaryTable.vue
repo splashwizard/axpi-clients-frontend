@@ -40,7 +40,7 @@
 <script>
 let _ = require('lodash');
 export default {
-  name: "InsightsTable",
+  name: "InsightsSummaryTable",
   props: ['insights', 'selectedOrderId'],
   computed: {
     insightsToShow() {
@@ -65,11 +65,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.axpi-basic-table {
-  width: 100%;
-
-  .action {
-    text-align: right;
-  }
-}
 </style>

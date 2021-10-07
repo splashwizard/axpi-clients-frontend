@@ -6,16 +6,16 @@
       <a-page-header :title="headerTitle" @back="handleBack"></a-page-header>
       <!-- / Header -->
 
-      <b style="display: block; padding-bottom: 20px;">Not showing properly where refactoring to be like Lucidchart</b>
+      <!--      <b style="display: block; padding-bottom: 20px;">Not showing properly where refactoring to be like Lucidchart</b>-->
+      <!--      <b style="display: block; padding-bottom: 20px;">Showing insights for ERP order ID: {{ erpOrderId }}</b>-->
 
-      <b style="display: block; padding-bottom: 20px;">Showing insights for ERP order ID: {{ erpOrderId }}</b>
+      <insights-summary-table v-if="insightType === null"
+                              @set-insight-type="setInsightType"
+                              :insights="insights"
+                              :selected-order-id="erpOrderId"></insights-summary-table>
 
-      <insights-table @set-insight-type="setInsightType"
-                      v-if="insightType === null" :insights="insights" :selected-order-id="erpOrderId"></insights-table>
-
-      <div v-if="insightType">
-        {{ insightType }} insights will be shown here
-      </div>
+      <group-insights-table v-if="insightType"
+                            :insights="groupInsightsToShow"></group-insights-table>
 
       <!--      <insight v-for="(theInsight, i) in insights" :key="i" :insight="theInsight"></insight>-->
     </div>
@@ -32,14 +32,15 @@
 <script>
 // import axios from "axios";
 
-// const _ = require("lodash");
+const _ = require("lodash");
 // import Insight from "./InsightsSidebar/Insight";
-import InsightsTable from "./InsightsSidebar/InsightsTable";
+import InsightsSummaryTable from "./InsightsSidebar/InsightsSummaryTable";
+import GroupInsightsTable from "./InsightsSidebar/GroupInsightsTable";
 
 export default {
   name: "InsightsSidebar",
   props: ["clusterId", "insights", "erpOrderId"],
-  components: {InsightsTable},
+  components: {InsightsSummaryTable, GroupInsightsTable},
   data() {
     return {
       insightType: null
@@ -72,6 +73,14 @@ export default {
         return this.insightType.charAt(0).toUpperCase() + this.insightType.slice(1) + ' Insights';
       }
       return 'Insights';
+    },
+
+    groupInsightsToShow() {
+      return _.filter(this.insights, insight => {
+        let erpOrderIdFilter = String(insight.erp_order_id) === String(this.erpOrderId);
+        let erpTypeFilter = String(insight.insight_type) === String(this.insightType);
+        return erpOrderIdFilter && erpTypeFilter;
+      });
     }
   },
 };

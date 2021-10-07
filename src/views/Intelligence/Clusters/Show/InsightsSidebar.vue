@@ -14,7 +14,7 @@
                       v-if="insightType === null" :insights="insights" :selected-order-id="erpOrderId"></insights-table>
 
       <div v-if="insightType">
-        Viewing {{ insightType }} insights...
+        {{ insightType }} insights will be shown here
       </div>
 
       <!--      <insight v-for="(theInsight, i) in insights" :key="i" :insight="theInsight"></insight>-->

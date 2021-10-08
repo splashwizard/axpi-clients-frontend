@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-      <div v-if="isLoading" style="text-align: center;">
-          <a-spin></a-spin>
-      </div>
+    <div v-if="isLoading" style="text-align: center">
+      <a-spin></a-spin>
+    </div>
     <div class="stat" v-for="(stat, i) in statsToShow" :key="i">
       <a-statistic
         v-if="!isLoading"
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   props: ["clusterId"],
   data() {
@@ -33,27 +33,47 @@ export default {
           title: "Spend",
           value: "spend",
           precision: 2,
-          prefix: '$'
+          prefix: "$",
+        },
+        {
+          title: "Saved",
+          value: "saved",
+          precision: 2,
+          prefix: "$",
+        },
+        {
+          title: "Savings potential in next 12 months",
+          value: "savings_potential_next_12_months",
+          precision: 2,
+          prefix: "$",
         },
       ],
     };
   },
   created() {
-      this.fetch();
+    this.fetch();
   },
   methods: {
-      fetch() {
-          let vm = this;
-          vm.isLoading = true;
-          axios.get(window.API_BASE + '/intelligence/clusters/' + this.clusterId + '/stats').then(r => {
-              vm.isLoading = false;
-              vm.stats = r.data;
-          }).catch(e => {
-              console.log(e);
-              vm.$message.error('Error loading cluster stats');
-          });
-      }
-  }
+    fetch() {
+      let vm = this;
+      vm.isLoading = true;
+      axios
+        .get(
+          window.API_BASE +
+            "/intelligence/clusters/" +
+            this.clusterId +
+            "/stats"
+        )
+        .then((r) => {
+          vm.isLoading = false;
+          vm.stats = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading cluster stats");
+        });
+    },
+  },
 };
 </script>
 

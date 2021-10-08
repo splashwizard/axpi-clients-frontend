@@ -21,7 +21,8 @@
           {{ formatType(type) }}
         </td>
         <td>
-          {{ formatCost({cost: getSavingsForGroupAndSelectedOrder(insights), cost_currency: 'USD'}) }}
+<!--          {{ formatCost({cost: getSavingsForGroupAndSelectedOrder(insights), cost_currency: 'USD'}) }}-->
+          {{ formatCost({cost: getMinSavings(insights), cost_currency: 'USD'}) }} <span v-if="getMaxSavings(insights) !== getMinSavings(insights)">- {{ formatCost({cost: getMaxSavings(insights), cost_currency: 'USD'}) }}</span>
         </td>
         <td class="action">
           <a-button @click.prevent="$emit('set-insight-type', type)">View</a-button>
@@ -65,6 +66,18 @@ export default {
 
     getSavingsForGroupAndSelectedOrder(insights) {
       return _.sum(_.map(_.filter(insights, insight => {
+        return String(insight.erp_order_id) === String(this.selectedOrderId);
+      }), 'potential_savings'));
+    },
+
+    getMinSavings(insights) {
+      return _.min(_.map(_.filter(insights, insight => {
+        return String(insight.erp_order_id) === String(this.selectedOrderId);
+      }), 'potential_savings'));
+    },
+
+    getMaxSavings(insights) {
+      return _.max(_.map(_.filter(insights, insight => {
         return String(insight.erp_order_id) === String(this.selectedOrderId);
       }), 'potential_savings'));
     }

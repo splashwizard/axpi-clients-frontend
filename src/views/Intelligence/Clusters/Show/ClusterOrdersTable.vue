@@ -9,7 +9,7 @@
     <div slot="name" slot-scope="name, record"> 
       <a-avatar style="margin-right: 20px;"
        size="large" :src="getImageSrc(getFirstProduct(record))" />
-       {{ name }}
+       {{ getFirstProduct(record) ? getFirstProduct(record)['Name'] : name }}
     </div>
     <div slot="productCode" slot-scope="name, record">
       {{ getFirstProduct(record) ? getFirstProduct(record)['Product_Code'] : '-' }}

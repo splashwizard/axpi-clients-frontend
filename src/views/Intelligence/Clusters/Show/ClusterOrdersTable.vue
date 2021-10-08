@@ -55,9 +55,13 @@ const columns = [
     scopedSlots: {customRender: 'name'}
   },
   {
-    title: "Product Code",
-    scopedSlots: {customRender: 'productCode'}
+    title: "PO Number",
+    scopedSlots: {customRender: 'PO Number'}
   },
+  // {
+  //   title: "Product Code",
+  //   scopedSlots: {customRender: 'productCode'}
+  // },
   {
     title: "Date Purchased",
     dataIndex: "PO Creation Year",

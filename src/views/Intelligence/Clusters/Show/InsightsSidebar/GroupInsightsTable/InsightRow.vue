@@ -22,7 +22,7 @@
         </a>
       </div>
       <div v-else>
-        <a href="#" @click.prevent="toggleShowMoreDetails">View more
+        <a href="#" @click.prevent="toggleShowMoreDetails">Compare
           <a-icon type="down" :style="{fontSize: '10px'}"/>
         </a>
       </div>

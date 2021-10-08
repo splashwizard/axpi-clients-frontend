@@ -56,7 +56,7 @@ const columns = [
   },
   {
     title: "PO Number",
-    scopedSlots: {customRender: 'PO Number'}
+    dataIndex: "PO Number"
   },
   // {
   //   title: "Product Code",

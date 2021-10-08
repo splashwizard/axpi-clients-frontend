@@ -6,9 +6,22 @@
     :data-source="data"
     :loading="loading"
   >
-    <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{
-        name
-      }}</a>
+    <div slot="name" slot-scope="name, record"> 
+      <a-avatar style="margin-right: 20px;"
+       size="large" :src="getImageSrc(getFirstProduct(record))" />
+       {{ name }}
+    </div>
+    <div slot="productCode" slot-scope="name, record">
+      {{ getFirstProduct(record) ? getFirstProduct(record)['Product_Code'] : '-' }}
+    </div>
+    <div slot="cost" slot-scope="cost">
+        {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
+    </div>
+    <div slot="insights" slot-scope="insights, record">
+      <a href="#" @click.prevent="handleRecordSelected(record)">
+        <a-icon type="eye" style="margin-right: 4px;" /> View Insights
+      </a>
+    </div>
     <div slot="actions" class="table-actions" slot-scope="actions, record">
       <a-dropdown :trigger="['click']">
         <a-button
@@ -32,6 +45,7 @@
 </template>
 <script>
 import axios from "axios";
+import Orders from "../../../../mixins/Orders";
 
 const columns = [
   {
@@ -41,9 +55,32 @@ const columns = [
     scopedSlots: {customRender: 'name'}
   },
   {
-    title: "PO Number",
-    dataIndex: "PO Number",
-    sorter: true,
+    title: "Product Code",
+    scopedSlots: {customRender: 'productCode'}
+  },
+  {
+    title: "Date Purchased",
+    dataIndex: "PO Creation Year",
+    // scopedSlots: {customRender: 'productCode'}
+  },
+  {
+    title: "Quantity",
+    dataIndex: "Quantity",
+    // scopedSlots: {customRender: 'productCode'}
+  },
+  {
+    title: "Cost",
+    dataIndex: "Cost",
+    scopedSlots: {customRender: 'cost'}
+  },
+  // {
+  //   title: "PO Number",
+  //   dataIndex: "PO Number",
+  //   sorter: true,
+  // },
+  {
+    title: "Insights",
+    scopedSlots: {customRender: 'insights'}
   },
   {
     title: "",
@@ -54,6 +91,7 @@ const columns = [
 
 export default {
   props: ["clusterId"],
+  mixins: [Orders],
   data() {
     return {
       data: [],
@@ -73,7 +111,7 @@ export default {
           window.API_BASE +
             "/intelligence/clusters/" +
             this.clusterId +
-            "/orders"
+            "/orders-with-matches"
         )
         .then((r) => {
           this.loading = false;
@@ -91,7 +129,17 @@ export default {
 
     handleRecordSelected(record) {
       this.$emit('record-selected', record);
-    }
+    },
+
+    getFirstProduct(record) {
+      return record["products"][0];
+    },
+
+    getImageSrc(product) {
+      if (product["Images"] && product["Images"].length) {
+        return product["Images"][0];
+      }
+    },
   },
 };
 </script>

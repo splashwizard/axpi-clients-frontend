@@ -24,7 +24,7 @@
           tbd
         </td>
         <td class="action">
-          <a-button @click.prevent="$emit('set-insight-type', type)" type="primary">View</a-button>
+          <a-button @click.prevent="$emit('set-insight-type', type)">View</a-button>
         </td>
       </tr>
       </tbody>

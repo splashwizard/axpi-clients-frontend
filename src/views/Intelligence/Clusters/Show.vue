@@ -1,23 +1,22 @@
 <template>
   <div class="cluster-show">
-    <loading-screen :is-loading="isLoading||isDeleting"></loading-screen>
+    <loading-screen :is-loading="isLoading || isDeleting"></loading-screen>
 
     <a-layout>
       <a-layout style="padding: 7px 30px">
         <div class="wrapper">
           <a-page-header
-              v-if="cluster"
-              :title="cluster.name"
-              @back="backToAllClusters"
+            v-if="cluster"
+            :title="cluster.name"
+            @back="backToAllClusters"
           >
             <template slot="extra">
               <a-button
-                  type="primary"
-                  icon="plus"
-                  @click.prevent="() => toggleSidebar()"
-              >Add Order
-              </a-button
-              >
+                type="primary"
+                icon="plus"
+                @click.prevent="() => toggleSidebar()"
+                >Add Order
+              </a-button>
             </template>
           </a-page-header>
 
@@ -25,9 +24,9 @@
             <!-- Graphs -->
             <div class="cluster-graphs-wrapper">
               <cluster-graphs
-                  :key="reloadKey"
-                  :graph-reload-key="graphReloadKey"
-                  :cluster-id="cluster['_id']"
+                :key="reloadKey"
+                :graph-reload-key="graphReloadKey"
+                :cluster-id="cluster['_id']"
               ></cluster-graphs>
             </div>
             <!-- / Graphs -->
@@ -36,10 +35,10 @@
             <a-tabs>
               <a-tab-pane tab="All Orders">
                 <cluster-orders-table
-                    :key="reloadKey"
-                    :cluster-id="cluster['_id']"
-                    @record-selected="(record) => viewInsightsFor(record)"
-                    @remove-order="removeOrder"
+                  :key="reloadKey"
+                  :cluster-id="cluster['_id']"
+                  @record-selected="(record) => viewInsightsFor(record)"
+                  @remove-order="removeOrder"
                 ></cluster-orders-table>
               </a-tab-pane>
             </a-tabs>
@@ -48,28 +47,29 @@
         </div>
       </a-layout>
       <a-layout-sider
-          width="400"
-          theme="dark"
-          :style="{ background: '#f7fafc', borderLeft: '1px solid #e3e8ee' }"
-          :collapsed-width="0"
-          v-model="shouldHideSidebar"
-          :trigger="null"
-          collapsible
+        :width="sidebarType === 'add-order' ? 400 : 500"
+        theme="dark"
+        :style="{ background: '#f7fafc', borderLeft: '1px solid #e3e8ee' }"
+        :collapsed-width="0"
+        v-model="shouldHideSidebar"
+        :trigger="null"
+        collapsible
       >
         <sidebar
-            v-if="shouldShowSidebar && sidebarType === 'add-order'"
-            @close="() => toggleSidebar()"
-            @reload="incrementReloadKey"
-            :cluster-id="cluster['_id']"
+          v-if="shouldShowSidebar && sidebarType === 'add-order'"
+          @close="() => toggleSidebar()"
+          @reload="incrementReloadKey"
+          :cluster-id="cluster['_id']"
         ></sidebar>
 
         <insights-sidebar
-            v-if="shouldShowSidebar && sidebarType === 'insights'"
-            @close="() => toggleSidebar('insights')"
-            @reload="incrementReloadKey"
-            :cluster-id="cluster['_id']"
-            :erp-order-id="selectedErpOrderId"
-            :insights="insights"></insights-sidebar>
+          v-if="shouldShowSidebar && sidebarType === 'insights'"
+          @close="() => toggleSidebar('insights')"
+          @reload="incrementReloadKey"
+          :cluster-id="cluster['_id']"
+          :erp-order-id="selectedErpOrderId"
+          :insights="insights"
+        ></insights-sidebar>
       </a-layout-sider>
     </a-layout>
   </div>
@@ -90,7 +90,7 @@ export default {
     InsightsSidebar,
     ClusterOrdersTable,
     ClusterGraphs,
-    Sidebar
+    Sidebar,
   },
   created() {
     this.loadCluster(this.$route.params.id);
@@ -101,12 +101,12 @@ export default {
       reloadKey: 1,
       graphReloadKey: 1,
       shouldShowSidebar: false,
-      sidebarType: 'add-order',
+      sidebarType: "add-order",
       selectedErpOrderId: null,
       isDeleting: false,
 
       insights: [],
-      isLoadingInsights: false
+      isLoadingInsights: false,
     };
   },
   computed: {
@@ -124,39 +124,41 @@ export default {
       this.$router.push("/intelligence/clusters");
     },
 
-    toggleSidebar(sidebarType = 'add-order') {
+    toggleSidebar(sidebarType = "add-order") {
+      let vm = this;
+
       if (sidebarType !== this.sidebarType) {
         console.log(sidebarType);
         console.log(this.sidebarType);
         this.sidebarType = sidebarType;
         if (!this.shouldShowSidebar) {
           this.shouldShowSidebar = true;
-          window.setTimeout(() => {
-            vm.graphReloadKey += 1;
-          }, 250);
         }
+        window.setTimeout(() => {
+          vm.graphReloadKey += 1;
+        }, 250);
         return false;
       }
 
       this.shouldShowSidebar = !this.shouldShowSidebar;
-      let vm = this;
       window.setTimeout(() => {
         vm.graphReloadKey += 1;
-      }, 250)
+      }, 250);
     },
 
     viewInsightsFor(record) {
       let vm = this;
 
-     this.sidebarType = 'insights';
-     this.selectedErpOrderId = record['_id'];
+      this.sidebarType = "insights";
+      this.selectedErpOrderId = record["_id"];
 
-     if (!this.shouldShowSidebar) {
-      this.shouldShowSidebar = true;
-       window.setTimeout(() => {
-         vm.graphReloadKey += 1;
-       }, 250);
-     }
+      if (!this.shouldShowSidebar) {
+        this.shouldShowSidebar = true;
+      }
+
+      window.setTimeout(() => {
+        vm.graphReloadKey += 1;
+      }, 250);
     },
 
     loadCluster(id) {
@@ -165,29 +167,29 @@ export default {
       vm.insights = [];
       vm.isLoading = true;
       axios
-          .get(window.API_BASE + "/intelligence/clusters/" + id)
-          .then((r) => {
-            vm.isLoading = false;
-            vm.cluster = r.data;
-            vm.loadInsights();
-          })
-          .catch((e) => {
-            vm.isLoading = false;
-            vm.$message.error("Error loading cluster");
-            console.log(e);
+        .get(window.API_BASE + "/intelligence/clusters/" + id)
+        .then((r) => {
+          vm.isLoading = false;
+          vm.cluster = r.data;
+          vm.loadInsights();
+        })
+        .catch((e) => {
+          vm.isLoading = false;
+          vm.$message.error("Error loading cluster");
+          console.log(e);
 
-            let errors;
-            if (
-                e.response &&
-                e.response.data &&
-                typeof e.response.data === "object"
-            ) {
-              errors = _.flatten(_.toArray(e.response.data.errors));
-            } else {
-              errors = ["Something went wrong. Please try again."];
-            }
-            vm.serverErrors = errors;
-          });
+          let errors;
+          if (
+            e.response &&
+            e.response.data &&
+            typeof e.response.data === "object"
+          ) {
+            errors = _.flatten(_.toArray(e.response.data.errors));
+          } else {
+            errors = ["Something went wrong. Please try again."];
+          }
+          vm.serverErrors = errors;
+        });
     },
 
     loadInsights() {
@@ -195,28 +197,33 @@ export default {
       vm.insights = [];
       vm.isLoadingInsights = true;
       axios
-          .get(window.API_BASE + "/intelligence/clusters/" + vm.cluster['_id'] + '/insights')
-          .then((r) => {
-            vm.isLoadingInsights = false;
-            vm.insights = r.data;
-          })
-          .catch((e) => {
-            vm.isLoadingInsights = false;
-            vm.$message.error("Error loading insights");
-            console.log(e);
+        .get(
+          window.API_BASE +
+            "/intelligence/clusters/" +
+            vm.cluster["_id"] +
+            "/insights"
+        )
+        .then((r) => {
+          vm.isLoadingInsights = false;
+          vm.insights = r.data;
+        })
+        .catch((e) => {
+          vm.isLoadingInsights = false;
+          vm.$message.error("Error loading insights");
+          console.log(e);
 
-            let errors;
-            if (
-                e.response &&
-                e.response.data &&
-                typeof e.response.data === "object"
-            ) {
-              errors = _.flatten(_.toArray(e.response.data.errors));
-            } else {
-              errors = ["Something went wrong. Please try again."];
-            }
-            vm.serverErrors = errors;
-          });
+          let errors;
+          if (
+            e.response &&
+            e.response.data &&
+            typeof e.response.data === "object"
+          ) {
+            errors = _.flatten(_.toArray(e.response.data.errors));
+          } else {
+            errors = ["Something went wrong. Please try again."];
+          }
+          vm.serverErrors = errors;
+        });
     },
 
     incrementReloadKey() {
@@ -226,18 +233,27 @@ export default {
     removeOrder(order) {
       let vm = this;
       vm.isDeleting = true;
-      axios.post(window.API_BASE + '/intelligence/clusters/' + this.cluster['_id'] + '/remove-order', {
-        erp_order_id: order['_id']
-      }).then(() => {
-        vm.isDeleting = false;
-        vm.$message.success("Order removed successfully");
-        vm.loadCluster(this.cluster['_id']);
-      }).catch(e => {
-        console.log(e);
-        vm.isDeleting = false;
-        vm.$message.error("Error removing order");
-      });
-    }
+      axios
+        .post(
+          window.API_BASE +
+            "/intelligence/clusters/" +
+            this.cluster["_id"] +
+            "/remove-order",
+          {
+            erp_order_id: order["_id"],
+          }
+        )
+        .then(() => {
+          vm.isDeleting = false;
+          vm.$message.success("Order removed successfully");
+          vm.loadCluster(this.cluster["_id"]);
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isDeleting = false;
+          vm.$message.error("Error removing order");
+        });
+    },
   },
 };
 </script>

@@ -21,7 +21,7 @@
           {{ formatType(type) }}
         </td>
         <td>
-          tbd
+          {{ formatCost({cost: getSavingsForGroupAndSelectedOrder(insights), cost_currency: 'USD'}) }}
         </td>
         <td class="action">
           <a-button @click.prevent="$emit('set-insight-type', type)">View</a-button>
@@ -39,9 +39,11 @@
 
 <script>
 let _ = require('lodash');
+import Orders from "../../../../../mixins/Orders";
 export default {
   name: "InsightsSummaryTable",
   props: ['insights', 'selectedOrderId'],
+  mixins: [Orders],
   computed: {
     insightsToShow() {
       if (this.selectedOrderId && this.insights.length) {
@@ -58,7 +60,13 @@ export default {
   },
   methods: {
     formatType(type) {
-     return type.charAt(0).toUpperCase() + type.slice(1);
+      return type.charAt(0).toUpperCase() + type.slice(1);
+    },
+
+    getSavingsForGroupAndSelectedOrder(insights) {
+      return _.sum(_.map(_.filter(insights, insight => {
+        return String(insight.erp_order_id) === String(this.selectedOrderId);
+      }), 'potential_savings'));
     }
   }
 }

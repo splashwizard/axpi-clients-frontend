@@ -14,6 +14,9 @@
     <div slot="productCode" slot-scope="name, record">
       {{ getFirstProduct(record) ? getFirstProduct(record)['Product_Code'] : '-' }}
     </div>
+    <div slot="quantity" slot-scope="quantity, order">
+     {{ getQuantity(order) }}
+    </div>
     <div slot="cost" slot-scope="cost">
         {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
     </div>
@@ -63,14 +66,14 @@ const columns = [
   //   scopedSlots: {customRender: 'productCode'}
   // },
   {
-    title: "Date Purchased",
+    title: "Year Purchased",
     dataIndex: "PO Creation Year",
     // scopedSlots: {customRender: 'productCode'}
   },
   {
     title: "Quantity",
     dataIndex: "Quantity",
-    // scopedSlots: {customRender: 'productCode'}
+    scopedSlots: {customRender: 'quantity'}
   },
   {
     title: "Cost",
@@ -144,6 +147,22 @@ export default {
         return product["Images"][0];
       }
     },
+
+    getQuantity(order) {
+      if (order["products"] && order["products"].length) {
+        if (order["products"][0]["normalisedQuantity"]) {
+          order['product_quantity'] = order['products'][0]['normalisedQuantity']['normalisedUnitMagnitude'];
+        }
+      }
+
+      let orderQuantity = order["Quantity"] !== "None" ? order["Quantity"] : 1;
+      let totalQuantity = orderQuantity;
+      if (order['product_quantity']) {
+        totalQuantity = Number(orderQuantity) * Number(order['product_quantity']);
+      }
+
+      return totalQuantity;
+    }
   },
 };
 </script>

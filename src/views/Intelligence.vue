@@ -40,7 +40,7 @@ export default {
 
 <style scoped>
 .stats {
-  padding-top: 20px;
+  padding-top: 30px;
 }
 
 .insights {

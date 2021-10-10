@@ -19,7 +19,7 @@
 
       <a-row :gutter="20">
         <a-col :span="6" v-for="(insight, i) in insightsToShow" :key="i">
-          <a-card :hoverable="true" @click.prevent="() => navigateToCluster(insight['cluster_id'])">
+          <a-card class="insight-card" :hoverable="true" @click.prevent="() => navigateToCluster(insight['cluster_id'])">
             <a-statistic :title="insight.description"
                          prefix="$"
                          :precision="0"
@@ -83,33 +83,90 @@ export default {
   },
 
   computed: {
+    allInsightsCollapsed() {
+      let collapsed = [];
+      _.each(this.allInsights, clusterInsights => {
+        collapsed = _.merge(collapsed, clusterInsights);
+      });
+      return collapsed;
+    },
+
     insightsToShow() {
       let insightCards = [];
 
-      _.each(this.allInsights, (clusterInsights, clusterId) => {
-        let groupedByType = _.groupBy(clusterInsights, 'insight_type');
-        _.each(groupedByType, (insights, insightType) => {
-          let groupedByErpOrderId = _.groupBy(insights, 'erp_order_id');
-          let numberOfOpportunities = Object.keys(groupedByErpOrderId).length;
+      let groupedByType = _.groupBy(this.allInsightsCollapsed, 'insight_type');
+      _.each(groupedByType, (insights, insightType) => {
+        let groupedByErpOrderId = _.groupBy(insights, 'erp_order_id');
+        let numberOfOpportunities = Object.keys(groupedByErpOrderId).length;
 
-          let potentialSavings = 0;
-          _.each(groupedByErpOrderId, insightsForErpOrder => {
-            potentialSavings += _.max(_.map(insightsForErpOrder, 'potential_savings'));
-          });
+        let potentialSavings = 0;
+        _.each(groupedByErpOrderId, insightsForErpOrder => {
+          potentialSavings += _.max(_.map(insightsForErpOrder, 'potential_savings'));
+        });
 
-          let description = 'Unknown';
-          if (insightType === 'pricing') {
-            description = 'Pricing Outliers';
-          }
+        let description = 'Unknown';
+        if (insightType === 'pricing') {
+          description = 'Pricing Outliers';
+        }
 
-          insightCards.push({
-            cluster_id: clusterId,
-            amount: potentialSavings,
-            opportunities: numberOfOpportunities,
-            description: description
-          });
+        insightCards.push({
+          // cluster_id: clusterId,
+          amount: potentialSavings,
+          opportunities: numberOfOpportunities,
+          insight_type: insightType,
+          description: description
         });
       });
+
+      // Add in 0-value insights
+      let pricingOutliersCard = _.find(insightCards, {'insight_type': 'pricing'});
+      if (!pricingOutliersCard) {
+       insightCards.push({
+         amount: 0, opportunities: 0, insight_type: 'pricing', description: 'Pricing Outliers'
+       });
+      }
+
+      let demandAggregationCard = _.find(insightCards, {'insight_type': 'demand-aggregration'});
+      if (!demandAggregationCard) {
+        insightCards.push({
+          amount: 0, opportunities: 0, insight_type: 'demand-aggregation', description: 'Demand Aggregation'
+        });
+      }
+
+      let alternativeProductCard = _.find(insightCards, {'insight_type': 'alternative-product'});
+      if (!alternativeProductCard) {
+        insightCards.push({
+          amount: 0, opportunities: 0, insight_type: 'alternative-product', description: 'Alternative Product'
+        });
+      }
+
+      let contractNegotiationCard = _.find(insightCards, {'insight_type': 'contract-negotiation'});
+      if (!contractNegotiationCard) {
+        insightCards.push({
+          amount: 0, opportunities: 0, insight_type: 'contract-negotiation', description: 'Contract Negotiation'
+        });
+      }
+
+      let stockpilingAdvisedCard = _.find(insightCards, {'insight_type': 'stockpiling-advised'});
+      if (!stockpilingAdvisedCard) {
+        insightCards.push({
+          amount: 0, opportunities: 0, insight_type: 'stockpiling-advised', description: 'Stockpiling Advised'
+        });
+      }
+
+      let expandedDemandIncreasesCard = _.find(insightCards, {'insight_type': 'expected-demand-increases'});
+      if (!expandedDemandIncreasesCard) {
+        insightCards.push({
+          amount: 0, opportunities: 0, insight_type: 'expected-demand-increases', description: 'Expected Demand Increases'
+        });
+      }
+
+      let unmatchedOrdersCard = _.find(insightCards, {'insight_type': 'unmatched-orders'});
+      if (!unmatchedOrdersCard) {
+        insightCards.push({
+          amount: 0, opportunities: 0, insight_type: 'unmatched-orders', description: 'Unmatched Orders'
+        });
+      }
 
       return insightCards;
     }
@@ -127,6 +184,10 @@ export default {
 
 .loader-description {
   margin-left: 10px;
+}
+
+.insight-card {
+  margin-bottom: 22px;
 }
 
 .insight-card-bottom {

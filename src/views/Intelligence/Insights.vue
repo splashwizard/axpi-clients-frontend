@@ -2,9 +2,9 @@
   <div>
     <a-tabs v-model="activeTab">
       <a-tab-pane key="all-insights" tab="All Insights"></a-tab-pane>
-      <!--      <a-tab-pane key="price-insights" tab="Price Insights"> </a-tab-pane>-->
-      <!--      <a-tab-pane key="demand-insights" tab="Demand Insights"> </a-tab-pane>-->
-      <!--      <a-tab-pane key="contract-insights" tab="Contract Insights"> </a-tab-pane>-->
+            <a-tab-pane key="price-insights" tab="Price Insights"> </a-tab-pane>
+            <a-tab-pane key="demand-insights" tab="Demand Insights"> </a-tab-pane>
+<!--            <a-tab-pane key="contract-insights" tab="Contract Insights"> </a-tab-pane>-->
     </a-tabs>
 
     <!-- Loading -->
@@ -15,7 +15,7 @@
     <!-- / Loading -->
 
     <!-- Insights -->
-    <div class="insights" v-if="!isLoading && activeTab === 'all-insights'">
+    <div class="insights" v-if="!isLoading">
 
       <a-row :gutter="20">
         <a-col :span="6" v-for="(insight, i) in insightsToShow" :key="i">
@@ -168,7 +168,16 @@ export default {
         });
       }
 
-      return insightCards;
+      return _.filter(insightCards, insightCard => {
+        if (this.activeTab === 'all-insights') {
+          return true;
+        } else if (this.activeTab === 'price-insights') {
+          return ['pricing'].includes(insightCard['insight_type']);
+        } else if (this.activeTab === 'demand-insights') {
+          return !['pricing'].includes(insightCard['insight_type']);
+        }
+        return false;
+      });
     }
   }
 };

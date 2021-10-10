@@ -2,7 +2,7 @@
   <div class="intellegence">
     <!-- Header -->
     <div class="page-header">
-      <h1 class="page-title">Axiom Intellegence</h1>
+      <h1 class="page-title">Axiom Intelligence</h1>
       <div class="actions">
         <a-button icon="pie-chart" @click.prevent="viewAllClusters" type="primary">All Clusters
         </a-button>

@@ -33,7 +33,8 @@
       {{ formatCost({cost: insight['potential_savings'], cost_currency: 'USD'}) }}
     </td>
     <td class="action">
-      <a-button type="primary">Select</a-button>
+      <a-button v-if="!isInsightSelected" @click.prevent="toggleInsightApplied">Select</a-button>
+      <a-button type="danger" v-else @click.prevent="toggleInsightApplied">Deselect</a-button>
     </td>
   </tr>
 </template>
@@ -44,7 +45,7 @@ import Orders from "../../../../../../mixins/Orders";
 const _ = require('lodash');
 
 export default {
-  props: ["insight"],
+  props: ["insight", "insightsAppliedLocal"],
   mixins: [Orders],
   data() {
     return {
@@ -63,6 +64,10 @@ export default {
       });
 
       return Math.round(100 * (propertiesThatMatch.length / properties.length));
+    },
+
+    isInsightSelected() {
+      return this.insightsAppliedLocal.includes(this.insight['insight_id']);
     }
   },
   methods: {
@@ -105,6 +110,10 @@ export default {
 
     doesPropertyMatch(property) {
       return this.getProperty(property) === this.getProperty(property, 'base')
+    },
+
+    toggleInsightApplied() {
+      this.$emit('toggle-insight-applied', this.insight);
     }
   },
 };

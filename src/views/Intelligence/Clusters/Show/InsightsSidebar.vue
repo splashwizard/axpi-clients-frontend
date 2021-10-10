@@ -2,6 +2,8 @@
   <div class="sidebar-wrapper">
     <!-- Top -->
     <div class="top">
+      <loading-screen :is-loading="isSaving"></loading-screen>
+
       <!-- Header -->
       <a-page-header :title="headerTitle" @back="handleBack"></a-page-header>
       <!-- / Header -->
@@ -15,6 +17,8 @@
                               :selected-order-id="erpOrderId"></insights-summary-table>
 
       <group-insights-table v-if="insightType"
+                            @toggle-insight-applied="toggleInsightApplied"
+                            :insights-applied-local="insightsAppliedLocal"
                             :insights="groupInsightsToShow"></group-insights-table>
 
       <!--      <insight v-for="(theInsight, i) in insights" :key="i" :insight="theInsight"></insight>-->
@@ -23,35 +27,47 @@
 
     <!-- Bottom -->
     <div class="bottom">
-
+      <div>
+        <a-button type="primary"
+                  @click.prevent="persistInsightsApplied"
+                  :disabled="!needsToSaveInsightsApplied">Save
+        </a-button>
+      </div>
     </div>
     <!-- / Bottom -->
   </div>
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 
 const _ = require("lodash");
+import LoadingScreen from "../../../../components/LoadingScreen";
 // import Insight from "./InsightsSidebar/Insight";
 import InsightsSummaryTable from "./InsightsSidebar/InsightsSummaryTable";
 import GroupInsightsTable from "./InsightsSidebar/GroupInsightsTable";
 
 export default {
   name: "InsightsSidebar",
-  props: ["clusterId", "insights", "erpOrderId"],
-  components: {InsightsSummaryTable, GroupInsightsTable},
+  props: ["clusterId", "insights", "erpOrderId", "insightsApplied"],
+  components: {InsightsSummaryTable, GroupInsightsTable, LoadingScreen},
   data() {
     return {
-      insightType: null
+      insightType: null,
+      insightsAppliedSaved: [],
+      insightsAppliedLocal: [],
+      isSaving: false
     };
   },
   watch: {
     erpOrderId: function () {
       this.insightType = null;
+      this.insightsAppliedLocal = _.cloneDeep(this.insightsApplied);
     },
   },
   created() {
+    this.insightsAppliedSaved = _.cloneDeep(this.insightsApplied);
+    this.insightsAppliedLocal = _.cloneDeep(this.insightsApplied);
   },
   methods: {
     setInsightType(type) {
@@ -64,6 +80,30 @@ export default {
       } else {
         this.$emit('close');
       }
+    },
+
+    toggleInsightApplied(insight) {
+      this.insightsAppliedLocal = _.xor(this.insightsAppliedLocal, [insight['insight_id']]);
+    },
+
+    persistInsightsApplied() {
+      if (!this.needsToSaveInsightsApplied) {
+        return false;
+      }
+      let vm = this;
+      vm.isSaving = true;
+      axios.put(window.API_BASE + '/intelligence/clusters/' + this.clusterId, {
+        insight_ids: vm.insightsAppliedLocal
+      }).then(() => {
+        vm.$emit('insights-saved', vm.insightsAppliedLocal);
+        vm.insightsAppliedSaved = vm.insightsAppliedLocal;
+        vm.$message.success('Insights saved successfully');
+        vm.isSaving = false;
+      }).catch(e => {
+        console.log(e);
+        vm.isSaving = false;
+        vm.$message.error('Error saving insights');
+      });
     }
   },
 
@@ -81,6 +121,16 @@ export default {
         let erpTypeFilter = String(insight.insight_type) === String(this.insightType);
         return erpOrderIdFilter && erpTypeFilter;
       });
+    },
+
+    needsToSaveInsightsApplied() {
+      let diffOne = _.difference(
+          this.insightsAppliedLocal, this.insightsAppliedSaved
+      );
+      let diffTwo = _.difference(
+          this.insightsAppliedSaved, this.insightsAppliedLocal
+      );
+      return _.union(diffOne, diffTwo).length > 0;
     }
   },
 };

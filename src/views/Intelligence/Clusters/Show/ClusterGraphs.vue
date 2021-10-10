@@ -12,7 +12,7 @@
     <!-- Card -->
     <a-card>
       <a-row type="flex" :gutter="20">
-        <a-col :span="20">
+        <a-col :span="19">
           <!-- Graphs -->
           <div v-if="isLoading" style="text-align: center;">
             <a-spin></a-spin> 
@@ -23,7 +23,7 @@
           </div>
           <!-- / Graphs -->
         </a-col>
-        <a-col :span="4">
+        <a-col :span="5">
           <div class="sidebar-wrapper">
               <cluster-stats-sidebar :cluster-id="clusterId"></cluster-stats-sidebar>
           </div>
@@ -72,5 +72,6 @@ export default {
 .sidebar-wrapper {
   border-left: 1px solid #eee;
   height: 100%;
+  padding-left: 20px;
 }
 </style>

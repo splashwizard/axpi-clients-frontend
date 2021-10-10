@@ -22,7 +22,7 @@
     </div>
     <div slot="insights" slot-scope="insights, record">
       <a href="#" @click.prevent="handleRecordSelected(record)">
-        <a-icon type="eye" style="margin-right: 4px;" /> View Insights
+        <a-icon type="eye" style="margin-right: 4px;" /> View
       </a>
     </div>
     <div slot="actions" class="table-actions" slot-scope="actions, record">

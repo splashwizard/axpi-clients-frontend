@@ -1,14 +1,14 @@
 <template>
   <div>
     <!-- Loading -->
-    <div v-if="isLoading" class="loader">
+    <div v-if="isLoading" class="loader stats-wrapper">
       <a-spin></a-spin>
       <span class="loader-description">Loading stats...</span>
     </div>
     <!-- / Loading -->
 
     <!-- Loaded -->
-    <div v-if="!isLoading && stats">
+    <div v-if="!isLoading && stats" class="stats-wrapper">
       <!--      <a-row :gutter="20">-->
       <!--        &lt;!&ndash; Overview &ndash;&gt;-->
       <!--        <a-col :span="12">-->
@@ -59,25 +59,25 @@
 
       <a-row :gutter="20">
         <a-col :span="6">
-          <a-card>
+          <a-card :bordered="false">
             <a-statistic title="Number of suppliers" :value="stats['number_of_suppliers']">
             </a-statistic>
           </a-card>
         </a-col>
         <a-col :span="6">
-          <a-card>
+          <a-card :bordered="false">
             <a-statistic title="Number of business units" :value="stats['number_of_organisational_units']">
             </a-statistic>
           </a-card>
         </a-col>
         <a-col :span="6">
-          <a-card>
+          <a-card :bordered="false">
             <a-statistic title="Number of categories" :value="stats['number_of_categories']">
             </a-statistic>
           </a-card>
         </a-col>
         <a-col :span="6">
-          <a-card>
+          <a-card :bordered="false">
             <a-statistic title="Total spend"
                          :precision="0"
                          prefix="$"
@@ -132,5 +132,9 @@ export default {
 
 .loader-description {
   margin-left: 10px;
+}
+
+.stats-wrapper {
+  border: 1px solid #ECECEC;
 }
 </style>

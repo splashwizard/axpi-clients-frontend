@@ -21,8 +21,11 @@
       {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
     </div>
     <div slot="potentialSavings" slot-scope="potentialSavings, record">
-      <span v-if="calculatePotentialSavings(record)">
-        {{ formatCost({cost: calculatePotentialSavings(record), cost_currency: 'USD'}) }}
+      <span v-if="calculateMaxPotentialSavings(record)">
+        <span v-if="calculateMinPotentialSavings(record) !== calculateMaxPotentialSavings(record) && Math.round(calculateMinPotentialSavings(record)) !== 0">
+          {{ formatCost({cost: calculateMinPotentialSavings(record), cost_currency: 'USD'}) }} -
+        </span>
+        {{ formatCost({cost: calculateMaxPotentialSavings(record), cost_currency: 'USD'}) }}
       </span>
       <span v-else>-</span>
     </div>
@@ -177,7 +180,24 @@ export default {
       return totalQuantity;
     },
 
-    calculatePotentialSavings(order) {
+    calculateMinPotentialSavings(order) {
+      let insights = _.filter(this.insights, insight => {
+        return insight['erp_order_id'] == order['_id'];
+      });
+
+      let potentialSavings = 0;
+      let groupedByType = _.groupBy(insights, 'insight_type');
+      _.each(groupedByType, insightsForType => {
+        let max = _.min(
+            _.map(insightsForType, 'potential_savings')
+        );
+        potentialSavings += max;
+      });
+
+      return potentialSavings;
+    },
+
+    calculateMaxPotentialSavings(order) {
       let insights = _.filter(this.insights, insight => {
         return insight['erp_order_id'] == order['_id'];
       });

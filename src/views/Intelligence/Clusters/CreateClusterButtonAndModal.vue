@@ -4,11 +4,11 @@
       New Cluster
     </a-button>
     <a-modal
-      :width="700"
-      v-model="visible"
-      :centered="true"
-      title="Create Cluster"
-      :footer="null"
+        :width="700"
+        v-model="visible"
+        :centered="true"
+        title="Create Cluster"
+        :footer="null"
     >
       <loading-screen :is-loading="isSaving"></loading-screen>
 
@@ -17,19 +17,19 @@
         <a-form layout="vertical">
           <a-form-item label="Name">
             <a-input
-              size="large"
-              v-model="clusterName"
-              @keyup.enter="goToStageTwo"
+                size="large"
+                v-model="clusterName"
+                @keyup.enter="goToStageTwo"
             />
           </a-form-item>
         </a-form>
         <div style="text-align: right">
           <a-button
-            :disabled="!canGoToStageTwo"
-            type="primary"
-            @click="goToStageTwo"
-            >Next
-            <a-icon type="arrow-right" />
+              :disabled="!canGoToStageTwo"
+              type="primary"
+              @click="goToStageTwo"
+          >Next
+            <a-icon type="arrow-right"/>
           </a-button>
         </div>
       </div>
@@ -39,28 +39,41 @@
       <div v-if="stage === 2">
         <div style="margin-bottom: 20px; text-align: left">
           <a-input-search
-            placeholder="Search ERP orders"
-            v-model="searchQuery"
-            style="width: 300px"
-            @search="fetch"
+              placeholder="Search orders"
+              v-model="searchQuery"
+              style="width: 300px"
+              @search="fetch"
           />
         </div>
 
         <a-table
-          class="axpi-table"
-          :columns="columns"
-          :row-selection="rowSelection"
-          :row-key="(record) => record['_id']"
-          :data-source="data"
-          :pagination="pagination"
-          :loading="loading || searchQueryIsDirty"
-          @change="handleTableChange"
+            class="axpi-table"
+            :columns="columns"
+            :row-selection="rowSelection"
+            :row-key="(record) => record['_id']"
+            :data-source="data"
+            :pagination="pagination"
+            :loading="loading || searchQueryIsDirty"
+            @change="handleTableChange"
         >
+          <div slot="name" slot-scope="name, order">
+            <!-- TODO: Get most relevant product if more than one product - in which case 0 element may not be the most appropriate match -->
+            <div class="product-name-wrapper">
+              <div class="left">
+                <a-avatar style="margin-right: 20px;"
+                          size="large" :src="order['match_details_images']"/>
+              </div>
+              <div class="right">
+                {{ order['match_details_names'][0] }}
+              </div>
+            </div>
+          </div>
         </a-table>
 
         <div style="text-align: right; margin-top: 15px">
           <a-button :disabled="!canSave" type="primary" @click="save"
-            >Save</a-button
+          >Save
+          </a-button
           >
         </div>
       </div>
@@ -77,13 +90,8 @@ const _ = require("lodash");
 const columns = [
   {
     title: "Name",
-    dataIndex: "PO Li Description",
     sorter: true,
-  },
-  {
-    title: "PO Number",
-    dataIndex: "PO Number",
-    sorter: true,
+    scopedSlots: {customRender: 'name'}
   },
 ];
 
@@ -138,25 +146,25 @@ export default {
       let vm = this;
       vm.isSaving = true;
       axios
-        .post(window.API_BASE + "/intelligence/clusters", {
-          name: this.clusterName,
-          erp_order_ids: this.selectedOrderIds,
-        })
-        .then((r) => {
-          vm.visible = false;
-          vm.isSaving = false;
-          vm.$router.push("/intelligence/clusters/" + r.data["_id"]);
-        })
-        .catch((e) => {
-          console.log(e);
-          vm.isSaving = false;
-          vm.$message.error("Error creating cluster");
-        });
+          .post(window.API_BASE + "/intelligence/clusters", {
+            name: this.clusterName,
+            erp_order_ids: this.selectedOrderIds,
+          })
+          .then((r) => {
+            vm.visible = false;
+            vm.isSaving = false;
+            vm.$router.push("/intelligence/clusters/" + r.data["_id"]);
+          })
+          .catch((e) => {
+            console.log(e);
+            vm.isSaving = false;
+            vm.$message.error("Error creating cluster");
+          });
     },
 
     determineSearchParams(params) {
       return {
-        results_per_page: 10,
+        results_per_page: 5,
         q: this.searchQuery,
         ...params,
       };
@@ -165,31 +173,31 @@ export default {
     fetch: _.debounce(function (params = {}) {
       this.loading = true;
       axios
-        .post(
-          window.API_BASE + "/intelligence/clusters/search-erp-orders",
-          this.determineSearchParams(params)
-        )
-        .then((r) => {
-          const pagination = { ...this.pagination };
-          // Read total count from server
-          pagination.total = r.data.total;
-          this.loading = false;
-          this.data = r.data.data;
-          this.pagination = pagination;
-          this.searchQueryIsDirty = false;
-        })
-        .catch((e) => {
-          console.log(e);
-          this.$message.error("Error searching ERP orders");
-        });
+          .post(
+              window.API_BASE + "/intelligence/clusters/search-erp-orders",
+              this.determineSearchParams(params)
+          )
+          .then((r) => {
+            const pagination = {...this.pagination};
+            // Read total count from server
+            pagination.total = r.data.total;
+            this.loading = false;
+            this.data = r.data.data;
+            this.pagination = pagination;
+            this.searchQueryIsDirty = false;
+          })
+          .catch((e) => {
+            console.log(e);
+            this.$message.error("Error searching ERP orders");
+          });
     }, 500),
 
     handleTableChange(pagination, filters, sorter) {
-      const pager = { ...this.pagination };
+      const pager = {...this.pagination};
       pager.current = pagination.current;
       this.pagination = pager;
       this.fetch({
-        results_per_page: pagination.pageSize,
+        // results_per_page: pagination.pageSize,
         page: pagination.current,
         sort_field: sorter.field,
         sort_order: sorter.order,
@@ -225,5 +233,21 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.product-name-wrapper {
+  display: flex;
+  flex-direction: row;
+
+  .left {
+    flex-shrink: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .right {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+}
 </style>

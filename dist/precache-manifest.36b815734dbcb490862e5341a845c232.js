@@ -8,12 +8,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "977d1450140c5ca83269",
+    "revision": "376d1d8052de9b8fc1b9",
     "url": "/css/app.ae0149cc.css"
   },
   {
     "revision": "2706a51eff719f2b2069",
     "url": "/css/chunk-vendors.85dce84d.css"
+  },
+  {
+    "revision": "e027909f542818c01ec0",
+    "url": "/css/clusters.2e058566.css"
   },
   {
     "revision": "4978ce56e46376854a8a",
@@ -52,8 +56,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/suppliers.667b8801.css"
   },
   {
-    "revision": "3fb4cc90b15d9a21cc54",
-    "url": "/css/view-cluster.ed079380.css"
+    "revision": "a299fe0e5b91ec6a8c6c",
+    "url": "/css/view-cluster.5dba03a5.css"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",
@@ -284,7 +288,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "d72fedb2b63159dfc07433083fae6685",
+    "revision": "3c7567157256211e52eb3c92fb3c07cc",
     "url": "/index.html"
   },
   {
@@ -304,16 +308,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.99bed1e2.js"
   },
   {
-    "revision": "977d1450140c5ca83269",
-    "url": "/js/app.76175a72.js"
+    "revision": "376d1d8052de9b8fc1b9",
+    "url": "/js/app.02b5fbf7.js"
   },
   {
     "revision": "2706a51eff719f2b2069",
     "url": "/js/chunk-vendors.3a569bf2.js"
   },
   {
-    "revision": "6d5dec8f53e66a4ef684",
-    "url": "/js/clusters.13fac825.js"
+    "revision": "e027909f542818c01ec0",
+    "url": "/js/clusters.31ee59fe.js"
   },
   {
     "revision": "4978ce56e46376854a8a",
@@ -360,8 +364,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/suppliers.cfe3ebed.js"
   },
   {
-    "revision": "3fb4cc90b15d9a21cc54",
-    "url": "/js/view-cluster.5b18e84d.js"
+    "revision": "a299fe0e5b91ec6a8c6c",
+    "url": "/js/view-cluster.b46d34e2.js"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",

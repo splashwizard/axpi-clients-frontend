@@ -7,9 +7,15 @@
       :loading="loading"
   >
     <div slot="name" slot-scope="name, record">
-      <a-avatar style="margin-right: 20px;"
-                size="large" :src="getImageSrc(getFirstProduct(record))"/>
-      {{ getFirstProduct(record) ? getFirstProduct(record)['Name'] : name }}
+      <div class="product-name-wrapper">
+        <div class="left">
+          <a-avatar style="margin-right: 20px;"
+                    size="large" :src="getImageSrc(getFirstProduct(record))"/>
+        </div>
+        <div class="right">
+          {{ getFirstProduct(record) ? getFirstProduct(record)['Name'] : name }}
+        </div>
+      </div>
     </div>
     <div slot="productCode" slot-scope="name, record">
       {{ getFirstProduct(record) ? getFirstProduct(record)['Product_Code'] : '-' }}
@@ -22,7 +28,8 @@
     </div>
     <div slot="potentialSavings" slot-scope="potentialSavings, record">
       <span v-if="calculateMaxPotentialSavings(record)">
-        <span v-if="calculateMinPotentialSavings(record) !== calculateMaxPotentialSavings(record) && Math.round(calculateMinPotentialSavings(record)) !== 0">
+        <span
+            v-if="calculateMinPotentialSavings(record) !== calculateMaxPotentialSavings(record) && Math.round(calculateMinPotentialSavings(record)) !== 0">
           {{ formatCost({cost: calculateMinPotentialSavings(record), cost_currency: 'USD'}) }} -
         </span>
         {{ formatCost({cost: calculateMaxPotentialSavings(record), cost_currency: 'USD'}) }}
@@ -216,3 +223,21 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+.product-name-wrapper {
+  display: flex;
+  flex-direction: row;
+
+  .left {
+    flex-shrink: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .right {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+}
+</style>

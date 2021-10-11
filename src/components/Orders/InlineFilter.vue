@@ -6,7 +6,7 @@
     <div v-if="isFilterEnabled" class="filter-body">
       <a-select style="width: 100%;" v-if="type === 'categorical'" v-model="details">
         <a-select-option v-for="(option, i) in options" :key="i" :value="option.value">
-         {{ option.label }}
+          {{ option.label }}
         </a-select-option>
       </a-select>
     </div>
@@ -20,11 +20,15 @@ export default {
   props: ['filters', 'id', 'label', 'type', 'options'],
   data() {
     return {
-      details: null
+      details: null,
+      watchingEnabled: false
     }
   },
   created() {
-    this.details = this.filters[this.id]
+    this.details = this.filters[this.id];
+    this.$nextTick(() => {
+      this.watchingEnabled = true;
+    })
   },
   computed: {
     isFilterEnabled() {
@@ -39,8 +43,10 @@ export default {
   },
   watch: {
     details(newVal) {
-      this.filters[this.id] = newVal;
-      this.$emit('filter-updated');
+      if (this.watchingEnabled) {
+        this.filters[this.id] = newVal;
+        this.$emit('filter-updated');
+      }
     }
   }
 }

@@ -110,6 +110,9 @@ export default {
         (description, x, cost_per_unit) => {
           return {
             name: description,
+            // x: this.xLabel + ': ' +x,
+            x_description: '<b>' + this.xLabel + ': ' + '</b>' + x,
+            cost_per_unit: '<b>Cost per unit: </b>' + this.formatCost({cost: cost_per_unit, cost_currency: 'USD'}),
             value: this.xLabel + " (" + x + "), " + 'Cost per unit ' + "(" + this.formatCost({cost: cost_per_unit, cost_currency: 'USD'}) + ")",
           };
         },
@@ -118,7 +121,9 @@ export default {
       tooltipItemTpl: `
         <li data-index={index} style="margin-bottom:4px;">
           <span style="background-color:{color};" class="g2-tooltip-marker"></span>
-          {name}<br />{value}
+          <b>{name}</b><br />
+          {x_description}<br />
+          {cost_per_unit}
         </li>
       `,
     };

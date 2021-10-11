@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "5298aca05677e17861c1",
+    "revision": "a45c02c6170abd7bf3b0",
     "url": "/css/app.ae0149cc.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/chunk-vendors.85dce84d.css"
   },
   {
-    "revision": "9b2f9cb23f0f6c3e7a1d",
-    "url": "/css/intelligence.5e8aecc8.css"
+    "revision": "40abe25610dd9336fca1",
+    "url": "/css/intelligence.6e038544.css"
   },
   {
     "revision": "87782a8320b4397906d5",
@@ -36,7 +36,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/optimisation~orders~specifications.2fa1b8cc.css"
   },
   {
-    "revision": "19490bf3dfa92cc201a0",
+    "revision": "769b3fcca3152890d5db",
     "url": "/css/orders.aa8928c1.css"
   },
   {
@@ -284,7 +284,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "b41fc319c2030550d66bfaa9219ea177",
+    "revision": "df58d7bea16a822d3ab36ce3307590d7",
     "url": "/index.html"
   },
   {
@@ -304,8 +304,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.99bed1e2.js"
   },
   {
-    "revision": "5298aca05677e17861c1",
-    "url": "/js/app.352ee59b.js"
+    "revision": "a45c02c6170abd7bf3b0",
+    "url": "/js/app.b6b568c0.js"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -316,8 +316,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/clusters.51433612.js"
   },
   {
-    "revision": "9b2f9cb23f0f6c3e7a1d",
-    "url": "/js/intelligence.37af7231.js"
+    "revision": "40abe25610dd9336fca1",
+    "url": "/js/intelligence.69929def.js"
   },
   {
     "revision": "87782a8320b4397906d5",
@@ -336,8 +336,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/optimisation~orders~specifications.44dd2867.js"
   },
   {
-    "revision": "19490bf3dfa92cc201a0",
-    "url": "/js/orders.bbbcfd50.js"
+    "revision": "769b3fcca3152890d5db",
+    "url": "/js/orders.efab44ef.js"
   },
   {
     "revision": "bb735b7fc4af5e379fbe",

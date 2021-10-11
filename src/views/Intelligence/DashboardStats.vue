@@ -60,7 +60,7 @@
                 <div class="table-header-wrapper">
                   <div class="table-header-left">
                     <b>Spend</b><br>
-                    Last 12 Months
+                    {{ dateRange }}
                   </div>
                   <div class="table-header-right">
                     <a-icon type="dollar"></a-icon>
@@ -99,7 +99,7 @@
                 <div class="table-header-wrapper">
                   <div class="table-header-left">
                     <b>Demand</b><br>
-                    Last 12 Months
+                    {{ dateRange }}
                   </div>
                   <div class="table-header-right">
                     <a-icon type="up-circle"></a-icon>
@@ -110,19 +110,19 @@
             </thead>
             <tbody>
             <tr>
-              <td>Roche Demand Change</td>
+              <td>{{ user.client.name }} Demand Change</td>
               <td>
-                3%
+                -
               </td>
             </tr>
             <tr>
               <td>Market Demand Change</td>
-              <td>12%</td>
+              <td>-</td>
             </tr>
             <tr>
               <td>Market Demand Volatility</td>
               <td>
-                Low
+                -
               </td>
             </tr>
             </tbody>
@@ -151,12 +151,12 @@
             <tr>
               <td>Risk Level</td>
               <td>
-                High
+                -
               </td>
             </tr>
             <tr>
               <td>Suppliers at Risk</td>
-              <td>10</td>
+              <td>-</td>
             </tr>
             </tbody>
           </table>
@@ -171,14 +171,34 @@
 <script>
 import axios from 'axios';
 import Orders from "../../mixins/Orders";
+import {mapGetters} from "vuex";
+
+const _ = require('lodash');
 
 export default {
   name: "DashboardStats",
+  props: ['filters'],
   mixins: [Orders],
   data() {
     return {
       isLoading: false,
       stats: []
+    }
+  },
+  computed: {
+    ...mapGetters('auth', {
+      user: 'user'
+    }),
+
+    dateRange() {
+      if (this.filters['filters_enabled'].length && this.filters['filters_enabled'].includes('date_range')) {
+        if (this.filters['date_range'] == 'last-12-months') {
+          return 'Last 12 Months';
+        } else if (this.filters['date_range'] == 'last-month') {
+          return 'Last Month'
+        }
+      }
+      return 'Last 12 Months';
     }
   },
   created() {
@@ -188,7 +208,7 @@ export default {
     fetch() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/intelligence/stats').then(r => {
+      axios.post(window.API_BASE + '/intelligence/stats', this.getSearchParams()).then(r => {
         vm.isLoading = false;
         vm.stats = r.data;
       }).catch(e => {
@@ -197,6 +217,16 @@ export default {
         vm.stats = null;
         vm.$message.error('Error loading stats');
       });
+    },
+
+    getSearchParams() {
+      let filters = {};
+
+      _.each(this.filters['filters_enabled'], key => {
+        filters[key] = this.filters[key];
+      });
+
+      return filters;
     }
   }
 }

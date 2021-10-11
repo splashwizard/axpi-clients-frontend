@@ -20,6 +20,9 @@
     <div slot="productCode" slot-scope="name, record">
       {{ getFirstProduct(record) ? getFirstProduct(record)['Product_Code'] : '-' }}
     </div>
+    <div slot="datePurchased" slot-scope="datePurchased">
+      {{ formatDatePurchased(datePurchased) }}
+    </div>
     <div slot="quantity" slot-scope="quantity, order">
       {{ getQuantity(order) }}
     </div>
@@ -66,6 +69,7 @@
 <script>
 import axios from "axios";
 import Orders from "../../../../mixins/Orders";
+import moment from 'moment';
 
 const _ = require('lodash');
 
@@ -85,9 +89,9 @@ const columns = [
   //   scopedSlots: {customRender: 'productCode'}
   // },
   {
-    title: "Year Purchased",
-    dataIndex: "PO Creation Year",
-    // scopedSlots: {customRender: 'productCode'}
+    title: "Date Purchased",
+    dataIndex: "PO Initial Create Date",
+    scopedSlots: {customRender: 'datePurchased'}
   },
   {
     title: "Quantity",
@@ -219,6 +223,11 @@ export default {
       });
 
       return potentialSavings;
+    },
+
+    formatDatePurchased(datePurchased) {
+      let timestamp = datePurchased['$date']['$numberLong'] / 1000;
+      return moment.unix(timestamp).format('DD/MM/YYYY');
     }
   },
 };

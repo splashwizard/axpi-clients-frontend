@@ -35,6 +35,7 @@
             <a-tabs>
               <a-tab-pane tab="All Orders">
                 <cluster-orders-table
+                    :insights="insights"
                     :key="reloadKey"
                     :cluster-id="cluster['_id']"
                     @record-selected="(record) => viewInsightsFor(record)"

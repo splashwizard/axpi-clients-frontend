@@ -11,6 +11,14 @@
         name
       }}</a>
 
+    <div slot="numberOfItems" slot-scope="actions, record">
+      {{ record['erp_order_ids'] ? record['erp_order_ids'].length : '-' }}
+    </div>
+
+    <div slot="potentialSavings" slot-scope="potentialSavings, record">
+      {{ formatCost({cost: calculatePotentialSavings(record), cost_currency: 'USD'}) }}
+    </div>
+
     <div slot="actions" class="table-actions" slot-scope="actions, record">
       <a-dropdown :trigger="['click']">
         <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
@@ -25,6 +33,9 @@
 </template>
 <script>
 import axios from 'axios';
+import Orders from "../../../../mixins/Orders";
+
+const _ = require('lodash');
 
 const columns = [
   {
@@ -32,6 +43,15 @@ const columns = [
     dataIndex: 'name',
     sorter: true,
     scopedSlots: {customRender: 'name'}
+  },
+  {
+    title: 'Number of Items',
+    scopedSlots: {customRender: 'numberOfItems'},
+  },
+  {
+    title: 'Potential Savings',
+    dataIndex: 'potential_savings',
+    scopedSlots: {customRender: 'potentialSavings'},
   },
   {
     title: '',
@@ -42,6 +62,7 @@ const columns = [
 
 export default {
   props: ['reloadKey'],
+  mixins: [Orders],
   data() {
     return {
       data: [],
@@ -97,6 +118,19 @@ export default {
 
     deleteCluster(cluster) {
       this.$emit('delete-cluster', cluster);
+    },
+
+    calculatePotentialSavings(record) {
+      console.log(record);
+      let insights = record['insights'];
+      let groupedByErpOrderId = _.groupBy(insights, 'erp_order_id');
+
+      let potentialSavings = 0;
+      _.each(groupedByErpOrderId, insightsForErpOrder => {
+        potentialSavings += _.max(_.map(insightsForErpOrder, 'potential_savings'));
+      });
+
+      return potentialSavings;
     }
   },
 };

@@ -1,44 +1,51 @@
 <template>
   <a-table
-    class="axpi-table"
-    :columns="columns"
-    :row-key="(record) => record.id"
-    :data-source="data"
-    :loading="loading"
+      class="axpi-table"
+      :columns="columns"
+      :row-key="(record) => record.id"
+      :data-source="data"
+      :loading="loading"
   >
-    <div slot="name" slot-scope="name, record"> 
+    <div slot="name" slot-scope="name, record">
       <a-avatar style="margin-right: 20px;"
-       size="large" :src="getImageSrc(getFirstProduct(record))" />
-       {{ getFirstProduct(record) ? getFirstProduct(record)['Name'] : name }}
+                size="large" :src="getImageSrc(getFirstProduct(record))"/>
+      {{ getFirstProduct(record) ? getFirstProduct(record)['Name'] : name }}
     </div>
     <div slot="productCode" slot-scope="name, record">
       {{ getFirstProduct(record) ? getFirstProduct(record)['Product_Code'] : '-' }}
     </div>
     <div slot="quantity" slot-scope="quantity, order">
-     {{ getQuantity(order) }}
+      {{ getQuantity(order) }}
     </div>
     <div slot="cost" slot-scope="cost">
-        {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
+      {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
+    </div>
+    <div slot="potentialSavings" slot-scope="potentialSavings, record">
+      <span v-if="calculatePotentialSavings(record)">
+        {{ formatCost({cost: calculatePotentialSavings(record), cost_currency: 'USD'}) }}
+      </span>
+      <span v-else>-</span>
     </div>
     <div slot="insights" slot-scope="insights, record">
       <a href="#" @click.prevent="handleRecordSelected(record)">
-        <a-icon type="eye" style="margin-right: 4px;" /> View
+        <a-icon type="eye" style="margin-right: 4px;"/>
+        View
       </a>
     </div>
     <div slot="actions" class="table-actions" slot-scope="actions, record">
       <a-dropdown :trigger="['click']">
         <a-button
-          type="link"
-          icon="ellipsis"
-          @click.prevent="(e) => e.preventDefault()"
+            type="link"
+            icon="ellipsis"
+            @click.prevent="(e) => e.preventDefault()"
         ></a-button>
         <a-menu slot="overlay">
           <a-menu-item>
             <a
-              href="#"
-              class="text-danger"
-              @click.prevent="deleteRecord(record)"
-              >Remove</a
+                href="#"
+                class="text-danger"
+                @click.prevent="deleteRecord(record)"
+            >Remove</a
             >
           </a-menu-item>
         </a-menu>
@@ -49,6 +56,8 @@
 <script>
 import axios from "axios";
 import Orders from "../../../../mixins/Orders";
+
+const _ = require('lodash');
 
 const columns = [
   {
@@ -80,6 +89,10 @@ const columns = [
     dataIndex: "Cost",
     scopedSlots: {customRender: 'cost'}
   },
+  {
+    title: "Potential Savings",
+    scopedSlots: {customRender: 'potentialSavings'}
+  },
   // {
   //   title: "PO Number",
   //   dataIndex: "PO Number",
@@ -91,13 +104,13 @@ const columns = [
   },
   {
     title: "",
-    scopedSlots: { customRender: "actions" },
+    scopedSlots: {customRender: "actions"},
     width: 10,
   },
 ];
 
 export default {
-  props: ["clusterId"],
+  props: ["clusterId", "insights"],
   mixins: [Orders],
   data() {
     return {
@@ -114,20 +127,20 @@ export default {
       console.log("params:", params);
       this.loading = true;
       axios
-        .get(
-          window.API_BASE +
-            "/intelligence/clusters/" +
-            this.clusterId +
-            "/orders-with-matches"
-        )
-        .then((r) => {
-          this.loading = false;
-          this.data = r.data;
-        })
-        .catch((e) => {
-          console.log(e);
-          this.$message.error("Error loading orders");
-        });
+          .get(
+              window.API_BASE +
+              "/intelligence/clusters/" +
+              this.clusterId +
+              "/orders-with-matches"
+          )
+          .then((r) => {
+            this.loading = false;
+            this.data = r.data;
+          })
+          .catch((e) => {
+            console.log(e);
+            this.$message.error("Error loading orders");
+          });
     },
 
     deleteRecord(order) {
@@ -162,6 +175,23 @@ export default {
       }
 
       return totalQuantity;
+    },
+
+    calculatePotentialSavings(order) {
+      let insights = _.filter(this.insights, insight => {
+        return insight['erp_order_id'] == order['_id'];
+      });
+
+      let potentialSavings = 0;
+      let groupedByType = _.groupBy(insights, 'insight_type');
+      _.each(groupedByType, insightsForType => {
+        let max = _.max(
+            _.map(insightsForType, 'potential_savings')
+        );
+        potentialSavings += max;
+      });
+
+      return potentialSavings;
     }
   },
 };

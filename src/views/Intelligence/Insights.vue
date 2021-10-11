@@ -98,8 +98,9 @@ export default {
   computed: {
     allInsightsCollapsed() {
       let collapsed = [];
-      _.each(this.allInsights, clusterInsights => {
-        collapsed = _.merge(collapsed, clusterInsights);
+      _.each(this.allInsights, (clusterInsights) => {
+        collapsed.push(clusterInsights);
+        collapsed = _.flatten(collapsed);
       });
       return collapsed;
     },
@@ -109,8 +110,13 @@ export default {
 
       let groupedByType = _.groupBy(this.allInsightsCollapsed, 'insight_type');
       _.each(groupedByType, (insights, insightType) => {
+        console.log(insights);
         let groupedByErpOrderId = _.groupBy(insights, 'erp_order_id');
-        let numberOfOpportunities = Object.keys(groupedByErpOrderId).length;
+        // let numberOfOpportunities = Object.keys(groupedByErpOrderId).length;
+
+        let groupedByClusterId = _.groupBy(insights, 'cluster_id');
+        // console.log(groupedByClusterId);
+        let numberOfOpportunities = Object.keys(groupedByClusterId).length;
 
         let potentialSavings = 0;
         _.each(groupedByErpOrderId, insightsForErpOrder => {

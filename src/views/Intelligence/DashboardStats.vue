@@ -71,19 +71,19 @@
             </thead>
             <tbody>
             <tr>
-              <td>Spend in last 12 months</td>
+              <td>Spend Managed</td>
               <td>
-                $100M
+                {{ stats['spend_managed'] ? formatCost({cost: stats['spend_managed'], cost_currency: 'USD'}) : '-' }}
               </td>
             </tr>
             <tr>
-              <td>Spend Managed</td>
-              <td>95%</td>
+              <td>Orders Classified</td>
+              <td>{{ stats['orders_classified_percentage'] ? stats['orders_classified_percentage'] : '-' }}</td>
             </tr>
             <tr>
-              <td>Spend Managed</td>
+              <td>Total Spend</td>
               <td>
-                {{ formatCost({cost: stats['total_spend'], cost_currency: 'USD'}) }}
+                {{ stats['total_spend'] ? formatCost({cost: stats['total_spend'], cost_currency: 'USD'}) : '-' }}
               </td>
             </tr>
             </tbody>
@@ -225,6 +225,10 @@ export default {
       _.each(this.filters['filters_enabled'], key => {
         filters[key] = this.filters[key];
       });
+
+      if (!Object.keys(filters).includes('date_range')) {
+        filters['date_range'] = 'last-12-months';
+      }
 
       return filters;
     }

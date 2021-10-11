@@ -26,6 +26,10 @@ export default {
     return {
       dateRangeOptions: [
         {
+          value: 'last-5-years',
+          label: 'Last 5 years'
+        },
+        {
           value: 'last-12-months',
           label: 'Last 12 months'
         },

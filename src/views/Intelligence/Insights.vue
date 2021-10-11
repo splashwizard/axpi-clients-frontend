@@ -2,9 +2,9 @@
   <div>
     <a-tabs v-model="activeTab">
       <a-tab-pane key="all-insights" tab="All Insights"></a-tab-pane>
-            <a-tab-pane key="price-insights" tab="Price Insights"> </a-tab-pane>
-            <a-tab-pane key="demand-insights" tab="Demand Insights"> </a-tab-pane>
-<!--            <a-tab-pane key="contract-insights" tab="Contract Insights"> </a-tab-pane>-->
+      <a-tab-pane key="price-insights" tab="Price Insights"></a-tab-pane>
+      <a-tab-pane key="demand-insights" tab="Demand Insights"></a-tab-pane>
+      <!--            <a-tab-pane key="contract-insights" tab="Contract Insights"> </a-tab-pane>-->
     </a-tabs>
 
     <!-- Loading -->
@@ -19,7 +19,8 @@
 
       <a-row :gutter="20">
         <a-col :span="6" v-for="(insight, i) in insightsToShow" :key="i">
-          <a-card class="insight-card" :hoverable="true" @click.prevent="() => navigateToCluster(insight['cluster_id'])">
+          <a-card class="insight-card" :hoverable="true"
+                  @click.prevent="() => handleInsightClicked(insight)">
             <a-statistic :title="insight.description"
                          prefix="$"
                          :precision="0"
@@ -50,6 +51,8 @@ import axios from 'axios';
 const _ = require('lodash');
 
 export default {
+  props: ['filters'],
+
   data() {
     return {
       activeTab: "all-insights",
@@ -63,10 +66,20 @@ export default {
   },
 
   methods: {
+    getSearchParams() {
+      let filters = {};
+
+      _.each(this.filters['filters_enabled'], key => {
+        filters[key] = this.filters[key];
+      });
+
+      return filters;
+    },
+
     fetch() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/intelligence/all-insights').then(r => {
+      axios.post(window.API_BASE + '/intelligence/all-insights', this.getSearchParams()).then(r => {
         vm.isLoading = false;
         vm.allInsights = r.data;
       }).catch(e => {
@@ -77,8 +90,8 @@ export default {
       });
     },
 
-    navigateToCluster(clusterId) {
-      this.$router.push('/intelligence/clusters/' + clusterId);
+    handleInsightClicked(insight) {
+      this.$router.push('/intelligence/clusters?insight_type=' + insight['insight_type']);
     }
   },
 
@@ -121,9 +134,9 @@ export default {
       // Add in 0-value insights
       let pricingOutliersCard = _.find(insightCards, {'insight_type': 'pricing'});
       if (!pricingOutliersCard) {
-       insightCards.push({
-         amount: 0, opportunities: 0, insight_type: 'pricing', description: 'Pricing Outliers'
-       });
+        insightCards.push({
+          amount: 0, opportunities: 0, insight_type: 'pricing', description: 'Pricing Outliers'
+        });
       }
 
       let demandAggregationCard = _.find(insightCards, {'insight_type': 'demand-aggregration'});
@@ -157,7 +170,10 @@ export default {
       let expandedDemandIncreasesCard = _.find(insightCards, {'insight_type': 'expected-demand-increases'});
       if (!expandedDemandIncreasesCard) {
         insightCards.push({
-          amount: 0, opportunities: 0, insight_type: 'expected-demand-increases', description: 'Expected Demand Increases'
+          amount: 0,
+          opportunities: 0,
+          insight_type: 'expected-demand-increases',
+          description: 'Expected Demand Increases'
         });
       }
 

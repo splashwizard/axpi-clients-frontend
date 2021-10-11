@@ -192,7 +192,9 @@ export default {
 
     dateRange() {
       if (this.filters['filters_enabled'].length && this.filters['filters_enabled'].includes('date_range')) {
-        if (this.filters['date_range'] == 'last-12-months') {
+        if (this.filters['date_range'] == 'last-5-years') {
+          return 'Last 5 Years';
+        } else if (this.filters['date_range'] == 'last-12-months') {
           return 'Last 12 Months';
         } else if (this.filters['date_range'] == 'last-month') {
           return 'Last Month'

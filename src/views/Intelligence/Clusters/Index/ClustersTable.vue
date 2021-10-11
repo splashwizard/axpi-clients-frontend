@@ -2,7 +2,7 @@
   <a-table class="axpi-table"
            :columns="columns"
            :row-key="record => record.id"
-           :data-source="data"
+           :data-source="dataToShow"
            :pagination="pagination"
            :loading="loading"
            @change="handleTableChange"
@@ -61,7 +61,7 @@ const columns = [
 ];
 
 export default {
-  props: ['reloadKey'],
+  props: ['reloadKey', 'insightTypeFilter'],
   mixins: [Orders],
   data() {
     return {
@@ -77,6 +77,20 @@ export default {
   watch: {
     reloadKey() {
       this.fetch();
+    }
+  },
+  computed: {
+    dataToShow() {
+      if (this.insightTypeFilter) {
+        return _.filter(this.data, d => {
+          let pricingInsights = _.filter(d['insights'], {
+            insight_type: this.insightTypeFilter
+          });
+          let potentialSavings = _.sum(_.map(pricingInsights, 'potential_savings'));
+          return potentialSavings > 0;
+        });
+      }
+      return this.data;
     }
   },
   methods: {
@@ -101,7 +115,7 @@ export default {
       console.log('params:', params);
       this.loading = true;
       axios.post(window.API_BASE + '/intelligence/clusters/search', {
-        results_per_page: 10,
+        results_per_page: 100,
         ...params
       }).then(r => {
         const pagination = {...this.pagination};

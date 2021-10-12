@@ -29,6 +29,20 @@
           </p>
           <!-- / Country comparison -->
 
+          <!-- Volume difference -->
+          <p v-if="volumePercentageDifference !== null">
+            <b>Volume difference: </b>
+            {{ volumePercentageDifference }}%
+          </p>
+          <!-- / Volume difference -->
+
+          <!-- Unit price difference -->
+          <p>
+            <b>Unit price difference: </b>
+            {{ pricePerUnitPercentageDifference }}%
+          </p>
+          <!-- / Unit price difference -->
+
         </div>
 
         <a href="#" style="margin-top: 5px;" @click.prevent="toggleShowMoreDetails">View less
@@ -80,6 +94,36 @@ export default {
       return Math.round(100 * (propertiesThatMatch.length / properties.length));
     },
 
+    baseVolume() {
+     return this.getProperty('volume');
+    },
+
+    comparedToVolume() {
+      return this.getProperty('volume', 'compared_to');
+    },
+
+    volumePercentageDifference() {
+      let volumeOfComparedTo = this.getProperty('volume', 'compared_to');
+      let volumeOfBase = this.getProperty('volume');
+
+      if (volumeOfComparedTo && volumeOfBase) {
+        let increase = volumeOfComparedTo - volumeOfBase;
+        let percentageDifference = (increase/volumeOfBase) * 100;
+        return Math.round(percentageDifference * 100) / 100;
+      }
+
+      return null;
+    },
+
+    pricePerUnitPercentageDifference() {
+      let basePrice = this.insight['price_per_unit']['base'];
+      let comparedToPrice = this.insight['price_per_unit']['compared_to'];
+
+      let increase = comparedToPrice - basePrice;
+      let percentageDifference = (increase/basePrice) * 100;
+      return Math.round(percentageDifference * 100) / 100;
+    },
+
     isInsightSelected() {
       return this.insightsAppliedLocal.includes(this.insight['insight_id']);
     }
@@ -123,6 +167,20 @@ export default {
           } else {
             return this.getFirstBaseProduct(this.insight)['Vendor'];
           }
+        case 'volume': {
+          let product = null;
+          if (type === 'compared_to') {
+            product = this.getFirstProduct(this.insight);
+          } else {
+            product = this.getFirstBaseProduct(this.insight);
+          }
+          let volume = null;
+          if (product['normalisedQuantity']['totalMeasure']['entity'] === 'volume') {
+            volume = product['normalisedQuantity']['totalMeasure']['normalisedUnitMagnitude'];
+          }
+          // volume = 5;
+          return volume;
+        }
         default:
           return null;
       }

@@ -128,7 +128,8 @@ const columns = [
   },
   {
     title: "Product Code",
-    scopedSlots: {customRender: 'productCode'}
+    scopedSlots: {customRender: 'productCode'},
+    width: 300
   },
   // {
   //   title: "PO Number",

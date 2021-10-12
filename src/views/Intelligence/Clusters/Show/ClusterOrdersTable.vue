@@ -87,10 +87,6 @@ const columns = [
     fixed: 'left',
     width: 350
   },
-  // {
-  //   title: "Product Code",
-  //   scopedSlots: {customRender: 'productCode'}
-  // },
   {
     title: "Date Purchased",
     dataIndex: "PO Initial Create Date",
@@ -129,6 +125,10 @@ const columns = [
     dataIndex: "PO Li Description",
     sorter: true,
     width: 300
+  },
+  {
+    title: "Product Code",
+    scopedSlots: {customRender: 'productCode'}
   },
   // {
   //   title: "PO Number",

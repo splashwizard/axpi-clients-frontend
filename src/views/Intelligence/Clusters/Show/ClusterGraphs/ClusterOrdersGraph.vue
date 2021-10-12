@@ -87,8 +87,8 @@ export default {
         let x = 0;
 
         if (order["products"] && order["products"].length) {
-          if (order["products"][0]["normalisedQuantity"]) {
-            order['product_quantity'] = order['products'][0]['normalisedQuantity']['normalisedUnitMagnitude'];
+          if (order["products"][0]["normalisedQuantity"] && order["products"][0]["normalisedQuantity"]["totalMeasure"]) {
+            order['product_quantity'] = order['products'][0]['normalisedQuantity']['totalMeasure']['normalisedUnitMagnitude'];
           }
         }
 

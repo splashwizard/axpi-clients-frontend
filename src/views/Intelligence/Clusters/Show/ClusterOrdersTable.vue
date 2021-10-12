@@ -1,6 +1,7 @@
 <template>
   <a-table
       class="axpi-table"
+      :scroll="{ x: 1300 }"
       :columns="columns"
       :row-key="(record) => record.id"
       :data-source="data"
@@ -39,13 +40,12 @@
       </span>
       <span v-else>-</span>
     </div>
-    <div slot="insights" slot-scope="insights, record">
-      <a href="#" @click.prevent="handleRecordSelected(record)">
+    <div class="insights-column" slot="insights" slot-scope="insights, record">
+      <a style="margin-right: 15px;" href="#" @click.prevent="handleRecordSelected(record)">
         <a-icon type="eye" style="margin-right: 4px;"/>
         View
       </a>
-    </div>
-    <div slot="actions" class="table-actions" slot-scope="actions, record">
+
       <a-dropdown :trigger="['click']">
         <a-button
             type="link"
@@ -64,6 +64,9 @@
         </a-menu>
       </a-dropdown>
     </div>
+<!--    <div slot="actions" class="table-actions" slot-scope="actions, record">-->
+
+<!--    </div>-->
   </a-table>
 </template>
 <script>
@@ -78,7 +81,9 @@ const columns = [
     title: "Name",
     dataIndex: "PO Li Description",
     sorter: true,
-    scopedSlots: {customRender: 'name'}
+    scopedSlots: {customRender: 'name'},
+    fixed: 'left',
+    width: 400
   },
   {
     title: "PO Number",
@@ -114,13 +119,16 @@ const columns = [
   // },
   {
     title: "Insights",
-    scopedSlots: {customRender: 'insights'}
+    scopedSlots: {customRender: 'insights'},
+    fixed: 'right',
+    width: 150
   },
-  {
-    title: "",
-    scopedSlots: {customRender: "actions"},
-    width: 10,
-  },
+  // {
+  //   title: "",
+  //   scopedSlots: {customRender: "actions"},
+  //   width: 10,
+  //   fixed: 'right'
+  // },
 ];
 
 export default {
@@ -248,5 +256,12 @@ export default {
     display: flex;
     align-items: center;
   }
+}
+
+.insights-column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

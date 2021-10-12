@@ -204,7 +204,7 @@ export default {
 
     getQuantity(order) {
       if (order["products"] && order["products"].length) {
-        if (order["products"][0] && order["products"][0] && order["products"][0]["normalisedQuantity"] && order["products"][0]["normalisedQuantity"]["totalQuantity"]["normalisedUnitMagnitude"]) {
+        if (order["products"][0] && order["products"][0]["normalisedQuantity"] && order["products"][0]["normalisedQuantity"]['totalQuantity'] && order["products"][0]["normalisedQuantity"]["totalQuantity"]["normalisedUnitMagnitude"]) {
           order['product_quantity'] = order['products'][0]['normalisedQuantity']['totalQuantity']['normalisedUnitMagnitude'];
         }
       }

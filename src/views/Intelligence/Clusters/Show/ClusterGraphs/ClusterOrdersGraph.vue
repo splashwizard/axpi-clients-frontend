@@ -97,19 +97,35 @@ export default {
         // Properties
         let properties = {};
         if (order["products"] && order["products"].length) {
-          let firstProductNormalisedData = order["products"][0]["normalisedData"];
-          if (firstProductNormalisedData) {
-            _.each(firstProductNormalisedData, (propertyData, propertyType) => {
-              let unit = propertyData['unifiedData'][0]['unit'];
-              let magnitude = propertyData['unifiedData'][0]['rawMagnitude'];
+          // let firstProductNormalisedData = order["products"][0]["normalisedData"];
+          // if (firstProductNormalisedData) {
+          //   _.each(firstProductNormalisedData, (propertyData, propertyType) => {
+          //     let unit = propertyData['unifiedData'][0]['unit'];
+          //     let magnitude = propertyData['unifiedData'][0]['rawMagnitude'];
+          //     // let key = propertyType + ' - ' + unit;
+          //     let key = unit;
+          //     properties[key] = {
+          //       magnitude: magnitude,
+          //       property_type: propertyType,
+          //       unit: unit
+          //     };
+          //   });
+          // }
+          let firstProductNormalisedQuantity = order["products"][0]["normalisedQuantity"];
+          if (firstProductNormalisedQuantity) {
+            let totalMeasure = firstProductNormalisedQuantity['totalMeasure'];
+            if (totalMeasure) {
+              let unit = totalMeasure['normalisedUnitBase'];
+              let magnitude = totalMeasure['normalisedUnitMagnitude'];
+              let entity = totalMeasure['entity'];
               // let key = propertyType + ' - ' + unit;
-              let key = unit;
+              let key = entity;
               properties[key] = {
-                magnitude: magnitude,
-                property_type: propertyType,
+                magnitude: magnitude * orderQuantity,
+                property_type: entity,
                 unit: unit
               };
-            });
+            }
           }
         }
         order["properties"] = properties;

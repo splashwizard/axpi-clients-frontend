@@ -79,15 +79,15 @@ const _ = require('lodash');
 const columns = [
   {
     title: "Name",
-    dataIndex: "PO Li Description",
     sorter: true,
     scopedSlots: {customRender: 'name'},
     fixed: 'left',
-    width: 400
+    width: 350
   },
   {
     title: "PO Number",
-    dataIndex: "PO Number"
+    dataIndex: "PO Number",
+    width: 120
   },
   // {
   //   title: "Product Code",
@@ -96,21 +96,31 @@ const columns = [
   {
     title: "Date Purchased",
     dataIndex: "PO Initial Create Date",
-    scopedSlots: {customRender: 'datePurchased'}
+    scopedSlots: {customRender: 'datePurchased'},
+    width: 150
   },
   {
     title: "Quantity",
     dataIndex: "Quantity",
-    scopedSlots: {customRender: 'quantity'}
+    scopedSlots: {customRender: 'quantity'},
+    width: 90
   },
   {
     title: "Cost",
     dataIndex: "Cost",
-    scopedSlots: {customRender: 'cost'}
+    scopedSlots: {customRender: 'cost'},
+    width: 80
   },
   {
     title: "Potential Savings",
-    scopedSlots: {customRender: 'potentialSavings'}
+    scopedSlots: {customRender: 'potentialSavings'},
+    width: 150
+  },
+  {
+    title: "ERP Order Description",
+    dataIndex: "PO Li Description",
+    sorter: true,
+    width: 300
   },
   // {
   //   title: "PO Number",
@@ -121,7 +131,7 @@ const columns = [
     title: "Insights",
     scopedSlots: {customRender: 'insights'},
     fixed: 'right',
-    width: 150
+    width: 130
   },
   // {
   //   title: "",

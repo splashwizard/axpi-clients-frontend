@@ -182,11 +182,11 @@ export default {
             name: description,
             // x: this.xLabel + ': ' +x,
             x_description: '<b>' + this.formatGraphLabel(this.xLabel) + ': ' + '</b>' + x + ' ' + this.xUnit,
-            cost_per_unit: '<b>Cost per ' + this.costPerLabel + ': </b>' + this.formatCost({
+            cost_per_unit: '<b>Cost per ' + this.costPerLabel + ': </b>' + this.formatCostGraph({
               cost: cost_per_unit,
               cost_currency: 'USD'
             }),
-            value: this.xLabel + " (" + x + "), " + 'Cost per unit ' + "(" + this.formatCost({
+            value: this.xLabel + " (" + x + "), " + 'Cost per unit ' + "(" + this.formatCostGraph({
               cost: cost_per_unit,
               cost_currency: 'USD'
             }) + ")",

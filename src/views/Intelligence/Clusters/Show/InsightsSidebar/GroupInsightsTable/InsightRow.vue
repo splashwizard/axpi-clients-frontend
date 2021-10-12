@@ -8,13 +8,27 @@
 
       <div v-if="showMoreDetails">
         <div class="comparison-wrapper">
+
+          <!-- Country comparison -->
           <p>
-            <b>Country: </b><br>
+            <b>Country: </b>
             {{ getProperty('country') }}
             <a-icon v-if="doesPropertyMatch('country')"
                     type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
             <a-icon v-else type="close-circle" theme="twoTone" two-tone-color="#FF0000"></a-icon>
           </p>
+          <!-- / Country comparison -->
+
+          <!-- Country comparison -->
+          <p>
+            <b>Vendor: </b>
+            {{ getProperty('vendor') }}
+            <a-icon v-if="doesPropertyMatch('vendor')"
+                    type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
+            <a-icon v-else type="close-circle" theme="twoTone" two-tone-color="#FF0000"></a-icon>
+          </p>
+          <!-- / Country comparison -->
+
         </div>
 
         <a href="#" style="margin-top: 5px;" @click.prevent="toggleShowMoreDetails">View less
@@ -54,7 +68,7 @@ export default {
   },
   computed: {
     matchPercentage() {
-      let properties = ['country', 'name'];
+      let properties = ['country', 'name', 'vendor'];
       let propertiesThatMatch = [];
 
       _.each(properties, property => {
@@ -103,6 +117,12 @@ export default {
           } else {
             return this.getFirstBaseProduct(this.insight)['Name'];
           }
+        case 'vendor':
+          if (type === 'compared_to') {
+            return this.getFirstProduct(this.insight)['Vendor'];
+          } else {
+            return this.getFirstBaseProduct(this.insight)['Vendor'];
+          }
         default:
           return null;
       }
@@ -120,11 +140,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+td {
+  vertical-align: top;
+}
+
 .comparison-wrapper {
   margin-top: 10px;
 
   b {
     font-weight: 500;
+    margin-right: 5px;
   }
 
   p {

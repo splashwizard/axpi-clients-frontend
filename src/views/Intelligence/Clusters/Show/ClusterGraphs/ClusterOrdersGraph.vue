@@ -75,7 +75,7 @@ export default {
         {
           dataKey: 'cost_per_unit',
           formatter: (val) => {
-            return this.formatCost({cost: val, cost_currency: 'USD'})
+            return this.formatCostGraph({cost: val, cost_currency: 'USD'})
           }
         }];
     },
@@ -215,7 +215,20 @@ export default {
   methods: {
     formatGraphLabel(label) {
       return label.charAt(0).toUpperCase() + label.substring(1);
-    }
+    },
+
+    formatCostGraph(order) {
+      if (order.cost) {
+        let currency = order.cost_currency ? order.cost_currency : 'GBP';
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: currency,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        }).format(order.cost);
+      }
+      return order.cost;
+    },
   }
 };
 </script>

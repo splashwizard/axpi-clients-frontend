@@ -22,7 +22,7 @@
       />
       <v-axis
           dataKey="x"
-          :title="{'text': formatGraphLabel(xLabel)}"
+          :title="{'text': formatGraphLabel(xLabel) + (xUnit ? ' (' + xUnit + ')' : '')}"
       >
       </v-axis>
       <v-axis
@@ -54,6 +54,13 @@ export default {
         return 'Quantity'
       }
       return this.xType;
+    },
+
+    xUnit() {
+      if (this.xLabel === 'volume') {
+        return 'm<sup>3</sup>';
+      }
+      return '';
     },
 
     costPerLabel() {
@@ -168,10 +175,13 @@ export default {
       return [
         "description*x*cost_per_unit",
         (description, x, cost_per_unit) => {
+          if (x < 1) {
+            x = Number.parseFloat(x).toExponential(3);
+          }
           return {
             name: description,
             // x: this.xLabel + ': ' +x,
-            x_description: '<b>' + this.xLabel + ': ' + '</b>' + x,
+            x_description: '<b>' + this.formatGraphLabel(this.xLabel) + ': ' + '</b>' + x + ' ' + this.xUnit,
             cost_per_unit: '<b>Cost per ' + this.costPerLabel + ': </b>' + this.formatCost({
               cost: cost_per_unit,
               cost_currency: 'USD'

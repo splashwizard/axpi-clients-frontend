@@ -40,6 +40,9 @@
       </span>
       <span v-else>-</span>
     </div>
+    <div slot="normalisedMeasure" slot-scope="normalisedMeasure, record">
+      {{ getNormalisedMeasure(record) }}
+    </div>
     <div class="insights-column" slot="insights" slot-scope="insights, record">
       <a style="margin-right: 15px;" href="#" @click.prevent="handleRecordSelected(record)">
         <a-icon type="eye" style="margin-right: 4px;"/>
@@ -64,9 +67,9 @@
         </a-menu>
       </a-dropdown>
     </div>
-<!--    <div slot="actions" class="table-actions" slot-scope="actions, record">-->
+    <!--    <div slot="actions" class="table-actions" slot-scope="actions, record">-->
 
-<!--    </div>-->
+    <!--    </div>-->
   </a-table>
 </template>
 <script>
@@ -83,11 +86,6 @@ const columns = [
     scopedSlots: {customRender: 'name'},
     fixed: 'left',
     width: 350
-  },
-  {
-    title: "PO Number",
-    dataIndex: "PO Number",
-    width: 120
   },
   // {
   //   title: "Product Code",
@@ -117,7 +115,17 @@ const columns = [
     width: 150
   },
   {
-    title: "ERP Order Description",
+    title: "Measure",
+    scopedSlots: {customRender: 'normalisedMeasure'},
+    width: 170
+  },
+  {
+    title: "PO Number",
+    dataIndex: "PO Number",
+    width: 120
+  },
+  {
+    title: "PO Name",
     dataIndex: "PO Li Description",
     sorter: true,
     width: 300
@@ -131,7 +139,7 @@ const columns = [
     title: "Insights",
     scopedSlots: {customRender: 'insights'},
     fixed: 'right',
-    width: 130
+    width: 140
   },
   // {
   //   title: "",
@@ -195,8 +203,8 @@ export default {
 
     getQuantity(order) {
       if (order["products"] && order["products"].length) {
-        if (order["products"][0]["normalisedQuantity"]) {
-          order['product_quantity'] = order['products'][0]['normalisedQuantity']['normalisedUnitMagnitude'];
+        if (order["products"][0] && order["products"][0] && order["products"][0]["normalisedQuantity"] && order["products"][0]["normalisedQuantity"]["totalQuantity"]["normalisedUnitMagnitude"]) {
+          order['product_quantity'] = order['products'][0]['normalisedQuantity']['totalQuantity']['normalisedUnitMagnitude'];
         }
       }
 
@@ -246,6 +254,28 @@ export default {
     formatDatePurchased(datePurchased) {
       let timestamp = datePurchased['$date']['$numberLong'] / 1000;
       return moment.unix(timestamp).format('DD/MM/YYYY');
+    },
+
+    getNormalisedMeasure(order) {
+      let product = this.getFirstProduct(order);
+
+      let toReturn = null;
+      if (product && product['normalisedQuantity'] && product['normalisedQuantity']['totalMeasure']) {
+        let magnitude = product['normalisedQuantity']['totalMeasure']['normalisedUnitMagnitude'];
+        // let magnitude = product['normalisedQuantity']['totalMeasure']['rawMagnitude'];
+        let unit = product['normalisedQuantity']['totalMeasure']['unit'];
+
+        if (magnitude && unit) {
+          if (magnitude < 1) {
+            magnitude = Number.parseFloat(magnitude).toExponential(3);
+          }
+          toReturn = String(magnitude) + ' ' + unit;
+        }
+      }
+      if (toReturn) {
+        return toReturn;
+      }
+      return '-';
     }
   },
 };

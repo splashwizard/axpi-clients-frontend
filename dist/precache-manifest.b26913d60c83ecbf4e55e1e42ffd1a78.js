@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "497686f3b22206b1eb55",
-    "url": "/css/app.ae0149cc.css"
+    "revision": "271aa97d5312dd72ac99",
+    "url": "/css/app.3b7dc382.css"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/intelligence.1a7776cf.css"
   },
   {
-    "revision": "87782a8320b4397906d5",
+    "revision": "46f48b064e9ed390791e",
     "url": "/css/matcher.357cd3ce.css"
   },
   {
@@ -56,8 +56,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/suppliers.667b8801.css"
   },
   {
-    "revision": "4912597c1c7ed606f1f0",
-    "url": "/css/view-cluster.ed351944.css"
+    "revision": "1b6e599468a7bba44ac8",
+    "url": "/css/view-cluster.5e4b061a.css"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",
@@ -288,7 +288,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "5851a468f2ca5f4ff8cf923ae0373767",
+    "revision": "286157c64891d09ec5fdedce3cc85c61",
     "url": "/index.html"
   },
   {
@@ -308,8 +308,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.99bed1e2.js"
   },
   {
-    "revision": "497686f3b22206b1eb55",
-    "url": "/js/app.44e79725.js"
+    "revision": "271aa97d5312dd72ac99",
+    "url": "/js/app.76ab9f3e.js"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -324,8 +324,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/intelligence.0355ec5b.js"
   },
   {
-    "revision": "87782a8320b4397906d5",
-    "url": "/js/matcher.e446d749.js"
+    "revision": "46f48b064e9ed390791e",
+    "url": "/js/matcher.9b10714f.js"
   },
   {
     "revision": "6717886a4bff5551265c",
@@ -364,8 +364,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/suppliers.cfe3ebed.js"
   },
   {
-    "revision": "4912597c1c7ed606f1f0",
-    "url": "/js/view-cluster.1b8012e6.js"
+    "revision": "1b6e599468a7bba44ac8",
+    "url": "/js/view-cluster.5d7ea9c0.js"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",

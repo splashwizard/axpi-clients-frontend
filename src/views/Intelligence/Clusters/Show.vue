@@ -11,6 +11,8 @@
               @back="backToAllClusters"
           >
             <template slot="extra">
+             <cluster-filters></cluster-filters>
+
               <a-button
                   type="primary"
                   icon="plus"
@@ -85,12 +87,15 @@ import ClusterOrdersTable from "./Show/ClusterOrdersTable";
 import ClusterGraphs from "./Show/ClusterGraphs.vue";
 import Sidebar from "./Show/Sidebar.vue";
 import InsightsSidebar from "./Show/InsightsSidebar";
+import {mapActions} from "vuex";
+import ClusterFilters from "./Show/ClusterFilters";
 
 const _ = require("lodash");
 
 export default {
   name: "Show",
   components: {
+    ClusterFilters,
     InsightsSidebar,
     ClusterOrdersTable,
     ClusterGraphs,
@@ -131,6 +136,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions('clusterViewer', {
+      setSelectedOrders: 'setSelectedOrders'
+    }),
+
     backToAllClusters() {
       this.$router.push("/intelligence/clusters");
     },
@@ -183,6 +192,7 @@ export default {
             vm.isLoading = false;
             vm.cluster = r.data;
             vm.loadInsights();
+            vm.setSelectedOrders([]);
           })
           .catch((e) => {
             vm.isLoading = false;

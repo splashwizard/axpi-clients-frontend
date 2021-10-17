@@ -4,7 +4,7 @@
       :scroll="{ x: 1300 }"
       :columns="columns"
       :row-key="(record) => record.id"
-      :data-source="data"
+      :data-source="dataToShow"
       :loading="loading"
   >
     <div slot="name" slot-scope="name, record">
@@ -14,12 +14,12 @@
                     size="large" :src="getImageSrc(getFirstProduct(record))"/>
         </div>
         <div class="right">
-          {{ getFirstProduct(record) ? getFirstProduct(record)['Name'] : name }}
+          {{ getFirstProduct(record) ? getFirstProduct(record)['name'] : name }}
         </div>
       </div>
     </div>
     <div slot="productCode" slot-scope="name, record">
-      {{ getFirstProduct(record) ? getFirstProduct(record)['Product_Code'] : '-' }}
+      {{ getFirstProduct(record) ? getFirstProduct(record)['productCode'] : '-' }}
     </div>
     <div slot="datePurchased" slot-scope="datePurchased">
       {{ formatDatePurchased(datePurchased) }}
@@ -76,7 +76,7 @@
 import axios from "axios";
 import Orders from "../../../../mixins/Orders";
 import moment from 'moment';
-
+import {mapGetters} from "vuex";
 const _ = require('lodash');
 
 const columns = [
@@ -129,7 +129,7 @@ const columns = [
   {
     title: "Product Code",
     scopedSlots: {customRender: 'productCode'},
-    width: 300
+    width: 150
   },
   // {
   //   title: "PO Number",
@@ -137,11 +137,16 @@ const columns = [
   //   sorter: true,
   // },
   {
+    title: "Vendor",
+    dataIndex: "Vendor",
+    width: 200
+  },
+  {
     title: "Insights",
     scopedSlots: {customRender: 'insights'},
     fixed: 'right',
     width: 140
-  },
+  }
   // {
   //   title: "",
   //   scopedSlots: {customRender: "actions"},
@@ -197,8 +202,8 @@ export default {
     },
 
     getImageSrc(product) {
-      if (product["Images"] && product["Images"].length) {
-        return product["Images"][0];
+      if (product["imageURLs"] && product["imageURLs"].length) {
+        return product["imageURLs"][0];
       }
     },
 
@@ -279,6 +284,21 @@ export default {
       return '-';
     }
   },
+  computed: {
+    ...mapGetters('clusterViewer', {
+      selectedOrders: 'selectedOrders'
+    }),
+
+    dataToShow() {
+      if (this.selectedOrders.length) {
+        let ids = _.map(this.selectedOrders, '_id');
+        return _.filter(this.data, d => {
+          return ids.includes(d['_id']);
+        });
+      }
+      return this.data;
+    }
+  }
 };
 </script>
 <style scoped lang="scss">

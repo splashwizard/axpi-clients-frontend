@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <div class="top-toolbar">
-      <a-select v-model="xType" style="width: 200px;">
-        <a-select-option v-for="(option, i) in xOptions" :value="option" :key="i">
-          {{ formatGraphLabel(option) }}
-        </a-select-option>
-      </a-select>
-    </div>
+  <div :key="clusterViewerReloadKey">
+    <!--    <div class="top-toolbar">-->
+    <!--      <a-select v-model="xType" style="width: 200px;">-->
+    <!--        <a-select-option v-for="(option, i) in xOptions" :value="option" :key="i">-->
+    <!--          {{ formatGraphLabel(option) }}-->
+    <!--        </a-select-option>-->
+    <!--      </a-select>-->
+    <!--    </div>-->
     <v-chart
         :key="graphReloadKey"
         :forceFit="true"
@@ -33,9 +33,11 @@
       <v-point
           position="x*cost_per_unit"
           :size="4"
-          :opacity="0.65"
+          color="color"
+          opacity="opacity"
           :tooltip="pointTooltip"
           shape="circle"
+          :on-click="handlePointClicked"
       />
     </v-chart>
   </div>
@@ -44,11 +46,19 @@
 <script>
 const _ = require("lodash");
 import Orders from "../../../../../mixins/Orders";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   props: ["orders", "graphReloadKey"],
   mixins: [Orders],
   computed: {
+    ...mapGetters('clusterViewer', {
+      selectedOrders: 'selectedOrders',
+      selectedXOption: 'selectedXOption',
+      selectedColourByOption: 'selectedColourByOption',
+      clusterViewerReloadKey: 'clusterViewerReloadKey'
+    }),
+
     xLabel() {
       if (this.xType === 'Quantity') {
         return 'Quantity'
@@ -82,6 +92,9 @@ export default {
 
     graphData() {
       let gd = [];
+      let colours = ['#267278', '#65338d', '#4770b3'];
+      let colourMappings = {};
+      let numberOfColoursUsedSoFar = 0;
 
       _.each(this.orders, (order) => {
         let x = 0;
@@ -148,13 +161,45 @@ export default {
           }
         }
 
+        // let opacity = 0.65;
+        let opacity = 0.7;
+        let selectedOrderIds = _.map(this.selectedOrders, '_id');
+        if (selectedOrderIds.includes(order['_id'])) {
+          opacity = 0.9;
+        }
+
+        let color = 'blue';
+        // selectedOrderIds = _.map(this.selectedOrders, '_id');
+        // if (selectedOrderIds.includes(order['_id'])) {
+          // color = 'red';
+          // opacity = 1;
+        // }
+
+        // Colour by
+        if (this.selectedColourByOption !== null) {
+          let key = this.selectedColourByOption.key;
+          let property = order[key];
+          if (Object.keys(colourMappings).includes(property)) {
+            color = colourMappings[property];
+          } else {
+            let colourToUse = colours[numberOfColoursUsedSoFar];
+            numberOfColoursUsedSoFar += 1;
+            colourMappings[property] = colourToUse;
+            color = colourMappings[property];
+          }
+          // console.log(colourMappings);
+        }
+
         gd.push({
+          id: order['_id'],
           description: order['PO Li Description'],
           quantity: totalQuantity,
           cost: cost,
           cost_per_unit: x ? cost / x : cost,
           properties: properties,
           x: x,
+          opacity: opacity,
+          color: color
         });
       });
 
@@ -193,12 +238,21 @@ export default {
           };
         },
       ];
+    },
+
+    xType: {
+      get() {
+        return this.selectedXOption;
+      },
+      set(val) {
+        this.selectXOption(val);
+      }
     }
   },
 
   data() {
     return {
-      xType: 'Quantity',
+      // xType: 'Quantity',
       height: 500,
       tooltipCrosshairs: {type: "cross"},
       tooltipItemTpl: `
@@ -212,7 +266,22 @@ export default {
     };
   },
 
+  created() {
+    this.setXOptions(this.xOptions);
+    this.selectXOption('Quantity');
+    this.setColourByOptions([
+      {key: 'Vendor', label: 'Vendor'}
+    ]);
+  },
+
   methods: {
+    ...mapActions('clusterViewer', {
+      toggleOrderSelected: 'toggleOrderSelected',
+      setXOptions: 'setXOptions',
+      selectXOption: 'selectXOption',
+      setColourByOptions: 'setColourByOptions'
+    }),
+
     formatGraphLabel(label) {
       return label.charAt(0).toUpperCase() + label.substring(1);
     },
@@ -229,6 +298,13 @@ export default {
       }
       return order.cost;
     },
+
+    handlePointClicked(point) {
+      let orderId = point['data']['_origin']['id'];
+      let order = _.find(this.orders, {'_id': orderId});
+      // console.log(order);
+      this.toggleOrderSelected(order);
+    }
   }
 };
 </script>

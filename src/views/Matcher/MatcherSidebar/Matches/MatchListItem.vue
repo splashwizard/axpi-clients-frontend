@@ -3,12 +3,12 @@
     <template v-if="item">
       <toggle-match-selected-button slot="actions" :match="item"></toggle-match-selected-button>
       <a-list-item-meta>
-        <div slot="title">{{ item['Name'] }}</div>
+        <div slot="title">{{ item['name'] }}</div>
         <div slot="description" class="product-description">
           <div v-if="showMoreDetails">
-            <b>Manufacturer: </b>{{ item['Manufacturer'] }} <br>
-            <b>Product Code: </b>{{ item['Product_Code'] }} <br>
-            <b>Catalog Code: </b>{{ item['Catalog_Code'] }} <br>
+            <b>Manufacturer: </b>{{ item['manufacturer'] }} <br>
+            <b>Product Code: </b>{{ item['productCode'] }} <br>
+            <b>Catalog Code: </b>{{ item['catalogCode'] }} <br>
             <a href="#" style="margin-top: 5px;" @click.prevent="toggleShowMoreDetails">View less
               <a-icon :style="{fontSize: '10px'}" type="up"/>
             </a>
@@ -64,8 +64,8 @@ export default {
   components: {ToggleMatchSelectedButton},
   methods: {
     getImageSrc(order) {
-      if (order['Images'] && order['Images'].length) {
-        return order['Images'][0];
+      if (order['imageURLs'] && order['imageURLs'].length) {
+        return order['imageURLs'][0];
       }
     },
 

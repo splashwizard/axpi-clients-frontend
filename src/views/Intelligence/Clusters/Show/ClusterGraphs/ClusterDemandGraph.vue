@@ -175,7 +175,7 @@ export default {
 <style scoped>
 .top-toolbar {
   margin-bottom: 30px;
-  float: right;
+  /*float: right;*/
 }
 
 .separator {

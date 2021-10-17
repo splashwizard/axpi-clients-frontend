@@ -2,6 +2,8 @@ let _ = require('lodash');
 // import router from "../../router";
 
 export const state = {
+    activeGraph: 'orders',
+
     selectedOrders: [],
     xOptions: null,
     selectedXOption: null,
@@ -12,10 +14,16 @@ export const state = {
     sizeByOptions: null,
     selectedSizeByOption: null,
 
+    selectedBinByOption: 'day',
+
     clusterViewerReloadKey: 1
 };
 
 export const mutations = {
+   SET_ACTIVE_GRAPH(state, activeGraph) {
+       state.activeGraph = activeGraph;
+   },
+
     SET_SELECTED_ORDERS(state, orders) {
         state.selectedOrders = orders;
     },
@@ -50,6 +58,10 @@ export const mutations = {
 
     INCREMENT_CLUSTER_VIEWER_RELOAD_KEY(state) {
         state.clusterViewerReloadKey += 1;
+    },
+
+    SELECT_BIN_BY_OPTION(state, binBy) {
+        state.selectedBinByOption = binBy;
     }
 };
 
@@ -80,6 +92,14 @@ export const getters = {
 
     selectedSizeByOption: (state) => {
         return state.selectedSizeByOption;
+    },
+
+    activeGraph: (state) => {
+        return state.activeGraph;
+    },
+
+    selectedBinByOption: (state) => {
+        return state.selectedBinByOption;
     },
 
     clusterViewerReloadKey: (state) => {
@@ -118,6 +138,14 @@ export const actions = {
 
     selectSizeByOption({commit}, option) {
         commit('SELECT_SIZE_BY_OPTION', option);
+    },
+
+    setActiveGraph({commit}, activeGraph) {
+        commit('SET_ACTIVE_GRAPH', activeGraph);
+    },
+
+    selectBinByOption({commit}, binBy) {
+        commit('SELECT_BIN_BY_OPTION', binBy);
     },
 
     incrementClusterViewerReloadKey({commit}) {

@@ -37,6 +37,7 @@
 const _ = require('lodash');
 import Moment from 'moment';
 import {extendMoment} from 'moment-range';
+import {mapGetters} from 'vuex';
 
 const moment = extendMoment(Moment);
 
@@ -54,6 +55,10 @@ export default {
     this.endDate = this.latestDate.clone();
   },
   computed: {
+    ...mapGetters('clusterViewer', {
+      selectedBinByOption: 'selectedBinByOption'
+    }),
+
     scale() {
       return [
         {
@@ -100,9 +105,8 @@ export default {
         });
       });
 
-      let groupedByDate = _.groupBy(gd, 'order_date');
-
       let graphPoints = [];
+      let groupedByDate = _.groupBy(gd, 'order_date');
       _.each(groupedByDate, (orders, date) => {
         let summedQuantity = _.sum(_.map(orders, 'quantity'));
         graphPoints.push({
@@ -145,30 +149,58 @@ export default {
       return Array.from(this.graphDateRange.by('days'));
     },
 
+    graphDateRangeByMonths() {
+      return Array.from(this.graphDateRange.by('months'));
+    },
+
     graphDataToShow() {
       let points = [];
 
-      _.each(this.graphDateRangeByDays, date => {
-        let dateFormatted = date.format('DD/MM/YYYY');
-        let pointFromData = _.find(this.graphData, {
-          order_date: dateFormatted
-        });
-        if (pointFromData) {
-          points.push(pointFromData);
-        } else {
-          points.push({
-            order_date: dateFormatted,
-            quantity: 0
+      if (this.selectedBinByOption === 'day') {
+        _.each(this.graphDateRangeByDays, date => {
+          let dateFormatted = date.format('DD/MM/YYYY');
+          let pointFromData = _.find(this.graphData, {
+            order_date: dateFormatted
           });
-        }
-      });
+          if (pointFromData) {
+            points.push(pointFromData);
+          } else {
+            points.push({
+              order_date: dateFormatted,
+              quantity: 0
+            });
+          }
+        });
+      }
+
+      if (this.selectedBinByOption === 'month') {
+        _.each(this.graphDateRangeByMonths, date => {
+          let beginningOfMonth = moment(date).startOf('month');
+          let endOfMonth = moment(date).endOf('month');
+          let monthRange = moment.range(beginningOfMonth, endOfMonth);
+
+          let daysData = [];
+          _.each(Array.from(monthRange.by('days')), date => {
+            let dateFormatted = date.format('DD/MM/YYYY');
+            let pointFromData = _.find(this.graphData, {
+              order_date: dateFormatted
+            });
+            daysData.push(pointFromData);
+          });
+
+          if (daysData) {
+            points.push({
+              order_date: beginningOfMonth.format('DD/MM/YYYY'),
+              quantity: _.sum(_.map(daysData, 'quantity'))
+            });
+          }
+        });
+      }
 
       return points;
     }
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 

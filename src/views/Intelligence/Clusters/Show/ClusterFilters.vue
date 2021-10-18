@@ -43,7 +43,7 @@
             <div class="filter-wrapper filter-last">
               <div class="filter-header">
                 <a-checkbox v-model="showSelectedColourByOptionFilter">
-                  Colour By
+                  Colour
                 </a-checkbox>
               </div>
               <div class="filter" v-if="showSelectedColourByOptionFilter">
@@ -344,67 +344,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.filter-title-wrapper {
-  display: flex;
-  padding: 4px;
 
-  .left {
-    flex-shrink: 1;
-    width: 48px;
-    text-align: left;
-  }
-
-  .right {
-    flex-shrink: 1;
-    width: 48px;
-    text-align: right;
-  }
-
-  .center {
-    flex-grow: 1;
-    text-align: center;
-  }
-}
-
-.filters-inner {
-  min-width: 250px;
-
-  .form-label {
-    margin-bottom: 5px;
-  }
-
-  .filter-wrapper {
-    .filter-header {
-      padding-left: 12px;
-      padding-right: 12px;
-      padding-top: 10px;
-      padding-bottom: 11px;
-      border-bottom: 1px solid #e8e8e8;
-
-      .ant-checkbox-wrapper span {
-        font-weight: 500;
-        color: #000;
-      }
-    }
-
-    .filter {
-      //margin-bottom: 20px;
-      padding-left: 12px;
-      padding-right: 12px;
-      padding-top: 11px;
-      padding-bottom: 11px;
-      background: rgb(250, 250, 252);
-      border-bottom: 1px solid #e8e8e8;
-
-      .ant-select {
-        width: 100% !important;
-      }
-    }
-
-    .filter-last {
-      margin-bottom: 5px !important;
-      border-bottom: none !important;
-    }
-  }
-}
 </style>

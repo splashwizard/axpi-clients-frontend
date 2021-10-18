@@ -1,48 +1,49 @@
 <template>
   <div class="home">
     <loading-screen
-      :is-loading="isLoadingSuppliers || isDeleting"
+        :is-loading="isLoadingSuppliers || isDeleting"
     ></loading-screen>
 
     <div class="page-header">
       <h1 class="page-title">Orders</h1>
       <div class="actions">
         <a-input-search
-          placeholder="Search orders"
-          style="width: 200px"
-          v-model="searchQuery"
+            placeholder="Search orders"
+            style="width: 200px"
+            v-model="searchQuery"
         />
 
         <orders-filters
-          @filter-updated="handleFilterUpdated"
-          :filters="filters"
+            @filter-updated="handleFilterUpdated"
+            @set-filters="setFilters"
+            :filters="filters"
         ></orders-filters>
 
         <a-button icon="export">Export</a-button>
         <a-button
-          icon="form"
-          @click="requestInformation"
-          :loading="isRequestingInformation"
-          :disabled="selectedOrderIds.length == 0"
-          >Request Information
+            icon="form"
+            @click="requestInformation"
+            :loading="isRequestingInformation"
+            :disabled="selectedOrderIds.length == 0"
+        >Request Information
         </a-button>
         <a-button
-          @click="createOrder"
-          icon="plus"
-          type="primary"
-          :loading="isLoading"
-          >Add Order
+            @click="createOrder"
+            icon="plus"
+            type="primary"
+            :loading="isLoading"
+        >Add Order
         </a-button>
       </div>
     </div>
 
     <orders-table
-      @set-selected-order-ids="setSelectedOrderIds"
-      @delete-order="deleteOrder"
-      :search-query="searchQuery"
-      :filters="filters"
-      :reload-key="reloadOrdersKey"
-      @selected="handleOrderSelected"
+        @set-selected-order-ids="setSelectedOrderIds"
+        @delete-order="deleteOrder"
+        :search-query="searchQuery"
+        :filters="filters"
+        :reload-key="reloadOrdersKey"
+        @selected="handleOrderSelected"
     ></orders-table>
 
     <edit-order-modal :suppliers="suppliers" v-if="order && type === 'order'">
@@ -55,7 +56,7 @@ import OrdersTable from "../components/Orders/OrdersTable";
 import EditOrderModal from "../components/Orders/EditOrderModal";
 import OrdersFilters from "../components/Orders/OrdersFilters";
 
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import axios from "axios";
 
 export default {
@@ -68,7 +69,7 @@ export default {
       isLoading: "isLoading",
     }),
   },
-  components: { OrdersTable, EditOrderModal, OrdersFilters },
+  components: {OrdersTable, EditOrderModal, OrdersFilters},
   data() {
     return {
       suppliers: [],
@@ -93,20 +94,24 @@ export default {
       incrementReloadOrdersKey: "incrementReloadOrdersKey",
     }),
 
+    setFilters(filters) {
+      this.filters = filters;
+    },
+
     loadSuppliers() {
       let vm = this;
       vm.isLoadingSuppliers = true;
       axios
-        .get(window.API_BASE + "/suppliers")
-        .then((r) => {
-          vm.suppliers = r.data;
-          vm.isLoadingSuppliers = false;
-        })
-        .catch((e) => {
-          console.log(e);
-          vm.isLoadingSuppliers = false;
-          vm.$message.error("Error loading suppliers");
-        });
+          .get(window.API_BASE + "/suppliers")
+          .then((r) => {
+            vm.suppliers = r.data;
+            vm.isLoadingSuppliers = false;
+          })
+          .catch((e) => {
+            console.log(e);
+            vm.isLoadingSuppliers = false;
+            vm.$message.error("Error loading suppliers");
+          });
     },
 
     requestInformation() {
@@ -118,36 +123,36 @@ export default {
 
       vm.isRequestingInformation = true;
       axios
-        .post(window.API_BASE + "/request-information", {
-          ids: vm.selectedOrderIds,
-        })
-        .then(() => {
-          vm.isRequestingInformation = false;
-          vm.$message.success("Information requested successfully");
-          vm.incrementReloadOrdersKey();
-        })
-        .catch((e) => {
-          console.log(e);
-          vm.isRequestingInformation = false;
-          this.$message.error("Error requesting information");
-        });
+          .post(window.API_BASE + "/request-information", {
+            ids: vm.selectedOrderIds,
+          })
+          .then(() => {
+            vm.isRequestingInformation = false;
+            vm.$message.success("Information requested successfully");
+            vm.incrementReloadOrdersKey();
+          })
+          .catch((e) => {
+            console.log(e);
+            vm.isRequestingInformation = false;
+            this.$message.error("Error requesting information");
+          });
     },
 
     deleteOrder(order) {
       let vm = this;
       vm.isDeleting = true;
       axios
-        .delete(window.API_BASE + "/orders/" + order.id)
-        .then(() => {
-          vm.isDeleting = false;
-          vm.$message.success("Order deleted successfully");
-          vm.incrementReloadOrdersKey();
-        })
-        .catch((e) => {
-          console.log(e);
-          vm.isDeleting = false;
-          vm.$message.success("Error deleting order");
-        });
+          .delete(window.API_BASE + "/orders/" + order.id)
+          .then(() => {
+            vm.isDeleting = false;
+            vm.$message.success("Order deleted successfully");
+            vm.incrementReloadOrdersKey();
+          })
+          .catch((e) => {
+            console.log(e);
+            vm.isDeleting = false;
+            vm.$message.success("Error deleting order");
+          });
     },
 
     setSelectedOrderIds(ids) {

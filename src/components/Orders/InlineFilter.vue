@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <a-checkbox @change="toggleFilterEnabled" :checked="isFilterEnabled">
-      {{ label }}
-    </a-checkbox>
-    <div v-if="isFilterEnabled" class="filter-body">
+  <div class="filter-wrapper">
+    <div class="filter-header">
+      <a-checkbox @change="toggleFilterEnabled" :checked="isFilterEnabled">
+        {{ label }}
+      </a-checkbox>
+    </div>
+    <div v-if="isFilterEnabled" class="filter">
       <a-select style="width: 100%;" v-if="type === 'categorical'" v-model="details">
         <a-select-option v-for="(option, i) in options" :key="i" :value="option.value">
           {{ option.label }}

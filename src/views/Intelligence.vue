@@ -6,6 +6,7 @@
       <div class="actions">
         <intelligence-filters
             @filter-updated="handleFilterUpdated"
+            @set-filters="setFilters"
             :filters="filters"
         ></intelligence-filters>
 
@@ -43,6 +44,10 @@ export default {
 
     incrementReloadKey() {
       this.reloadKey += 1;
+    },
+
+    setFilters(filters) {
+      this.filters = filters;
     },
 
     handleFilterUpdated() {

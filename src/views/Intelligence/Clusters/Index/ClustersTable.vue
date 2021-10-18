@@ -114,15 +114,18 @@ export default {
     fetch(params = {}) {
       console.log('params:', params);
       this.loading = true;
-      axios.post(window.API_BASE + '/intelligence/clusters/search', {
+      // axios.post(window.API_BASE + '/intelligence/clusters/search', {
+      axios.get(window.API_BASE + '/intelligence/clusters', {
         results_per_page: 100,
         ...params
       }).then(r => {
         const pagination = {...this.pagination};
         // Read total count from server
-        pagination.total = r.data.total;
+        // pagination.total = r.data.total;
+        pagination.total = r.data.length;
         this.loading = false;
-        this.data = r.data.data;
+        // this.data = r.data.data;
+        this.data = r.data;
         this.pagination = pagination;
       }).catch(e => {
         console.log(e);

@@ -74,7 +74,7 @@ export default {
   name: "ClusterFilters",
   data() {
     return {
-      binByOptions: ['day', 'month'],
+      binByOptions: ['day', 'month', 'year'],
 
       selectedXOptionLocal: null,
       selectedColourByOptionLocal: null,

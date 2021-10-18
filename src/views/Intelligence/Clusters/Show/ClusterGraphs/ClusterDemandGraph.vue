@@ -153,6 +153,10 @@ export default {
       return Array.from(this.graphDateRange.by('months'));
     },
 
+    graphDateRangeByYears() {
+      return Array.from(this.graphDateRange.by('years'));
+    },
+
     graphDataToShow() {
       let points = [];
 
@@ -190,7 +194,31 @@ export default {
 
           if (daysData) {
             points.push({
-              order_date: beginningOfMonth.format('DD/MM/YYYY'),
+              order_date: beginningOfMonth.format('MM/YYYY'),
+              quantity: _.sum(_.map(daysData, 'quantity'))
+            });
+          }
+        });
+      }
+
+      if (this.selectedBinByOption === 'year') {
+        _.each(this.graphDateRangeByYears, date => {
+          let beginningOfYear = moment(date).startOf('year');
+          let endOfYear = moment(date).endOf('year');
+          let monthRange = moment.range(beginningOfYear, endOfYear);
+
+          let daysData = [];
+          _.each(Array.from(monthRange.by('days')), date => {
+            let dateFormatted = date.format('DD/MM/YYYY');
+            let pointFromData = _.find(this.graphData, {
+              order_date: dateFormatted
+            });
+            daysData.push(pointFromData);
+          });
+
+          if (daysData) {
+            points.push({
+              order_date: beginningOfYear.format('YYYY'),
               quantity: _.sum(_.map(daysData, 'quantity'))
             });
           }

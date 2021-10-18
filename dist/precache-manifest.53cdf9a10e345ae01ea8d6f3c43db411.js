@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "2536fdc19fbe49c02742",
+    "revision": "37c90d38b0530a2f0409",
     "url": "/css/app.2780240a.css"
   },
   {
@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/intelligence.7e7d373e.css"
   },
   {
-    "revision": "acceedd9fa1a924a6dd7",
+    "revision": "c0d5eac8f4f41745d0a9",
     "url": "/css/matcher.357cd3ce.css"
   },
   {
@@ -52,7 +52,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "f87c6d048c98ee0d509c",
+    "revision": "272cc17e4eecfc3c54b3",
     "url": "/css/suppliers.667b8801.css"
   },
   {
@@ -292,7 +292,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "cf3e0fe22b9ce675526cce67d45e91cc",
+    "revision": "730c0b73fef3c3a0bb73f31e967aeb4f",
     "url": "/index.html"
   },
   {
@@ -312,8 +312,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.99bed1e2.js"
   },
   {
-    "revision": "2536fdc19fbe49c02742",
-    "url": "/js/app.62586689.js"
+    "revision": "37c90d38b0530a2f0409",
+    "url": "/js/app.de72630f.js"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -328,8 +328,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/intelligence.9e35696e.js"
   },
   {
-    "revision": "acceedd9fa1a924a6dd7",
-    "url": "/js/matcher.8cf5cfa5.js"
+    "revision": "c0d5eac8f4f41745d0a9",
+    "url": "/js/matcher.8b3e3c65.js"
   },
   {
     "revision": "6717886a4bff5551265c",
@@ -364,8 +364,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/specifications.ca6a6dc9.js"
   },
   {
-    "revision": "f87c6d048c98ee0d509c",
-    "url": "/js/suppliers.cfe3ebed.js"
+    "revision": "272cc17e4eecfc3c54b3",
+    "url": "/js/suppliers.bde8334b.js"
   },
   {
     "revision": "643ece567d40c00cb047",

@@ -37,7 +37,6 @@ const columns = [
   {
     title: 'Country',
     dataIndex: 'country',
-    sorter: true,
     scopedSlots: {
       customRender: 'country'
     }
@@ -45,7 +44,6 @@ const columns = [
   {
     title: 'Product Type',
     dataIndex: 'product-type',
-    sorter: true,
     scopedSlots: {
       customRender: 'product-type'
     }
@@ -88,8 +86,8 @@ export default {
       this.fetch({
         results_per_page: pagination.pageSize,
         page: pagination.current,
-        sort_field: sorter.field,
-        sort_order: sorter.order,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
         ...filters,
       });
     },

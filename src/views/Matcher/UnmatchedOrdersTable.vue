@@ -102,8 +102,8 @@ export default {
       this.fetch({
         results_per_page: pagination.pageSize,
         page: pagination.current,
-        sort_field: sorter.field,
-        sort_order: sorter.order,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
         ...filters,
       });
     },

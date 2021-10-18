@@ -151,6 +151,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "view-cluster" */ '../views/Intelligence/Clusters/Show.vue')
     },
     {
+        path: '/products/:id',
+        name: 'View Product',
+        component: () => import(/* webpackChunkName: "view-product" */ '../views/Products/Show.vue')
+    },
+    {
         path: '/developers',
         name: 'Developers',
         // route level code-splitting

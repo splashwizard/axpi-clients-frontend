@@ -1,18 +1,18 @@
 <template>
   <div>
-    <div class="top-toolbar">
-      <a-date-picker
-          v-model="startDate"
-          placeholder="Start"
-      />
-      <span class="separator">
-        -
-      </span>
-      <a-date-picker
-          v-model="endDate"
-          placeholder="End"
-      />
-    </div>
+<!--    <div class="top-toolbar">-->
+<!--      <a-date-picker-->
+<!--          v-model="start_date"-->
+<!--          placeholder="Start"-->
+<!--      />-->
+<!--      <span class="separator">-->
+<!--        - -->
+<!--      </span>-->
+<!--      <a-date-picker-->
+<!--          v-model="end_date"-->
+<!--          placeholder="End"-->
+<!--      />-->
+<!--    </div>-->
 
     <v-chart
         :key="graphReloadKey"
@@ -37,7 +37,7 @@
 const _ = require('lodash');
 import Moment from 'moment';
 import {extendMoment} from 'moment-range';
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 
 const moment = extendMoment(Moment);
 
@@ -45,19 +45,36 @@ export default {
   name: "ClusterDemandGraph",
   props: ["orders", "graphReloadKey"],
   data() {
-    return {
-      startDate: null,
-      endDate: null
-    }
+    return {}
   },
   created() {
-    this.startDate = this.earliestDate.clone();
-    this.endDate = this.latestDate.clone();
+    this.start_date = this.earliestDate.clone();
+    this.end_date = this.latestDate.clone();
   },
   computed: {
     ...mapGetters('clusterViewer', {
-      selectedBinByOption: 'selectedBinByOption'
+      selectedBinByOption: 'selectedBinByOption',
+      startDate: 'startDate',
+      endDate: 'endDate'
     }),
+
+    start_date: {
+      get() {
+        return this.startDate;
+      },
+      set(val) {
+        this.setStartDate(val);
+      }
+    },
+
+    end_date: {
+      get() {
+        return this.endDate;
+      },
+      set(val) {
+        this.setEndDate(val);
+      }
+    },
 
     scale() {
       return [
@@ -72,19 +89,6 @@ export default {
       let gd = [];
 
       _.each(this.orders, order => {
-        // Let's computed total quantity for each order
-        if (order["products"] && order["products"].length) {
-          if (order["products"][0]["normalisedQuantity"]) {
-            order['product_quantity'] = order['products'][0]['normalisedQuantity']['normalisedUnitMagnitude'];
-          }
-        }
-        let orderQuantity = order["Quantity"] !== "None" ? order["Quantity"] : 1;
-        let totalQuantity = orderQuantity;
-        if (order['product_quantity']) {
-          totalQuantity = Number(orderQuantity) * Number(order['product_quantity']);
-        }
-        order["total_quantity"] = totalQuantity;
-
         // Now let's convert the timestamps into moment
         let orderDate = null;
         let orderDateMoment = null;
@@ -132,17 +136,17 @@ export default {
     },
 
     graphDateRange() {
-      let startDate = this.startDate;
-      let endDate = this.endDate;
+      let start_date = this.start_date;
+      let end_date = this.end_date;
 
-      if (!startDate) {
-        startDate = this.earliestDate;
+      if (!start_date) {
+        start_date = this.earliestDate;
       }
-      if (!endDate) {
-        endDate = this.latestDate;
+      if (!end_date) {
+        end_date = this.latestDate;
       }
 
-      return moment.range(startDate, endDate);
+      return moment.range(start_date, end_date);
     },
 
     graphDateRangeByDays() {
@@ -228,7 +232,12 @@ export default {
       return points;
     }
   },
-  methods: {}
+  methods: {
+    ...mapActions('clusterViewer', {
+      setStartDate: 'setStartDate',
+      setEndDate: 'setEndDate'
+    })
+  }
 }
 </script>
 

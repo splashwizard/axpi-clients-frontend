@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "4eb02a93a0f3283b26df",
-    "url": "/css/app.3b7dc382.css"
+    "revision": "6c9f0cde621dc15da01b",
+    "url": "/css/app.12568f73.css"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/intelligence.1a7776cf.css"
   },
   {
-    "revision": "46f48b064e9ed390791e",
+    "revision": "acceedd9fa1a924a6dd7",
     "url": "/css/matcher.357cd3ce.css"
   },
   {
@@ -56,8 +56,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/suppliers.667b8801.css"
   },
   {
-    "revision": "7acb8b8dd97d3c6b5f90",
-    "url": "/css/view-cluster.a7fb8c0e.css"
+    "revision": "9d34dca4a15d9b22f5e6",
+    "url": "/css/view-cluster.cc794ccb.css"
+  },
+  {
+    "revision": "31436a2020fd8e72d800",
+    "url": "/css/view-product.6c7cde12.css"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",
@@ -288,7 +292,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "728dd8c250f3df08629f30833e4a4fc5",
+    "revision": "766233182220759da067628a35d72b5c",
     "url": "/index.html"
   },
   {
@@ -308,8 +312,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.99bed1e2.js"
   },
   {
-    "revision": "4eb02a93a0f3283b26df",
-    "url": "/js/app.a083f623.js"
+    "revision": "6c9f0cde621dc15da01b",
+    "url": "/js/app.f0c46085.js"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -324,8 +328,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/intelligence.0355ec5b.js"
   },
   {
-    "revision": "46f48b064e9ed390791e",
-    "url": "/js/matcher.9b10714f.js"
+    "revision": "acceedd9fa1a924a6dd7",
+    "url": "/js/matcher.8cf5cfa5.js"
   },
   {
     "revision": "6717886a4bff5551265c",
@@ -364,8 +368,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/suppliers.cfe3ebed.js"
   },
   {
-    "revision": "7acb8b8dd97d3c6b5f90",
-    "url": "/js/view-cluster.ecb91421.js"
+    "revision": "9d34dca4a15d9b22f5e6",
+    "url": "/js/view-cluster.8cc5f753.js"
+  },
+  {
+    "revision": "31436a2020fd8e72d800",
+    "url": "/js/view-product.75fd2a95.js"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",

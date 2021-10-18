@@ -16,6 +16,9 @@ export const state = {
 
     selectedBinByOption: 'day',
 
+    startDate: null,
+    endDate: null,
+
     clusterViewerReloadKey: 1
 };
 
@@ -62,6 +65,14 @@ export const mutations = {
 
     SELECT_BIN_BY_OPTION(state, binBy) {
         state.selectedBinByOption = binBy;
+    },
+
+    SET_START_DATE(state, startDate) {
+       state.startDate = startDate;
+    },
+
+    SET_END_DATE(state, endDate) {
+       state.endDate = endDate;
     }
 };
 
@@ -100,6 +111,14 @@ export const getters = {
 
     selectedBinByOption: (state) => {
         return state.selectedBinByOption;
+    },
+
+    startDate: (state) => {
+        return state.startDate;
+    },
+
+    endDate: (state) => {
+        return state.endDate;
     },
 
     clusterViewerReloadKey: (state) => {
@@ -146,6 +165,14 @@ export const actions = {
 
     selectBinByOption({commit}, binBy) {
         commit('SELECT_BIN_BY_OPTION', binBy);
+    },
+
+    setStartDate({commit}, startDate) {
+       commit('SET_START_DATE', startDate);
+    },
+
+    setEndDate({commit}, endDate) {
+        commit('SET_END_DATE', endDate);
     },
 
     incrementClusterViewerReloadKey({commit}) {

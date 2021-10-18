@@ -6,6 +6,7 @@
       :row-key="(record) => record.id"
       :data-source="dataToShow"
       :loading="loading"
+      @change="handleTableChange"
   >
     <div slot="name" slot-scope="name, record">
       <div class="product-name-wrapper">
@@ -14,12 +15,12 @@
                     size="large" :src="getImageSrc(getFirstProduct(record))"/>
         </div>
         <div class="right">
-          {{ getFirstProduct(record) ? getFirstProduct(record)['name'] : name }}
+          <a v-if="getFirstProduct(record)" target="_blank" :href="getProductLink(getFirstProduct(record))">
+            {{ name }}
+          </a>
+          <span v-else>{{ record['PO Li Description'] }}</span>
         </div>
       </div>
-    </div>
-    <div slot="productCode" slot-scope="name, record">
-      {{ getFirstProduct(record) ? getFirstProduct(record)['productCode'] : '-' }}
     </div>
     <div slot="datePurchased" slot-scope="datePurchased">
       {{ formatDatePurchased(datePurchased) }}
@@ -77,83 +78,8 @@ import axios from "axios";
 import Orders from "../../../../mixins/Orders";
 import moment from 'moment';
 import {mapGetters} from "vuex";
-const _ = require('lodash');
 
-const columns = [
-  {
-    title: "Name",
-    sorter: true,
-    scopedSlots: {customRender: 'name'},
-    fixed: 'left',
-    width: 350
-  },
-  {
-    title: "Date Purchased",
-    dataIndex: "PO Initial Create Date",
-    scopedSlots: {customRender: 'datePurchased'},
-    width: 150
-  },
-  {
-    title: "Quantity",
-    dataIndex: "Quantity",
-    scopedSlots: {customRender: 'quantity'},
-    width: 90
-  },
-  {
-    title: "Cost",
-    dataIndex: "Cost",
-    scopedSlots: {customRender: 'cost'},
-    width: 80
-  },
-  {
-    title: "Potential Savings",
-    scopedSlots: {customRender: 'potentialSavings'},
-    width: 150
-  },
-  {
-    title: "Measure",
-    scopedSlots: {customRender: 'normalisedMeasure'},
-    width: 170
-  },
-  {
-    title: "PO Number",
-    dataIndex: "PO Number",
-    width: 120
-  },
-  {
-    title: "PO Name",
-    dataIndex: "PO Li Description",
-    sorter: true,
-    width: 300
-  },
-  {
-    title: "Product Code",
-    scopedSlots: {customRender: 'productCode'},
-    width: 150
-  },
-  // {
-  //   title: "PO Number",
-  //   dataIndex: "PO Number",
-  //   sorter: true,
-  // },
-  {
-    title: "Vendor",
-    dataIndex: "Vendor",
-    width: 200
-  },
-  {
-    title: "Insights",
-    scopedSlots: {customRender: 'insights'},
-    fixed: 'right',
-    width: 140
-  }
-  // {
-  //   title: "",
-  //   scopedSlots: {customRender: "actions"},
-  //   width: 10,
-  //   fixed: 'right'
-  // },
-];
+const _ = require('lodash');
 
 export default {
   props: ["clusterId", "insights"],
@@ -161,8 +87,7 @@ export default {
   data() {
     return {
       data: [],
-      loading: false,
-      columns,
+      loading: false
     };
   },
   mounted() {
@@ -170,14 +95,14 @@ export default {
   },
   methods: {
     fetch(params = {}) {
-      console.log("params:", params);
       this.loading = true;
       axios
-          .get(
+          .post(
               window.API_BASE +
               "/intelligence/clusters/" +
               this.clusterId +
-              "/orders-with-matches"
+              "/orders-with-matches",
+              params
           )
           .then((r) => {
             this.loading = false;
@@ -208,19 +133,21 @@ export default {
     },
 
     getQuantity(order) {
-      if (order["products"] && order["products"].length) {
-        if (order["products"][0] && order["products"][0]["normalisedQuantity"] && order["products"][0]["normalisedQuantity"]['totalQuantity'] && order["products"][0]["normalisedQuantity"]["totalQuantity"]["normalisedUnitMagnitude"]) {
-          order['product_quantity'] = order['products'][0]['normalisedQuantity']['totalQuantity']['normalisedUnitMagnitude'];
-        }
-      }
+      // if (order["products"] && order["products"].length) {
+      //   if (order["products"][0] && order["products"][0]["normalisedQuantity"] && order["products"][0]["normalisedQuantity"]['totalQuantity'] && order["products"][0]["normalisedQuantity"]["totalQuantity"]["normalisedUnitMagnitude"]) {
+      //     order['product_quantity'] = order['products'][0]['normalisedQuantity']['totalQuantity']['normalisedUnitMagnitude'];
+      //   }
+      // }
+      //
+      // let orderQuantity = order["Quantity"] !== "None" ? Number(order["Quantity"]) : 1;
+      // let totalQuantity = orderQuantity;
+      // if (order['product_quantity']) {
+      //   totalQuantity = Number(orderQuantity) * Number(order['product_quantity']);
+      // }
+      //
+      // return totalQuantity;
 
-      let orderQuantity = order["Quantity"] !== "None" ? order["Quantity"] : 1;
-      let totalQuantity = orderQuantity;
-      if (order['product_quantity']) {
-        totalQuantity = Number(orderQuantity) * Number(order['product_quantity']);
-      }
-
-      return totalQuantity;
+      return order['total_quantity'] ? order['total_quantity'] : Number(order['Quantity']);
     },
 
     calculateMinPotentialSavings(order) {
@@ -282,12 +209,126 @@ export default {
         return toReturn;
       }
       return '-';
+    },
+
+    getProductLink(product) {
+      return '/products/' + product['_id'];
+    },
+
+    handleTableChange(pagination, filters, sorter) {
+      console.log(pagination);
+      const pager = {...this.pagination};
+      pager.current = pagination.current;
+      this.pagination = pager;
+      this.fetch({
+        results: pagination.pageSize,
+        page: pagination.current,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
+        ...filters,
+      });
     }
   },
   computed: {
     ...mapGetters('clusterViewer', {
       selectedOrders: 'selectedOrders'
     }),
+
+    columns() {
+      return [
+        {
+          title: "Name",
+          // sorter: true,
+          dataIndex: 'product_name',
+          scopedSlots: {customRender: 'name'},
+          fixed: 'left',
+          width: 350,
+          sorter: true
+        },
+        {
+          title: "Date Purchased",
+          dataIndex: "PO Initial Create Date",
+          scopedSlots: {customRender: 'datePurchased'},
+          sorter: true,
+          width: 160
+        },
+        {
+          title: "Quantity",
+          dataIndex: "Quantity",
+          scopedSlots: {customRender: 'quantity'},
+          sorter: true,
+          width: 110
+        },
+        {
+          title: "Cost",
+          dataIndex: "Cost",
+          scopedSlots: {customRender: 'cost'},
+          sorter: true,
+          width: 110
+        },
+        {
+          title: "Potential Savings",
+          scopedSlots: {customRender: 'potentialSavings'},
+          width: 150
+        },
+        {
+          title: "Measure",
+          scopedSlots: {customRender: 'normalisedMeasure'},
+          width: 170
+        },
+        {
+          title: "PO Number",
+          dataIndex: "PO Number",
+          width: 130,
+          sorter: true
+        },
+        {
+          title: "PO Name",
+          dataIndex: "PO Li Description",
+          sorter: true,
+          width: 300
+        },
+        {
+          title: "Product Code",
+          dataIndex: 'product_code',
+          // scopedSlots: {customRender: 'productCode'},
+          sorter: true,
+          width: 150
+        },
+        // {
+        //   title: "PO Number",
+        //   dataIndex: "PO Number",
+        //   sorter: true,
+        // },
+        {
+          title: "Vendor",
+          dataIndex: "Vendor",
+          width: 200,
+          filters: _.map(this.vendorFilterOptions, o => {
+            return {
+              text: o,
+              value: o
+            }
+          })
+        },
+        {
+          title: "Insights",
+          scopedSlots: {customRender: 'insights'},
+          fixed: 'right',
+          width: 140
+        }
+        // {
+        //   title: "",
+        //   scopedSlots: {customRender: "actions"},
+        //   width: 10,
+        //   fixed: 'right'
+        // },
+      ];
+    },
+
+    vendorFilterOptions() {
+      return _.uniq(_.map(this.dataToShow, 'Vendor'));
+    },
 
     dataToShow() {
       if (this.selectedOrders.length) {

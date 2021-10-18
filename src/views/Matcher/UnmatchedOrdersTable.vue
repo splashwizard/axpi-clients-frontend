@@ -33,11 +33,11 @@ const columns = [
     dataIndex: 'PO Number',
     sorter: true
   },
-  {
-    title: 'Manufacturer',
-    dataIndex: 'Manufacturer',
-    sorter: true
-  },
+  // {
+  //   title: 'Manufacturer',
+  //   dataIndex: 'Manufacturer',
+  //   sorter: true
+  // },
   {
     title: 'Vendor',
     dataIndex: 'Vendor',

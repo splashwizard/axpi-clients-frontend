@@ -22,24 +22,37 @@
           <!-- Orders graph -->
           <div v-if="activeGraph === 'orders'">
             <!-- Measure -->
-            <div class="filter">
-              <div class="form-label">Measure</div>
-              <a-select v-model="selectedXOptionLocal" style="width: 200px;">
-                <a-select-option v-for="(option, i) in xOptions" :value="option" :key="i">
-                  {{ formatGraphLabel(option) }}
-                </a-select-option>
-              </a-select>
+            <div class="filter-wrapper">
+              <div class="filter-header">
+                <a-checkbox v-model="showSelectedXOptionFilter">
+                  Measure
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showSelectedXOptionFilter">
+                <!--                <div class="form-label">Measure</div>-->
+                <a-select v-model="selectedXOptionLocal" style="width: 200px;">
+                  <a-select-option v-for="(option, i) in xOptions" :value="option" :key="i">
+                    {{ formatGraphLabel(option) }}
+                  </a-select-option>
+                </a-select>
+              </div>
             </div>
             <!-- / Measure -->
 
             <!-- Colour by -->
-            <div class="filter filter-last">
-              <div class="form-label">Colour By</div>
-              <a-select :allow-clear="true" v-model="selectedColourByOptionLocal" style="width: 200px;">
-                <a-select-option v-for="(option, i) in colourByOptions" :value="option" :key="i">
-                  {{ option['label'] }}
-                </a-select-option>
-              </a-select>
+            <div class="filter-wrapper filter-last">
+              <div class="filter-header">
+                <a-checkbox v-model="showSelectedColourByOptionFilter">
+                  Colour By
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showSelectedColourByOptionFilter">
+                <a-select v-model="selectedColourByOptionLocal" style="width: 200px;">
+                  <a-select-option v-for="(option, i) in colourByOptions" :value="option" :key="i">
+                    {{ option['label'] }}
+                  </a-select-option>
+                </a-select>
+              </div>
             </div>
             <!-- / Colour by -->
           </div>
@@ -48,15 +61,55 @@
           <!-- Demand graph -->
           <div v-if="activeGraph === 'demand'">
             <!-- Bin by -->
-            <div class="filter filter-last">
-              <div class="form-label">Bin By</div>
-              <a-select v-model="selectedBinByOptionLocal" style="width: 200px;">
-                <a-select-option v-for="(option, i) in binByOptions" :value="option" :key="i">
-                  {{ formatGraphLabel(option) }}
-                </a-select-option>
-              </a-select>
+            <div class="filter-wrapper">
+              <div class="filter-header">
+                <a-checkbox v-model="showSelectedBinByOptionFilter">
+                  Bin By
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showSelectedBinByOptionFilter">
+                <a-select v-model="selectedBinByOptionLocal" style="width: 200px;">
+                  <a-select-option v-for="(option, i) in binByOptions" :value="option" :key="i">
+                    {{ formatGraphLabel(option) }}
+                  </a-select-option>
+                </a-select>
+              </div>
             </div>
             <!-- / Bin by -->
+
+            <!-- Start date -->
+            <div class="filter-wrapper">
+              <div class="filter-header">
+                <a-checkbox v-model="showStartDateFilter">
+                  Start Date
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showStartDateFilter">
+                <a-date-picker
+                    style="width: 100%"
+                    v-model="startDateLocal"
+                    placeholder="Start"
+                />
+              </div>
+            </div>
+            <!-- / Start date -->
+
+            <!-- End date -->
+            <div class="filter-wrapper filter-last">
+              <div class="filter-header">
+                <a-checkbox v-model="showEndDateFilter">
+                  End Date
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showEndDateFilter">
+                <a-date-picker
+                    style="width: 100%"
+                    v-model="endDateLocal"
+                    placeholder="End"
+                />
+              </div>
+            </div>
+            <!-- / End date -->
           </div>
           <!-- / Demand graph -->
 
@@ -76,28 +129,79 @@ export default {
     return {
       binByOptions: ['day', 'month', 'year'],
 
+      showSelectedXOptionFilter: true,
       selectedXOptionLocal: null,
+
+      showSelectedColourByOptionFilter: false,
       selectedColourByOptionLocal: null,
 
-      selectedBinByOptionLocal: null
+      showSelectedBinByOptionFilter: false,
+      selectedBinByOptionLocal: null,
+
+      showStartDateFilter: false,
+      startDateLocal: null,
+
+      showEndDateFilter: false,
+      endDateLocal: null
     }
   },
   created() {
     this.selectedXOptionLocal = this.selectedXOption;
+
     this.selectedColourByOptionLocal = this.selectedColourByOption;
+    if (this.selectedColourByOptionLocal) {
+      this.showSelectedColourByOptionFilter = true;
+    }
+
     this.selectedBinByOptionLocal = this.selectedBinByOption;
+    if (this.selectedBinByOptionLocal) {
+      this.showSelectedBinByOptionFilter = true;
+    }
+
+    this.startDateLocal = this.startDate;
+    if (this.startDateLocal) {
+      this.showStartDateFilter = true;
+    }
+
+    this.endDateLocal = this.endDate;
+    if (this.endDateLocal) {
+      this.showEndDateFilter = true;
+    }
   },
   watch: {
     selectedXOption(newVal) {
       this.selectedXOptionLocal = newVal;
+      if (newVal) {
+        this.showSelectedXOptionFilter = true;
+      }
     },
 
     selectedColourByOption(newVal) {
       this.selectedColourByOptionLocal = newVal;
+      if (newVal) {
+        this.showSelectedColourByOptionFilter = true;
+      }
     },
 
     selectedBinByOption(newVal) {
       this.selectedBinByOptionLocal = newVal;
+      if (newVal) {
+        this.showSelectedBinByOptionFilter = true;
+      }
+    },
+
+    startDate(newVal) {
+      this.startDateLocal = newVal;
+      // if (newVal) {
+      //   this.showStartDateFilter = true;
+      // }
+    },
+
+    endDate(newVal) {
+      this.endDateLocal = newVal;
+      // if (newVal) {
+      //   this.showEndDateFilter = true;
+      // }
     }
   },
   computed: {
@@ -110,7 +214,10 @@ export default {
       colourByOptions: 'colourByOptions',
       selectedColourByOption: 'selectedColourByOption',
 
-      selectedBinByOption: 'selectedBinByOption'
+      selectedBinByOption: 'selectedBinByOption',
+
+      startDate: 'startDate',
+      endDate: 'endDate'
     }),
 
     xType: {
@@ -142,15 +249,39 @@ export default {
 
     hasUnsavedChanges() {
       let hasUnsaved = false;
+
       if (this.selectedXOptionLocal !== this.selectedXOption) {
+        hasUnsaved = true;
+      }
+
+      if (!this.showSelectedColourByOptionFilter && this.selectedColourByOption) {
         hasUnsaved = true;
       }
       if (this.selectedColourByOptionLocal !== this.selectedColourByOption) {
         hasUnsaved = true;
       }
+
+      if (this.showSelectedBinByOptionFilter && this.selectedBinByOption) {
+        hasUnsaved = true;
+      }
       if (this.selectedBinByOptionLocal !== this.selectedBinByOption) {
         hasUnsaved = true;
       }
+
+      if (this.showStartDateFilter && this.startDate) {
+        hasUnsaved = true;
+      }
+      if (this.startDateLocal !== this.startDate) {
+        hasUnsaved = true;
+      }
+
+      if (this.showEndDateFilter && this.endDate) {
+        hasUnsaved = true;
+      }
+      if (this.endDateLocal !== this.endDate) {
+        hasUnsaved = true;
+      }
+
       return hasUnsaved;
     }
   },
@@ -159,19 +290,49 @@ export default {
       selectXOption: 'selectXOption',
       selectColourByOption: 'selectColourByOption',
       selectBinByOption: 'selectBinByOption',
+      setStartDate: 'setStartDate',
+      setEndDate: 'setEndDate',
       incrementClusterViewerReloadKey: 'incrementClusterViewerReloadKey'
     }),
 
     clear() {
-      this.selectedColourByOptionLocal = null;
-      this.selectColourByOption(null);
+      this.showSelectedXOptionFilter = false;
+      this.showSelectedColourByOptionFilter = false;
+      this.save();
       this.incrementClusterViewerReloadKey();
     },
 
     save() {
-      this.selectXOption(this.selectedXOptionLocal);
-      this.selectColourByOption(this.selectedColourByOptionLocal);
-      this.selectBinByOption(this.selectedBinByOptionLocal);
+      if (this.showSelectedXOptionFilter) {
+        this.selectXOption(this.selectedXOptionLocal);
+      } else {
+        this.selectXOption('Quantity');
+      }
+
+      if (this.showSelectedColourByOptionFilter) {
+        this.selectColourByOption(this.selectedColourByOptionLocal);
+      } else {
+        this.selectColourByOption(null);
+      }
+
+      if (this.showSelectedBinByOptionFilter) {
+        this.selectBinByOption(this.selectedBinByOptionLocal);
+      } else {
+        this.selectBinByOption('day');
+      }
+
+      if (this.showStartDateFilter) {
+        this.setStartDate(this.startDateLocal);
+      } else {
+        this.setStartDate(null);
+      }
+
+      if (this.showEndDateFilter) {
+        this.setEndDate(this.endDateLocal);
+      } else {
+        this.setEndDate(null);
+      }
+
       this.incrementClusterViewerReloadKey();
     },
 
@@ -206,18 +367,44 @@ export default {
 }
 
 .filters-inner {
-  min-width: 200px;
+  min-width: 250px;
 
   .form-label {
     margin-bottom: 5px;
   }
 
-  .filter {
-    margin-bottom: 20px;
-  }
+  .filter-wrapper {
+    .filter-header {
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 10px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid #e8e8e8;
 
-  .filter-last {
-    margin-bottom: 5px !important;
+      .ant-checkbox-wrapper span {
+        font-weight: 500;
+        color: #000;
+      }
+    }
+
+    .filter {
+      //margin-bottom: 20px;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 11px;
+      padding-bottom: 11px;
+      background: rgb(250, 250, 252);
+      border-bottom: 1px solid #e8e8e8;
+
+      .ant-select {
+        width: 100% !important;
+      }
+    }
+
+    .filter-last {
+      margin-bottom: 5px !important;
+      border-bottom: none !important;
+    }
   }
 }
 </style>

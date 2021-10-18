@@ -99,20 +99,15 @@ export default {
       _.each(this.orders, (order) => {
         let x = 0;
 
-        if (order["products"] && order["products"].length) {
-          if (order["products"][0]["normalisedQuantity"] && order["products"][0]["normalisedQuantity"]["totalQuantity"]) {
-            order['product_quantity'] = order['products'][0]['normalisedQuantity']['totalQuantity']['normalisedUnitMagnitude'];
-          }
-        }
 
         let cost = order["Cost"];
         let orderQuantity = order["Quantity"] !== "None" ? order["Quantity"] : 1;
 
         // Get total quantity (product quantity x erp order quantity)
-        let totalQuantity = orderQuantity;
-        if (order['product_quantity']) {
-          totalQuantity = Number(orderQuantity) * Number(order['product_quantity']);
-        }
+        let totalQuantity = order['total_quantity'];
+        // if (order['product_quantity']) {
+        //   totalQuantity = Number(orderQuantity) * Number(order['product_quantity']);
+        // }
 
         // Properties
         let properties = {};

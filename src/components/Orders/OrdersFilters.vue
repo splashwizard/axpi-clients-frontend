@@ -9,7 +9,8 @@
           Filters
         </div>
         <div class="right">
-          <a-button :disabled="!hasUnsavedChanges" @click="save"
+          <a-button :key="unsavedReloadKey"
+              :disabled="!hasUnsavedChanges" @click="save"
                     type="primary" size="small">Save
           </a-button>
         </div>
@@ -22,6 +23,7 @@
                        id="product_type"
                        label="Type"
                        type="categorical"
+                       @filter-update="handleFilterUpdated"
                        :options="typeOptions"></inline-filter>
 
         <!--        <inline-filter :filters="filtersLocal"-->
@@ -49,6 +51,7 @@ export default {
   data() {
     return {
       filtersLocal: null,
+      unsavedReloadKey: 1,
       typeOptions: [
         {
           value: 'print',
@@ -86,7 +89,7 @@ export default {
         hasUnsaved = true;
       }
 
-      if (this.filters['product_type'] && this.filtersLocal['product_type'] && this.filters['product_type'] !== this.filtersLocal['product_type']) {
+      if (this.filters['product_type'] !== this.filtersLocal['product_type']) {
         hasUnsaved = true;
       }
 
@@ -95,7 +98,12 @@ export default {
   },
   methods: {
     handleFilterUpdated() {
+      this.incrementUnsavedReloadKey();
       // this.$emit('filter-updated');
+    },
+
+    incrementUnsavedReloadKey() {
+     this.unsavedReloadKey += 1;
     },
 
     clear() {

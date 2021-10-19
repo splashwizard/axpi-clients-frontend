@@ -82,6 +82,7 @@ export default {
   computed: {
     hasUnsavedChanges() {
       let hasUnsaved = false;
+      let unsavedReloadKey = this.unsavedReloadKey;
 
       let diffOne = _.difference(this.filters.filters_enabled, this.filtersLocal.filters_enabled);
       let diffTwo = _.difference(this.filtersLocal.filters_enabled, this.filters.filters_enabled);

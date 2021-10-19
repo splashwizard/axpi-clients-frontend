@@ -23,7 +23,7 @@
                        id="product_type"
                        label="Type"
                        type="categorical"
-                       @filter-update="handleFilterUpdated"
+                       @filter-updated="handleFilterUpdated"
                        :options="typeOptions"></inline-filter>
 
         <!--        <inline-filter :filters="filtersLocal"-->
@@ -102,6 +102,7 @@ export default {
       // this.incrementUnsavedReloadKey();
       // this.$emit('filter-updated');
       this.hasUnsavedChangesFromEvent = true;
+      console.log('hasUnsavedChangesFromEvent = true');
     },
 
     incrementUnsavedReloadKey() {

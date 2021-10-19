@@ -42,7 +42,7 @@ export default {
           prefix: "$",
         },
         {
-          title: "Savings potential",
+          title: "Savings Potential",
           value: "savings_potential_next_12_months",
           precision: 2,
           prefix: "$",

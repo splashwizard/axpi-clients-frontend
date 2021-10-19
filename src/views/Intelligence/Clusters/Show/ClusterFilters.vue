@@ -64,7 +64,7 @@
             <div class="filter-wrapper">
               <div class="filter-header">
                 <a-checkbox v-model="showSelectedBinByOptionFilter">
-                  Bin By
+                  Bin
                 </a-checkbox>
               </div>
               <div class="filter" v-if="showSelectedBinByOptionFilter">

@@ -20,7 +20,7 @@
 
         <inline-filter :filters="filtersLocal"
                        id="product_type"
-                       label="Order Type"
+                       label="Type"
                        type="categorical"
                        :options="typeOptions"></inline-filter>
 
@@ -83,6 +83,10 @@ export default {
       let diffOne = _.difference(this.filters.filters_enabled, this.filtersLocal.filters_enabled);
       let diffTwo = _.difference(this.filtersLocal.filters_enabled, this.filters.filters_enabled);
       if (_.merge(diffOne, diffTwo).length) {
+        hasUnsaved = true;
+      }
+
+      if (this.filters.product_type !== this.filtersLocal.product_type) {
         hasUnsaved = true;
       }
 

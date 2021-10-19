@@ -4,9 +4,9 @@
       :scroll="{ x: 1300 }"
       :columns="columns"
       :row-key="(record) => record.id"
+      @change="handleTableChange"
       :data-source="dataToShow"
       :loading="loading"
-      @change="handleTableChange"
   >
     <div slot="name" slot-scope="name, record">
       <div class="product-name-wrapper">
@@ -74,15 +74,14 @@
   </a-table>
 </template>
 <script>
-import axios from "axios";
 import Orders from "../../../../mixins/Orders";
 import moment from 'moment';
-import {mapGetters} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 const _ = require('lodash');
 
 export default {
-  props: ["clusterId", "insights"],
+  props: ["clusterId"],
   mixins: [Orders],
   data() {
     return {
@@ -90,29 +89,12 @@ export default {
       loading: false
     };
   },
-  mounted() {
-    this.fetch();
-  },
   methods: {
-    fetch(params = {}) {
-      this.loading = true;
-      axios
-          .post(
-              window.API_BASE +
-              "/intelligence/clusters/" +
-              this.clusterId +
-              "/orders-with-matches",
-              params
-          )
-          .then((r) => {
-            this.loading = false;
-            this.data = r.data;
-          })
-          .catch((e) => {
-            console.log(e);
-            this.$message.error("Error loading orders");
-          });
-    },
+   ...mapActions('clusterViewer', {
+     setSortField: 'setSortField',
+     setSortOrder: 'setSortOrder',
+     setFilters: 'setFilters'
+   }),
 
     deleteRecord(order) {
       this.$emit("remove-order", order);
@@ -215,23 +197,38 @@ export default {
       return '/products/' + product['_id'];
     },
 
+    // handleTableChange(pagination, filters, sorter) {
+    //   console.log(pagination);
+    //   const pager = {...this.pagination};
+    //   pager.current = pagination.current;
+    //   this.pagination = pager;
+    //   this.fetch({
+    //     results: pagination.pageSize,
+    //     page: pagination.current,
+    //     sortField: sorter.field,
+    //     sortOrder: sorter.order,
+    //     ...filters,
+    //   });
+    // }
+
     handleTableChange(pagination, filters, sorter) {
-      console.log(pagination);
-      const pager = {...this.pagination};
-      pager.current = pagination.current;
-      this.pagination = pager;
-      this.fetch({
-        results: pagination.pageSize,
-        page: pagination.current,
-        sortField: sorter.field,
-        sortOrder: sorter.order,
-        ...filters,
-      });
+      // this.sortField = sorter.field;
+      // this.sortOrder = sorter.order;
+      // this.filters = filters;
+      this.setSortField(sorter.field);
+      this.setSortOrder(sorter.order);
+      this.setFilters(filters);
     }
   },
   computed: {
     ...mapGetters('clusterViewer', {
-      selectedOrders: 'selectedOrders'
+      selectedOrders: 'selectedOrders',
+      ordersWithMatches: 'ordersWithMatches',
+      ordersWithMatchesFiltered: 'ordersWithMatchesFiltered',
+      insights: 'insights',
+      sortField: 'sortField',
+      sortOrder: 'sortOrder',
+      filters: 'filters'
     }),
 
     columns() {
@@ -254,8 +251,8 @@ export default {
         },
         {
           title: "Quantity",
-          dataIndex: "Quantity",
-          scopedSlots: {customRender: 'quantity'},
+          dataIndex: "total_quantity",
+          // scopedSlots: {customRender: 'quantity'},
           sorter: true,
           width: 110
         },
@@ -327,17 +324,57 @@ export default {
     },
 
     vendorFilterOptions() {
-      return _.uniq(_.map(this.dataToShow, 'Vendor'));
+      return _.uniq(_.map(this.ordersWithMatches, 'Vendor'));
     },
 
     dataToShow() {
+      let dataToShow = [];
+
       if (this.selectedOrders.length) {
         let ids = _.map(this.selectedOrders, '_id');
-        return _.filter(this.data, d => {
+        dataToShow = _.filter(this.ordersWithMatchesFiltered, d => {
           return ids.includes(d['_id']);
         });
+      } else {
+        dataToShow = this.ordersWithMatchesFiltered;
       }
-      return this.data;
+
+      let sortOrder = this.sortOrder === 'ascend' ? 'asc' : 'desc';
+      switch (this.sortField) {
+        case 'product_name':
+          dataToShow = _.orderBy(dataToShow, 'product_name', sortOrder);
+          break;
+        case 'PO Initial Create Date':
+          dataToShow = _.map(dataToShow, d => {
+            if (d['PO Initial Create Date'] && d['PO Initial Create Date']['$date'] && d['PO Initial Create Date']['$date']['$numberLong']) {
+              d.timestamp = d['PO Initial Create Date']['$date']['$numberLong'];
+            } else {
+              d.timestamp = null;
+            }
+            return d;
+          });
+          dataToShow = _.orderBy(dataToShow, 'timestamp', sortOrder);
+          break;
+        case 'total_quantity':
+          dataToShow = _.orderBy(dataToShow, 'total_quantity', sortOrder);
+          break;
+        case 'Cost':
+          dataToShow = _.orderBy(dataToShow, 'Cost', sortOrder);
+          break;
+        case 'PO Number':
+          dataToShow = _.orderBy(dataToShow, 'PO Number', sortOrder);
+          break;
+        case 'PO Li Description':
+          dataToShow = _.orderBy(dataToShow, 'PO Li Description', sortOrder);
+          break;
+        case 'product_code':
+          dataToShow = _.orderBy(dataToShow, 'product_code', sortOrder);
+          break;
+        default:
+          break;
+      }
+
+      return dataToShow;
     }
   }
 };

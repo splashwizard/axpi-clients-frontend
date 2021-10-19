@@ -2,6 +2,9 @@ let _ = require('lodash');
 // import router from "../../router";
 
 export const state = {
+    ordersWithMatches: [],
+    insights: [],
+
     activeGraph: 'orders',
 
     selectedOrders: [],
@@ -19,13 +22,25 @@ export const state = {
     startDate: null,
     endDate: null,
 
+    sortField: null,
+    sortOrder: null,
+    filters: {},
+
     clusterViewerReloadKey: 1
 };
 
 export const mutations = {
-   SET_ACTIVE_GRAPH(state, activeGraph) {
-       state.activeGraph = activeGraph;
-   },
+    SET_ORDERS_WITH_MATCHES(state, ordersWithMatches) {
+        state.ordersWithMatches = ordersWithMatches;
+    },
+
+    SET_INSIGHTS(state, insights) {
+        state.insights = insights;
+    },
+
+    SET_ACTIVE_GRAPH(state, activeGraph) {
+        state.activeGraph = activeGraph;
+    },
 
     SET_SELECTED_ORDERS(state, orders) {
         state.selectedOrders = orders;
@@ -68,15 +83,48 @@ export const mutations = {
     },
 
     SET_START_DATE(state, startDate) {
-       state.startDate = startDate;
+        state.startDate = startDate;
     },
 
     SET_END_DATE(state, endDate) {
-       state.endDate = endDate;
+        state.endDate = endDate;
+    },
+
+    SET_SORT_FIELD(state, sortField) {
+        state.sortField = sortField;
+    },
+
+    SET_SORT_ORDER(state, sortOrder) {
+        state.sortOrder = sortOrder;
+    },
+
+    SET_FILTERS(state, filters) {
+        state.filters = filters;
     }
 };
 
 export const getters = {
+    ordersWithMatches: (state) => {
+        return state.ordersWithMatches;
+    },
+
+    ordersWithMatchesFiltered: (state) => {
+        // return state.ordersWithMatches;
+
+        let ordersWithMatches = state.ordersWithMatches;
+        if (state.filters && state.filters['Vendor'] && state.filters['Vendor'].length) {
+            ordersWithMatches = _.filter(ordersWithMatches, o => {
+                return state.filters['Vendor'].includes(o['Vendor']);
+                // return true;
+            });
+        }
+        return ordersWithMatches;
+    },
+
+    insights: (state) => {
+        return state.insights;
+    },
+
     selectedOrders: (state) => {
         return state.selectedOrders;
     },
@@ -123,16 +171,37 @@ export const getters = {
 
     clusterViewerReloadKey: (state) => {
         return state.clusterViewerReloadKey;
+    },
+
+    sortField: (state) => {
+        return state.sortField;
+    },
+
+    sortOrder: (state) => {
+        return state.sortOrder;
+    },
+
+    filters: (state) => {
+        return state.filters;
     }
 };
 
 export const actions = {
+    setOrdersWithMatches({commit}, ordersWithMatches) {
+        commit('SET_ORDERS_WITH_MATCHES', ordersWithMatches);
+    },
+
+    setInsights({commit}, insights) {
+        commit('SET_INSIGHTS', insights);
+    },
+
     toggleOrderSelected({commit}, order) {
         commit('TOGGLE_ORDER_SELECTED', order);
     },
 
     setSelectedOrders({commit}, orders) {
         commit('SET_SELECTED_ORDERS', orders);
+        commit('SET_FILTERS', {});
     },
 
     setXOptions({commit}, options) {
@@ -168,11 +237,23 @@ export const actions = {
     },
 
     setStartDate({commit}, startDate) {
-       commit('SET_START_DATE', startDate);
+        commit('SET_START_DATE', startDate);
     },
 
     setEndDate({commit}, endDate) {
         commit('SET_END_DATE', endDate);
+    },
+
+    setSortField({commit}, sortField) {
+        commit('SET_SORT_FIELD', sortField);
+    },
+
+    setSortOrder({commit}, sortOrder) {
+        commit('SET_SORT_ORDER', sortOrder);
+    },
+
+    setFilters({commit}, filters) {
+        commit('SET_FILTERS', filters);
     },
 
     incrementClusterViewerReloadKey({commit}) {

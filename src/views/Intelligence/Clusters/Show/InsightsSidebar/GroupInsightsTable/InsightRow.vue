@@ -4,7 +4,7 @@
       <a-avatar size="large" :src="getImageSrc(getFirstProduct(insight))"/>
     </td>
     <td>
-      <b>{{ getFirstProduct(insight)["Name"] }}</b>
+      <b>{{ getFirstProduct(insight)["name"] }}</b>
 
       <div v-if="showMoreDetails">
         <div class="comparison-wrapper">
@@ -69,7 +69,7 @@
 
 <script>
 import Orders from "../../../../../../mixins/Orders";
-
+import {mapGetters} from "vuex";
 const _ = require('lodash');
 
 export default {
@@ -81,6 +81,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('clusterViewer', {
+      ordersWithMatches: 'ordersWithMatches'
+    }),
+
     matchPercentage() {
       let properties = ['country', 'name', 'vendor'];
       let propertiesThatMatch = [];
@@ -95,7 +99,7 @@ export default {
     },
 
     baseVolume() {
-     return this.getProperty('volume');
+      return this.getProperty('volume');
     },
 
     comparedToVolume() {
@@ -108,7 +112,7 @@ export default {
 
       if (volumeOfComparedTo && volumeOfBase) {
         let increase = volumeOfComparedTo - volumeOfBase;
-        let percentageDifference = (increase/volumeOfBase) * 100;
+        let percentageDifference = (increase / volumeOfBase) * 100;
         return Math.round(percentageDifference * 100) / 100;
       }
 
@@ -120,7 +124,7 @@ export default {
       let comparedToPrice = this.insight['price_per_unit']['compared_to'];
 
       let increase = comparedToPrice - basePrice;
-      let percentageDifference = (increase/basePrice) * 100;
+      let percentageDifference = (increase / basePrice) * 100;
       return Math.round(percentageDifference * 100) / 100;
     },
 
@@ -130,11 +134,18 @@ export default {
   },
   methods: {
     getFirstProduct(insight) {
-      return insight["products"]["compared_to"][0];
+      let order = _.find(this.ordersWithMatches, {
+        '_id': insight['compared_to_erp_order_id']
+      });
+      return order["products"][0];
     },
 
     getFirstBaseProduct(insight) {
-      return insight["products"]["base"][0];
+      // return insight["products"]["base"][0];
+      let order = _.find(this.ordersWithMatches, {
+        '_id': insight['erp_order_id']
+      });
+      return order["products"][0];
     },
 
     toggleShowMoreDetails() {
@@ -142,8 +153,8 @@ export default {
     },
 
     getImageSrc(product) {
-      if (product["Images"] && product["Images"].length) {
-        return product["Images"][0];
+      if (product["imageURLs"] && product["imageURLs"].length) {
+        return product["imageURLs"][0];
       }
     },
 
@@ -175,7 +186,7 @@ export default {
             product = this.getFirstBaseProduct(this.insight);
           }
           let volume = null;
-          if (product['normalisedQuantity']['totalMeasure']['entity'] === 'volume') {
+          if (product['normalisedQuantity'] && product['normalisedQuantity']['totalMeasure'] && product['normalisedQuantity']['totalMeasure']['entity'] === 'volume') {
             volume = product['normalisedQuantity']['totalMeasure']['normalisedUnitMagnitude'];
           }
           // volume = 5;

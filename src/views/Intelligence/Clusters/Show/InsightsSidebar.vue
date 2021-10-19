@@ -46,10 +46,11 @@ import LoadingScreen from "../../../../components/LoadingScreen";
 // import Insight from "./InsightsSidebar/Insight";
 import InsightsSummaryTable from "./InsightsSidebar/InsightsSummaryTable";
 import GroupInsightsTable from "./InsightsSidebar/GroupInsightsTable";
+import {mapGetters} from "vuex";
 
 export default {
   name: "InsightsSidebar",
-  props: ["clusterId", "insights", "erpOrderId", "insightsApplied"],
+  props: ["clusterId", "erpOrderId", "insightsApplied"],
   components: {InsightsSummaryTable, GroupInsightsTable, LoadingScreen},
   data() {
     return {
@@ -108,6 +109,10 @@ export default {
   },
 
   computed: {
+    ...mapGetters('clusterViewer', {
+      insights: 'insights'
+    }),
+
     headerTitle() {
       if (this.insightType) {
         return this.insightType.charAt(0).toUpperCase() + this.insightType.slice(1) + ' Insights';

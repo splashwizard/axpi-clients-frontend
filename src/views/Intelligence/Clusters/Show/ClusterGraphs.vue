@@ -19,10 +19,10 @@
           </div>
           <div v-else>
             <cluster-orders-graph :graph-reload-key="graphReloadKey"
-                                  v-if="activeGraph === 'orders'" :orders="clusterOrders"></cluster-orders-graph>
+                                  v-if="activeGraph === 'orders'" :orders="ordersWithMatchesFiltered"></cluster-orders-graph>
 
             <cluster-demand-graph :graph-reload-key="graphReloadKey"
-                                  v-if="activeGraph === 'demand'" :orders="clusterOrders"></cluster-demand-graph>
+                                  v-if="activeGraph === 'demand'" :orders="ordersWithMatchesFiltered"></cluster-demand-graph>
           </div>
           <!-- / Graphs -->
         </a-col>
@@ -40,7 +40,7 @@
 <script>
 import {mapGetters, mapActions} from "vuex";
 import ClusterStatsSidebar from "./ClusterGraphs/ClusterStatsSidebar.vue";
-import axios from 'axios';
+// import axios from 'axios';
 import ClusterOrdersGraph from './ClusterGraphs/ClusterOrdersGraph.vue';
 import ClusterDemandGraph from "./ClusterGraphs/ClusterDemandGraph";
 
@@ -50,12 +50,13 @@ export default {
   data() {
     return {
       isLoading: false,
-      clusterOrders: []
+      // clusterOrders: []
     };
   },
   computed: {
     ...mapGetters('clusterViewer', {
-      activeGraph: 'activeGraph'
+      activeGraph: 'activeGraph',
+      ordersWithMatchesFiltered: 'ordersWithMatchesFiltered'
     }),
 
     active_graph: {
@@ -68,24 +69,24 @@ export default {
     }
   },
   created() {
-    this.fetch();
+    // this.fetch();
   },
   methods: {
     ...mapActions('clusterViewer', {
       setActiveGraph: 'setActiveGraph'
     }),
 
-    fetch() {
-      let vm = this;
-      vm.isLoading = true;
-      axios.get(window.API_BASE + '/intelligence/clusters/' + this.clusterId + '/orders-with-matches').then(r => {
-        vm.clusterOrders = r.data;
-        vm.isLoading = false;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading cluster orders');
-      });
-    }
+    // fetch() {
+    //   let vm = this;
+    //   vm.isLoading = true;
+    //   axios.get(window.API_BASE + '/intelligence/clusters/' + this.clusterId + '/orders-with-matches').then(r => {
+    //     vm.clusterOrders = r.data;
+    //     vm.isLoading = false;
+    //   }).catch(e => {
+    //     console.log(e);
+    //     vm.$message.error('Error loading cluster orders');
+    //   });
+    // }
   }
 };
 </script>

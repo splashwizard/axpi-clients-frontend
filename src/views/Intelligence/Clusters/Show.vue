@@ -1,6 +1,6 @@
 <template>
   <div class="cluster-show">
-    <loading-screen :is-loading="isLoading || isDeleting"></loading-screen>
+    <loading-screen :is-loading="isLoading || isLoadingInsights || isLoadingOrdersWithMatches || isDeleting"></loading-screen>
 
     <a-layout>
       <a-layout style="padding: 7px 30px">
@@ -11,7 +11,7 @@
               @back="backToAllClusters"
           >
             <template slot="extra">
-             <cluster-filters></cluster-filters>
+              <cluster-filters></cluster-filters>
 
               <a-button
                   type="primary"
@@ -22,7 +22,7 @@
             </template>
           </a-page-header>
 
-          <div v-if="cluster">
+          <div v-if="cluster && !isLoadingOrdersWithMatches">
             <!-- Graphs -->
             <div class="cluster-graphs-wrapper">
               <cluster-graphs
@@ -37,7 +37,6 @@
             <a-tabs>
               <a-tab-pane tab="All Orders">
                 <cluster-orders-table
-                    :insights="insights"
                     :key="reloadKey"
                     :cluster-id="cluster['_id']"
                     @record-selected="(record) => viewInsightsFor(record)"
@@ -114,8 +113,8 @@ export default {
       selectedErpOrderId: null,
       isDeleting: false,
 
-      insights: [],
       isLoadingInsights: false,
+      isLoadingOrdersWithMatches: false
     };
   },
   computed: {
@@ -137,7 +136,9 @@ export default {
   },
   methods: {
     ...mapActions('clusterViewer', {
-      setSelectedOrders: 'setSelectedOrders'
+      setSelectedOrders: 'setSelectedOrders',
+      setInsights: 'setInsights',
+      setOrdersWithMatches: 'setOrdersWithMatches'
     }),
 
     backToAllClusters() {
@@ -192,6 +193,7 @@ export default {
             vm.isLoading = false;
             vm.cluster = r.data;
             vm.loadInsights();
+            vm.loadOrdersWithMatches();
             vm.setSelectedOrders([]);
           })
           .catch((e) => {
@@ -213,9 +215,46 @@ export default {
           });
     },
 
+    loadOrdersWithMatches() {
+      let vm = this;
+      // vm.insights = [];
+      vm.setOrdersWithMatches([]);
+      vm.isLoadingOrdersWithMatches = true;
+      axios
+          .get(
+              window.API_BASE +
+              "/intelligence/clusters/" +
+              vm.cluster["_id"] +
+              "/orders-with-matches"
+          )
+          .then((r) => {
+            vm.isLoadingOrdersWithMatches = false;
+            vm.setOrdersWithMatches(r.data);
+            // vm.insights = r.data;
+          })
+          .catch((e) => {
+            vm.isLoadingOrdersWithMatches = false;
+            vm.$message.error("Error loading orders with matches");
+            console.log(e);
+
+            let errors;
+            if (
+                e.response &&
+                e.response.data &&
+                typeof e.response.data === "object"
+            ) {
+              errors = _.flatten(_.toArray(e.response.data.errors));
+            } else {
+              errors = ["Something went wrong. Please try again."];
+            }
+            vm.serverErrors = errors;
+          });
+    },
+
     loadInsights() {
       let vm = this;
-      vm.insights = [];
+      // vm.insights = [];
+      vm.setInsights([]);
       vm.isLoadingInsights = true;
       axios
           .get(
@@ -226,7 +265,8 @@ export default {
           )
           .then((r) => {
             vm.isLoadingInsights = false;
-            vm.insights = r.data;
+            vm.setInsights(r.data);
+            // vm.insights = r.data;
           })
           .catch((e) => {
             vm.isLoadingInsights = false;

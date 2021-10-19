@@ -51,6 +51,7 @@ export default {
   data() {
     return {
       filtersLocal: null,
+      hasUnsavedChangesFromEvent: false,
       unsavedReloadKey: 1,
       typeOptions: [
         {
@@ -82,7 +83,6 @@ export default {
   computed: {
     hasUnsavedChanges() {
       let hasUnsaved = false;
-      let unsavedReloadKey = this.unsavedReloadKey;
 
       let diffOne = _.difference(this.filters.filters_enabled, this.filtersLocal.filters_enabled);
       let diffTwo = _.difference(this.filtersLocal.filters_enabled, this.filters.filters_enabled);
@@ -94,13 +94,14 @@ export default {
         hasUnsaved = true;
       }
 
-      return hasUnsaved;
+      return (hasUnsaved || this.hasUnsavedChangesFromEvent);
     }
   },
   methods: {
     handleFilterUpdated() {
-      this.incrementUnsavedReloadKey();
+      // this.incrementUnsavedReloadKey();
       // this.$emit('filter-updated');
+      this.hasUnsavedChangesFromEvent = true;
     },
 
     incrementUnsavedReloadKey() {
@@ -114,6 +115,7 @@ export default {
     save() {
       this.$emit('set-filters', _.cloneDeep(this.filtersLocal));
       this.$emit('filter-updated');
+      this.hasUnsavedChangesFromEvent = false;
     }
   }
 }

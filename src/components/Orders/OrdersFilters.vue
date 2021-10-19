@@ -86,7 +86,7 @@ export default {
         hasUnsaved = true;
       }
 
-      if (this.filters.product_type !== this.filtersLocal.product_type) {
+      if (this.filters['product_type'] && this.filtersLocal['product_type'] && this.filters['product_type'] !== this.filtersLocal['product_type']) {
         hasUnsaved = true;
       }
 

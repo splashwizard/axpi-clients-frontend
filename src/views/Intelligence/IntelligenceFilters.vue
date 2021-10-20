@@ -22,7 +22,7 @@
                        id="date_range"
                        label="Date range"
                        type="categorical"
-                       @filter-udpated="handleFilterUpdated"
+                       @filter-updated="handleFilterUpdated"
                        :options="dateRangeOptions"></inline-filter>
 
 <!--        <inline-filter :filters="filters"-->

@@ -1,6 +1,7 @@
 <template>
   <div class="cluster-show">
-    <loading-screen :is-loading="isLoading || isLoadingInsights || isLoadingOrdersWithMatches || isDeleting"></loading-screen>
+    <loading-screen
+        :is-loading="isLoading || isLoadingInsights || isLoadingOrdersWithMatches || isDeleting"></loading-screen>
 
     <a-layout>
       <a-layout style="padding: 7px 30px">
@@ -86,7 +87,7 @@ import ClusterOrdersTable from "./Show/ClusterOrdersTable";
 import ClusterGraphs from "./Show/ClusterGraphs.vue";
 import Sidebar from "./Show/Sidebar.vue";
 import InsightsSidebar from "./Show/InsightsSidebar";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import ClusterFilters from "./Show/ClusterFilters";
 
 const _ = require("lodash");
@@ -105,7 +106,6 @@ export default {
   },
   data() {
     return {
-      cluster: null,
       reloadKey: 1,
       graphReloadKey: 1,
       shouldShowSidebar: false,
@@ -118,6 +118,10 @@ export default {
     };
   },
   computed: {
+   ...mapGetters('clusterViewer', {
+     cluster: 'cluster'
+   }),
+
     shouldHideSidebar() {
       return !this.shouldShowSidebar;
     },
@@ -136,9 +140,11 @@ export default {
   },
   methods: {
     ...mapActions('clusterViewer', {
+      setCluster: 'setCluster',
       setSelectedOrders: 'setSelectedOrders',
       setInsights: 'setInsights',
-      setOrdersWithMatches: 'setOrdersWithMatches'
+      setOrdersWithMatches: 'setOrdersWithMatches',
+      setActiveGraph: 'setActiveGraph'
     }),
 
     backToAllClusters() {
@@ -184,14 +190,16 @@ export default {
 
     loadCluster(id) {
       let vm = this;
-      vm.cluster = null;
-      vm.insights = [];
+      this.setCluster(null);
+      this.setOrdersWithMatches([]);
+      this.setInsights([]);
+      this.setActiveGraph('orders');
       vm.isLoading = true;
       axios
           .get(window.API_BASE + "/intelligence/clusters/" + id)
           .then((r) => {
             vm.isLoading = false;
-            vm.cluster = r.data;
+            vm.setCluster(r.data);
             vm.loadInsights();
             vm.loadOrdersWithMatches();
             vm.setSelectedOrders([]);

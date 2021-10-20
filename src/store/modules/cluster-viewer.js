@@ -2,6 +2,7 @@ let _ = require('lodash');
 // import router from "../../router";
 
 export const state = {
+    cluster: null,
     ordersWithMatches: [],
     insights: [],
 
@@ -30,6 +31,10 @@ export const state = {
 };
 
 export const mutations = {
+   SET_CLUSTER(state, cluster) {
+       state.cluster = cluster;
+   },
+
     SET_ORDERS_WITH_MATCHES(state, ordersWithMatches) {
         state.ordersWithMatches = ordersWithMatches;
     },
@@ -104,6 +109,10 @@ export const mutations = {
 };
 
 export const getters = {
+   cluster: (state) => {
+       return state.cluster;
+   },
+
     ordersWithMatches: (state) => {
         return state.ordersWithMatches;
     },
@@ -187,6 +196,10 @@ export const getters = {
 };
 
 export const actions = {
+   setCluster({commit}, cluster) {
+       commit('SET_CLUSTER', cluster);
+   },
+
     setOrdersWithMatches({commit}, ordersWithMatches) {
         commit('SET_ORDERS_WITH_MATCHES', ordersWithMatches);
     },

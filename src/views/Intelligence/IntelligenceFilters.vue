@@ -22,6 +22,7 @@
                        id="date_range"
                        label="Date range"
                        type="categorical"
+                       @filter-udpated="handleFilterUpdated"
                        :options="dateRangeOptions"></inline-filter>
 
 <!--        <inline-filter :filters="filters"-->
@@ -49,6 +50,7 @@ export default {
   data() {
     return {
       filtersLocal: null,
+      hasUnsavedChangesFromEvent: false,
       dateRangeOptions: [
         {
           value: 'last-5-years',
@@ -78,12 +80,13 @@ export default {
         hasUnsaved = true;
       }
 
-      return hasUnsaved;
+      return (hasUnsaved || this.hasUnsavedChangesFromEvent);
     }
   },
   methods: {
     handleFilterUpdated() {
       // this.$emit('filter-updated');
+      this.hasUnsavedChangesFromEvent = true;
     },
 
     clear() {
@@ -93,6 +96,7 @@ export default {
     save() {
       this.$emit('set-filters', _.cloneDeep(this.filtersLocal));
       this.$emit('filter-updated');
+      this.hasUnsavedChangesFromEvent = false;
     }
   }
 }

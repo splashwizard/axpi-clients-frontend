@@ -102,7 +102,7 @@ export default {
       // this.incrementUnsavedReloadKey();
       // this.$emit('filter-updated');
       this.hasUnsavedChangesFromEvent = true;
-      console.log('hasUnsavedChangesFromEvent = true');
+      // console.log('hasUnsavedChangesFromEvent = true');
     },
 
     incrementUnsavedReloadKey() {

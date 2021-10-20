@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "1563c4dc572d8325a6fe",
+    "revision": "c91ec9a0056c1ce10750",
     "url": "/css/app.2780240a.css"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/clusters.2e058566.css"
   },
   {
-    "revision": "b57c9cc920909f61c5ff",
+    "revision": "ac1f6a64fa5f87f97497",
     "url": "/css/intelligence.54f80373.css"
   },
   {
@@ -40,8 +40,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/optimisation~orders~specifications.2fa1b8cc.css"
   },
   {
-    "revision": "58f8aaa725d58cd61e95",
-    "url": "/css/orders.886cda43.css"
+    "revision": "ff39ce868a2e7cdabb6a",
+    "url": "/css/orders.e2a2d033.css"
   },
   {
     "revision": "fc895b7af42de5b81ae4",
@@ -292,7 +292,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "ec645f5749b628bab14011c4fc0c3d96",
+    "revision": "8cdeb19244f7afb858ddb54f68150166",
     "url": "/index.html"
   },
   {
@@ -312,8 +312,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.99bed1e2.js"
   },
   {
-    "revision": "1563c4dc572d8325a6fe",
-    "url": "/js/app.a6b887b9.js"
+    "revision": "c91ec9a0056c1ce10750",
+    "url": "/js/app.7dc8a346.js"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -324,8 +324,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/clusters.31ee59fe.js"
   },
   {
-    "revision": "b57c9cc920909f61c5ff",
-    "url": "/js/intelligence.03c74bb4.js"
+    "revision": "ac1f6a64fa5f87f97497",
+    "url": "/js/intelligence.d84850d7.js"
   },
   {
     "revision": "c0d5eac8f4f41745d0a9",
@@ -344,8 +344,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/optimisation~orders~specifications.44dd2867.js"
   },
   {
-    "revision": "58f8aaa725d58cd61e95",
-    "url": "/js/orders.da92fabf.js"
+    "revision": "ff39ce868a2e7cdabb6a",
+    "url": "/js/orders.75531cf6.js"
   },
   {
     "revision": "bb735b7fc4af5e379fbe",

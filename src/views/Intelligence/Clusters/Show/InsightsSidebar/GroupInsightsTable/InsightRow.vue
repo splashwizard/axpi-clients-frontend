@@ -162,21 +162,21 @@ export default {
       switch (property) {
         case 'country':
           if (type === 'compared_to') {
-            return this.getFirstProduct(this.insight)['Country'];
+            return this.getFirstProduct(this.insight)['country'];
           } else {
-            return this.getFirstBaseProduct(this.insight)['Country'];
+            return this.getFirstBaseProduct(this.insight)['country'];
           }
         case 'name':
           if (type === 'compared_to') {
-            return this.getFirstProduct(this.insight)['Name'];
+            return this.getFirstProduct(this.insight)['name'];
           } else {
-            return this.getFirstBaseProduct(this.insight)['Name'];
+            return this.getFirstBaseProduct(this.insight)['name'];
           }
         case 'vendor':
           if (type === 'compared_to') {
-            return this.getFirstProduct(this.insight)['Vendor'];
+            return this.getFirstProduct(this.insight)['vendor'];
           } else {
-            return this.getFirstBaseProduct(this.insight)['Vendor'];
+            return this.getFirstBaseProduct(this.insight)['vendor'];
           }
         case 'volume': {
           let product = null;

@@ -49,7 +49,7 @@ export default {
   components: {ClusterDemandGraph, ClusterStatsSidebar, ClusterOrdersGraph},
   data() {
     return {
-      isLoading: false,
+      // isLoading: false,
       // clusterOrders: []
     };
   },
@@ -58,6 +58,10 @@ export default {
       activeGraph: 'activeGraph',
       ordersWithMatchesFiltered: 'ordersWithMatchesFiltered'
     }),
+
+    isLoading() {
+     return !(this.ordersWithMatchesFiltered.length);
+    },
 
     active_graph: {
       get() {

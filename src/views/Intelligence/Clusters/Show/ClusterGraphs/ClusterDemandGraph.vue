@@ -88,7 +88,11 @@ export default {
     graphData() {
       let gd = [];
 
-      _.each(this.orders, order => {
+      let orders = _.filter(this.orders, order => {
+       return (order["PO Initial Create Date"] && order["PO Initial Create Date"]["$date"] && order["PO Initial Create Date"]["$date"]["$numberLong"]);
+      });
+
+      _.each(orders, order => {
         // Now let's convert the timestamps into moment
         let orderDate = null;
         let orderDateMoment = null;

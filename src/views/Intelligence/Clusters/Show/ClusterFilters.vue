@@ -55,6 +55,23 @@
               </div>
             </div>
             <!-- / Colour by -->
+
+            <!-- Size by -->
+            <div class="filter-wrapper filter-last">
+              <div class="filter-header">
+                <a-checkbox v-model="showSelectedSizeByOptionFilter">
+                  Size
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showSelectedSizeByOptionFilter">
+                <a-select v-model="selectedSizeByOptionLocal" style="width: 200px;">
+                  <a-select-option v-for="(option, i) in sizeByOptions" :value="option" :key="i">
+                    {{ option }}
+                  </a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / Size by -->
           </div>
           <!-- / Orders graph -->
 
@@ -135,6 +152,9 @@ export default {
       showSelectedColourByOptionFilter: false,
       selectedColourByOptionLocal: null,
 
+      showSelectedSizeByOptionFilter: false,
+      selectedSizeByOptionLocal: null,
+
       showSelectedBinByOptionFilter: false,
       selectedBinByOptionLocal: null,
 
@@ -151,6 +171,11 @@ export default {
     this.selectedColourByOptionLocal = this.selectedColourByOption;
     if (this.selectedColourByOptionLocal) {
       this.showSelectedColourByOptionFilter = true;
+    }
+
+    this.selectedSizeByOptionLocal = this.selectedSizeByOption;
+    if (this.selectedSizeByOptionLocal) {
+      this.showSelectedSizeByOptionFilter = true;
     }
 
     this.selectedBinByOptionLocal = this.selectedBinByOption;
@@ -214,6 +239,9 @@ export default {
       colourByOptions: 'colourByOptions',
       selectedColourByOption: 'selectedColourByOption',
 
+      sizeByOptions: 'sizeByOptions',
+      selectedSizeByOption: 'selectedSizeByOption',
+
       selectedBinByOption: 'selectedBinByOption',
 
       startDate: 'startDate',
@@ -238,6 +266,15 @@ export default {
       }
     },
 
+    sizeBy: {
+      get() {
+        return this.selectedSizeByOption;
+      },
+      set(val) {
+        this.selectSizeByOption(val);
+      }
+    },
+
     binBy: {
       get() {
         return this.selectedBinByOption;
@@ -258,6 +295,13 @@ export default {
         hasUnsaved = true;
       }
       if (this.selectedColourByOptionLocal !== this.selectedColourByOption) {
+        hasUnsaved = true;
+      }
+
+      if (!this.showSelectedSizeByOptionFilter && this.selectedSizeByOption) {
+        hasUnsaved = true;
+      }
+      if (this.selectedSizeByOptionLocal !== this.selectedSizeByOption) {
         hasUnsaved = true;
       }
 
@@ -289,6 +333,7 @@ export default {
     ...mapActions('clusterViewer', {
       selectXOption: 'selectXOption',
       selectColourByOption: 'selectColourByOption',
+      selectSizeByOption: 'selectSizeByOption',
       selectBinByOption: 'selectBinByOption',
       setStartDate: 'setStartDate',
       setEndDate: 'setEndDate',
@@ -298,6 +343,7 @@ export default {
     clear() {
       this.showSelectedXOptionFilter = false;
       this.showSelectedColourByOptionFilter = false;
+      this.showSelectedSizeByOptionFilter = false;
       this.save();
       this.incrementClusterViewerReloadKey();
     },
@@ -313,6 +359,12 @@ export default {
         this.selectColourByOption(this.selectedColourByOptionLocal);
       } else {
         this.selectColourByOption(null);
+      }
+
+      if (this.showSelectedSizeByOptionFilter) {
+        this.selectSizeByOption(this.selectedSizeByOptionLocal);
+      } else {
+        this.selectSizeByOption(null);
       }
 
       if (this.showSelectedBinByOptionFilter) {

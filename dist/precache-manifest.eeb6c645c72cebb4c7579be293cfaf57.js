@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "d48fc53bedc69b41ae9b",
-    "url": "/css/app.2780240a.css"
+    "revision": "c7dfbbabbb9a391df739",
+    "url": "/css/app.e3b3df4d.css"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -56,12 +56,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/suppliers.667b8801.css"
   },
   {
-    "revision": "f88ae68d9288632ecb13",
-    "url": "/css/view-cluster.22c4d0da.css"
+    "revision": "8684a7e6da6ff1a1b8e9",
+    "url": "/css/view-cluster.867d1495.css"
   },
   {
-    "revision": "31436a2020fd8e72d800",
-    "url": "/css/view-product.6c7cde12.css"
+    "revision": "137128b8df15f46df441",
+    "url": "/css/view-product.53de1d46.css"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",
@@ -292,7 +292,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "b7f390fc7c85f770582603d9847b811d",
+    "revision": "850fbc59ba2f3066ca21daeb49b9b5ec",
     "url": "/index.html"
   },
   {
@@ -312,8 +312,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.99bed1e2.js"
   },
   {
-    "revision": "d48fc53bedc69b41ae9b",
-    "url": "/js/app.9fe4f340.js"
+    "revision": "c7dfbbabbb9a391df739",
+    "url": "/js/app.6e12b7b8.js"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -368,12 +368,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/suppliers.bde8334b.js"
   },
   {
-    "revision": "f88ae68d9288632ecb13",
-    "url": "/js/view-cluster.dd8408a8.js"
+    "revision": "8684a7e6da6ff1a1b8e9",
+    "url": "/js/view-cluster.924db95f.js"
   },
   {
-    "revision": "31436a2020fd8e72d800",
-    "url": "/js/view-product.75fd2a95.js"
+    "revision": "137128b8df15f46df441",
+    "url": "/js/view-product.fda35328.js"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",

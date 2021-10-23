@@ -15,6 +15,7 @@
         :data="graphData"
         :scale="scale"
     >
+      <v-legend v-if="selectedColourByOption" data-key="Vendor"/>
       <v-tooltip
           :showTitle="false"
           :crosshairs="tooltipCrosshairs"
@@ -32,7 +33,7 @@
       </v-axis>
       <v-point
           position="x*cost_per_unit"
-          :size="4"
+          size="size"
           color="color"
           opacity="opacity"
           :tooltip="pointTooltip"
@@ -56,6 +57,7 @@ export default {
       selectedOrders: 'selectedOrders',
       selectedXOption: 'selectedXOption',
       selectedColourByOption: 'selectedColourByOption',
+      selectedSizeByOption: 'selectedSizeByOption',
       clusterViewerReloadKey: 'clusterViewerReloadKey'
     }),
 
@@ -92,9 +94,9 @@ export default {
 
     graphData() {
       let gd = [];
-      let colours = ['#267278', '#65338d', '#4770b3'];
-      let colourMappings = {};
-      let numberOfColoursUsedSoFar = 0;
+      // let colours = ['#267278', '#65338d', '#4770b3'];
+      // let colourMappings = {};
+      // let numberOfColoursUsedSoFar = 0;
 
       _.each(this.orders, (order) => {
         let x = 0;
@@ -125,21 +127,28 @@ export default {
           //     };
           //   });
           // }
-          let firstProductNormalisedQuantity = order["products"][0]["normalisedQuantity"];
-          if (firstProductNormalisedQuantity) {
-            let totalMeasure = firstProductNormalisedQuantity['totalMeasure'];
-            if (totalMeasure) {
-              let unit = totalMeasure['normalisedUnitBase'];
-              let magnitude = totalMeasure['normalisedUnitMagnitude'];
-              let entity = totalMeasure['entity'];
-              // let key = propertyType + ' - ' + unit;
-              let key = entity;
-              properties[key] = {
-                magnitude: magnitude * orderQuantity,
-                property_type: entity,
-                unit: unit
+          // let firstProductNormalisedQuantity = order["products"][0]["normalisedQuantity"];
+          // if (firstProductNormalisedQuantity) {
+          //   let unit = firstProductNormalisedQuantity['normalisedUnitBase'];
+          //   let magnitude = firstProductNormalisedQuantity['normalisedUnitMagnitude'];
+          //   let entity = firstProductNormalisedQuantity['entity'];
+          //   // let key = propertyType + ' - ' + unit;
+          //   let key = entity;
+          //   properties[key] = {
+          //     magnitude: magnitude * orderQuantity,
+          //     property_type: entity,
+          //     unit: unit
+          //   };
+          // }
+          if (order['product_numeric_properties']) {
+            _.each(order['product_numeric_properties'], p => {
+              let property = {
+                magnitude: p.propertyValue * orderQuantity,
+                property_type: p.propertyName,
+                unit: p.propertyUnit
               };
-            }
+              properties[p.propertyName] = property;
+            });
           }
         }
         order["properties"] = properties;
@@ -163,25 +172,22 @@ export default {
         }
 
         let color = 'blue';
-        // selectedOrderIds = _.map(this.selectedOrders, '_id');
-        // if (selectedOrderIds.includes(order['_id'])) {
-          // color = 'red';
-          // opacity = 1;
-        // }
-
-        // Colour by
         if (this.selectedColourByOption !== null) {
           let key = this.selectedColourByOption.key;
-          let property = order[key];
-          if (Object.keys(colourMappings).includes(property)) {
-            color = colourMappings[property];
+          color = order[key];
+        }
+
+        // Size by
+        let size = null;
+        if (this.selectedSizeByOption) {
+          let sizeByProperty = _.find(order['product_numeric_properties'], p => {
+            return p['propertyName'] === this.selectedSizeByOption;
+          });
+          if (sizeByProperty) {
+            size = sizeByProperty['propertyValue'];
           } else {
-            let colourToUse = colours[numberOfColoursUsedSoFar];
-            numberOfColoursUsedSoFar += 1;
-            colourMappings[property] = colourToUse;
-            color = colourMappings[property];
+            size = 0;
           }
-          // console.log(colourMappings);
         }
 
         gd.push({
@@ -193,7 +199,8 @@ export default {
           properties: properties,
           x: x,
           opacity: opacity,
-          color: color
+          color: color,
+          size: size
         });
       });
 

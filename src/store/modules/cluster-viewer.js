@@ -31,9 +31,9 @@ export const state = {
 };
 
 export const mutations = {
-   SET_CLUSTER(state, cluster) {
-       state.cluster = cluster;
-   },
+    SET_CLUSTER(state, cluster) {
+        state.cluster = cluster;
+    },
 
     SET_ORDERS_WITH_MATCHES(state, ordersWithMatches) {
         state.ordersWithMatches = ordersWithMatches;
@@ -109,17 +109,16 @@ export const mutations = {
 };
 
 export const getters = {
-   cluster: (state) => {
-       return state.cluster;
-   },
+    cluster: (state) => {
+        return state.cluster;
+    },
 
     ordersWithMatches: (state) => {
         return state.ordersWithMatches;
     },
 
     ordersWithMatchesFiltered: (state) => {
-        // return state.ordersWithMatches;
-
+        // Filter by filters from table
         let ordersWithMatches = state.ordersWithMatches;
         if (state.filters && state.filters['Vendor'] && state.filters['Vendor'].length) {
             ordersWithMatches = _.filter(ordersWithMatches, o => {
@@ -127,6 +126,15 @@ export const getters = {
                 // return true;
             });
         }
+
+        // Size by filter - we don't want to include points
+        // That don't have this property
+        if (state.selectedSizeByOption) {
+            ordersWithMatches = _.filter(ordersWithMatches, o => {
+                return o.product_numeric_property_descriptions && o.product_numeric_property_descriptions.includes(state.selectedSizeByOption);
+            });
+        }
+
         return ordersWithMatches;
     },
 
@@ -155,7 +163,9 @@ export const getters = {
     },
 
     sizeByOptions: (state) => {
-        return state.sizeByOptions;
+        let numericPropertyDescriptions = _.map(state.ordersWithMatches, 'product_numeric_property_descriptions');
+        let flattened = _.flatten(numericPropertyDescriptions);
+        return _.uniq(flattened);
     },
 
     selectedSizeByOption: (state) => {
@@ -196,9 +206,9 @@ export const getters = {
 };
 
 export const actions = {
-   setCluster({commit}, cluster) {
-       commit('SET_CLUSTER', cluster);
-   },
+    setCluster({commit}, cluster) {
+        commit('SET_CLUSTER', cluster);
+    },
 
     setOrdersWithMatches({commit}, ordersWithMatches) {
         commit('SET_ORDERS_WITH_MATCHES', ordersWithMatches);

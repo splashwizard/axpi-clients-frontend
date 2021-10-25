@@ -1,18 +1,18 @@
 <template>
   <div>
-<!--    <div class="top-toolbar">-->
-<!--      <a-date-picker-->
-<!--          v-model="start_date"-->
-<!--          placeholder="Start"-->
-<!--      />-->
-<!--      <span class="separator">-->
-<!--        - -->
-<!--      </span>-->
-<!--      <a-date-picker-->
-<!--          v-model="end_date"-->
-<!--          placeholder="End"-->
-<!--      />-->
-<!--    </div>-->
+    <!--    <div class="top-toolbar">-->
+    <!--      <a-date-picker-->
+    <!--          v-model="start_date"-->
+    <!--          placeholder="Start"-->
+    <!--      />-->
+    <!--      <span class="separator">-->
+    <!--        - -->
+    <!--      </span>-->
+    <!--      <a-date-picker-->
+    <!--          v-model="end_date"-->
+    <!--          placeholder="End"-->
+    <!--      />-->
+    <!--    </div>-->
 
     <v-chart
         :key="graphReloadKey"
@@ -21,11 +21,14 @@
         height="400"
         :scale="scale"
         :data="graphDataToShow">
-      <v-axis dataKey="quantity" :title="{'text': 'Quantity'}"></v-axis>
+      <v-axis dataKey="quantity"
+              :title="{'text': formatGraphLabel(xLabel) + (xUnit ? ' (' + xUnit + ')' : '')}"
+      ></v-axis>
       <v-axis dataKey="order_date" :title="{'text': 'Order Date'}"
               :tick="{'tickCount': 3}"></v-axis>
-      <v-tooltip></v-tooltip>
+      <v-tooltip :showTitle="false" :itemTpl="tooltipItemTpl"></v-tooltip>
       <v-interval
+          :tooltip="intervalTooltip"
           position="order_date*quantity"
           :opacity="1"
       />
@@ -45,7 +48,15 @@ export default {
   name: "ClusterDemandGraph",
   props: ["orders", "graphReloadKey"],
   data() {
-    return {}
+    return {
+      tooltipItemTpl: `
+        <li data-index={index} style="margin-bottom:4px;">
+          <span style="background-color:{color};" class="g2-tooltip-marker"></span>
+          <b>{name}</b><br />
+          {value}
+        </li>
+      `,
+    }
   },
   created() {
     this.start_date = this.earliestDate.clone();
@@ -55,8 +66,18 @@ export default {
     ...mapGetters('clusterViewer', {
       selectedBinByOption: 'selectedBinByOption',
       startDate: 'startDate',
-      endDate: 'endDate'
+      endDate: 'endDate',
+      selectedXOption: 'selectedXOption'
     }),
+
+    xType: {
+      get() {
+        return this.selectedXOption;
+      },
+      set(val) {
+        this.selectXOption(val);
+      }
+    },
 
     start_date: {
       get() {
@@ -85,11 +106,25 @@ export default {
       ]
     },
 
+    xLabel() {
+      if (this.xType === 'Quantity') {
+        return 'Quantity'
+      }
+      return this.xType;
+    },
+
+    xUnit() {
+      if (this.xLabel === 'volume') {
+        return 'cubic metres';
+      }
+      return '';
+    },
+
     graphData() {
       let gd = [];
 
       let orders = _.filter(this.orders, order => {
-       return (order["PO Initial Create Date"] && order["PO Initial Create Date"]["$date"] && order["PO Initial Create Date"]["$date"]["$numberLong"]);
+        return (order["PO Initial Create Date"] && order["PO Initial Create Date"]["$date"] && order["PO Initial Create Date"]["$date"]["$numberLong"]);
       });
 
       _.each(orders, order => {
@@ -105,12 +140,30 @@ export default {
         order["order_date_moment"] = orderDateMoment;
         order["order_date"] = orderDate;
 
-        gd.push({
-          '_id': order['_id'],
-          'order_date': order['order_date'],
-          'order_date_moment': order['order_date_moment'],
-          'quantity': order['total_quantity']
-        });
+        // Measure
+        let measure = null;
+        if (order["products"] && order["products"].length) {
+          if (order["products"][0]['normalisedMeasure']) {
+            measure = order['products'][0]['normalisedMeasure'];
+          }
+        }
+
+        let quantity = null;
+        if (this.xType === 'Quantity') {
+          quantity = order['total_quantity'];
+        } else if (measure && measure['entity'] === this.xType) {
+          let orderQuantity = order["Quantity"] !== "None" ? order["Quantity"] : 1;
+          quantity = measure['normalisedUnitMagnitude'] * orderQuantity;
+        }
+
+        if (quantity !== null) {
+          gd.push({
+            '_id': order['_id'],
+            'order_date': order['order_date'],
+            'order_date_moment': order['order_date_moment'],
+            'quantity': quantity
+          });
+        }
       });
 
       let graphPoints = [];
@@ -234,13 +287,36 @@ export default {
       }
 
       return points;
+    },
+
+    intervalTooltip() {
+      return [
+        "order_date*quantity",
+        (order_date, quantity) => {
+          if (quantity < 1 && quantity !== 0) {
+            // x = Number.parseFloat(x).toExponential(3);
+            let exp = Number.parseFloat(quantity).toExponential(3);
+            let split = exp.split('e');
+            quantity = split[0] + ' x 10' + '<sup>' + split[1] + '</sup>'
+          }
+          return {
+            name: order_date,
+            value: quantity + ' ' + this.xUnit
+          }
+        }
+      ]
     }
   },
   methods: {
     ...mapActions('clusterViewer', {
       setStartDate: 'setStartDate',
-      setEndDate: 'setEndDate'
-    })
+      setEndDate: 'setEndDate',
+      selectXOption: 'selectXOption'
+    }),
+
+    formatGraphLabel(label) {
+      return label.charAt(0).toUpperCase() + label.substring(1);
+    }
   }
 }
 </script>

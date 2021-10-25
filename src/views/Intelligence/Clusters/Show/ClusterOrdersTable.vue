@@ -174,6 +174,18 @@ export default {
       return '-';
     },
 
+    getNormalisedMeasureMagnitude(order) {
+      let product = this.getFirstProduct(order);
+      let toReturn = null;
+      if (product && product['normalisedMeasure']) {
+        let magnitude = product['normalisedMeasure']['normalisedUnitMagnitude'];
+        if (magnitude) {
+          toReturn = magnitude;
+        }
+      }
+      return toReturn;
+    },
+
     getNormalisedMeasure(order) {
       let product = this.getFirstProduct(order);
 
@@ -181,7 +193,7 @@ export default {
       if (product && product['normalisedMeasure'] && product['normalisedMeasure']) {
         let magnitude = product['normalisedMeasure']['normalisedUnitMagnitude'];
         // let magnitude = product['normalisedQuantity']['totalMeasure']['rawMagnitude'];
-        let unit = product['normalisedMeasure']['unit'];
+        let unit = product['normalisedMeasure']['normalisedUnitBase'];
 
         if (magnitude && unit) {
           if (magnitude < 1) {
@@ -271,12 +283,16 @@ export default {
         },
         {
           title: "Potential Savings",
+          dataIndex: "Potential Savings",
           scopedSlots: {customRender: 'potentialSavings'},
+          sorter: true,
           width: 150
         },
         {
           title: "Measure",
+          dataIndex: 'Measure',
           scopedSlots: {customRender: 'normalisedMeasure'},
+          sorter: true,
           width: 170
         },
         {
@@ -349,6 +365,20 @@ export default {
       switch (this.sortField) {
         case 'product_name':
           dataToShow = _.orderBy(dataToShow, 'product_name', sortOrder);
+          break;
+        case 'Potential Savings':
+          dataToShow = _.map(dataToShow, d => {
+            d.maxSaving = this.calculateMaxPotentialSavings(d);
+            return d;
+          });
+          dataToShow = _.orderBy(dataToShow, 'maxSaving', sortOrder);
+          break;
+        case 'Measure':
+          dataToShow = _.map(dataToShow, d => {
+            d.measureMagnitude = this.getNormalisedMeasureMagnitude(d);
+            return d;
+          });
+          dataToShow = _.orderBy(dataToShow, 'measureMagnitude', sortOrder);
           break;
         case 'PO Initial Create Date':
           dataToShow = _.map(dataToShow, d => {

@@ -44,6 +44,9 @@
                   </div>
                 </div>
               </div>
+              <div slot="cost" slot-scope="cost">
+                {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
+              </div>
             </a-table>
           </div>
           <!-- / Orders table -->
@@ -70,15 +73,23 @@
 
 <script>
 import axios from "axios";
+import Orders from "../../../../mixins/Orders";
 
 const _ = require("lodash");
 
 const columns = [
   {
     title: "Name",
-    // dataIndex: "PO Li Description",
+    dataIndex: "Name",
     sorter: true,
     scopedSlots: {customRender: 'name'}
+  },
+  {
+    title: "Cost",
+    dataIndex: "Cost",
+    scopedSlots: {customRender: 'cost'},
+    sorter: true,
+    width: 110
   }
   // {
   //   title: "PO Number",
@@ -90,6 +101,7 @@ const columns = [
 export default {
   name: "AddOrderToClusterButtonAndModal",
   props: ["clusterId"],
+  mixins: [Orders],
   data() {
     return {
       isSaving: false,
@@ -160,6 +172,7 @@ export default {
       return {
         results_per_page: 10,
         q: this.searchQuery,
+        cluster_id: this.clusterId,
         ...params,
       };
     },
@@ -193,8 +206,8 @@ export default {
       this.fetch({
         results_per_page: pagination.pageSize,
         page: pagination.current,
-        sort_field: sorter.field,
-        sort_order: sorter.order,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
         ...filters,
       });
     },

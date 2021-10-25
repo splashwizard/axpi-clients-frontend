@@ -19,8 +19,8 @@
       <template slot="content">
         <div class="filters-inner">
 
-          <!-- Orders graph -->
-          <div v-if="activeGraph === 'orders'">
+          <!-- Common filters -->
+          <div>
             <!-- Measure -->
             <div class="filter-wrapper">
               <div class="filter-header">
@@ -38,7 +38,11 @@
               </div>
             </div>
             <!-- / Measure -->
+          </div>
+          <!-- / Common filters -->
 
+          <!-- Orders graph -->
+          <div v-if="activeGraph === 'orders'">
             <!-- Colour by -->
             <div class="filter-wrapper filter-last">
               <div class="filter-header">

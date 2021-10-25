@@ -50,7 +50,7 @@
         </div>
       </a-layout>
       <a-layout-sider
-          :width="sidebarType === 'add-order' ? 400 : 500"
+          :width="sidebarType === 'add-order' ? 500 : 500"
           theme="dark"
           :style="{ background: '#f7fafc', borderLeft: '1px solid #e3e8ee' }"
           :collapsed-width="0"
@@ -113,6 +113,7 @@ export default {
       selectedErpOrderId: null,
       isDeleting: false,
 
+      isLoading: false,
       isLoadingInsights: false,
       isLoadingOrdersWithMatches: false
     };

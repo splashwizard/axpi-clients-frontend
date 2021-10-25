@@ -237,7 +237,7 @@ export default {
       return [
         "description*x*cost_per_unit*order_date*vendor",
         (description, x, cost_per_unit, order_date, vendor) => {
-          if (x < 1) {
+          if (x < 1 && x !== 0) {
             // x = Number.parseFloat(x).toExponential(3);
             let exp = Number.parseFloat(x).toExponential(3);
             let split = exp.split('e');

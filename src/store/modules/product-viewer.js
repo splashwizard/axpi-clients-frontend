@@ -9,7 +9,10 @@ export const state = {
     serverErrors: [],
 
     documents: [],
-    isLoadingDocuments: false
+    isLoadingDocuments: false,
+
+    details: [],
+    isLoadingDetails: false
 };
 
 export const mutations = {
@@ -39,12 +42,32 @@ export const mutations = {
 
     STOP_LOADING_DOCUMENTS(state) {
         state.isLoadingDocuments = false;
+    },
+
+    SET_DETAILS(state, details) {
+        state.details = details;
+    },
+
+    START_LOADING_DETAILS(state) {
+        state.isLoadingDetails = true;
+    },
+
+    STOP_LOADING_DETAILS(state) {
+        state.isLoadingDetails = false;
     }
 };
 
 export const getters = {
     isLoading: (state) => {
         return state.isLoading;
+    },
+
+    isLoadingDocuments: (state) => {
+        return state.isLoadingDocuments;
+    },
+
+    isLoadingDetails: (state) => {
+        return state.isLoadingDetails;
     },
 
     product: (state) => {
@@ -64,7 +87,7 @@ export const getters = {
     vendors: (state) => {
         let vendors = [];
         if (state.product && state.product['product']) {
-           vendors.push(state.product['product']['vendor']);
+            vendors.push(state.product['product']['vendor']);
         }
         if (state.product && state.product['product_vendor_mapping']) {
             vendors.push(state.product['product_vendor_mapping']['vendors']['names']);
@@ -78,6 +101,10 @@ export const getters = {
 
     documents: (state) => {
         return state.documents;
+    },
+
+    details: (state) => {
+        return state.details;
     }
 };
 
@@ -86,10 +113,12 @@ export const actions = {
         commit('START_LOADING');
         commit('SET_ERRORS', []);
         commit('SET_DOCUMENTS', []);
+        commit('SET_DETAILS', []);
         axios.get(window.API_BASE + '/products/' + id).then(r => {
             commit('STOP_LOADING');
             commit('SET_PRODUCT', r.data);
             dispatch('loadDocuments');
+            dispatch('loadDetails');
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');
@@ -116,6 +145,20 @@ export const actions = {
         }).catch(e => {
             commit('STOP_LOADING_DOCUMENTS');
             this._vm.$message.error('Error loading documents');
+            console.log(e);
+        });
+    },
+
+    loadDetails({commit, getters}) {
+        let product = getters.product;
+
+        commit('START_LOADING_DETAILS');
+        axios.get(window.API_BASE + '/products/' + product['_id'] + '/details').then(r => {
+            commit('STOP_LOADING_DETAILS');
+            commit('SET_DETAILS', r.data);
+        }).catch(e => {
+            commit('STOP_LOADING_DETAILS');
+            this._vm.$message.error('Error loading details');
             console.log(e);
         });
     }

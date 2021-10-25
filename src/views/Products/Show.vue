@@ -1,6 +1,6 @@
 <template>
   <div class="product-show">
-    <loading-screen :is-loading="isLoading"></loading-screen>
+    <loading-screen :is-loading="isLoading||isLoadingDocuments||isLoadingDetails"></loading-screen>
 
     <a-page-header v-if="product" :title="product.name" @back="backToAllProducts"></a-page-header>
 
@@ -20,6 +20,11 @@
     <!-- Tabs -->
     <div class="tabs-wrapper">
       <a-tabs v-if="product">
+        <a-tab-pane key="specification" tab="Specification">
+          <div class="specifications-tab-wrapper">
+            <specifications-tab></specifications-tab>
+          </div>
+        </a-tab-pane>
         <a-tab-pane key="documents" tab="Documents">
           <documents-tab></documents-tab>
         </a-tab-pane>
@@ -33,10 +38,11 @@
 import {mapGetters, mapActions} from 'vuex';
 import ImageCarousel from "./Show/ImageCarousel";
 import DocumentsTab from "./Show/DocumentsTab";
+import SpecificationsTab from "./Show/SpecificationsTab";
 
 export default {
   name: "Show",
-  components: {DocumentsTab, ImageCarousel},
+  components: {DocumentsTab, SpecificationsTab, ImageCarousel},
   data() {
     return {}
   },
@@ -51,7 +57,9 @@ export default {
   computed: {
     ...mapGetters('productViewer', {
       product: 'product',
-      isLoading: 'isLoading'
+      isLoading: 'isLoading',
+      isLoadingDocuments: 'isLoadingDocuments',
+      isLoadingDetails: 'isLoadingDetails'
     })
   },
   methods: {
@@ -71,11 +79,19 @@ export default {
 </script>
 
 <style scoped>
+.product-show {
+  padding: 7px 30px;
+}
+
 .product-show-section {
   margin-top: 40px;
 }
 
 .tabs-wrapper {
   margin-top: 90px;
+}
+
+.specifications-tab-wrapper {
+  margin-top: 15px;
 }
 </style>

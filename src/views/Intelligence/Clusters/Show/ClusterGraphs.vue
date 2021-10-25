@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cluster-graphs">
     <!-- Graph selector -->
     <a-tabs v-model="active_graph">
       <a-tab-pane key="orders" tab="Orders"></a-tab-pane>
@@ -19,10 +19,12 @@
           </div>
           <div v-else>
             <cluster-orders-graph :graph-reload-key="graphReloadKey"
-                                  v-if="activeGraph === 'orders'" :orders="ordersWithMatchesFiltered"></cluster-orders-graph>
+                                  v-if="activeGraph === 'orders'"
+                                  :orders="ordersWithMatchesFiltered"></cluster-orders-graph>
 
             <cluster-demand-graph :graph-reload-key="graphReloadKey"
-                                  v-if="activeGraph === 'demand'" :orders="ordersWithMatchesFiltered"></cluster-demand-graph>
+                                  v-if="activeGraph === 'demand'"
+                                  :orders="ordersWithMatchesFiltered"></cluster-demand-graph>
           </div>
           <!-- / Graphs -->
         </a-col>
@@ -60,7 +62,7 @@ export default {
     }),
 
     isLoading() {
-     return !(this.ordersWithMatchesFiltered.length);
+      return !(this.ordersWithMatchesFiltered.length);
     },
 
     active_graph: {
@@ -95,10 +97,22 @@ export default {
 };
 </script>
 
-<style scoped>
-.sidebar-wrapper {
-  border-left: 1px solid #eee;
-  height: 100%;
-  padding-left: 20px;
+<style lang="scss">
+.cluster-graphs {
+  .sidebar-wrapper {
+    border-left: 1px solid #eee;
+    height: 100%;
+    padding-left: 20px;
+    padding-top: 24px;
+  }
+
+  .ant-col-19 {
+    padding-top: 24px;
+  }
+
+  .ant-card-body {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
 }
 </style>

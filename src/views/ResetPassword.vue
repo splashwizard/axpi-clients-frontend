@@ -85,7 +85,7 @@ export default {
 
           axios.post(window.API_COMMON_BASE + '/account/reset-password', {
             email: email,
-            token: vm.$route.params.token,
+            token: vm.$route.query.token,
             password: password
           }).then(() => {
             vm.isSaving = false;

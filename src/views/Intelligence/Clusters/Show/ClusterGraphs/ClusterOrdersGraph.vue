@@ -48,6 +48,9 @@
 const _ = require("lodash");
 import Orders from "../../../../../mixins/Orders";
 import {mapActions, mapGetters} from "vuex";
+import Moment from 'moment';
+import {extendMoment} from 'moment-range';
+const moment = extendMoment(Moment);
 
 export default {
   props: ["orders", "graphReloadKey"],
@@ -190,9 +193,22 @@ export default {
           }
         }
 
+        // Order date
+        let orderDate = null;
+        let orderDateMoment = null;
+        if (order["PO Initial Create Date"] && order["PO Initial Create Date"]["$date"] && order["PO Initial Create Date"]["$date"]["$numberLong"]) {
+          orderDateMoment = moment.unix(
+              Number(order["PO Initial Create Date"]["$date"]["$numberLong"]) / 1000
+          );
+          orderDate = orderDateMoment.format("DD/MM/YYYY")
+        }
+
         gd.push({
           id: order['_id'],
-          description: order['PO Li Description'],
+          // description: order['PO Li Description'],
+          description: order['product_name'],
+          vendor: order['Vendor'] ? order['Vendor'] : '-',
+          order_date: orderDate ? orderDate : '-',
           quantity: totalQuantity,
           cost: cost,
           cost_per_unit: x ? cost / x : cost,
@@ -219,8 +235,8 @@ export default {
 
     pointTooltip() {
       return [
-        "description*x*cost_per_unit",
-        (description, x, cost_per_unit) => {
+        "description*x*cost_per_unit*order_date*vendor",
+        (description, x, cost_per_unit, order_date, vendor) => {
           if (x < 1) {
             x = Number.parseFloat(x).toExponential(3);
           }
@@ -232,6 +248,8 @@ export default {
               cost: cost_per_unit,
               cost_currency: 'USD'
             }),
+            order_date: '<b>Order date: </b>' + order_date,
+            vendor: '<b>Vendor: </b>' + vendor,
             value: this.xLabel + " (" + x + "), " + 'Cost per unit ' + "(" + this.formatCostGraph({
               cost: cost_per_unit,
               cost_currency: 'USD'
@@ -261,7 +279,9 @@ export default {
           <span style="background-color:{color};" class="g2-tooltip-marker"></span>
           <b>{name}</b><br />
           {x_description}<br />
-          {cost_per_unit}
+          {cost_per_unit}<br />
+          {order_date}<br />
+          {vendor}
         </li>
       `,
     };
@@ -293,7 +313,7 @@ export default {
         return new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: currency,
-          minimumFractionDigits: 0,
+          minimumFractionDigits: 2,
           maximumFractionDigits: 2
         }).format(order.cost);
       }

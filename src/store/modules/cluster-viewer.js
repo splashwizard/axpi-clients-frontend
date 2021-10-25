@@ -12,10 +12,8 @@ export const state = {
     xOptions: null,
     selectedXOption: null,
 
-    colourByOptions: null,
     selectedColourByOption: null,
 
-    sizeByOptions: null,
     selectedSizeByOption: null,
 
     selectedBinByOption: 'day',
@@ -63,16 +61,8 @@ export const mutations = {
         state.selectedXOption = xOption;
     },
 
-    SET_COLOUR_BY_OPTIONS(state, options) {
-        state.colourByOptions = options;
-    },
-
     SELECT_COLOUR_BY_OPTION(state, option) {
         state.selectedColourByOption = option;
-    },
-
-    SET_SIZE_BY_OPTIONS(state, options) {
-        state.sizeByOptions = options;
     },
 
     SELECT_SIZE_BY_OPTION(state, option) {
@@ -155,7 +145,21 @@ export const getters = {
     },
 
     colourByOptions: (state) => {
-        return state.colourByOptions;
+        // return state.colourByOptions;
+        let options = [
+            {key: 'Vendor', label: 'Vendor'}
+        ];
+
+        let categoricalPropertyDescriptions = _.map(state.ordersWithMatches, 'product_categorical_property_descriptions');
+        let flattened = _.flatten(categoricalPropertyDescriptions);
+        options.push(_.map(flattened, v => {
+            return {
+                key: v,
+                label: v
+            }
+        }));
+
+        return _.uniqBy(_.flatten(options), 'label');
     },
 
     selectedColourByOption: (state) => {
@@ -235,16 +239,8 @@ export const actions = {
         commit('SELECT_X_OPTION', option);
     },
 
-    setColourByOptions({commit}, options) {
-        commit('SET_COLOUR_BY_OPTIONS', options);
-    },
-
     selectColourByOption({commit}, option) {
         commit('SELECT_COLOUR_BY_OPTION', option);
-    },
-
-    setSizeByOptions({commit}, options) {
-        commit('SET_SIZE_BY_OPTIONS', options);
     },
 
     selectSizeByOption({commit}, option) {

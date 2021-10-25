@@ -48,7 +48,7 @@
               </div>
               <div class="filter" v-if="showSelectedColourByOptionFilter">
                 <a-select v-model="selectedColourByOptionLocal" style="width: 200px;">
-                  <a-select-option v-for="(option, i) in colourByOptions" :value="option" :key="i">
+                  <a-select-option v-for="option in colourByOptions" :value="option.key" :key="option.key">
                     {{ option['label'] }}
                   </a-select-option>
                 </a-select>
@@ -139,6 +139,7 @@
 
 <script>
 import {mapGetters, mapActions} from "vuex";
+const _ = require('lodash');
 
 export default {
   name: "ClusterFilters",
@@ -202,9 +203,11 @@ export default {
     },
 
     selectedColourByOption(newVal) {
-      this.selectedColourByOptionLocal = newVal;
       if (newVal) {
         this.showSelectedColourByOptionFilter = true;
+        this.selectedColourByOptionLocal = newVal['key'];
+      } else {
+        this.selectedColourByOptionLocal = null;
       }
     },
 
@@ -356,7 +359,9 @@ export default {
       }
 
       if (this.showSelectedColourByOptionFilter) {
-        this.selectColourByOption(this.selectedColourByOptionLocal);
+        this.selectColourByOption(
+            _.find(this.colourByOptions, {key: this.selectedColourByOptionLocal})
+        );
       } else {
         this.selectColourByOption(null);
       }

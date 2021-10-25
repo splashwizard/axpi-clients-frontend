@@ -42,7 +42,7 @@
       <span v-else>-</span>
     </div>
     <div slot="normalisedMeasure" slot-scope="normalisedMeasure, record">
-      {{ getNormalisedMeasure(record) }}
+      <span v-html="getNormalisedMeasure(record)"></span>
     </div>
     <div class="insights-column" slot="insights" slot-scope="insights, record">
       <a style="margin-right: 15px;" href="#" @click.prevent="handleRecordSelected(record)">
@@ -90,11 +90,11 @@ export default {
     };
   },
   methods: {
-   ...mapActions('clusterViewer', {
-     setSortField: 'setSortField',
-     setSortOrder: 'setSortOrder',
-     setFilters: 'setFilters'
-   }),
+    ...mapActions('clusterViewer', {
+      setSortField: 'setSortField',
+      setSortOrder: 'setSortOrder',
+      setFilters: 'setFilters'
+    }),
 
     deleteRecord(order) {
       this.$emit("remove-order", order);
@@ -167,24 +167,30 @@ export default {
     },
 
     formatDatePurchased(datePurchased) {
-      let timestamp = datePurchased['$date']['$numberLong'] / 1000;
-      return moment.unix(timestamp).format('DD/MM/YYYY');
+      if (datePurchased['$date'] && datePurchased['$date']['$numberLong']) {
+        let timestamp = datePurchased['$date']['$numberLong'] / 1000;
+        return moment.unix(timestamp).format('DD/MM/YYYY');
+      }
+      return '-';
     },
 
     getNormalisedMeasure(order) {
       let product = this.getFirstProduct(order);
 
       let toReturn = null;
-      if (product && product['normalisedQuantity'] && product['normalisedQuantity']['totalMeasure']) {
-        let magnitude = product['normalisedQuantity']['totalMeasure']['normalisedUnitMagnitude'];
+      if (product && product['normalisedMeasure'] && product['normalisedMeasure']) {
+        let magnitude = product['normalisedMeasure']['normalisedUnitMagnitude'];
         // let magnitude = product['normalisedQuantity']['totalMeasure']['rawMagnitude'];
-        let unit = product['normalisedQuantity']['totalMeasure']['unit'];
+        let unit = product['normalisedMeasure']['unit'];
 
         if (magnitude && unit) {
           if (magnitude < 1) {
-            magnitude = Number.parseFloat(magnitude).toExponential(3);
+            // magnitude = Number.parseFloat(magnitude).toExponential(3);
+            let exp = Number.parseFloat(magnitude).toExponential(3);
+            let split = exp.split('e');
+            magnitude = split[0] + ' x 10' + '<sup>' + split[1] + '</sup>'
           }
-          toReturn = String(magnitude) + ' ' + unit;
+          toReturn = String(magnitude) + ' ' + (unit !== 'dimensionless' ? unit : null);
         }
       }
       if (toReturn) {

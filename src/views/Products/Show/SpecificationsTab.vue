@@ -5,7 +5,8 @@
       <tr>
         <th>Field Name</th>
         <th>Field Value</th>
-        <th>Normalised Field Value</th>
+        <th width="150">Normalised Value</th>
+        <th></th>
         <th></th>
       </tr>
       </thead>

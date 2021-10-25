@@ -50,6 +50,7 @@ import Orders from "../../../../../mixins/Orders";
 import {mapActions, mapGetters} from "vuex";
 import Moment from 'moment';
 import {extendMoment} from 'moment-range';
+
 const moment = extendMoment(Moment);
 
 export default {
@@ -73,14 +74,17 @@ export default {
 
     xUnit() {
       if (this.xLabel === 'volume') {
-        return 'm<sup>3</sup>';
+        return 'cubic metres';
       }
       return '';
     },
 
+
     costPerLabel() {
       if (this.xType === 'Quantity') {
         return 'unit';
+      } else if (this.xType === 'volume') {
+       return 'cubic metre';
       }
       return this.xLabel;
     },
@@ -113,36 +117,17 @@ export default {
         //   totalQuantity = Number(orderQuantity) * Number(order['product_quantity']);
         // }
 
+        // Measure
+        let measure = null;
+        if (order["products"] && order["products"].length) {
+          if (order["products"][0]['normalisedMeasure']) {
+            measure = order['products'][0]['normalisedMeasure'];
+          }
+        }
+
         // Properties
         let properties = {};
         if (order["products"] && order["products"].length) {
-          // let firstProductNormalisedData = order["products"][0]["normalisedData"];
-          // if (firstProductNormalisedData) {
-          //   _.each(firstProductNormalisedData, (propertyData, propertyType) => {
-          //     let unit = propertyData['unifiedData'][0]['unit'];
-          //     let magnitude = propertyData['unifiedData'][0]['rawMagnitude'];
-          //     // let key = propertyType + ' - ' + unit;
-          //     let key = unit;
-          //     properties[key] = {
-          //       magnitude: magnitude,
-          //       property_type: propertyType,
-          //       unit: unit
-          //     };
-          //   });
-          // }
-          // let firstProductNormalisedQuantity = order["products"][0]["normalisedQuantity"];
-          // if (firstProductNormalisedQuantity) {
-          //   let unit = firstProductNormalisedQuantity['normalisedUnitBase'];
-          //   let magnitude = firstProductNormalisedQuantity['normalisedUnitMagnitude'];
-          //   let entity = firstProductNormalisedQuantity['entity'];
-          //   // let key = propertyType + ' - ' + unit;
-          //   let key = entity;
-          //   properties[key] = {
-          //     magnitude: magnitude * orderQuantity,
-          //     property_type: entity,
-          //     unit: unit
-          //   };
-          // }
           if (order['product_numeric_properties']) {
             _.each(order['product_numeric_properties'], p => {
               let property = {
@@ -160,8 +145,8 @@ export default {
         if (this.xType === 'Quantity') {
           x = totalQuantity;
         } else {
-          if (Object.keys(properties).includes(this.xType)) {
-            x = properties[this.xType]['magnitude'];
+          if (measure && measure['entity'] === this.xType) {
+            x = measure['normalisedUnitMagnitude'];
           } else {
             x = null;
           }
@@ -174,10 +159,19 @@ export default {
           opacity = 0.9;
         }
 
-        let color = 'blue';
+        let color = 'Other';
         if (this.selectedColourByOption !== null) {
           let key = this.selectedColourByOption.key;
-          color = order[key];
+          if (key in order) {
+            color = order[key];
+          } else {
+            let colourByProperty = _.find(order['product_categorical_properties'], p => {
+              return p['propertyName'] === this.selectedColourByOption.key;
+            });
+            if (colourByProperty) {
+              color = colourByProperty['propertyValue'];
+            }
+          }
         }
 
         // Size by
@@ -210,6 +204,7 @@ export default {
           vendor: order['Vendor'] ? order['Vendor'] : '-',
           order_date: orderDate ? orderDate : '-',
           quantity: totalQuantity,
+          measure: measure,
           cost: cost,
           cost_per_unit: x ? cost / x : cost,
           properties: properties,
@@ -225,10 +220,15 @@ export default {
 
     xOptions() {
       let options = ['Quantity'];
+      // _.each(this.graphData, gd => {
+      //   let propertyLabels = Object.keys(gd['properties']);
+      //   options.push(propertyLabels);
+      //   options = _.flatten(options);
+      // });
       _.each(this.graphData, gd => {
-        let propertyLabels = Object.keys(gd['properties']);
-        options.push(propertyLabels);
-        options = _.flatten(options);
+        if (gd['measure'] !== null) {
+          options.push(gd['measure']['entity']);
+        }
       });
       return _.uniq(options);
     },
@@ -238,7 +238,10 @@ export default {
         "description*x*cost_per_unit*order_date*vendor",
         (description, x, cost_per_unit, order_date, vendor) => {
           if (x < 1) {
-            x = Number.parseFloat(x).toExponential(3);
+            // x = Number.parseFloat(x).toExponential(3);
+            let exp = Number.parseFloat(x).toExponential(3);
+            let split = exp.split('e');
+            x = split[0] + ' x 10' + '<sup>' + split[1] + '</sup>'
           }
           return {
             name: description,
@@ -290,17 +293,13 @@ export default {
   created() {
     this.setXOptions(this.xOptions);
     this.selectXOption('Quantity');
-    this.setColourByOptions([
-      {key: 'Vendor', label: 'Vendor'}
-    ]);
   },
 
   methods: {
     ...mapActions('clusterViewer', {
       toggleOrderSelected: 'toggleOrderSelected',
       setXOptions: 'setXOptions',
-      selectXOption: 'selectXOption',
-      setColourByOptions: 'setColourByOptions'
+      selectXOption: 'selectXOption'
     }),
 
     formatGraphLabel(label) {

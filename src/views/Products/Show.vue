@@ -89,10 +89,10 @@ export default {
 
 .tabs-wrapper {
   margin-top: 90px;
+  margin-bottom: 80px;
 }
 
 .specifications-tab-wrapper {
   margin-top: 15px;
-  margin-bottom: 20px;
 }
 </style>

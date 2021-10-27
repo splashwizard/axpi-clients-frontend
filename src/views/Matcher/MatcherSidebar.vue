@@ -20,7 +20,8 @@
                 <b>Vendor: </b><br>{{ selectedErpOrder['Vendor'] }}
               </p>
               <p>
-                <b>Cost: </b><br>${{ selectedErpOrder['Cost'] }}
+<!--                <b>Cost: </b><br>${{ selectedErpOrder['Cost'] }}-->
+                <b>Cost: </b><br>${{ selectedErpOrder['CHF_FLOAT'] }}
               </p>
             </a-col>
             <a-col :span="12">

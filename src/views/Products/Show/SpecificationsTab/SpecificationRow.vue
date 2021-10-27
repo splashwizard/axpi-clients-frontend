@@ -5,12 +5,7 @@
       {{ localDetail['propertyName'] }}
     </td>
     <td>
-      <span v-if="!isEditing" v-html="formatVal(localDetail['rawMagnitude'])"></span>
-      <a-input v-if="isEditing" v-model="details.rawMagnitude"/>
-    </td>
-    <td>
-      <span v-if="!isEditing">{{ localDetail['unit'] !== 'dimensionless' ? localDetail['unit'] : '' }}</span>
-      <a-input v-if="isEditing" v-model="details.unit"/>
+      <span v-html="getPropertyValue(localDetail)"></span>
     </td>
     <td>
       <span v-if="!isEditing" v-html="formatVal(localDetail['normalisedUnitMagnitude'])"></span>
@@ -24,6 +19,10 @@
     </td>
     <td class="text-right">
       <a-button @click.prevent="edit" v-if="!isEditing" size="small" icon="edit" type="default"></a-button>
+      <delete-product-detail-button style="margin-left: 6px;"
+          v-if="!isEditing" :product="product"
+                                    :details="localDetail"></delete-product-detail-button>
+
       <a-button @click.prevent="cancel" style="margin-right: 5px;" v-if="isEditing" size="small" type="default">Cancel
       </a-button>
       <a-button @click.prevent="save" v-if="isEditing" size="small" type="primary">Save</a-button>
@@ -34,9 +33,11 @@
 <script>
 import axios from 'axios';
 import {mapGetters, mapActions} from 'vuex';
+import DeleteProductDetailButton from "./DeleteProductDetailButton";
 
 export default {
   name: "SpecificationRow",
+  components: {DeleteProductDetailButton},
   props: ['detail'],
   data() {
     return {
@@ -56,9 +57,16 @@ export default {
     })
   },
   methods: {
-   ...mapActions('productViewer', {
-     loadDetails: 'loadDetails'
-   }),
+    ...mapActions('productViewer', {
+      loadDetails: 'loadDetails'
+    }),
+
+    getPropertyValue(detail) {
+      if (detail['propertyValues'] && detail['propertyValues'].length) {
+        return detail['propertyValues'][0];
+      }
+      return '-';
+    },
 
     edit() {
       this.isEditing = true;

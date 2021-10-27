@@ -108,7 +108,8 @@ export default {
       _.each(this.orders, (order) => {
         let x = 0;
 
-        let cost = order["Cost"];
+        // let cost = order["Cost"];
+        let cost = order["CHF_FLOAT"];
         let orderQuantity = order["Quantity"] !== "None" ? order["Quantity"] : 1;
 
         // Get total quantity (product quantity x erp order quantity)

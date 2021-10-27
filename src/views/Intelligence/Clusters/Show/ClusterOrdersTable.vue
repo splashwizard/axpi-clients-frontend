@@ -208,7 +208,7 @@ export default {
       if (toReturn) {
         return toReturn;
       }
-      return '-';
+      return '';
     },
 
     getProductLink(product) {
@@ -276,7 +276,8 @@ export default {
         },
         {
           title: "Cost",
-          dataIndex: "Cost",
+          // dataIndex: "Cost",
+          dataIndex: "CHF_FLOAT",
           scopedSlots: {customRender: 'cost'},
           sorter: true,
           width: 110
@@ -396,6 +397,9 @@ export default {
           break;
         case 'Cost':
           dataToShow = _.orderBy(dataToShow, 'Cost', sortOrder);
+          break;
+        case 'CHF_FLOAT':
+          dataToShow = _.orderBy(dataToShow, 'CHF_FLOAT', sortOrder);
           break;
         case 'PO Number':
           dataToShow = _.orderBy(dataToShow, 'PO Number', sortOrder);

@@ -112,7 +112,8 @@ export default {
           td.push(productRow);
         }
       });
-      return td;
+      return _.uniqBy(td, 'product_id');
+      // return td;
     }
   },
   methods: {

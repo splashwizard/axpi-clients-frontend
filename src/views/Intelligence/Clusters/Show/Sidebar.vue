@@ -86,7 +86,8 @@ const columns = [
   },
   {
     title: "Cost",
-    dataIndex: "Cost",
+    // dataIndex: "Cost",
+    dataIndex: "CHF_FLOAT",
     scopedSlots: {customRender: 'cost'},
     sorter: true,
     width: 110

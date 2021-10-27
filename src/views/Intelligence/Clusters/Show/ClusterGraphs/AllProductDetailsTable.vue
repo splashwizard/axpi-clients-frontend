@@ -69,7 +69,7 @@ export default {
           dataIndex: 'product_name',
           scopedSlots: {customRender: 'name'},
           sorter: true,
-          width: 300,
+          width: 350,
           fixed: 'left'
         },
         ..._.map(this.uniqueProperties, (p) => ({

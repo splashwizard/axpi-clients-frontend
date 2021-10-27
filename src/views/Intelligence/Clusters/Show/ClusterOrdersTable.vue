@@ -39,7 +39,7 @@
         </span>
         {{ formatCost({cost: calculateMaxPotentialSavings(record), cost_currency: 'USD'}) }}
       </span>
-      <span v-else>-</span>
+      <span v-else></span>
     </div>
     <div slot="normalisedMeasure" slot-scope="normalisedMeasure, record">
       <span v-html="getNormalisedMeasure(record)"></span>

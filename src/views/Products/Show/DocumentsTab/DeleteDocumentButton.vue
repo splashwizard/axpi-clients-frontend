@@ -1,5 +1,5 @@
 <template>
-  <a-popover slot="actions"
+  <a-popover v-model="visible"
              placement="topRight"
              trigger="click">
     <template slot="title">
@@ -11,17 +11,54 @@
     </template>
     <template slot="content">
       <div class="popover-inner popconfirm">
-        <a-button type="" size="small" style="margin-right: 10px;">Cancel</a-button>
-        <a-button type="danger" size="small">Delete</a-button>
+        <a-button :disabled="isDeleting"
+                  @click="visible = false" size="small" style="margin-right: 10px;">Cancel</a-button>
+        <a-button :disabled="isDeleting"
+                  @click.prevent="deleteDocument" type="danger" size="small">Delete</a-button>
       </div>
     </template>
-    <a href="#" class="text-danger">Delete</a>
+    <a-button :disabled="isDeleting"
+              size="small" icon="delete" type="danger"></a-button>
   </a-popover>
 </template>
 
 <script>
+import axios from 'axios';
+import {mapActions} from 'vuex';
 export default {
-name: "DocumentListItem"
+  name: "DeleteDocumentButton",
+  props: ['product', 'document'],
+  data() {
+    return {
+      visible: false,
+      isDeleting: false
+    }
+  },
+  methods: {
+    ...mapActions('productViewer', {
+      loadDocuments: 'loadDocuments'
+    }),
+
+    deleteDocument() {
+      let vm = this;
+
+      if (vm.isDeleting) {
+        return false;
+      }
+
+      vm.isDeleting = true;
+      axios.delete(window.API_BASE + '/products/' + this.product['productCode'] + '/documents/' + this.document['_id']).then(() => {
+        vm.isDeleting = false;
+        vm.visible = false;
+        vm.$message.success('Document deleted successfully');
+        vm.loadDocuments();
+      }).catch(e => {
+        console.log(e);
+        vm.isDeleting = false;
+        vm.$message.error('Error deleting document');
+      });
+    }
+  }
 }
 </script>
 

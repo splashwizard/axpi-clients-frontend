@@ -1,14 +1,30 @@
 <template>
-  <div>
-    <a-list v-if="documents.length" item-layout="horizontal" :data-source="documents">
-      <a-list-item slot="renderItem" slot-scope="item">
-        <a-list-item-meta>
-          <div slot="title">{{ item.description }}</div>
-        </a-list-item-meta>
-        <a slot="actions" :href="getDownloadLink(item.url)" target="_blank">Download</a>
-        <delete-document-button></delete-document-button>
-      </a-list-item>
-    </a-list>
+  <div style="padding-top: 15px;">
+    <table class="axpi-basic-table">
+      <thead>
+      <tr>
+        <th>Document</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(document, i) in documents" :key="i">
+        <td>
+          {{ document.description }}
+        </td>
+        <td>
+<!--          <a style="margin-right: 5px" :href="getDownloadLink(document.url)" target="_blank">Download</a>-->
+          <a-button @click.prevent="download(document.url)"
+              icon="download" size="small" style="margin-right: 5px;"></a-button>
+          <delete-document-button :product="product" :document="document"></delete-document-button>
+        </td>
+      </tr>
+      <tr v-if="documents.length === 0">
+       <td colspan="2">No documents</td>
+      </tr>
+      </tbody>
+    </table>
+
 
     <div class="upload-button-wrapper">
       <a-upload
@@ -19,7 +35,7 @@
           :headers="headers"
           @change="handleChange"
       >
-        <a-button>
+        <a-button type="primary">
           <a-icon type="upload"/>
           Click to Upload
         </a-button>
@@ -31,9 +47,11 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import store from "../../../store";
+import DeleteDocumentButton from "./DocumentsTab/DeleteDocumentButton";
 
 export default {
   name: "DocumentsTab",
+  components: {DeleteDocumentButton},
   computed: {
     ...mapGetters('productViewer', {
       product: 'product',
@@ -70,6 +88,10 @@ export default {
 
     getDownloadLink(src) {
       return window.IMAGE_STORAGE_BASE + '/' + src;
+    },
+
+    download(src) {
+      window.open(this.getDownloadLink(src), '_blank');
     }
   },
   data() {
@@ -80,7 +102,7 @@ export default {
 
 <style scoped>
 .upload-button-wrapper {
-  margin-top: 15px;
+  margin-top: 35px;
 }
 
 .ant-popover-inner-content {

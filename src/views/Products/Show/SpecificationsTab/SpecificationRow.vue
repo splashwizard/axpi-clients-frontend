@@ -12,15 +12,20 @@
       <a-input v-if="isEditing" v-model="details.normalisedUnitMagnitude"/>
     </td>
     <td>
-      <span v-if="!isEditing">{{
-          localDetail['normalisedUnitBase'] !== 'dimensionless' ? localDetail['normalisedUnitBase'] : ''
-        }}</span>
-      <a-input v-if="isEditing" v-model="details.normalisedUnitBase"/>
+      <span v-if="!isEditing">{{ formatUnit(localDetail.normalisedUnitBase) }}</span>
+      <!--      <a-input v-if="isEditing" v-model="details.normalisedUnitBase"/>-->
+      <a-select v-if="isEditing" v-model="details.normalisedUnitBase" style="width: 100%">
+        <a-select-option v-for="(option, i) in unitOptions" :value="option.unit" :key="i">
+          {{ option.unit == 'dimensionless' ? 'dimensionless' : null }}
+          {{ option.unit == 'count' ? 'count' : null }}
+          {{ option.display }}
+        </a-select-option>
+      </a-select>
     </td>
     <td class="text-right">
       <a-button @click.prevent="edit" v-if="!isEditing" size="small" icon="edit" type="default"></a-button>
       <delete-product-detail-button style="margin-left: 6px;"
-          v-if="!isEditing" :product="product"
+                                    v-if="!isEditing" :product="product"
                                     :details="localDetail"></delete-product-detail-button>
 
       <a-button @click.prevent="cancel" style="margin-right: 5px;" v-if="isEditing" size="small" type="default">Cancel
@@ -34,10 +39,12 @@
 import axios from 'axios';
 import {mapGetters, mapActions} from 'vuex';
 import DeleteProductDetailButton from "./DeleteProductDetailButton";
+import Units from "../../../../mixins/Units";
 
 export default {
   name: "SpecificationRow",
   components: {DeleteProductDetailButton},
+  mixins: [Units],
   props: ['detail'],
   data() {
     return {

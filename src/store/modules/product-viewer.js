@@ -153,6 +153,7 @@ export const actions = {
         let product = getters.product;
 
         commit('START_LOADING_DETAILS');
+        commit('SET_DETAILS', []);
         axios.get(window.API_BASE + '/products/' + product['_id'] + '/details').then(r => {
             commit('STOP_LOADING_DETAILS');
             commit('SET_DETAILS', r.data);

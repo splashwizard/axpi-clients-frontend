@@ -6,7 +6,7 @@
     <!-- Table -->
     <a-table v-if="!isLoading"
              class="axpi-table small-th column-dividers"
-             :scroll="{ x: 1300 }"
+             :scroll="{ x: 'max-content' }"
              :columns="columns"
              :data-source="tableData"
              :loading="isLoading"
@@ -80,7 +80,10 @@ export default {
           sorter: true,
           width: 200,
           scopedSlots: {customRender: p}
-        }))
+        })),
+        {
+          title: ''
+        }
       ]
     },
 

@@ -19,11 +19,14 @@
         <td>
           <a-input placeholder="Property name" v-model="newDetails.propertyName"/>
         </td>
+<!--        <td>-->
+<!--          <a-input placeholder="Value" v-model="newDetails.rawMagnitude"/>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--          <a-input placeholder="Unit" v-model="newDetails.unit"/>-->
+<!--        </td>-->
         <td>
-          <a-input placeholder="Value" v-model="newDetails.rawMagnitude"/>
-        </td>
-        <td>
-          <a-input placeholder="Unit" v-model="newDetails.unit"/>
+
         </td>
         <td>
           <a-input placeholder="Value" v-model="newDetails.normalisedUnitMagnitude"/>

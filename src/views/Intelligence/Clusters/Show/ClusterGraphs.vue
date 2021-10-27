@@ -5,12 +5,13 @@
       <a-tab-pane key="orders" tab="Orders"></a-tab-pane>
       <!--      <a-tab-pane key="prices" tab="Prices"></a-tab-pane>-->
       <a-tab-pane key="demand" tab="Demand"></a-tab-pane>
-      <!--      <a-tab-pane key="product-details" tab="Product Details"></a-tab-pane>-->
+      <a-tab-pane key="product-details" tab="Product Details">
+      </a-tab-pane>
     </a-tabs>
     <!-- / Graph selector -->
 
     <!-- Card -->
-    <a-card>
+    <a-card v-if="activeGraph !== 'product-details'">
       <a-row type="flex" :gutter="20">
         <a-col :span="19">
           <!-- Graphs -->
@@ -25,6 +26,7 @@
             <cluster-demand-graph :graph-reload-key="graphReloadKey"
                                   v-if="activeGraph === 'demand'"
                                   :orders="ordersWithMatchesFiltered"></cluster-demand-graph>
+
           </div>
           <!-- / Graphs -->
         </a-col>
@@ -36,6 +38,15 @@
       </a-row>
     </a-card>
     <!-- / Card -->
+
+    <!-- Table -->
+    <div v-if="activeGraph === 'product-details'">
+      <div v-if="isLoading" style="text-align: center;">
+        <a-spin></a-spin>
+      </div>
+      <all-product-details-table v-if="activeGraph === 'product-details'"></all-product-details-table>
+    </div>
+    <!-- / Table -->
   </div>
 </template>
 
@@ -45,10 +56,11 @@ import ClusterStatsSidebar from "./ClusterGraphs/ClusterStatsSidebar.vue";
 // import axios from 'axios';
 import ClusterOrdersGraph from './ClusterGraphs/ClusterOrdersGraph.vue';
 import ClusterDemandGraph from "./ClusterGraphs/ClusterDemandGraph";
+import AllProductDetailsTable from "./ClusterGraphs/AllProductDetailsTable";
 
 export default {
   props: ["clusterId", "graphReloadKey"],
-  components: {ClusterDemandGraph, ClusterStatsSidebar, ClusterOrdersGraph},
+  components: {AllProductDetailsTable, ClusterDemandGraph, ClusterStatsSidebar, ClusterOrdersGraph},
   data() {
     return {
       // isLoading: false,

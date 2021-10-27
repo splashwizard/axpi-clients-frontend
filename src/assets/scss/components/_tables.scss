@@ -21,6 +21,24 @@
     }
   }
 
+  &.small-th {
+    th {
+      padding-top: 3px;
+      padding-bottom: 3px;
+    }
+  }
+
+  &.column-dividers {
+   table {
+     border-left: 1px solid #e8e8e8 !important;
+     border-top: 1px solid #e8e8e8 !important;
+   }
+
+    td, th {
+      border-right: 1px solid #e8e8e8 !important;
+    }
+  }
+
   td {
     padding-top: 9px !important;
     padding-bottom: 9px !important;

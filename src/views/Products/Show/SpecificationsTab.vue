@@ -71,7 +71,10 @@ export default {
     detailsToShow() {
       let d = this.details;
       d.push(this.detailsToAppend);
-      return _.flatten(d);
+      let flattened = _.flatten(d);
+      return _.filter(flattened, f => {
+        return !(f.variableType && f.variableType === 'categorical');
+      });
     }
   },
   data() {

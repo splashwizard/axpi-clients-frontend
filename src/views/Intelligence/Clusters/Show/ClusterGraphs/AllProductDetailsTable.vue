@@ -36,9 +36,11 @@
 const _ = require('lodash');
 import {mapGetters} from 'vuex';
 import axios from 'axios';
+import Units from "../../../../../mixins/Units";
 
 export default {
   name: "AllProductDetailsTable",
+  mixins: [Units],
   data() {
     return {
       enriched: [],
@@ -96,15 +98,19 @@ export default {
               propertyName: p
             });
             if (property) {
-              let magnitudeFormatted = property.propertyValue;
-              if (magnitudeFormatted < 1 && magnitudeFormatted !== 0) {
-                let exp = Number.parseFloat(magnitudeFormatted).toExponential(3);
-                let split = exp.split('e');
-                magnitudeFormatted = split[0] + ' x 10' + '<sup>' + split[1] + '</sup>'
-              }
+              if (property.variableType && property.variableType === 'categorical') {
+                productRow[p] = property.propertyValue;
+              } else {
+                let magnitudeFormatted = property.propertyValue;
+                if (magnitudeFormatted < 1 && magnitudeFormatted !== 0) {
+                  let exp = Number.parseFloat(magnitudeFormatted).toExponential(3);
+                  let split = exp.split('e');
+                  magnitudeFormatted = split[0] + ' x 10' + '<sup>' + split[1] + '</sup>'
+                }
 
-              let propertyUnitFormatted = this.formatUnit(property.propertyUnit);
-              productRow[p] = magnitudeFormatted + ' ' + propertyUnitFormatted;
+                let propertyUnitFormatted = this.formatUnit(property.propertyUnit);
+                productRow[p] = magnitudeFormatted + ' ' + propertyUnitFormatted;
+              }
             } else {
               productRow[p] = '';
             }
@@ -131,12 +137,6 @@ export default {
       return record["products"][0];
     },
 
-    formatUnit(unit) {
-     if (unit === 'dimensionless') {
-       return '';
-     }
-     return unit;
-    },
 
     enrich() {
       let vm = this;

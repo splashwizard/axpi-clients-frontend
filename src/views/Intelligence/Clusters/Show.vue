@@ -35,7 +35,7 @@
             <!-- / Graphs -->
 
             <!-- Orders & Insights -->
-            <a-tabs>
+            <a-tabs v-if="activeGraph !== 'product-details'">
               <a-tab-pane tab="All Orders">
                 <cluster-orders-table
                     :key="reloadKey"
@@ -119,9 +119,10 @@ export default {
     };
   },
   computed: {
-   ...mapGetters('clusterViewer', {
-     cluster: 'cluster'
-   }),
+    ...mapGetters('clusterViewer', {
+      cluster: 'cluster',
+      activeGraph: 'activeGraph'
+    }),
 
     shouldHideSidebar() {
       return !this.shouldShowSidebar;

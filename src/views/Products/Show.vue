@@ -11,7 +11,31 @@
           <image-carousel :urls="product['imageURLs']"></image-carousel>
         </a-col>
         <a-col :span="11">
-          {{ product['description'] }}
+          <!-- More details -->
+          <div class="more-details" v-if="productVendorMapping && productVendorMapping.vendors">
+            <h3>Vendors:</h3>
+            <a-badge v-for="(vendor, i) in productVendorMapping.vendors.names" :key="i"
+                     :count="vendor"/>
+          </div>
+          <!-- / More details -->
+
+          <h3>Description:</h3>
+          <div v-if="descriptionTooLong">
+            {{ descriptionToShow }}
+            <div style="margin-top: 10px;">
+              <a v-if="descriptionShowMore"
+                 href="#" style="margin-top: 5px;" @click.prevent="toggleDescriptionShowMore">View less
+                <a-icon :style="{fontSize: '10px'}" type="up"/>
+              </a>
+              <a v-if="!descriptionShowMore"
+                 href="#" style="margin-top: 5px;" @click.prevent="toggleDescriptionShowMore">View more
+                <a-icon :style="{fontSize: '10px'}" type="down"/>
+              </a>
+            </div>
+          </div>
+          <div v-if="!descriptionTooLong">
+            {{ product['description'] }}
+          </div>
         </a-col>
       </a-row>
     </div>
@@ -44,7 +68,9 @@ export default {
   name: "Show",
   components: {DocumentsTab, SpecificationsTab, ImageCarousel},
   data() {
-    return {}
+    return {
+      descriptionShowMore: false
+    }
   },
   created() {
     this.attemptLoadProduct();
@@ -57,15 +83,35 @@ export default {
   computed: {
     ...mapGetters('productViewer', {
       product: 'product',
+      productVendorMapping: 'productVendorMapping',
       isLoading: 'isLoading',
       isLoadingDocuments: 'isLoadingDocuments',
       isLoadingDetails: 'isLoadingDetails'
-    })
+    }),
+
+    descriptionTooLong() {
+      let length = this.product['description'].length;
+      if (length > 1000) {
+        return true;
+      }
+      return false;
+    },
+
+    descriptionToShow() {
+      if (this.descriptionShowMore) {
+        return this.product['description'];
+      }
+      return this.product['description'].substring(0, 1000);
+    }
   },
   methods: {
     ...mapActions('productViewer', {
       loadProduct: 'loadProduct'
     }),
+
+    toggleDescriptionShowMore() {
+      this.descriptionShowMore = !this.descriptionShowMore;
+    },
 
     backToAllProducts() {
       this.$router.push('/products');
@@ -78,7 +124,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .product-show {
   padding: 7px 30px;
 }
@@ -94,5 +140,13 @@ export default {
 
 .specifications-tab-wrapper {
   margin-top: 15px;
+}
+
+.more-details {
+  margin-bottom: 20px;
+
+  .ant-badge {
+    margin-right: 5px;
+  }
 }
 </style>

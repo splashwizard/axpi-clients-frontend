@@ -117,6 +117,13 @@ export const getters = {
             });
         }
 
+        if (state.filters && state.filters['product_name'] && state.filters['product_name'].length) {
+            ordersWithMatches = _.filter(ordersWithMatches, o => {
+                return state.filters['product_name'].includes(o['product_name']);
+                // return true;
+            });
+        }
+
         // Size by filter - we don't want to include points
         // That don't have this property
         if (state.selectedSizeByOption) {

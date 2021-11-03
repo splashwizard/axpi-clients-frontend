@@ -76,13 +76,14 @@
 <script>
 import Orders from "../../../../mixins/Orders";
 import moment from 'moment';
+import Units from "../../../../mixins/Units";
 import {mapGetters, mapActions} from "vuex";
 
 const _ = require('lodash');
 
 export default {
   props: ["clusterId"],
-  mixins: [Orders],
+  mixins: [Orders, Units],
   data() {
     return {
       data: [],
@@ -202,7 +203,8 @@ export default {
             let split = exp.split('e');
             magnitude = split[0] + ' x 10' + '<sup>' + split[1] + '</sup>'
           }
-          toReturn = String(magnitude) + ' ' + (unit !== 'dimensionless' ? unit : null);
+          // toReturn = String(magnitude) + ' ' + (unit !== 'dimensionless' ? unit : null);
+          toReturn = String(magnitude) + ' ' + this.formatUnit(unit);
         }
       }
       if (toReturn) {
@@ -258,7 +260,13 @@ export default {
           scopedSlots: {customRender: 'name'},
           fixed: 'left',
           width: 350,
-          sorter: true
+          sorter: true,
+          filters: _.map(this.productNameOptions, o => {
+            return {
+              text: o,
+              value: o
+            }
+          })
         },
         {
           title: "Date Purchased",
@@ -348,6 +356,10 @@ export default {
 
     vendorFilterOptions() {
       return _.uniq(_.map(this.ordersWithMatches, 'Vendor'));
+    },
+
+    productNameOptions() {
+      return _.uniq(_.map(this.ordersWithMatches, 'product_name'));
     },
 
     dataToShow() {

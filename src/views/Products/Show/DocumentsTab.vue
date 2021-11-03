@@ -12,34 +12,39 @@
         <td>
           {{ document.description }}
         </td>
-        <td>
-<!--          <a style="margin-right: 5px" :href="getDownloadLink(document.url)" target="_blank">Download</a>-->
+        <td style="text-align: right;">
+          <!--          <a style="margin-right: 5px" :href="getDownloadLink(document.url)" target="_blank">Download</a>-->
           <a-button @click.prevent="download(document.url)"
-              icon="download" size="small" style="margin-right: 5px;"></a-button>
+                    icon="download" size="small" style="margin-right: 5px;"></a-button>
           <delete-document-button :product="product" :document="document"></delete-document-button>
         </td>
       </tr>
       <tr v-if="documents.length === 0">
-       <td colspan="2">No documents</td>
+        <td colspan="2">No documents</td>
       </tr>
       </tbody>
     </table>
 
 
     <div class="upload-button-wrapper">
-      <a-upload
-          :showUploadList="false"
-          name="file"
-          :multiple="true"
-          :action="uploadUrl"
-          :headers="headers"
-          @change="handleChange"
-      >
-        <a-button type="primary">
-          <a-icon type="upload"/>
-          Click to Upload
-        </a-button>
-      </a-upload>
+      <!--      <a-upload-->
+      <!--          :showUploadList="false"-->
+      <!--          name="file"-->
+      <!--          :multiple="true"-->
+      <!--          :action="uploadUrl"-->
+      <!--          :headers="headers"-->
+      <!--          @change="handleChange"-->
+      <!--      >-->
+      <!--        <a-button type="primary">-->
+      <!--          <a-icon type="upload"/>-->
+      <!--          Click to Upload-->
+      <!--        </a-button>-->
+      <!--      </a-upload>-->
+
+      <!-- Upload document button and modal -->
+      <upload-document-button-and-modal :product="product"></upload-document-button-and-modal>
+      <!-- / Upload document button and modal -->
+
     </div>
   </div>
 </template>
@@ -48,10 +53,11 @@
 import {mapGetters, mapActions} from 'vuex';
 import store from "../../../store";
 import DeleteDocumentButton from "./DocumentsTab/DeleteDocumentButton";
+import UploadDocumentButtonAndModal from "./DocumentsTab/UploadDocumentButtonAndModal";
 
 export default {
   name: "DocumentsTab",
-  components: {DeleteDocumentButton},
+  components: {UploadDocumentButtonAndModal, DeleteDocumentButton},
   computed: {
     ...mapGetters('productViewer', {
       product: 'product',

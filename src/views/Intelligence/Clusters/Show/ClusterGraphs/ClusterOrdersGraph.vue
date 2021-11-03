@@ -147,7 +147,8 @@ export default {
           x = totalQuantity;
         } else {
           if (measure && measure['entity'] === this.xType) {
-            x = measure['normalisedUnitMagnitude'];
+            // x = measure['normalisedUnitMagnitude'];
+            x = measure['normalisedUnitMagnitude'] * orderQuantity;
           } else {
             x = null;
           }

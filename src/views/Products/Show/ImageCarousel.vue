@@ -47,4 +47,13 @@ export default {
 .ant-carousel >>> .slick-thumb li.slick-active img {
   filter: grayscale(0%);
 }
+.slick-dots li {
+  margin-right: 20px;
+}
+.slick-dots li:last-child {
+  margin-right: 0 !important;
+}
+.slick-dots img {
+  border: 1px solid #e8e8e8;
+}
 </style>

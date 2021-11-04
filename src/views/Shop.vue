@@ -41,7 +41,7 @@
 
               <div slot="datasheet" slot-scope="datasheet, row">
                 <span>
-                  <a :href="row.URL">
+                  <a :href="row.URL" target="_blank">
                     <a-icon type="link"></a-icon>
                     Product Brochure
                   </a>

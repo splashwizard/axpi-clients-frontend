@@ -7,7 +7,7 @@ export const state = {
     basket: [],
     isLoading: false,
     searchQuery: '',
-    pagination: {},
+    tablePagination: {},
     enriched: []
 };
 
@@ -24,8 +24,8 @@ export const mutations = {
         state.isLoading = false;
     },
 
-    SET_PAGINATION(state, pagination) {
-        state.pagination = pagination;
+    SET_TABLE_PAGINATION(state, pagination) {
+        state.tablePagination = pagination;
     },
 
     SET_BASKET(state) {
@@ -86,8 +86,8 @@ export const getters = {
     searchQuery: (state) => {
         return state.searchQuery;
     },
-    pagination: (state) => {
-        return state.pagination;
+    tablePagination: (state) => {
+        return state.tablePagination;
     },
     enriched: (state) => {
         return state.enriched;
@@ -106,7 +106,7 @@ export const actions = {
             commit('SET_SEARCH_RESULTS', r.data);
             const pagination = {...getters.pagination};
             pagination.total = r.data.total;
-            commit('SET_PAGINATION', pagination);
+            commit('SET_TABLE_PAGINATION', pagination);
             commit('STOP_LOADING');
             if (r.data.data.length) {
                 dispatch('enrich');
@@ -121,8 +121,8 @@ export const actions = {
         commit('SET_SEARCH_QUERY', query);
     },
 
-    setPagination({commit}, pagination) {
-        commit('SET_PAGINATION', pagination);
+    setTablePagination({commit}, pagination) {
+        commit('SET_TABLE_PAGINATION', pagination);
     },
 
     addProductToBasket({commit}, product) {

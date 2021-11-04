@@ -52,6 +52,11 @@
     //display: none !important;
   }
 
+  .ant-table-thead > tr > th[colspan]:not([colspan='1']) {
+    text-align: left;
+    border-bottom: 1px solid #e8e8e8 !important;
+  }
+
   //.ant-table-column-sorter-down.on {
   //  margin-top: 8px !important;
   //}

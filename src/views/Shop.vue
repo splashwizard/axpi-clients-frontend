@@ -28,23 +28,42 @@
                      :scroll="{ x: 'max-content' }"
                      :columns="columns"
                      :data-source="tableData"
+                     :pagination="pagination"
+                     @change="handleTableChange"
                      :loading="isLoading"
             >
+             <div slot="image" slot-scope="image, row">
+               <a-avatar
+                   size="large"
+                   :src="getImageSrc(row)"
+               />
+             </div>
+
+              <div slot="datasheet" slot-scope="datasheet, row">
+                <span>
+                  <a :href="row.URL">
+                    <a-icon type="link"></a-icon>
+                    Product Brochure
+                  </a>
+                </span>
+              </div>
+
               <div v-for="(p,i) in uniqueProperties" :slot="p" :key="i" slot-scope="property">
                 <span v-html="property"></span>
               </div>
 
               <div slot="actions" slot-scope="actions, record">
                 <a-button v-if="!isProductInBasket(record)"
-                    type="primary" @click.prevent="() => addProductToBasket(record)">Add to basket</a-button>
+                          type="primary" @click.prevent="() => addProductToBasket(record)">Add to basket
+                </a-button>
 
                 <div v-else class="quantity-changer">
                   <a-button @click.prevent="() => decrementProductQuantity(record)"
-                  icon="minus">
+                            icon="minus">
                   </a-button>
                   <div>{{ getQuantityOfProductInBasket(record) }}</div>
                   <a-button @click.prevent="() => incrementProductQuantity(record)"
-                      icon="plus"></a-button>
+                            icon="plus"></a-button>
                 </div>
               </div>
             </a-table>
@@ -59,6 +78,7 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import Units from "../mixins/Units";
+
 const _ = require('lodash');
 
 export default {
@@ -70,7 +90,7 @@ export default {
       searchResults: 'searchResults',
       isLoading: 'isLoading',
       searchQuery: 'searchQuery',
-      pagination: 'pagination',
+      tablePagination: 'tablePagination',
       basket: 'basket',
       enriched: 'enriched'
     }),
@@ -81,6 +101,15 @@ export default {
       },
       set(val) {
         this.setSearchQuery(val);
+      }
+    },
+
+    pagination: {
+      get() {
+        return this.tablePagination;
+      },
+      set(val) {
+        this.setTablePagination(val);
       }
     },
 
@@ -96,18 +125,44 @@ export default {
     columns() {
       return [
         {
+          title: '',
+          width: 60,
+          fixed: 'left',
+          scopedSlots: {customRender: 'image'}
+        },
+        {
           title: 'Name',
           dataIndex: 'name',
           width: 350,
           fixed: 'left'
         },
-        ..._.map(this.uniqueProperties, (p) => ({
-          title: p,
-          dataIndex: p,
-          sorter: false,
-          width: 200,
-          scopedSlots: {customRender: p}
-        })),
+        {
+          title: 'Market Data',
+          children: [
+            {
+              title: '',
+              dataIndex: 'datasheet',
+              scopedSlots: {customRender: 'datasheet'}
+            },
+            {
+              title: 'Price',
+              dataIndex: 'price',
+              scopedSlots: {customRender: 'price'}
+            }
+          ]
+        },
+        {
+          title: 'Most Relevant',
+          children: [
+            ..._.map(this.uniqueProperties, (p) => ({
+              title: p,
+              dataIndex: p,
+              sorter: false,
+              width: 200,
+              scopedSlots: {customRender: p}
+            })),
+          ]
+        },
         {
           title: '',
         },
@@ -156,11 +211,17 @@ export default {
     ...mapActions('shop', {
       search: 'search',
       setSearchQuery: 'setSearchQuery',
-      setPagination: 'setPagination',
+      setTablePagination: 'setTablePagination',
       addProductToBasket: 'addProductToBasket',
       incrementProductQuantity: 'incrementProductQuantity',
       decrementProductQuantity: 'decrementProductQuantity'
     }),
+
+    getImageSrc(order) {
+      if (order['imageURLs'] && order['imageURLs'].length) {
+        return order['imageURLs'][0];
+      }
+    },
 
     goToBasket() {
       this.$router.push('/shop/basket');
@@ -169,7 +230,8 @@ export default {
     handleTableChange(pagination, filters, sorter) {
       const pager = {...this.pagination};
       pager.current = pagination.current;
-      this.setPagination(pager);
+      // this.setPagination(pager);
+      this.pagination = pager;
       this.search({
         results_per_page: pagination.pageSize,
         page: pagination.current,

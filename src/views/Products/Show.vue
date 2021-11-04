@@ -19,6 +19,13 @@
           </div>
           <!-- / More details -->
 
+          <!-- Manufacturer -->
+          <div class="more-details" v-if="product && product['manufacturer']">
+            <h3>Manufacturer:</h3>
+            {{ product['manufacturer'] }}
+          </div>
+          <!-- / Manufacturer -->
+
           <h3>Description:</h3>
           <div v-if="descriptionTooLong">
             {{ descriptionToShow }}

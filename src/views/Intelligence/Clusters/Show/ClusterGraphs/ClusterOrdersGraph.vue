@@ -132,7 +132,8 @@ export default {
           if (order['product_numeric_properties']) {
             _.each(order['product_numeric_properties'], p => {
               let property = {
-                magnitude: p.propertyValue * orderQuantity,
+                // magnitude: p.propertyValue * orderQuantity,
+                magnitude: p.propertyValue,
                 property_type: p.propertyName,
                 unit: p.propertyUnit
               };

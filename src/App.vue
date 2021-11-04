@@ -175,6 +175,11 @@
             <!--                            Option 10-->
             <!--                        </a-menu-item>-->
             <!--                    </a-sub-menu>-->
+            <a-menu-item key="shop" title="Shop">
+              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping"
+                      theme="filled"></a-icon>
+              <span v-if="!menuCollapsed">Shop</span>
+            </a-menu-item>
             <a-menu-item key="developers" title="Developers">
               <developers-icon class="nav-icon"></developers-icon>
               <span v-if="!menuCollapsed">Developers</span>
@@ -265,11 +270,11 @@ export default {
     }),
 
     noPadding() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product'].includes(this.$route.name);
+      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
     },
 
     menuCollapsed() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product'].includes(this.$route.name);
+      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
     }
   }
 }

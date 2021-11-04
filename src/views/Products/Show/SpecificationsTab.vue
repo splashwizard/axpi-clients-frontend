@@ -11,8 +11,11 @@
       </tr>
       </thead>
       <tbody>
-      <specification-row v-for="(detail, i) in detailsToShow" :detail="detail" :key="i"
+      <specification-row v-for="(detail, i) in numericDetailsToShow" :detail="detail" :key="i"
       ></specification-row>
+
+      <categorical-specification-row v-for="(detail, i) in categoricalDetailsToShow" :detail="detail" :key="i"
+      ></categorical-specification-row>
 
       <!-- New row -->
       <tr v-if="isAddingNewProperty">
@@ -32,7 +35,14 @@
           <a-input placeholder="Value" v-model="newDetails.normalisedUnitMagnitude"/>
         </td>
         <td>
-          <a-input placeholder="Unit" v-model="newDetails.normalisedUnitBase"/>
+<!--          <a-input placeholder="Unit" v-model="newDetails.normalisedUnitBase"/>-->
+          <a-select v-model="newDetails.normalisedUnitBase" style="width: 100%">
+            <a-select-option v-for="(option, i) in unitOptions" :value="option.unit" :key="i">
+              {{ option.unit == 'dimensionless' ? 'dimensionless' : null }}
+              {{ option.unit == 'count' ? 'count' : null }}
+              {{ option.display }}
+            </a-select-option>
+          </a-select>
         </td>
         <td class="text-right">
           <a-button @click.prevent="cancel" style="margin-right: 5px;" size="small" type="default">Cancel
@@ -56,24 +66,35 @@
 <script>
 import SpecificationRow from "./SpecificationsTab/SpecificationRow";
 import LoadingScreen from "../../../components/LoadingScreen";
+import CategoricalSpecificationRow from "./SpecificationsTab/CategoricalSpecificationRow";
+import Units from "../../../mixins/Units";
 import {mapGetters} from "vuex";
 import axios from 'axios';
 const _ = require('lodash');
 
 export default {
   name: "SpecificationsTabs",
-  components: {SpecificationRow, LoadingScreen},
+  components: {SpecificationRow, CategoricalSpecificationRow, LoadingScreen},
+  mixins: [Units],
   computed: {
     ...mapGetters('productViewer', {
       details: 'details',
       product: 'product'
     }),
-    detailsToShow() {
+    numericDetailsToShow() {
       let d = this.details;
       d.push(this.detailsToAppend);
       let flattened = _.flatten(d);
       return _.filter(flattened, f => {
         return !(f.variableType && f.variableType === 'categorical');
+      });
+    },
+    categoricalDetailsToShow() {
+      let d = this.details;
+      d.push(this.detailsToAppend);
+      let flattened = _.flatten(d);
+      return _.filter(flattened, f => {
+        return f.variableType && f.variableType === 'categorical';
       });
     }
   },

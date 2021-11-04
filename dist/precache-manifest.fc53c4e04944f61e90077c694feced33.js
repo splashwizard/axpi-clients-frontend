@@ -8,8 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "f8ffee34fee5329d4c49",
+    "revision": "17af4f66c312d626b35a",
     "url": "/css/app.aa1bc5eb.css"
+  },
+  {
+    "revision": "865688ed52cd3d56a190",
+    "url": "/css/basket.90192209.css"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -52,16 +56,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
+    "revision": "b7248da0b6d719da4a96",
+    "url": "/css/shop.21464d29.css"
+  },
+  {
     "revision": "272cc17e4eecfc3c54b3",
     "url": "/css/suppliers.667b8801.css"
   },
   {
-    "revision": "18a8f91d6564d1c1f3a9",
-    "url": "/css/view-cluster.f4921568.css"
+    "revision": "063d04626296e244a9e2",
+    "url": "/css/view-cluster.6311cb17.css"
   },
   {
-    "revision": "39885f9b686072dc992b",
-    "url": "/css/view-product.8fb2da66.css"
+    "revision": "da7ceff9698805962634",
+    "url": "/css/view-product.a8f2b5eb.css"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",
@@ -292,7 +300,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "b644fe2772c99f175e5a2aa9db4f6a17",
+    "revision": "ac8babe0bad105d043e59318d9721eea",
     "url": "/index.html"
   },
   {
@@ -312,8 +320,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.99bed1e2.js"
   },
   {
-    "revision": "f8ffee34fee5329d4c49",
-    "url": "/js/app.3f33c37c.js"
+    "revision": "17af4f66c312d626b35a",
+    "url": "/js/app.bfd6f278.js"
+  },
+  {
+    "revision": "865688ed52cd3d56a190",
+    "url": "/js/basket.93b6e9ef.js"
   },
   {
     "revision": "2706a51eff719f2b2069",
@@ -360,6 +372,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.7b91bd79.js"
   },
   {
+    "revision": "b7248da0b6d719da4a96",
+    "url": "/js/shop.9050c943.js"
+  },
+  {
     "revision": "ce6ba83fc462e668279a",
     "url": "/js/specifications.ca6a6dc9.js"
   },
@@ -368,12 +384,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/suppliers.bde8334b.js"
   },
   {
-    "revision": "18a8f91d6564d1c1f3a9",
-    "url": "/js/view-cluster.239f6a31.js"
+    "revision": "063d04626296e244a9e2",
+    "url": "/js/view-cluster.bf1a6d21.js"
   },
   {
-    "revision": "39885f9b686072dc992b",
-    "url": "/js/view-product.ba9dc351.js"
+    "revision": "da7ceff9698805962634",
+    "url": "/js/view-product.cfa18967.js"
   },
   {
     "revision": "5ce0f3d872d18262a5ad",

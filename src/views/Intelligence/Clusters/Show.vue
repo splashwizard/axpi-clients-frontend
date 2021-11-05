@@ -14,6 +14,8 @@
             <template slot="extra">
               <cluster-filters></cluster-filters>
 
+              <a-button icon="export" @click.prevent="exportCsv">Export</a-button>
+
               <a-button
                   type="primary"
                   icon="plus"
@@ -89,6 +91,8 @@ import Sidebar from "./Show/Sidebar.vue";
 import InsightsSidebar from "./Show/InsightsSidebar";
 import {mapActions, mapGetters} from "vuex";
 import ClusterFilters from "./Show/ClusterFilters";
+import {ExportToCsv} from 'export-to-csv';
+import moment from "moment";
 
 const _ = require("lodash");
 
@@ -121,7 +125,8 @@ export default {
   computed: {
     ...mapGetters('clusterViewer', {
       cluster: 'cluster',
-      activeGraph: 'activeGraph'
+      activeGraph: 'activeGraph',
+      ordersWithMatchesFiltered: 'ordersWithMatchesFiltered'
     }),
 
     shouldHideSidebar() {
@@ -133,6 +138,28 @@ export default {
         return this.cluster['insights_applied'];
       }
       return [];
+    },
+
+    exportData() {
+      return _.map(this.ordersWithMatchesFiltered, o => {
+        let params = {
+          'Name': o['PO Li Description'],
+        }
+
+        // Date Purchased
+        let datePurchased = o['PO Initial Create Date'];
+        if (datePurchased && datePurchased['$date'] && datePurchased['$date']['$numberLong']) {
+          let timestamp = datePurchased['$date']['$numberLong'] / 1000;
+          params['Date Purchased'] = moment.unix(timestamp).format('DD/MM/YYYY');
+        } else {
+          params['Date Purchased'] = '-';
+        }
+
+        // Quantity
+        params['Quantity'] = o['total_quantity'] ? o['total_quantity'] : Number(o['Quantity']);
+
+        return params;
+      });
     }
   },
   watch: {
@@ -148,6 +175,23 @@ export default {
       setOrdersWithMatches: 'setOrdersWithMatches',
       setActiveGraph: 'setActiveGraph'
     }),
+
+    exportCsv() {
+      const options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: this.cluster.name,
+        useTextFile: false,
+        useBom: true,
+        useKeysAsHeaders: true,
+        filename: this.cluster.name
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.exportData);
+    },
 
     backToAllClusters() {
       this.$router.push("/intelligence/clusters");

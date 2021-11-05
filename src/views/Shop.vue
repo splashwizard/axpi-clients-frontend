@@ -10,6 +10,7 @@
               <a-button icon="shopping" @click="goToBasket">
                 <span style="margin-right: 5px;">Basket</span> <span v-if="basket.length">({{ basket.length }})</span>
               </a-button>
+              <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
             </template>
           </a-page-header>
 
@@ -23,7 +24,7 @@
           />
           <!-- / Search -->
 
-          <div class="table-wrapper">
+          <div class="table-wrapper" v-if="tableData && tableData.length">
             <a-table v-if="!isLoading" class="axpi-table column-dividers"
                      :scroll="{ x: 'max-content' }"
                      :columns="columns"
@@ -78,12 +79,13 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import Units from "../mixins/Units";
+import AddSpecToBasketButtonAndModal from "./Shop/AddSpecToBasketButtonAndModal";
 
 const _ = require('lodash');
 
 export default {
   name: "Shop",
-  components: {},
+  components: {AddSpecToBasketButtonAndModal},
   mixins: [Units],
   computed: {
     ...mapGetters('shop', {
@@ -205,7 +207,7 @@ export default {
     }
   },
   created() {
-    this.search();
+    // this.search();
   },
   methods: {
     ...mapActions('shop', {

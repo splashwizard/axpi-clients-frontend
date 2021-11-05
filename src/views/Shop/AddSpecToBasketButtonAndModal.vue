@@ -1,6 +1,6 @@
 <template>
   <div style="display: inline !important;">
-    <a-button type="primary" icon="plus" @click.prevent="showMethodSelectorModal">Add Specifications</a-button>
+    <a-button type="default" icon="plus" @click.prevent="showMethodSelectorModal"></a-button>
 
     <a-modal title="Add Specifications" :visible="methodSelectorModalVisible" @cancel="handleMethodSelectorCancel"
              :footer="false">
@@ -43,7 +43,7 @@
 
       <div class="toolbar">
         <div class="left">
-          <a-input-search placeholder="Search" style="width: 250px" />
+          <a-input-search placeholder="Search" style="width: 250px"/>
         </div>
         <div class="right">
 <!--          <a-button icon="filter">Filter</a-button>-->
@@ -72,7 +72,7 @@
           {{ displayTimeAgo(date) }}
         </div>
         <!--        <div slot="actions" slot-scope="name, record" class="table-actions">-->
-        <!--          <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>-->
+        <!--          <a-button @click.prevent="addSpecificationToBasket(record)">Add</a-button>-->
         <!--        </div>-->
       </a-table>
 
@@ -95,7 +95,7 @@
 
       <div class="toolbar">
         <div class="left">
-          <a-input-search placeholder="Search" style="width: 250px" />
+          <a-input-search placeholder="Search" style="width: 250px"/>
         </div>
         <div class="right">
           <a-button icon="filter">Filter</a-button>
@@ -127,7 +127,7 @@
           {{ displayTimeAgo(date) }}
         </div>
         <!--        <div slot="actions" slot-scope="name, record" class="table-actions">-->
-        <!--          <a-button @click.prevent="addSpecificationToOptimisation(record)">Add</a-button>-->
+        <!--          <a-button @click.prevent="addSpecificationToBasket(record)">Add</a-button>-->
         <!--        </div>-->
       </a-table>
 
@@ -147,6 +147,7 @@
 import axios from 'axios';
 import Orders from "../../mixins/Orders";
 import Dates from "../../mixins/Dates";
+import {mapActions} from 'vuex';
 
 const _ = require('lodash');
 
@@ -217,8 +218,8 @@ const PAST_ORDERS_COLUMNS = [
 ];
 
 export default {
-  name: "AddSpecificationToOptimisationButtonAndModal",
-  props: ['optimisation'],
+  name: "AddSpecToBasketButtonAndModal",
+  props: [],
   mixins: [Orders, Dates],
   data() {
     return {
@@ -278,6 +279,11 @@ export default {
     },
   },
   methods: {
+   ...mapActions('shop', {
+     addPastOrderToBasket: 'addPastOrderToBasket',
+     addSpecificationToBasket: 'addSpecificationToBasket'
+   }),
+
     selectMethod(method) {
       this.methodSelectorModalVisible = false;
       if (method === 'saved') {
@@ -332,39 +338,20 @@ export default {
       });
     },
 
-    addSpecificationToOptimisation(specification) {
-      let vm = this;
-      vm.isSaving = true;
-      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/create-from-specification', {
-        specification_id: specification.id
-      }).then(() => {
-        vm.isSaving = false;
-        vm.$message.success('Specification added successfully');
-        vm.$emit('refresh-optimisation');
-      }).catch(e => {
-        console.log(e);
-        vm.isSaving = false;
-        vm.$message.error('Error adding specification');
-      });
-    },
-
     addSpecifications() {
       if (this.selectedSpecificationIds.length == 0) {
         return false
       }
       let vm = this;
       vm.isSaving = true;
-      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/create-from-specifications', {
-        specification_ids: vm.selectedSpecificationIds
-      }).then(() => {
-        vm.isSaving = false;
-        vm.$message.success('Specifications added successfully');
-        vm.$emit('refresh-optimisation');
-      }).catch(e => {
-        console.log(e);
-        vm.isSaving = false;
-        vm.$message.error('Error adding specifications');
+      _.each(this.selectedSpecificationIds, id => {
+        let order = _.find(this.specifications, {id: id});
+        if (order) {
+          this.addSpecificationToBasket(order);
+        }
       });
+      vm.isSaving = false;
+      vm.savedSpecModalVisible = false;
     },
 
     // Past Orders
@@ -403,39 +390,20 @@ export default {
       });
     },
 
-    addPastOrderToOptimisation(pastOrder) {
-      let vm = this;
-      vm.isSaving = true;
-      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/create-from-past-order', {
-        order_id: pastOrder.id
-      }).then(() => {
-        vm.isSaving = false;
-        vm.$message.success('Past order added successfully');
-        vm.$emit('refresh-optimisation');
-      }).catch(e => {
-        console.log(e);
-        vm.isSaving = false;
-        vm.$message.error('Error adding past order');
-      });
-    },
-
     addPastOrders() {
       if (this.selectedPastOrdersIds.length == 0) {
         return false
       }
       let vm = this;
       vm.isSaving = true;
-      axios.post(window.API_BASE + '/optimisations/' + this.optimisation.id + '/create-from-orders', {
-        order_ids: vm.selectedPastOrdersIds
-      }).then(() => {
-        vm.isSaving = false;
-        vm.$message.success('Orders added successfully');
-        vm.$emit('refresh-optimisation');
-      }).catch(e => {
-        console.log(e);
-        vm.isSaving = false;
-        vm.$message.error('Error adding orders');
+      _.each(this.selectedPastOrdersIds, id => {
+        let order = _.find(this.pastOrders, {id: id});
+        if (order) {
+          this.addPastOrderToBasket(order);
+        }
       });
+      vm.isSaving = false;
+      vm.pastOrdersModalVisible = false;
     }
   }
 }

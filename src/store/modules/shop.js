@@ -40,7 +40,28 @@ export const mutations = {
         state.basket.push({
             itemType: 'product',
             id: product['_id'],
+            name: product.name,
             product: product,
+            quantity: 1
+        });
+    },
+
+    ADD_PAST_ORDER_TO_BASKET(state, order) {
+       state.basket.push({
+           itemType: 'order',
+           id: order['id'],
+           name: order['product_name'],
+           order: order,
+           quantity: 1
+       });
+    },
+
+    ADD_SPECIFICATION_TO_BASKET(state, spec) {
+        state.basket.push({
+            itemType: 'specification',
+            id: spec['id'],
+            name: spec['product_name'],
+            specification: spec,
             quantity: 1
         });
     },
@@ -60,6 +81,52 @@ export const mutations = {
             return (
                 item.itemType === 'product'
                 && item.id === product['_id']
+            );
+        });
+        p.quantity--;
+        if (p.quantity < 1) {
+            state.basket = _.without(state.basket, p);
+        }
+    },
+
+    INCREMENT_PAST_ORDER_QUANTITY(state, order) {
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'order'
+                && item.id === order['id']
+            );
+        });
+        p.quantity++;
+    },
+
+    DECREMENT_PAST_ORDER_QUANTITY(state, order) {
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'order'
+                && item.id === order['id']
+            );
+        });
+        p.quantity--;
+        if (p.quantity < 1) {
+            state.basket = _.without(state.basket, p);
+        }
+    },
+
+    INCREMENT_SPECIFICATION_QUANTITY(state, spec) {
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'specification'
+                && item.id === spec['id']
+            );
+        });
+        p.quantity++;
+    },
+
+    DECREMENT_SPECIFICATION_QUANTITY(state, spec) {
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'specification'
+                && item.id === spec['id']
             );
         });
         p.quantity--;
@@ -125,6 +192,14 @@ export const actions = {
         commit('SET_TABLE_PAGINATION', pagination);
     },
 
+    addPastOrderToBasket({commit}, order) {
+        commit('ADD_PAST_ORDER_TO_BASKET', order);
+    },
+
+    addSpecificationToBasket({commit}, spec) {
+        commit('ADD_SPECIFICATION_TO_BASKET', spec);
+    },
+
     addProductToBasket({commit}, product) {
         commit('ADD_PRODUCT_TO_BASKET', product);
     },
@@ -135,6 +210,22 @@ export const actions = {
 
     decrementProductQuantity({commit}, product) {
         commit('DECREMENT_PRODUCT_QUANTITY', product);
+    },
+
+    incrementPastOrderQuantity({commit}, product) {
+        commit('INCREMENT_PAST_ORDER_QUANTITY', product);
+    },
+
+    decrementPastOrderQuantity({commit}, product) {
+        commit('DECREMENT_PAST_ORDER_QUANTITY', product);
+    },
+
+    incrementSpecificationQuantity({commit}, product) {
+        commit('INCREMENT_SPECIFICATION_QUANTITY', product);
+    },
+
+    decrementSpecificationQuantity({commit}, product) {
+        commit('DECREMENT_SPECIFICATION_QUANTITY', product);
     },
 
     enrich({commit, getters}) {

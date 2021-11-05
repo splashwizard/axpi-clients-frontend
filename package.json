@@ -21,6 +21,7 @@
     "country-list-js": "^3.1.7",
     "d3": "^6.6.2",
     "element-ui": "^2.15.1",
+    "export-to-csv": "^0.2.1",
     "html2canvas": "^1.0.0-rc.7",
     "insert-css": "^2.0.0",
     "less": "^4.1.1",

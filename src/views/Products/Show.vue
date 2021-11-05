@@ -2,7 +2,10 @@
   <div class="product-show">
     <loading-screen :is-loading="isLoading||isLoadingDocuments||isLoadingDetails"></loading-screen>
 
-    <a-page-header v-if="product" :title="product.name" @back="backToAllProducts"></a-page-header>
+<!--    <a-page-header v-if="product" :title="product.name"-->
+<!--                   @back="backToAllProducts"-->
+<!--    ></a-page-header>-->
+    <a-page-header v-if="product" :title="product.name"></a-page-header>
 
     <!-- Images & Description -->
     <div v-if="product" class="product-show-section">

@@ -15,7 +15,8 @@
           >
 
             <div slot="actions" slot-scope="actions, record">
-              <div class="quantity-changer">
+              <!-- Product -->
+              <div v-if="record.itemType === 'product'" class="quantity-changer">
                 <a-button @click.prevent="() => decrementProductQuantity(record.product)"
                           icon="minus">
                 </a-button>
@@ -23,6 +24,27 @@
                 <a-button @click.prevent="() => incrementProductQuantity(record.product)"
                           icon="plus"></a-button>
               </div>
+              <!-- / Product -->
+              <!-- Order -->
+              <div v-if="record.itemType === 'order'" class="quantity-changer">
+                <a-button @click.prevent="() => decrementPastOrderQuantity(record.order)"
+                          icon="minus">
+                </a-button>
+                <div>{{ record.quantity }}</div>
+                <a-button @click.prevent="() => incrementPastOrderQuantity(record.order)"
+                          icon="plus"></a-button>
+              </div>
+              <!-- / Order -->
+              <!-- Specification -->
+              <div v-if="record.itemType === 'specification'" class="quantity-changer">
+                <a-button @click.prevent="() => decrementSpecificationQuantity(record.specification)"
+                          icon="minus">
+                </a-button>
+                <div>{{ record.quantity }}</div>
+                <a-button @click.prevent="() => incrementSpecificationQuantity(record.specification)"
+                          icon="plus"></a-button>
+              </div>
+              <!-- / Specification -->
             </div>
           </a-table>
         </div>
@@ -42,7 +64,7 @@ export default {
      columns: [
        {
          title: 'Name',
-         dataIndex: 'product.name',
+         dataIndex: 'name',
          width: 350,
        },
        {
@@ -56,7 +78,13 @@ export default {
   methods: {
     ...mapActions('shop', {
       incrementProductQuantity: 'incrementProductQuantity',
-      decrementProductQuantity: 'decrementProductQuantity'
+      decrementProductQuantity: 'decrementProductQuantity',
+
+      incrementPastOrderQuantity: 'incrementPastOrderQuantity',
+      decrementPastOrderQuantity: 'decrementPastOrderQuantity',
+
+      incrementSpecificationQuantity: 'incrementSpecificationQuantity',
+      decrementSpecificationQuantity: 'decrementSpecificationQuantity'
     }),
 
     goBackToShop() {

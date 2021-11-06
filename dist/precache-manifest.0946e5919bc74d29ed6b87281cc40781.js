@@ -4,11 +4,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/account.6e73487a.css"
   },
   {
-    "revision": "f93affaa07b0635eda77",
+    "revision": "bee1304f3535544ea973",
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "d149a79be62c715233f9",
+    "revision": "10327e421bf66dbb8dd0",
     "url": "/css/app.8096af74.css"
   },
   {
@@ -32,16 +32,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/matcher.6dd6419f.css"
   },
   {
-    "revision": "a4d298ed0f00b6cfaec4",
-    "url": "/css/optimisation.bb0e4074.css"
+    "revision": "ab2e97dda55b28de6c21",
+    "url": "/css/optimisation.24b02b97.css"
   },
   {
     "revision": "1d51667c014c146a5c00",
     "url": "/css/optimisations.df260471.css"
   },
   {
-    "revision": "c36ec4bc849a9209b662",
-    "url": "/css/optimisation~orders~specifications.2fa1b8cc.css"
+    "revision": "095983eb00c917755a43",
+    "url": "/css/optimisation~orders~shop~specifications.2fa1b8cc.css"
   },
   {
     "revision": "5d955e5205de9b967229",
@@ -56,16 +56,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "eab88da45b6b65b1501c",
-    "url": "/css/shop.147e101e.css"
+    "revision": "6ffba458b82d0c190878",
+    "url": "/css/shop.5348f8ad.css"
   },
   {
     "revision": "578f0632d9e7878f8bc1",
     "url": "/css/suppliers.667b8801.css"
   },
   {
-    "revision": "4a36006949c06dd30e1b",
-    "url": "/css/view-cluster.21d6761f.css"
+    "revision": "440a37521e447f8c30b3",
+    "url": "/css/view-cluster.354253df.css"
   },
   {
     "revision": "f6b356ebcb582c4f00c4",
@@ -300,7 +300,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "4558f1d858bc538bc12c5731ef24317a",
+    "revision": "7f8ba7850cdcaa229a4c6c7789fe78ef",
     "url": "/index.html"
   },
   {
@@ -312,16 +312,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/account.c27d9b16.js"
   },
   {
-    "revision": "f93affaa07b0635eda77",
-    "url": "/js/analytics.84695093.js"
+    "revision": "bee1304f3535544ea973",
+    "url": "/js/analytics.77733dc3.js"
   },
   {
-    "revision": "7419e2c472a38757dc25",
-    "url": "/js/analytics~optimisation~orders.99bed1e2.js"
+    "revision": "6c1f63fe2a6fb66548d1",
+    "url": "/js/analytics~optimisation~orders.71a807f3.js"
   },
   {
-    "revision": "d149a79be62c715233f9",
-    "url": "/js/app.d264e944.js"
+    "revision": "10327e421bf66dbb8dd0",
+    "url": "/js/app.eea9cf84.js"
   },
   {
     "revision": "856e8d4e65697a4f32a1",
@@ -344,16 +344,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/matcher.fc793c85.js"
   },
   {
-    "revision": "a4d298ed0f00b6cfaec4",
-    "url": "/js/optimisation.7540bfc7.js"
+    "revision": "ab2e97dda55b28de6c21",
+    "url": "/js/optimisation.a06d99c3.js"
   },
   {
     "revision": "1d51667c014c146a5c00",
     "url": "/js/optimisations.81241d66.js"
   },
   {
-    "revision": "c36ec4bc849a9209b662",
-    "url": "/js/optimisation~orders~specifications.4e597c5e.js"
+    "revision": "095983eb00c917755a43",
+    "url": "/js/optimisation~orders~shop~specifications.22bcc8e7.js"
   },
   {
     "revision": "5d955e5205de9b967229",
@@ -372,20 +372,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.02e7a29d.js"
   },
   {
-    "revision": "eab88da45b6b65b1501c",
-    "url": "/js/shop.b27050da.js"
+    "revision": "6ffba458b82d0c190878",
+    "url": "/js/shop.85b98270.js"
   },
   {
-    "revision": "8dc240ec3183d031b270",
-    "url": "/js/specifications.a295176d.js"
+    "revision": "156479fc86e1d5e0b5d0",
+    "url": "/js/specifications.c72a8cbe.js"
   },
   {
     "revision": "578f0632d9e7878f8bc1",
     "url": "/js/suppliers.4ca34403.js"
   },
   {
-    "revision": "4a36006949c06dd30e1b",
-    "url": "/js/view-cluster.28f92fb4.js"
+    "revision": "440a37521e447f8c30b3",
+    "url": "/js/view-cluster.4dce5542.js"
   },
   {
     "revision": "f6b356ebcb582c4f00c4",

@@ -1,6 +1,9 @@
 <template>
   <div style="display: inline !important;">
-    <a-button type="default" icon="plus" @click.prevent="showMethodSelectorModal"></a-button>
+    <a-button size="large" type="default" icon="plus" @click.prevent="showMethodSelectorModal"></a-button>
+
+    <edit-order-modal v-if="order && type === 'specification'">
+    </edit-order-modal>
 
     <a-modal title="Add Specifications" :visible="methodSelectorModalVisible" @cancel="handleMethodSelectorCancel"
              :footer="false">
@@ -46,7 +49,7 @@
           <a-input-search placeholder="Search" style="width: 250px"/>
         </div>
         <div class="right">
-<!--          <a-button icon="filter">Filter</a-button>-->
+          <!--          <a-button icon="filter">Filter</a-button>-->
         </div>
       </div>
 
@@ -147,7 +150,9 @@
 import axios from 'axios';
 import Orders from "../../mixins/Orders";
 import Dates from "../../mixins/Dates";
-import {mapActions} from 'vuex';
+import EditOrderModal from "../../components/Orders/EditOrderModal";
+import {mapActions, mapGetters} from 'vuex';
+import eventBus from "../../event-bus";
 
 const _ = require('lodash');
 
@@ -221,6 +226,7 @@ export default {
   name: "AddSpecToBasketButtonAndModal",
   props: [],
   mixins: [Orders, Dates],
+  components: {EditOrderModal},
   data() {
     return {
       serverErrors: [],
@@ -242,10 +248,18 @@ export default {
       pastOrdersColumns: PAST_ORDERS_COLUMNS,
       selectedPastOrdersIds: [],
 
+      isExpectingSpecificationToBeAdded: false,
+      idOfSpecificationAdded: null,
+
       isSaving: false
     }
   },
   computed: {
+    ...mapGetters('orderEditor', {
+      order: 'order',
+      type: 'type'
+    }),
+
     isLoading() {
       return (this.isLoadingSpecifications || this.isLoadingPastOrders);
     },
@@ -278,11 +292,34 @@ export default {
       }
     },
   },
+  created() {
+    eventBus.$on('specification-updated', spec => {
+      if (spec.id === this.idOfSpecificationAdded) {
+        this.updateSpecificationInBasket(spec);
+      }
+    });
+  },
+  watch: {
+    order(updatedSpec) {
+      if (updatedSpec) {
+        if (this.isExpectingSpecificationToBeAdded) {
+          this.idOfSpecificationAdded = updatedSpec.id;
+          this.addSpecificationToBasket(updatedSpec);
+          this.isExpectingSpecificationToBeAdded = false;
+        }
+      }
+    }
+  },
   methods: {
-   ...mapActions('shop', {
-     addPastOrderToBasket: 'addPastOrderToBasket',
-     addSpecificationToBasket: 'addSpecificationToBasket'
-   }),
+    ...mapActions('shop', {
+      addPastOrderToBasket: 'addPastOrderToBasket',
+      addSpecificationToBasket: 'addSpecificationToBasket',
+      updateSpecificationInBasket: 'updateSpecificationInBasket'
+    }),
+
+    ...mapActions('orderEditor', {
+      createSpecification: 'createSpecification'
+    }),
 
     selectMethod(method) {
       this.methodSelectorModalVisible = false;
@@ -292,6 +329,14 @@ export default {
       if (method === 'past-orders') {
         this.showPastOrdersModal();
       }
+      if (method === 'create-new') {
+        this.createNewSpecificationAndAddToBasket();
+      }
+    },
+
+    createNewSpecificationAndAddToBasket() {
+      this.isExpectingSpecificationToBeAdded = true;
+      this.createSpecification();
     },
 
     showMethodSelectorModal() {

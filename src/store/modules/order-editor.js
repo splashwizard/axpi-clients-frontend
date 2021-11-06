@@ -1,7 +1,7 @@
 import axios from 'axios';
 import orders from "../../helpers/orders";
 import validator from "../../helpers/validator";
-
+import eventBus from "../../event-bus";
 let _ = require('lodash');
 // import router from "../../router";
 
@@ -269,6 +269,13 @@ export const actions = {
         commit('START_SAVING');
         commit('SET_ERRORS', []);
         axios.put(resource, orders.encodeOrder(order)).then(() => {
+           if (getters.type === 'specification') {
+              eventBus.$emit('specification-updated', {
+                  id: order.id,
+                  product_name: order.product_name
+              });
+           }
+
             commit('STOP_SAVING');
             if (quitAfterSave === true) {
                 commit('SET_ORDER', null)

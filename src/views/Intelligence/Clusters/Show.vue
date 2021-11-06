@@ -12,9 +12,9 @@
               @back="backToAllClusters"
           >
             <template slot="extra">
-              <cluster-filters></cluster-filters>
+              <a-button icon="download" @click.prevent="exportCsv"></a-button>
 
-              <a-button icon="export" @click.prevent="exportCsv">Export</a-button>
+              <cluster-filters></cluster-filters>
 
               <a-button
                   type="primary"

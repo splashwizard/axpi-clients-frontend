@@ -10,18 +10,25 @@
               <a-button icon="shopping" @click="goToBasket">
                 <span style="margin-right: 5px;">Basket</span> <span v-if="basket.length">({{ basket.length }})</span>
               </a-button>
-              <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
             </template>
           </a-page-header>
 
           <!-- Search -->
-          <a-input-search
-              placeholder="Search by catalog number, product name, keyword, application"
-              enter-button="Search"
-              v-model="search_query"
-              size="large"
-              @search="search"
-          />
+          <div class="search-wrapper">
+            <div class="left">
+              <a-input-search
+                  placeholder="Search by catalog number, product name, keyword, application"
+                  enter-button="Search"
+                  v-model="search_query"
+                  size="large"
+                  @search="search"
+              />
+            </div>
+            <div class="right">
+              <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
+            </div>
+          </div>
+
           <!-- / Search -->
 
           <div class="table-wrapper" v-if="tableData && tableData.length">
@@ -33,18 +40,18 @@
                      @change="handleTableChange"
                      :loading="isLoading"
             >
-             <div slot="image" slot-scope="image, row">
-               <a-avatar
-                   size="large"
-                   :src="getImageSrc(row)"
-               />
-             </div>
+              <div slot="image" slot-scope="image, row">
+                <a-avatar
+                    size="large"
+                    :src="getImageSrc(row)"
+                />
+              </div>
 
               <div slot="datasheet" slot-scope="datasheet, row">
                 <span>
                   <a :href="row.URL" target="_blank">
                     <a-icon type="link"></a-icon>
-                    Product Brochure
+                    Datasheet
                   </a>
                 </span>
               </div>
@@ -264,7 +271,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .shop-index {
 
 }
@@ -282,5 +289,19 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+
+  .left {
+    flex: 1;
+  }
+
+  .right {
+    flex-shrink: 1;
+    padding-left: 10px;
+  }
 }
 </style>

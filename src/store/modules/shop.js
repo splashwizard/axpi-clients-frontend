@@ -66,6 +66,20 @@ export const mutations = {
         });
     },
 
+    UPDATE_SPECIFICATION_IN_BASKET(state, spec) {
+        state.basket = _.map(state.basket, item => {
+            if (
+                item.itemType === 'specification'
+                && item.id === spec.id
+            ) {
+                item['name'] = spec.product_name;
+                item['specification']['product_name'] = spec.product_name;
+                return item;
+            }
+            return item;
+        });
+    },
+
     INCREMENT_PRODUCT_QUANTITY(state, product) {
         let p = _.find(state.basket, item => {
             return (
@@ -198,6 +212,10 @@ export const actions = {
 
     addSpecificationToBasket({commit}, spec) {
         commit('ADD_SPECIFICATION_TO_BASKET', spec);
+    },
+
+    updateSpecificationInBasket({commit}, spec) {
+       commit('UPDATE_SPECIFICATION_IN_BASKET', spec);
     },
 
     addProductToBasket({commit}, product) {

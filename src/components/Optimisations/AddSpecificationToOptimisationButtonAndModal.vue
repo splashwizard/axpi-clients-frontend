@@ -43,10 +43,10 @@
 
       <div class="toolbar">
         <div class="left">
-          <a-input-search placeholder="Search" style="width: 250px" />
+          <a-input-search placeholder="Search" style="width: 250px"/>
         </div>
         <div class="right">
-<!--          <a-button icon="filter">Filter</a-button>-->
+          <!--          <a-button icon="filter">Filter</a-button>-->
         </div>
       </div>
 
@@ -95,7 +95,7 @@
 
       <div class="toolbar">
         <div class="left">
-          <a-input-search placeholder="Search" style="width: 250px" />
+          <a-input-search placeholder="Search" style="width: 250px"/>
         </div>
         <div class="right">
           <a-button icon="filter">Filter</a-button>
@@ -147,6 +147,7 @@
 import axios from 'axios';
 import Orders from "../../mixins/Orders";
 import Dates from "../../mixins/Dates";
+import {mapGetters, mapActions} from "vuex";
 
 const _ = require('lodash');
 
@@ -241,10 +242,27 @@ export default {
       pastOrdersColumns: PAST_ORDERS_COLUMNS,
       selectedPastOrdersIds: [],
 
-      isSaving: false
+      isSaving: false,
+
+      specification: null,
+
+      shouldAddNextSpecification: false
+    }
+  },
+  watch: {
+    order(newVal) {
+      let vm = this;
+      if (newVal && this.shouldAddNextSpecification) {
+        alert('add spec');
+        vm.shouldAddNextSpecification = false;
+      }
     }
   },
   computed: {
+    ...mapGetters('orderEditor', {
+      order: 'order'
+    }),
+
     isLoading() {
       return (this.isLoadingSpecifications || this.isLoadingPastOrders);
     },
@@ -278,6 +296,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions('orderEditor', {
+      createSpecification: 'createSpecification'
+    }),
+
     selectMethod(method) {
       this.methodSelectorModalVisible = false;
       if (method === 'saved') {
@@ -285,6 +307,9 @@ export default {
       }
       if (method === 'past-orders') {
         this.showPastOrdersModal();
+      }
+      if (method === 'create-new') {
+        this.createNewSpecificationAndAddToBasket();
       }
     },
 
@@ -436,6 +461,12 @@ export default {
         vm.isSaving = false;
         vm.$message.error('Error adding orders');
       });
+    },
+
+    createNewSpecificationAndAddToBasket() {
+      this.shouldAddNextSpecification = true;
+      this.createSpecification();
+      this.methodSelectorModalVisible = false;
     }
   }
 }

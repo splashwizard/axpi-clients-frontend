@@ -26,6 +26,10 @@ window.API_TOKEN_URL = 'https://api.axiomdata.io/api/token';
 import VueHtml2Canvas from 'vue-html2canvas';
 Vue.use(VueHtml2Canvas);
 
+// Algolia
+import InstantSearch from 'vue-instantsearch';
+Vue.use(InstantSearch);
+
 // Ant Design
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';

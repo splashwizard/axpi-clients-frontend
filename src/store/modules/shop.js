@@ -8,7 +8,8 @@ export const state = {
     isLoading: false,
     searchQuery: '',
     tablePagination: {},
-    enriched: []
+    enriched: [],
+    displayMode: 'specs'
 };
 
 export const mutations = {
@@ -151,6 +152,10 @@ export const mutations = {
 
     SET_ENRICHED(state, enriched) {
         state.enriched = enriched;
+    },
+
+    SET_DISPLAY_MODE(state, displayMode) {
+        state.displayMode = displayMode;
     }
 };
 
@@ -172,6 +177,9 @@ export const getters = {
     },
     enriched: (state) => {
         return state.enriched;
+    },
+    displayMode: (state) => {
+        return state.displayMode;
     }
 };
 
@@ -259,5 +267,9 @@ export const actions = {
             commit('STOP_LOADING');
             vm._vm.$message.error('Error enriching product data');
         });
+    },
+
+    setDisplayMode({commit}, displayMode) {
+        commit('SET_DISPLAY_MODE', displayMode);
     }
 };

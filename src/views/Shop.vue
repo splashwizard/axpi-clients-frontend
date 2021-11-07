@@ -7,6 +7,15 @@
         <div class="wrapper">
           <a-page-header title="Shop">
             <template slot="extra">
+              <a-radio-group v-model="display_mode">
+                <a-radio-button value="specs">
+                  Specs
+                </a-radio-button>
+                <a-radio-button value="prices">
+                  Prices
+                </a-radio-button>
+              </a-radio-group>
+
               <a-button icon="shopping" @click="goToBasket">
                 <span style="margin-right: 5px;">Basket</span> <span v-if="basket.length">({{ basket.length }})</span>
               </a-button>
@@ -28,10 +37,10 @@
               <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
             </div>
           </div>
-
           <!-- / Search -->
 
-          <div class="table-wrapper" v-if="tableData && tableData.length">
+          <!-- Specs display mode -->
+          <div class="table-wrapper" v-if="displayMode === 'specs' && tableData && tableData.length">
             <a-table v-if="!isLoading" class="axpi-table column-dividers"
                      :scroll="{ x: 'max-content' }"
                      :columns="columns"
@@ -76,6 +85,49 @@
               </div>
             </a-table>
           </div>
+          <!-- / Specs display mode -->
+
+          <!-- Prices display mode -->
+          <div class="prices-list-wrapper" v-if="displayMode === 'prices' && tableData && tableData.length">
+
+            <a-list item-layout="horizontal" :data-source="tableData">
+              <a-list-item slot="renderItem" slot-scope="item, index">
+                <a-list-item-meta>
+                  <a slot="title" href="#">{{ item.name }}</a>
+                  <div slot="description">
+                    <p>
+                      <b>Manufacturer: </b> {{ item.manufacturer }}
+                    </p>
+                    <p>
+                      {{ item.description }}
+                    </p>
+                    <div class="price-list-actions-wrapper">
+                      <a-button v-if="!isProductInBasket(item)"
+                                type="default" @click.prevent="() => addProductToBasket(item)">Add to basket
+                      </a-button>
+
+                      <div v-else class="quantity-changer">
+                        <a-button @click.prevent="() => decrementProductQuantity(item)"
+                                  icon="minus">
+                        </a-button>
+                        <div>{{ getQuantityOfProductInBasket(item) }}</div>
+                        <a-button @click.prevent="() => incrementProductQuantity(item)"
+                                  icon="plus"></a-button>
+                      </div>
+                    </div>
+                  </div>
+                  <a-avatar
+                      size="large"
+                      shape="square"
+                      slot="avatar"
+                      :src="getImageSrc(item)"
+                  />
+                </a-list-item-meta>
+              </a-list-item>
+            </a-list>
+
+          </div>
+          <!-- / Prices display mode -->
 
         </div>
       </a-layout>
@@ -101,8 +153,18 @@ export default {
       searchQuery: 'searchQuery',
       tablePagination: 'tablePagination',
       basket: 'basket',
-      enriched: 'enriched'
+      enriched: 'enriched',
+      displayMode: 'displayMode'
     }),
+
+    display_mode: {
+      get() {
+        return this.displayMode;
+      },
+      set(val) {
+        this.setDisplayMode(val);
+      }
+    },
 
     search_query: {
       get() {
@@ -223,7 +285,8 @@ export default {
       setTablePagination: 'setTablePagination',
       addProductToBasket: 'addProductToBasket',
       incrementProductQuantity: 'incrementProductQuantity',
-      decrementProductQuantity: 'decrementProductQuantity'
+      decrementProductQuantity: 'decrementProductQuantity',
+      setDisplayMode: 'setDisplayMode'
     }),
 
     getImageSrc(order) {
@@ -278,6 +341,32 @@ export default {
 
 .table-wrapper {
   margin-top: 25px;
+}
+
+.prices-list-wrapper {
+  margin-top: 25px;
+
+  .ant-list-item-meta {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .ant-avatar {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    margin-right: 15px;
+  }
+
+  .ant-list-item-meta-title {
+    font-size: 17px;
+    margin-bottom: 7px;
+  }
+
+  .price-list-actions-wrapper {
+    max-width: 120px;
+    //margin-bottom: 10px;
+  }
 }
 
 .wrapper {

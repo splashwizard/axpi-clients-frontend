@@ -176,23 +176,25 @@ export default {
     },
 
     getNormalisedMeasureMagnitude(order) {
+      let orderQuantity = order["Quantity"] !== "None" ? Number(order["Quantity"]) : 1;
       let product = this.getFirstProduct(order);
       let toReturn = null;
       if (product && product['normalisedMeasure']) {
         let magnitude = product['normalisedMeasure']['normalisedUnitMagnitude'];
         if (magnitude) {
-          toReturn = magnitude;
+          toReturn = magnitude * orderQuantity;
         }
       }
       return toReturn;
     },
 
     getNormalisedMeasure(order) {
+      let orderQuantity = order["Quantity"] !== "None" ? Number(order["Quantity"]) : 1;
       let product = this.getFirstProduct(order);
 
       let toReturn = null;
       if (product && product['normalisedMeasure'] && product['normalisedMeasure']) {
-        let magnitude = product['normalisedMeasure']['normalisedUnitMagnitude'];
+        let magnitude = product['normalisedMeasure']['normalisedUnitMagnitude'] * orderQuantity;
         // let magnitude = product['normalisedQuantity']['totalMeasure']['rawMagnitude'];
         let unit = product['normalisedMeasure']['normalisedUnitBase'];
 

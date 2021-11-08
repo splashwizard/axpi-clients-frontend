@@ -56,6 +56,9 @@
             :loading="loading || searchQueryIsDirty"
             @change="handleTableChange"
         >
+          <div slot="cost" slot-scope="cost">
+            {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
+          </div>
           <div slot="name" slot-scope="name, order">
             <!-- TODO: Get most relevant product if more than one product - in which case 0 element may not be the most appropriate match -->
             <div class="product-name-wrapper">
@@ -84,6 +87,7 @@
 
 <script>
 import axios from "axios";
+import Orders from "../../../mixins/Orders";
 
 const _ = require("lodash");
 
@@ -93,10 +97,19 @@ const columns = [
     sorter: true,
     scopedSlots: {customRender: 'name'}
   },
+  {
+    title: "Cost",
+    // dataIndex: "Cost",
+    dataIndex: "CHF_FLOAT",
+    scopedSlots: {customRender: 'cost'},
+    sorter: true,
+    width: 110
+  }
 ];
 
 export default {
   name: "CreateClusterButtonAndModal",
+  mixins: [Orders],
   data() {
     return {
       visible: false,
@@ -199,8 +212,8 @@ export default {
       this.fetch({
         // results_per_page: pagination.pageSize,
         page: pagination.current,
-        sort_field: sorter.field,
-        sort_order: sorter.order,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
         ...filters,
       });
     },

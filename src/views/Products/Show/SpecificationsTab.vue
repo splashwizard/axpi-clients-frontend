@@ -82,7 +82,7 @@ export default {
       product: 'product'
     }),
     numericDetailsToShow() {
-      let d = this.details;
+      let d = _.cloneDeep(this.details);
       d.push(this.detailsToAppend);
       let flattened = _.flatten(d);
       return _.filter(flattened, f => {
@@ -90,7 +90,7 @@ export default {
       });
     },
     categoricalDetailsToShow() {
-      let d = this.details;
+      let d = _.cloneDeep(this.details);
       d.push(this.detailsToAppend);
       let flattened = _.flatten(d);
       return _.filter(flattened, f => {

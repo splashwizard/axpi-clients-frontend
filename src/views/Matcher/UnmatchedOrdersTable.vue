@@ -8,6 +8,9 @@
              :loading="loading||searchQueryIsDirty"
              @change="handleTableChange"
     >
+      <div slot="cost" slot-scope="cost">
+        {{ formatCost({cost_currency: 'USD', cost: cost}) }}
+      </div>
       <div slot="actions" class="table-actions" slot-scope="actions, row">
         <a-button type="default" @click="selectErpOrder(row)">Match</a-button>
       </div>
@@ -20,12 +23,19 @@ import axios from 'axios';
 import eventBus from "../../event-bus";
 
 const _ = require('lodash');
+import Orders from "../../mixins/Orders";
 import {mapActions} from 'vuex';
 
 const columns = [
   {
     title: 'Name',
     dataIndex: 'PO Li Description',
+    sorter: true
+  },
+  {
+    title: 'Cost',
+    dataIndex: 'CHF_FLOAT',
+    scopedSlots: {customRender: 'cost'},
     sorter: true
   },
   {
@@ -58,6 +68,7 @@ const columns = [
 export default {
   props: ['reloadKey'],
   name: "UnmatchedOrdersTable",
+  mixins: [Orders],
   data() {
     return {
       data: [],

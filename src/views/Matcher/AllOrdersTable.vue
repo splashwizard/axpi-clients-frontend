@@ -8,6 +8,9 @@
              :loading="loading||searchQueryIsDirty"
              @change="handleTableChange"
     >
+      <div slot="cost" slot-scope="cost">
+        {{ formatCost({cost_currency: 'USD', cost: cost}) }}
+      </div>
       <div slot="status" slot-scope="status, row">
         <a-badge :count="getStatus(row)" :number-style="getStatusBadgeStyle(row)"></a-badge>
       </div>
@@ -35,6 +38,12 @@ const columns = [
   {
     title: 'PO Number',
     dataIndex: 'PO Number',
+    sorter: true
+  },
+  {
+    title: 'Cost',
+    dataIndex: 'CHF_FLOAT',
+    scopedSlots: {customRender: 'cost'},
     sorter: true
   },
   // {

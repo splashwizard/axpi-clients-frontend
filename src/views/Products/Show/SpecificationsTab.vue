@@ -11,6 +11,9 @@
       </tr>
       </thead>
       <tbody>
+     <edit-quantity-row :product="product"></edit-quantity-row>
+     <edit-measure-row :product="product"></edit-measure-row>
+
       <specification-row v-for="(detail, i) in numericDetailsToShow" :detail="detail" :key="i"
       ></specification-row>
 
@@ -67,6 +70,8 @@
 import SpecificationRow from "./SpecificationsTab/SpecificationRow";
 import LoadingScreen from "../../../components/LoadingScreen";
 import CategoricalSpecificationRow from "./SpecificationsTab/CategoricalSpecificationRow";
+import EditQuantityRow from "./SpecificationsTab/EditQuantityRow";
+import EditMeasureRow from "./SpecificationsTab/EditMeasureRow";
 import Units from "../../../mixins/Units";
 import {mapGetters} from "vuex";
 import axios from 'axios';
@@ -74,7 +79,7 @@ const _ = require('lodash');
 
 export default {
   name: "SpecificationsTabs",
-  components: {SpecificationRow, CategoricalSpecificationRow, LoadingScreen},
+  components: {SpecificationRow, CategoricalSpecificationRow, LoadingScreen, EditQuantityRow, EditMeasureRow},
   mixins: [Units],
   computed: {
     ...mapGetters('productViewer', {

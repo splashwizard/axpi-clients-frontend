@@ -2,10 +2,43 @@
   <div class="product-show">
     <loading-screen :is-loading="isLoading||isLoadingDocuments||isLoadingDetails"></loading-screen>
 
-<!--    <a-page-header v-if="product" :title="product.name"-->
-<!--                   @back="backToAllProducts"-->
-<!--    ></a-page-header>-->
+    <!--    <a-page-header v-if="product" :title="product.name"-->
+    <!--                   @back="backToAllProducts"-->
+    <!--    ></a-page-header>-->
     <a-page-header v-if="product" :title="product.name"></a-page-header>
+
+    <!-- Product details top -->
+    <div class="product-details-top">
+      <!-- Has vendor mapping -->
+      <div v-if="productVendorMapping && productVendorMapping.vendors" class="product-details-top-property">
+        <b>Vendors:</b>
+        <a-badge v-for="(vendor, i) in productVendorMapping.vendors.names" :key="i"
+                 :count="vendor"/>
+      </div>
+      <!-- / Has vendor mapping -->
+
+      <!-- Doesn't have vendor mapping -->
+      <div v-if="!(productVendorMapping && productVendorMapping.vendors)" class="product-details-top-property">
+        <b>Vendors:</b>
+        <a-badge :count="product['vendor']"/>
+      </div>
+      <!-- Doesn't have vendor mapping -->
+
+      <!-- Manufacturer -->
+      <div class="product-details-top-property">
+        <b>Manufacturer:</b>
+        {{ product['manufacturer'] ? product['manufacturer'] : '-' }}
+      </div>
+      <!-- / Manufacturer -->
+
+      <!-- Product Code -->
+      <div class="product-details-top-property">
+        <b>Product Code</b>
+        {{ product['productCode'] }}
+      </div>
+      <!-- / Product Code -->
+    </div>
+    <!-- / Product details top -->
 
     <!-- Images & Description -->
     <div v-if="product" class="product-show-section">
@@ -14,22 +47,7 @@
           <image-carousel :urls="product['imageURLs']"></image-carousel>
         </a-col>
         <a-col :span="11">
-          <!-- More details -->
-          <div class="more-details" v-if="productVendorMapping && productVendorMapping.vendors">
-            <h3>Vendors:</h3>
-            <a-badge v-for="(vendor, i) in productVendorMapping.vendors.names" :key="i"
-                     :count="vendor"/>
-          </div>
-          <!-- / More details -->
-
-          <!-- Manufacturer -->
-          <div class="more-details" v-if="product && product['manufacturer']">
-            <h3>Manufacturer:</h3>
-            {{ product['manufacturer'] }}
-          </div>
-          <!-- / Manufacturer -->
-
-          <h3>Description:</h3>
+          <h3>Description</h3>
           <div v-if="descriptionTooLong">
             {{ descriptionToShow }}
             <div style="margin-top: 10px;">
@@ -157,6 +175,21 @@ export default {
 
   .ant-badge {
     margin-right: 5px;
+  }
+}
+
+.product-details-top {
+  .ant-badge {
+    margin-right: 5px;
+  }
+
+  .product-details-top-property {
+    margin-right: 25px;
+    display: inline;
+    b {
+      display: inline;
+      margin-right: 5px;
+    }
   }
 }
 </style>

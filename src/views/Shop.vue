@@ -33,7 +33,13 @@
                   v-model="search_query"
                   size="large"
                   @search="search"
-              />
+              >
+                <a-select slot="addonBefore" default-value="Search all" style="width: 120px">
+                  <a-select-option value="all">
+                    Search all
+                  </a-select-option>
+                </a-select>
+              </a-input-search>
             </div>
             <div class="right">
               <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
@@ -148,25 +154,25 @@
                     <p>
                       {{ item.description }}
                     </p>
-<!--                    <div class="price-list-actions-wrapper">-->
-<!--                      <a-button v-if="!isProductInBasket(item)"-->
-<!--                                type="primary" @click.prevent="() => addProductToBasket(item)">Add to basket-->
-<!--                      </a-button>-->
+                    <!--                    <div class="price-list-actions-wrapper">-->
+                    <!--                      <a-button v-if="!isProductInBasket(item)"-->
+                    <!--                                type="primary" @click.prevent="() => addProductToBasket(item)">Add to basket-->
+                    <!--                      </a-button>-->
 
-<!--                      <div v-else class="quantity-changer">-->
-<!--                        <a-button @click.prevent="() => decrementProductQuantity(item)"-->
-<!--                                  icon="minus">-->
-<!--                        </a-button>-->
-<!--                        <div>-->
-<!--                          <a-input type="number"-->
-<!--                                   @change="e => setProductQuantity({quantity: e.target.value, id: item['_id']})"-->
-<!--                                   :value="getQuantityOfProductInBasket(item)"></a-input>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash;                        <div>{{ getQuantityOfProductInBasket(item) }}</div>&ndash;&gt;-->
-<!--                        <a-button @click.prevent="() => incrementProductQuantity(item)"-->
-<!--                                  icon="plus"></a-button>-->
-<!--                      </div>-->
-<!--                    </div>-->
+                    <!--                      <div v-else class="quantity-changer">-->
+                    <!--                        <a-button @click.prevent="() => decrementProductQuantity(item)"-->
+                    <!--                                  icon="minus">-->
+                    <!--                        </a-button>-->
+                    <!--                        <div>-->
+                    <!--                          <a-input type="number"-->
+                    <!--                                   @change="e => setProductQuantity({quantity: e.target.value, id: item['_id']})"-->
+                    <!--                                   :value="getQuantityOfProductInBasket(item)"></a-input>-->
+                    <!--                        </div>-->
+                    <!--                        &lt;!&ndash;                        <div>{{ getQuantityOfProductInBasket(item) }}</div>&ndash;&gt;-->
+                    <!--                        <a-button @click.prevent="() => incrementProductQuantity(item)"-->
+                    <!--                                  icon="plus"></a-button>-->
+                    <!--                      </div>-->
+                    <!--                    </div>-->
                   </div>
                   <a-avatar
                       size="large"

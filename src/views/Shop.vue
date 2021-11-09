@@ -9,9 +9,11 @@
             <template slot="extra">
               <a-radio-group v-model="display_mode">
                 <a-radio-button value="specs">
+                  <a-icon style="margin-right: 5px" type="form"></a-icon>
                   Specs
                 </a-radio-button>
                 <a-radio-button value="prices">
+                  <span style="margin-right: 3px;">$</span>
                   Prices
                 </a-radio-button>
               </a-radio-group>
@@ -65,12 +67,25 @@
                 </span>
               </div>
 
+              <div slot="price">
+                ?
+              </div>
+
+              <div slot="numberOfAuthorisedSellers">
+                1
+              </div>
+
+              <div slot="marketAvailability">
+                1
+              </div>
+
               <div v-for="(p,i) in uniqueProperties" :slot="p" :key="i" slot-scope="property">
                 <span v-html="property"></span>
               </div>
 
               <div slot="actions" slot-scope="actions, record">
                 <a-button v-if="!isProductInBasket(record)"
+                          class="add-to-basket-button"
                           type="primary" @click.prevent="() => addProductToBasket(record)">Add to basket
                 </a-button>
 
@@ -78,7 +93,12 @@
                   <a-button @click.prevent="() => decrementProductQuantity(record)"
                             icon="minus">
                   </a-button>
-                  <div>{{ getQuantityOfProductInBasket(record) }}</div>
+                  <!--                  <div>{{ getQuantityOfProductInBasket(record) }}</div>-->
+                  <div>
+                    <a-input type="number"
+                             @change="e => setProductQuantity({quantity: e.target.value, id: record['_id']})"
+                             :value="getQuantityOfProductInBasket(record)"></a-input>
+                  </div>
                   <a-button @click.prevent="() => incrementProductQuantity(record)"
                             icon="plus"></a-button>
                 </div>
@@ -91,30 +111,62 @@
           <div class="prices-list-wrapper" v-if="displayMode === 'prices' && tableData && tableData.length">
 
             <a-list item-layout="horizontal" :data-source="tableData">
-              <a-list-item slot="renderItem" slot-scope="item, index">
+              <a-list-item slot="renderItem" slot-scope="item">
                 <a-list-item-meta>
-                  <a slot="title" href="#">{{ item.name }}</a>
+                  <div slot="title">
+                    <div class="title-wrapper">
+                      <div class="left">
+                        {{ item.name }}
+                      </div>
+                      <div class="right">
+                        <div class="price-list-actions-wrapper">
+                          <a-button v-if="!isProductInBasket(item)"
+                                    type="primary" @click.prevent="() => addProductToBasket(item)">Add to basket
+                          </a-button>
+
+                          <div v-else class="quantity-changer">
+                            <a-button @click.prevent="() => decrementProductQuantity(item)"
+                                      icon="minus">
+                            </a-button>
+                            <div>
+                              <a-input type="number"
+                                       @change="e => setProductQuantity({quantity: e.target.value, id: item['_id']})"
+                                       :value="getQuantityOfProductInBasket(item)"></a-input>
+                            </div>
+                            <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
+                            <a-button @click.prevent="() => incrementProductQuantity(item)"
+                                      icon="plus"></a-button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div slot="description">
                     <p>
-                      <b>Manufacturer: </b> {{ item.manufacturer }}
+                      <b>{{ item.manufacturer }}</b>
                     </p>
                     <p>
                       {{ item.description }}
                     </p>
-                    <div class="price-list-actions-wrapper">
-                      <a-button v-if="!isProductInBasket(item)"
-                                type="default" @click.prevent="() => addProductToBasket(item)">Add to basket
-                      </a-button>
+<!--                    <div class="price-list-actions-wrapper">-->
+<!--                      <a-button v-if="!isProductInBasket(item)"-->
+<!--                                type="primary" @click.prevent="() => addProductToBasket(item)">Add to basket-->
+<!--                      </a-button>-->
 
-                      <div v-else class="quantity-changer">
-                        <a-button @click.prevent="() => decrementProductQuantity(item)"
-                                  icon="minus">
-                        </a-button>
-                        <div>{{ getQuantityOfProductInBasket(item) }}</div>
-                        <a-button @click.prevent="() => incrementProductQuantity(item)"
-                                  icon="plus"></a-button>
-                      </div>
-                    </div>
+<!--                      <div v-else class="quantity-changer">-->
+<!--                        <a-button @click.prevent="() => decrementProductQuantity(item)"-->
+<!--                                  icon="minus">-->
+<!--                        </a-button>-->
+<!--                        <div>-->
+<!--                          <a-input type="number"-->
+<!--                                   @change="e => setProductQuantity({quantity: e.target.value, id: item['_id']})"-->
+<!--                                   :value="getQuantityOfProductInBasket(item)"></a-input>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash;                        <div>{{ getQuantityOfProductInBasket(item) }}</div>&ndash;&gt;-->
+<!--                        <a-button @click.prevent="() => incrementProductQuantity(item)"-->
+<!--                                  icon="plus"></a-button>-->
+<!--                      </div>-->
+<!--                    </div>-->
                   </div>
                   <a-avatar
                       size="large"
@@ -219,6 +271,16 @@ export default {
               title: 'Price',
               dataIndex: 'price',
               scopedSlots: {customRender: 'price'}
+            },
+            {
+              title: 'Number of authorised sellers',
+              dataIndex: 'numberOfAuthorisedSellers',
+              scopedSlots: {customRender: 'numberOfAuthorisedSellers'}
+            },
+            {
+              title: 'Market availability',
+              dataIndex: 'marketAvailability',
+              scopedSlots: {customRender: 'marketAvailability'}
             }
           ]
         },
@@ -286,6 +348,7 @@ export default {
       addProductToBasket: 'addProductToBasket',
       incrementProductQuantity: 'incrementProductQuantity',
       decrementProductQuantity: 'decrementProductQuantity',
+      setProductQuantity: 'setProductQuantity',
       setDisplayMode: 'setDisplayMode'
     }),
 
@@ -341,6 +404,10 @@ export default {
 
 .table-wrapper {
   margin-top: 25px;
+
+  .add-to-basket-button {
+    width: 100%;
+  }
 }
 
 .prices-list-wrapper {
@@ -352,20 +419,28 @@ export default {
   }
 
   .ant-avatar {
-    width: 60px;
-    height: 60px;
+    width: 140px;
+    height: 140px;
     line-height: 60px;
     margin-right: 15px;
   }
 
   .ant-list-item-meta-title {
     font-size: 17px;
-    margin-bottom: 7px;
+    margin-bottom: 6px;
+
+    //a {
+    //  color: #000;
+    //}
   }
 
   .price-list-actions-wrapper {
-    max-width: 120px;
+    max-width: 190px;
     //margin-bottom: 10px;
+
+    .ant-input {
+      width: 110px;
+    }
   }
 }
 
@@ -378,6 +453,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 190px;
+
+  .ant-input {
+    width: 110px;
+  }
 }
 
 .search-wrapper {
@@ -391,6 +471,18 @@ export default {
   .right {
     flex-shrink: 1;
     padding-left: 10px;
+  }
+}
+
+.title-wrapper {
+  display: flex;
+
+  .left {
+    flex-grow: 1;
+  }
+
+  .right {
+    flex-shrink: 1;
   }
 }
 </style>

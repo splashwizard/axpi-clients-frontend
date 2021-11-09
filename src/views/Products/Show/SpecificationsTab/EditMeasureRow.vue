@@ -37,7 +37,7 @@ import axios from 'axios';
 import Units from "../../../../mixins/Units";
 
 export default {
-  name: "EditQuantityRow",
+  name: "EditMeasureRow",
   props: ['product'],
   mixins: [Units],
   data() {

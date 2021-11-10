@@ -33,7 +33,7 @@
             <a-col :span="12">
               <!-- Country comparison -->
               <p>
-                <b>Country: </b><br>
+                <b>Country </b><br>
                 {{ getProperty('country') }}
                 <a-icon v-if="doesPropertyMatch('country')"
                         type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
@@ -43,7 +43,7 @@
 
               <!-- Country comparison -->
               <p>
-                <b>Vendor: </b><br>
+                <b>Vendor </b><br>
                 {{ getProperty('vendor') }}
                 <a-icon v-if="doesPropertyMatch('vendor')"
                         type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
@@ -53,7 +53,7 @@
 
               <!-- Business unit -->
               <p>
-                <b>Business Unit: </b><br>
+                <b>Business unit </b><br>
                 {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : '-' }}
               </p>
               <!-- / Business unit -->
@@ -62,21 +62,21 @@
               <!-- Volume difference -->
 <!--              <p v-if="volumePercentageDifference !== null">-->
               <p>
-                <b>Volume difference: </b><br>
+                <b>Volume difference </b><br>
                 {{ volumePercentageDifference !== null ? volumePercentageDifference : 0 }}%
               </p>
               <!-- / Volume difference -->
 
               <!-- Unit price difference -->
               <p>
-                <b>Unit price difference: </b><br>
+                <b>Unit price difference </b><br>
                 {{ pricePerUnitPercentageDifference }}%
               </p>
               <!-- / Unit price difference -->
 
               <!-- Time difference -->
               <p>
-                <b>Time difference: </b><br>
+                <b>Time difference </b><br>
                 {{ timeDifference }}
               </p>
               <!-- / Time difference -->

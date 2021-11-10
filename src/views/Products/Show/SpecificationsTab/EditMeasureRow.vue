@@ -17,7 +17,7 @@
         <a-select-option v-for="(option, i) in unitOptions" :value="option.unit" :key="i">
           {{ option.unit == 'dimensionless' ? 'dimensionless' : null }}
           {{ option.unit == 'count' ? 'count' : null }}
-          {{ option.display }}
+          <span v-html="option.display"></span>
         </a-select-option>
       </a-select>
     </td>

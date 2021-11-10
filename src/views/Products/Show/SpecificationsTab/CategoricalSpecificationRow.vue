@@ -69,7 +69,7 @@ export default {
     edit() {
       this.isEditing = true;
       this.details = {
-        ...this.detail
+        ...this.localDetail
       };
     },
 

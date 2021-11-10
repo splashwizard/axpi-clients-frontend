@@ -7,31 +7,52 @@
     <td>
       <span v-html="getPropertyValue(localDetail)"></span>
     </td>
-    <td>
-      <span v-if="!isEditing" v-html="formatVal(localDetail['normalisedUnitMagnitude'])"></span>
-      <a-input v-if="isEditing" v-model="details.normalisedUnitMagnitude"/>
+    <!-- Not editing -->
+    <td v-if="!isEditing">
+      <span v-if="localDetail['inequality'] && localDetail['inequality'] !== 'range'" style="padding-right: 5px;">{{ getInequalityLabel(localDetail['inequality']) }}</span>
+      <span v-html="formatVal(localDetail['normalisedUnitMagnitude'])"></span>
     </td>
-    <td>
-      <span v-if="!isEditing">{{ formatUnit(localDetail.normalisedUnitBase) }}</span>
-      <!--      <a-input v-if="isEditing" v-model="details.normalisedUnitBase"/>-->
-      <a-select v-if="isEditing" v-model="details.normalisedUnitBase" style="width: 100%">
-        <a-select-option v-for="(option, i) in unitOptions" :value="option.unit" :key="i">
-          {{ option.unit == 'dimensionless' ? 'dimensionless' : null }}
-          {{ option.unit == 'count' ? 'count' : null }}
-          {{ option.display }}
-        </a-select-option>
-      </a-select>
+    <td v-if="!isEditing">
+      <span>{{ formatUnit(localDetail.normalisedUnitBase) }}</span>
     </td>
-    <td class="text-right">
+    <td v-if="!isEditing" class="text-right">
       <a-button @click.prevent="edit" v-if="!isEditing" size="small" icon="edit" type="default"></a-button>
       <delete-product-detail-button style="margin-left: 6px;"
                                     v-if="!isEditing" :product="product"
                                     :details="localDetail"></delete-product-detail-button>
+    </td>
+    <!-- / Not editing -->
 
+    <!-- Editing -->
+    <td colspan="2" v-if="isEditing">
+      <div class="editing-fields-wrapper">
+        <div class="input-padding-right">
+          <a-select v-model="details.inequality" style="width: 80px;">
+            <a-select-option v-for="(option, i) in inequalityOptions" :value="option.value" :key="i">
+              {{ option.label }}
+            </a-select-option>
+          </a-select>
+        </div>
+
+        <div class="input-padding-right">
+          <a-input v-model="details.normalisedUnitMagnitude"/>
+        </div>
+
+        <a-select v-model="details.normalisedUnitBase" style="width: 150px;">
+          <a-select-option v-for="(option, i) in unitOptions" :value="option.unit" :key="i">
+            {{ option.unit == 'dimensionless' ? 'dimensionless' : null }}
+            {{ option.unit == 'count' ? 'count' : null }}
+            <span v-html="option.display"></span>
+          </a-select-option>
+        </a-select>
+      </div>
+    </td>
+    <td class="text-right" v-if="isEditing">
       <a-button @click.prevent="cancel" style="margin-right: 5px;" v-if="isEditing" size="small" type="default">Cancel
       </a-button>
       <a-button @click.prevent="save" v-if="isEditing" size="small" type="primary">Save</a-button>
     </td>
+    <!-- / Editing -->
   </tr>
 </template>
 
@@ -40,11 +61,12 @@ import axios from 'axios';
 import {mapGetters, mapActions} from 'vuex';
 import DeleteProductDetailButton from "./DeleteProductDetailButton";
 import Units from "../../../../mixins/Units";
+import Inequalities from "../../../../mixins/Inequalities";
 
 export default {
   name: "SpecificationRow",
   components: {DeleteProductDetailButton},
-  mixins: [Units],
+  mixins: [Units, Inequalities],
   props: ['detail'],
   data() {
     return {
@@ -78,7 +100,7 @@ export default {
     edit() {
       this.isEditing = true;
       this.details = {
-        ...this.detail
+        ...this.localDetail
       };
     },
 
@@ -116,5 +138,13 @@ export default {
 <style scoped>
 .text-right {
   text-align: right;
+}
+
+.editing-fields-wrapper {
+  display: flex;
+}
+
+.input-padding-right {
+  padding-right: 10px;
 }
 </style>

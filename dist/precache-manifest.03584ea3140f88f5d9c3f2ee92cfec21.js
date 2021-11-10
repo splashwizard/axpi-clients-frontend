@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "99f5bcbfbf4d9c8a8cc2",
+    "revision": "00b77f071fde0c3bfa78",
     "url": "/css/app.8096af74.css"
   },
   {
@@ -28,7 +28,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/intelligence.54f80373.css"
   },
   {
-    "revision": "d3f2c65cce322657a149",
+    "revision": "722a4d979adcb5c0e375",
     "url": "/css/matcher.0474bb59.css"
   },
   {
@@ -64,8 +64,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/suppliers.667b8801.css"
   },
   {
-    "revision": "9059dc76bad55f47568b",
-    "url": "/css/view-cluster.ea4419fe.css"
+    "revision": "0a346a39909107742ba1",
+    "url": "/css/view-cluster.2ea55588.css"
   },
   {
     "revision": "ded9d3be7576875ed620",
@@ -300,7 +300,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "c2189b91fda3555b2ff1b23dd1a90f1e",
+    "revision": "8e067bf05fbf43c5a818f24a3610092e",
     "url": "/index.html"
   },
   {
@@ -320,8 +320,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.71a807f3.js"
   },
   {
-    "revision": "99f5bcbfbf4d9c8a8cc2",
-    "url": "/js/app.e5ad140c.js"
+    "revision": "00b77f071fde0c3bfa78",
+    "url": "/js/app.2fcc77c6.js"
   },
   {
     "revision": "fb6d11d4b2efcbdd4402",
@@ -340,8 +340,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/intelligence.600d3b41.js"
   },
   {
-    "revision": "d3f2c65cce322657a149",
-    "url": "/js/matcher.b7aa1fa4.js"
+    "revision": "722a4d979adcb5c0e375",
+    "url": "/js/matcher.732d9008.js"
   },
   {
     "revision": "6851a2db30cccd044c23",
@@ -384,8 +384,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/suppliers.7d518c20.js"
   },
   {
-    "revision": "9059dc76bad55f47568b",
-    "url": "/js/view-cluster.ef1f25ef.js"
+    "revision": "0a346a39909107742ba1",
+    "url": "/js/view-cluster.9afecf8e.js"
   },
   {
     "revision": "ded9d3be7576875ed620",

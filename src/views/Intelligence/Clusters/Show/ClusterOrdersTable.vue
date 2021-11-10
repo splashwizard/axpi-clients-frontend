@@ -369,10 +369,10 @@ export default {
           width: 150
         },
         {
-          title: "Product Measure",
+          title: "Product Unit of Measure",
           dataIndex: "Product Unit of Measure",
           scopedSlots: {customRender: 'productUnitOfMeasure'},
-          width: 150
+          width: 200
         },
         {
           title: "Insights",

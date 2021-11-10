@@ -245,8 +245,8 @@ export default {
             product = this.getFirstBaseProduct(this.insight);
           }
           let volume = null;
-          if (product['normalisedQuantity'] && product['normalisedQuantity']['totalMeasure'] && product['normalisedQuantity']['totalMeasure']['entity'] === 'volume') {
-            volume = product['normalisedQuantity']['totalMeasure']['normalisedUnitMagnitude'];
+          if (product['normalisedQuantity'] && product['normalisedQuantity']['entity'] === 'volume') {
+            volume = product['normalisedQuantity']['normalisedUnitMagnitude'];
           }
           // volume = 5;
           return volume;

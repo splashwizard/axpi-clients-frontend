@@ -14,8 +14,11 @@
       <div slot="name" slot-scope="name, record">
         <div class="product-name-wrapper">
           <div class="left">
-            <a-avatar style="margin-right: 20px;"
-                      size="large" :src="getImageSrc(record)"/>
+            <a target="_blank"
+               :href="record['URL'] ? record['URL'] : '#'">
+              <a-avatar style="margin-right: 20px;"
+                        size="large" :src="getImageSrc(record)"/>
+            </a>
           </div>
           <div class="right">
             <a target="_blank" :href="getProductLink(record)">
@@ -94,7 +97,8 @@ export default {
           let productRow = {
             product_id: o.product_id,
             product_name: o.product_name,
-            imageURLs: this.getFirstProduct(o)['imageURLs']
+            imageURLs: this.getFirstProduct(o)['imageURLs'],
+            URL: this.getFirstProduct(o)['URL']
           };
           _.each(this.uniqueProperties, p => {
             let property = _.find(o.product_all_properties, {

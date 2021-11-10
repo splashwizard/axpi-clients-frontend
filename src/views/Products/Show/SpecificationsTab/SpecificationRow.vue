@@ -17,7 +17,7 @@
             v-html="formatRange(localDetail)"></span>
     </td>
     <td v-if="!isEditing">
-      <span>{{ formatUnit(localDetail.normalisedUnitBase) }}</span>
+      <span :span="formatUnit(localDetail.normalisedUnitBase)"></span>
     </td>
     <td v-if="!isEditing" class="text-right">
       <a-button @click.prevent="edit" v-if="!isEditing" size="small" icon="edit" type="default"></a-button>

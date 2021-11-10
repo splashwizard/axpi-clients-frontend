@@ -12,9 +12,9 @@
       <div class="product-name-wrapper">
         <div class="left">
           <a target="_blank"
-              :href="getFirstProduct(record) ? getFirstProduct(record)['URL'] : '#'">
-          <a-avatar style="margin-right: 20px;"
-                    size="large" :src="getImageSrc(getFirstProduct(record))"/>
+             :href="getFirstProduct(record) ? getFirstProduct(record)['URL'] : '#'">
+            <a-avatar style="margin-right: 20px;"
+                      size="large" :src="getImageSrc(getFirstProduct(record))"/>
           </a>
         </div>
         <div class="right">
@@ -88,9 +88,12 @@
 </template>
 <script>
 import Orders from "../../../../mixins/Orders";
-import moment from 'moment';
 import Units from "../../../../mixins/Units";
 import {mapGetters, mapActions} from "vuex";
+import Moment from 'moment';
+import {extendMoment} from 'moment-range';
+
+const moment = extendMoment(Moment);
 
 const _ = require('lodash');
 
@@ -275,7 +278,9 @@ export default {
       insights: 'insights',
       sortField: 'sortField',
       sortOrder: 'sortOrder',
-      filters: 'filters'
+      filters: 'filters',
+      startDate: 'startDate',
+      endDate: 'endDate'
     }),
 
     columns() {
@@ -411,6 +416,33 @@ export default {
       } else {
         dataToShow = this.ordersWithMatchesFiltered;
       }
+
+      // Filter by date
+      dataToShow = _.filter(dataToShow, d => {
+        // Order date
+        let orderDate = null;
+        let orderDateMoment = null;
+        if (d["PO Initial Create Date"] && d["PO Initial Create Date"]["$date"] && d["PO Initial Create Date"]["$date"]["$numberLong"]) {
+          orderDateMoment = moment.unix(
+              Number(d["PO Initial Create Date"]["$date"]["$numberLong"]) / 1000
+          );
+          orderDate = orderDateMoment.format("DD/MM/YYYY")
+        }
+        d.order_date = orderDate;
+        d.order_date_moment = orderDateMoment;
+
+        if (d.order_date_moment && moment(d.order_date_moment).isValid() && this.startDate) {
+          if (d.order_date_moment.isBefore(this.startDate)) {
+            return false;
+          }
+        }
+        if (d.order_date_moment && moment(d.order_date_moment).isValid() && this.endDate) {
+          if (d.order_date_moment.isAfter(this.endDate)) {
+            return false;
+          }
+        }
+        return true;
+      });
 
       let sortOrder = this.sortOrder === 'ascend' ? 'asc' : 'desc';
       switch (this.sortField) {

@@ -1,6 +1,6 @@
 <template>
   <div class="shop-index">
-    <loading-screen :is-loading="isLoading"></loading-screen>
+    <loading-screen :is-loading="isLoading||isEnriching"></loading-screen>
 
     <a-layout>
       <a-layout style="padding: 7px 30px">
@@ -49,13 +49,13 @@
 
           <!-- Specs display mode -->
           <div class="table-wrapper" v-if="displayMode === 'specs' && tableData && tableData.length">
-            <a-table v-if="!isLoading" class="axpi-table column-dividers"
+            <a-table v-if="!(isLoading||isEnriching)" class="axpi-table column-dividers"
                      :scroll="{ x: 'max-content' }"
                      :columns="columns"
                      :data-source="tableData"
                      :pagination="pagination"
                      @change="handleTableChange"
-                     :loading="isLoading"
+                     :loading="isLoading||isEnriching"
             >
               <div slot="image" slot-scope="image, row">
                 <a-avatar
@@ -212,7 +212,8 @@ export default {
       tablePagination: 'tablePagination',
       basket: 'basket',
       enriched: 'enriched',
-      displayMode: 'displayMode'
+      displayMode: 'displayMode',
+      isEnriching: 'isEnriching'
     }),
 
     display_mode: {

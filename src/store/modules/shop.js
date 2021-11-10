@@ -6,6 +6,7 @@ export const state = {
     searchResults: [],
     basket: [],
     isLoading: false,
+    isEnriching: false,
     searchQuery: '',
     tablePagination: {},
     enriched: [],
@@ -23,6 +24,14 @@ export const mutations = {
 
     STOP_LOADING(state) {
         state.isLoading = false;
+    },
+
+    START_ENRICHING(state) {
+        state.isEnriching = true;
+    },
+
+    STOP_ENRICHING(state) {
+        state.isEnriching = false;
     },
 
     SET_TABLE_PAGINATION(state, pagination) {
@@ -208,6 +217,9 @@ export const getters = {
     isLoading: (state) => {
         return state.isLoading;
     },
+    isEnriching: (state) => {
+        return state.isEnriching;
+    },
     basket: (state) => {
         return state.basket;
     },
@@ -310,15 +322,21 @@ export const actions = {
 
     enrich({commit, getters}) {
         let vm = this;
-        commit('START_LOADING');
+        commit('START_ENRICHING');
+        let ids = _.map(getters.searchResults.data, '_id');
+        if (ids.length) {
+            if (ids[0]['$oid']) {
+                ids = _.map(ids, '$oid');
+            }
+        }
         axios.post(window.API_BASE + '/products/enrich-many', {
-            ids: _.map(getters.searchResults.data, '_id')
+            ids: ids
         }).then(r => {
-            commit('STOP_LOADING');
+            commit('STOP_ENRICHING');
             commit('SET_ENRICHED', r.data);
         }).catch(e => {
             console.log(e);
-            commit('STOP_LOADING');
+            commit('STOP_ENRICHING');
             vm._vm.$message.error('Error enriching product data');
         });
     },

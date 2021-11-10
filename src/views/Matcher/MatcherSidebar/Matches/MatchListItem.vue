@@ -9,6 +9,7 @@
             <b>Manufacturer: </b>{{ item['manufacturer'] }} <br>
             <b>Product Code: </b>{{ item['productCode'] }} <br>
             <b>Catalog Code: </b>{{ item['catalogCode'] }} <br>
+            <b>Quantity: </b>{{ item['quantity'] }} <br>
             <a href="#" style="margin-top: 5px;" @click.prevent="toggleShowMoreDetails">View less
               <a-icon :style="{fontSize: '10px'}" type="up"/>
             </a>

@@ -25,15 +25,15 @@ export default {
                     value: '<='
                 },
                 {
-                    label: 'range',
-                    value: 'range'
+                    label: 'Between',
+                    value: 'between'
                 }
             ]
         }
     },
     methods: {
         getInequalityLabel(inequality) {
-            if (inequality === 'range') {
+            if (inequality === 'between') {
                 return null;
             }
             let option = _.find(this.inequalityOptions, {

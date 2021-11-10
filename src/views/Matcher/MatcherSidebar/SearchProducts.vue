@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-input-search placeholder="Search orders"
+    <a-input-search placeholder="Search products by name, product code or catalog code"
                     v-model="searchQuery"
                     style="width: 100%; margin-bottom: 10px;" @search="search"/>
 

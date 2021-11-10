@@ -9,7 +9,7 @@
     </td>
     <!-- Not editing -->
     <td v-if="!isEditing">
-      <span v-if="localDetail['inequality'] && localDetail['inequality'] !== 'range'" style="padding-right: 5px;">{{ getInequalityLabel(localDetail['inequality']) }}</span>
+      <span v-if="localDetail['inequality'] && localDetail['inequality'] !== 'between'" style="padding-right: 5px;">{{ getInequalityLabel(localDetail['inequality']) }}</span>
       <span v-html="formatVal(localDetail['normalisedUnitMagnitude'])"></span>
     </td>
     <td v-if="!isEditing">
@@ -27,16 +27,26 @@
     <td colspan="2" v-if="isEditing">
       <div class="editing-fields-wrapper">
         <div class="input-padding-right">
-          <a-select v-model="details.inequality" style="width: 80px;">
+          <a-select v-model="details.inequality" style="width: 110px;">
             <a-select-option v-for="(option, i) in inequalityOptions" :value="option.value" :key="i">
               {{ option.label }}
             </a-select-option>
           </a-select>
         </div>
 
-        <div class="input-padding-right">
+        <!-- Normal value input -->
+        <div v-if="details.inequality !== 'between'" class="input-padding-right">
           <a-input v-model="details.normalisedUnitMagnitude"/>
         </div>
+        <!-- / Normal value input -->
+
+        <!-- Normal range input -->
+        <div v-if="details.inequality === 'between'" class="input-padding-right inequality-input-wrapper">
+          <a-input v-model="details.rangeMin"/>
+          <span class="inequality-input-to">to</span>
+          <a-input v-model="details.rangeMax"/>
+        </div>
+        <!-- / Normal range input -->
 
         <a-select v-model="details.normalisedUnitBase" style="width: 150px;">
           <a-select-option v-for="(option, i) in unitOptions" :value="option.unit" :key="i">
@@ -99,6 +109,13 @@ export default {
 
     edit() {
       this.isEditing = true;
+      if (this.localDetail.uncertainty) {
+        this.localDetail.rangeMin = this.localDetail.normalisedUnitMagnitude - this.localDetail.uncertainty;
+        this.localDetail.rangeMax = this.localDetail.normalisedUnitMagnitude + this.localDetail.uncertainty;
+      } else {
+        this.localDetail.rangeMin = this.localDetail.normalisedUnitMagnitude;
+        this.localDetail.rangeMax = this.localDetail.normalisedUnitMagnitude;
+      }
       this.details = {
         ...this.localDetail
       };
@@ -121,6 +138,20 @@ export default {
     save() {
       let vm = this;
       vm.isSaving = true;
+
+      if (this.details.inequality && this.details.inequality === 'between') {
+        // Get endpoints
+        let min = this.details.rangeMin;
+        let max = this.details.rangeMax;
+
+        // Let's calculate the midpoint (value) and uncertainty from this
+        let normalisedUnitMagnitude = (max - min) / 2;
+        let uncertainty = (max - normalisedUnitMagnitude);
+
+        this.details.normalisedUnitMagnitude = normalisedUnitMagnitude;
+        this.details.uncertainty = uncertainty;
+      }
+
       axios.post(window.API_BASE + '/products/' + this.product['_id'] + '/details', vm.details).then(() => {
         vm.isSaving = false;
         vm.isEditing = false;
@@ -146,5 +177,15 @@ export default {
 
 .input-padding-right {
   padding-right: 10px;
+}
+
+.inequality-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.inequality-input-to {
+  padding-left: 6px;
+  padding-right: 6px;
 }
 </style>

@@ -44,6 +44,9 @@
     <div slot="normalisedMeasure" slot-scope="normalisedMeasure, record">
       <span v-html="getNormalisedMeasure(record)"></span>
     </div>
+    <div slot="productUnitOfMeasure" slot-scope="productUnitOfMeasure, record">
+      <span v-html="getFirstProductUnitOfMeasure(record)"></span>
+    </div>
     <div class="insights-column" slot="insights" slot-scope="insights, record">
       <a style="margin-right: 15px;" href="#" @click.prevent="handleRecordSelected(record)">
         <a-icon type="eye" style="margin-right: 4px;"/>
@@ -199,6 +202,14 @@ export default {
       return toReturn;
     },
 
+    getFirstProductUnitOfMeasure(order) {
+      let product = this.getFirstProduct(order);
+      if (product && product['normalisedQuantity']) {
+        return product['normalisedQuantity']['unit'];
+      }
+      return null;
+    },
+
     getNormalisedMeasure(order) {
       let orderQuantity = order["Quantity"] !== "None" ? Number(order["Quantity"]) : 1;
       let product = this.getFirstProduct(order);
@@ -351,6 +362,17 @@ export default {
               value: o
             }
           })
+        },
+        {
+          title: "BU of Measure",
+          dataIndex: "BU of Measure",
+          width: 150
+        },
+        {
+          title: "Product Measure",
+          dataIndex: "Product Unit of Measure",
+          scopedSlots: {customRender: 'productUnitOfMeasure'},
+          width: 150
         },
         {
           title: "Insights",

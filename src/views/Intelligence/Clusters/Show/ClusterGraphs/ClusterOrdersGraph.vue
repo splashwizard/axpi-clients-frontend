@@ -12,7 +12,7 @@
         :forceFit="true"
         renderer="svg"
         height="400"
-        :data="graphData"
+        :data="graphDataToShow"
         :scale="scale"
     >
       <v-legend v-if="selectedColourByOption" data-key="Vendor"/>
@@ -62,8 +62,54 @@ export default {
       selectedXOption: 'selectedXOption',
       selectedColourByOption: 'selectedColourByOption',
       selectedSizeByOption: 'selectedSizeByOption',
-      clusterViewerReloadKey: 'clusterViewerReloadKey'
+      clusterViewerReloadKey: 'clusterViewerReloadKey',
+      startDate: 'startDate',
+      endDate: 'endDate'
     }),
+
+    start_date: {
+      get() {
+        return this.startDate;
+      },
+      set(val) {
+        this.setStartDate(val);
+      }
+    },
+
+    end_date: {
+      get() {
+        return this.endDate;
+      },
+      set(val) {
+        this.setEndDate(val);
+      }
+    },
+
+    datesFromGraphData() {
+      return _.map(this.graphData, 'order_date_moment');
+    },
+
+    earliestDate() {
+      return moment.min(this.datesFromGraphData);
+    },
+
+    latestDate() {
+      return moment.max(this.datesFromGraphData);
+    },
+
+    graphDateRange() {
+      let start_date = this.start_date;
+      let end_date = this.end_date;
+
+      if (!start_date) {
+        start_date = this.earliestDate;
+      }
+      if (!end_date) {
+        end_date = this.latestDate;
+      }
+
+      return moment.range(start_date, end_date);
+    },
 
     xLabel() {
       if (this.xType === 'Quantity') {
@@ -84,7 +130,7 @@ export default {
       if (this.xType === 'Quantity') {
         return 'unit';
       } else if (this.xType === 'volume') {
-       return 'cubic metre';
+        return 'cubic metre';
       }
       return this.xLabel;
     },
@@ -97,6 +143,22 @@ export default {
             return this.formatCostGraph({cost: val, cost_currency: 'USD'})
           }
         }];
+    },
+
+    graphDataToShow() {
+      return _.filter(this.graphData, d => {
+        if (d.order_date_moment && moment(d.order_date_moment).isValid() && this.start_date) {
+          if (d.order_date_moment.isBefore(this.start_date)) {
+           return false;
+          }
+        }
+        if (d.order_date_moment && moment(d.order_date_moment).isValid() && this.end_date) {
+          if (d.order_date_moment.isAfter(this.end_date)) {
+            return false;
+          }
+        }
+        return true;
+      });
     },
 
     graphData() {
@@ -200,12 +262,14 @@ export default {
           orderDate = orderDateMoment.format("DD/MM/YYYY")
         }
 
+
         gd.push({
           id: order['_id'],
           // description: order['PO Li Description'],
           description: order['product_name'],
           vendor: order['Vendor'] ? order['Vendor'] : '-',
           order_date: orderDate ? orderDate : '-',
+          order_date_moment: orderDateMoment,
           quantity: totalQuantity,
           measure: measure,
           cost: cost,
@@ -296,13 +360,18 @@ export default {
   created() {
     this.setXOptions(this.xOptions);
     this.selectXOption('Quantity');
+
+    this.start_date = this.earliestDate.clone();
+    this.end_date = this.latestDate.clone();
   },
 
   methods: {
     ...mapActions('clusterViewer', {
       toggleOrderSelected: 'toggleOrderSelected',
       setXOptions: 'setXOptions',
-      selectXOption: 'selectXOption'
+      selectXOption: 'selectXOption',
+      setStartDate: 'setStartDate',
+      setEndDate: 'setEndDate'
     }),
 
     formatGraphLabel(label) {

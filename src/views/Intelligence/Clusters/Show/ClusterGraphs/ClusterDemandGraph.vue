@@ -59,8 +59,8 @@ export default {
     }
   },
   created() {
-    this.start_date = this.earliestDate.clone();
-    this.end_date = this.latestDate.clone();
+    // this.start_date = this.earliestDate.clone();
+    // this.end_date = this.latestDate.clone();
   },
   computed: {
     ...mapGetters('clusterViewer', {

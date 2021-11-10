@@ -76,27 +76,6 @@
               </div>
             </div>
             <!-- / Size by -->
-          </div>
-          <!-- / Orders graph -->
-
-          <!-- Demand graph -->
-          <div v-if="activeGraph === 'demand'">
-            <!-- Bin by -->
-            <div class="filter-wrapper">
-              <div class="filter-header">
-                <a-checkbox v-model="showSelectedBinByOptionFilter">
-                  Bin
-                </a-checkbox>
-              </div>
-              <div class="filter" v-if="showSelectedBinByOptionFilter">
-                <a-select v-model="selectedBinByOptionLocal" style="width: 200px;">
-                  <a-select-option v-for="(option, i) in binByOptions" :value="option" :key="i">
-                    {{ formatGraphLabel(option) }}
-                  </a-select-option>
-                </a-select>
-              </div>
-            </div>
-            <!-- / Bin by -->
 
             <!-- Start date -->
             <div class="filter-wrapper">
@@ -131,6 +110,27 @@
               </div>
             </div>
             <!-- / End date -->
+          </div>
+          <!-- / Orders graph -->
+
+          <!-- Demand graph -->
+          <div v-if="activeGraph === 'demand'">
+            <!-- Bin by -->
+            <div class="filter-wrapper">
+              <div class="filter-header">
+                <a-checkbox v-model="showSelectedBinByOptionFilter">
+                  Bin
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showSelectedBinByOptionFilter">
+                <a-select v-model="selectedBinByOptionLocal" style="width: 200px;">
+                  <a-select-option v-for="(option, i) in binByOptions" :value="option" :key="i">
+                    {{ formatGraphLabel(option) }}
+                  </a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / Bin by -->
           </div>
           <!-- / Demand graph -->
 

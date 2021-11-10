@@ -15,7 +15,7 @@
         <a-badge :count="getStatus(row)" :number-style="getStatusBadgeStyle(row)"></a-badge>
       </div>
       <div slot="actions" class="table-actions" slot-scope="actions, row">
-        <a-button v-if="!hasMatches(row)" type="default" @click="selectErpOrder(row)">Match</a-button>
+        <a-button block v-if="!hasMatches(row)" type="default" @click="selectErpOrder(row)">Match</a-button>
         <a-button block v-if="hasMatches(row)" type="primary" @click="selectErpOrder(row)">Edit</a-button>
       </div>
     </a-table>
@@ -28,6 +28,7 @@ import axios from 'axios';
 const _ = require('lodash');
 import {mapActions} from 'vuex';
 import eventBus from "../../event-bus";
+import Orders from "../../mixins/Orders";
 
 const columns = [
   {
@@ -75,6 +76,7 @@ const columns = [
 export default {
   props: ['reloadKey'],
   name: "AllOrdersTable",
+  mixins: [Orders],
   data() {
     return {
       data: [],

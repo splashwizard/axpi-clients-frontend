@@ -9,8 +9,12 @@
     </td>
     <!-- Not editing -->
     <td v-if="!isEditing">
-      <span v-if="localDetail['inequality'] && localDetail['inequality'] !== 'between'" style="padding-right: 5px;">{{ getInequalityLabel(localDetail['inequality']) }}</span>
-      <span v-html="formatVal(localDetail['normalisedUnitMagnitude'])"></span>
+      <span v-if="localDetail['inequality'] && localDetail['inequality'] !== 'between'"
+            style="padding-right: 5px;">{{ getInequalityLabel(localDetail['inequality']) }}</span>
+      <span v-if="!(localDetail['inequality'] && localDetail['inequality'] === 'between')"
+            v-html="formatVal(localDetail['normalisedUnitMagnitude'])"></span>
+      <span v-if="(localDetail['inequality'] && localDetail['inequality'] === 'between')"
+            v-html="formatRange(localDetail)"></span>
     </td>
     <td v-if="!isEditing">
       <span>{{ formatUnit(localDetail.normalisedUnitBase) }}</span>
@@ -135,6 +139,13 @@ export default {
       return val;
     },
 
+    formatRange(details) {
+      let lower = details.normalisedUnitMagnitude - details.uncertainty;
+      let upper = details.normalisedUnitMagnitude + details.uncertainty;
+
+      return this.formatVal(lower) + ' - ' + this.formatVal(upper);
+    },
+
     save() {
       let vm = this;
       vm.isSaving = true;
@@ -145,8 +156,8 @@ export default {
         let max = this.details.rangeMax;
 
         // Let's calculate the midpoint (value) and uncertainty from this
-        let normalisedUnitMagnitude = (max - min) / 2;
-        let uncertainty = (max - normalisedUnitMagnitude);
+        let normalisedUnitMagnitude = (Number(max) + Number(min)) / 2;
+        let uncertainty = (Number(max) - Number(normalisedUnitMagnitude));
 
         this.details.normalisedUnitMagnitude = normalisedUnitMagnitude;
         this.details.uncertainty = uncertainty;

@@ -38,6 +38,40 @@
               </div>
             </div>
             <!-- / Measure -->
+
+            <!-- Start date -->
+            <div class="filter-wrapper">
+              <div class="filter-header">
+                <a-checkbox v-model="showStartDateFilter">
+                  Start Date
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showStartDateFilter">
+                <a-date-picker
+                    style="width: 100%"
+                    v-model="startDateLocal"
+                    placeholder="Start"
+                />
+              </div>
+            </div>
+            <!-- / Start date -->
+
+            <!-- End date -->
+            <div class="filter-wrapper filter-last">
+              <div class="filter-header">
+                <a-checkbox v-model="showEndDateFilter">
+                  End Date
+                </a-checkbox>
+              </div>
+              <div class="filter" v-if="showEndDateFilter">
+                <a-date-picker
+                    style="width: 100%"
+                    v-model="endDateLocal"
+                    placeholder="End"
+                />
+              </div>
+            </div>
+            <!-- / End date -->
           </div>
           <!-- / Common filters -->
 
@@ -76,40 +110,6 @@
               </div>
             </div>
             <!-- / Size by -->
-
-            <!-- Start date -->
-            <div class="filter-wrapper">
-              <div class="filter-header">
-                <a-checkbox v-model="showStartDateFilter">
-                  Start Date
-                </a-checkbox>
-              </div>
-              <div class="filter" v-if="showStartDateFilter">
-                <a-date-picker
-                    style="width: 100%"
-                    v-model="startDateLocal"
-                    placeholder="Start"
-                />
-              </div>
-            </div>
-            <!-- / Start date -->
-
-            <!-- End date -->
-            <div class="filter-wrapper filter-last">
-              <div class="filter-header">
-                <a-checkbox v-model="showEndDateFilter">
-                  End Date
-                </a-checkbox>
-              </div>
-              <div class="filter" v-if="showEndDateFilter">
-                <a-date-picker
-                    style="width: 100%"
-                    v-model="endDateLocal"
-                    placeholder="End"
-                />
-              </div>
-            </div>
-            <!-- / End date -->
           </div>
           <!-- / Orders graph -->
 

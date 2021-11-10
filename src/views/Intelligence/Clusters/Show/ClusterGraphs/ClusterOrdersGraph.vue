@@ -361,8 +361,12 @@ export default {
     this.setXOptions(this.xOptions);
     this.selectXOption('Quantity');
 
-    this.start_date = this.earliestDate.clone();
-    this.end_date = this.latestDate.clone();
+    if (!this.start_date) {
+      this.start_date = this.earliestDate.clone();
+    }
+    if (!this.end_date) {
+      this.end_date = this.latestDate.clone();
+    }
   },
 
   methods: {

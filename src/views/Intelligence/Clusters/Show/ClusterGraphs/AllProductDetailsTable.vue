@@ -40,6 +40,10 @@ const _ = require('lodash');
 import {mapGetters} from 'vuex';
 import axios from 'axios';
 import Units from "../../../../../mixins/Units";
+import Moment from 'moment';
+import {extendMoment} from 'moment-range';
+
+const moment = extendMoment(Moment);
 
 export default {
   name: "AllProductDetailsTable",
@@ -56,8 +60,54 @@ export default {
   computed: {
     ...mapGetters('clusterViewer', {
       ordersWithMatchesFiltered: 'ordersWithMatchesFiltered',
-      selectedOrders: 'selectedOrders'
+      selectedOrders: 'selectedOrders',
+      startDate: 'startDate',
+      endDate: 'endDate'
     }),
+
+    start_date: {
+      get() {
+        return this.startDate;
+      },
+      set(val) {
+        this.setStartDate(val);
+      }
+    },
+
+    end_date: {
+      get() {
+        return this.endDate;
+      },
+      set(val) {
+        this.setEndDate(val);
+      }
+    },
+
+    datesFromTableData() {
+      return _.map(this.tableData, 'order_date_moment');
+    },
+
+    earliestDate() {
+      return moment.min(this.datesFromTableData);
+    },
+
+    latestDate() {
+      return moment.max(this.datesFromTableData);
+    },
+
+    tableDateRange() {
+      let start_date = this.start_date;
+      let end_date = this.end_date;
+
+      if (!start_date) {
+        start_date = this.earliestDate;
+      }
+      if (!end_date) {
+        end_date = this.latestDate;
+      }
+
+      return moment.range(start_date, end_date);
+    },
 
     uniqueProperties() {
       let properties = [];
@@ -103,13 +153,38 @@ export default {
         dataToShow = this.ordersWithMatchesFiltered;
       }
 
-      return dataToShow;
+      return _.filter(dataToShow, d => {
+        // Order date
+        let orderDate = null;
+        let orderDateMoment = null;
+        if (d["PO Initial Create Date"] && d["PO Initial Create Date"]["$date"] && d["PO Initial Create Date"]["$date"]["$numberLong"]) {
+          orderDateMoment = moment.unix(
+              Number(d["PO Initial Create Date"]["$date"]["$numberLong"]) / 1000
+          );
+          orderDate = orderDateMoment.format("DD/MM/YYYY")
+        }
+        d.order_date = orderDate;
+        d.order_date_moment = orderDateMoment;
+
+        if (d.order_date_moment && moment(d.order_date_moment).isValid() && this.startDate) {
+          if (d.order_date_moment.isBefore(this.startDate)) {
+            return false;
+          }
+        }
+        if (d.order_date_moment && moment(d.order_date_moment).isValid() && this.endDate) {
+          if (d.order_date_moment.isAfter(this.endDate)) {
+            return false;
+          }
+        }
+        return true;
+      });
     },
 
     tableData() {
       let td = [];
       _.each(this.dataToShow, o => {
         if (o.product_name) {
+
           let productRow = {
             product_id: o.product_id,
             product_name: o.product_name,

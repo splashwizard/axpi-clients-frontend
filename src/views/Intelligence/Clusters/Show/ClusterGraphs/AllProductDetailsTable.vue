@@ -55,7 +55,8 @@ export default {
   },
   computed: {
     ...mapGetters('clusterViewer', {
-      ordersWithMatchesFiltered: 'ordersWithMatchesFiltered'
+      ordersWithMatchesFiltered: 'ordersWithMatchesFiltered',
+      selectedOrders: 'selectedOrders'
     }),
 
     uniqueProperties() {
@@ -90,9 +91,24 @@ export default {
       ]
     },
 
+    dataToShow() {
+      let dataToShow = [];
+
+      if (this.selectedOrders.length) {
+        let ids = _.map(this.selectedOrders, '_id');
+        dataToShow = _.filter(this.ordersWithMatchesFiltered, d => {
+          return ids.includes(d['_id']);
+        });
+      } else {
+        dataToShow = this.ordersWithMatchesFiltered;
+      }
+
+      return dataToShow;
+    },
+
     tableData() {
       let td = [];
-      _.each(this.ordersWithMatchesFiltered, o => {
+      _.each(this.dataToShow, o => {
         if (o.product_name) {
           let productRow = {
             product_id: o.product_id,

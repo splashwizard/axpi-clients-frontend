@@ -199,6 +199,18 @@ export default {
       return order["products"][0];
     },
 
+    getBaseErpOrder(insight) {
+      return _.find(this.ordersWithMatches, {
+        '_id': insight['erp_order_id']
+      });
+    },
+
+    getComparedToErpOrder(insight) {
+      return _.find(this.ordersWithMatches, {
+        '_id': insight['compared_to_erp_order_id']
+      });
+    },
+
     getFirstBaseProduct(insight) {
       // return insight["products"]["base"][0];
       let order = _.find(this.ordersWithMatches, {

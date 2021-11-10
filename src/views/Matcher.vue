@@ -58,6 +58,11 @@ export default {
       currentTab: 'overview'
     }
   },
+  created() {
+    if (this.$route.query.erpOrderId) {
+      this.currentTab = 'all-transactions';
+    }
+  },
   methods: {
     ...mapActions('matcher', {
       selectErpOrder: 'selectErpOrder'

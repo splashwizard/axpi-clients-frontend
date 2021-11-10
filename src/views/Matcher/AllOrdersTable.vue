@@ -132,6 +132,10 @@ export default {
         results_per_page: 10
       };
 
+      if (this.$route.query.erpOrderId) {
+        search['erp_order_id'] = this.$route.query.erpOrderId;
+      }
+
       return {
         ...search,
         ...params

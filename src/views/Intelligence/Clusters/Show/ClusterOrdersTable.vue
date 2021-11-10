@@ -60,6 +60,13 @@
           <a-menu-item>
             <a
                 href="#"
+                @click.prevent="editMatch(record)"
+            >Edit Match</a
+            >
+          </a-menu-item>
+          <a-menu-item>
+            <a
+                href="#"
                 class="text-danger"
                 @click.prevent="deleteRecord(record)"
             >Remove</a
@@ -96,6 +103,10 @@ export default {
       setSortOrder: 'setSortOrder',
       setFilters: 'setFilters'
     }),
+
+    editMatch(order) {
+      window.open('/matcher?erpOrderId=' + order['_id']);
+    },
 
     deleteRecord(order) {
       this.$emit("remove-order", order);

@@ -10,7 +10,7 @@
     <!-- Product details top -->
     <div class="product-details-top">
       <!-- Has vendor mapping -->
-      <div v-if="productVendorMapping && productVendorMapping.vendors" class="product-details-top-property">
+      <div v-if="productVendorMapping && productVendorMapping.vendors && productVendorMapping.vendors.names" class="product-details-top-property">
         <b>Vendors:</b>
         <a-badge v-for="(vendor, i) in productVendorMapping.vendors.names" :key="i"
                  :count="vendor"/>
@@ -33,8 +33,8 @@
 
       <!-- Product Code -->
       <div class="product-details-top-property">
-        <b>Product Code</b>
-        {{ product['productCode'] }}
+        <b>Product Code:</b>
+        {{ product['productCode'] ? product['productCode'] : '-' }}
       </div>
       <!-- / Product Code -->
     </div>

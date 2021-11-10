@@ -50,12 +50,20 @@
                 <a-icon v-else type="close-circle" theme="twoTone" two-tone-color="#FF0000"></a-icon>
               </p>
               <!-- / Country comparison -->
+
+              <!-- Business unit -->
+              <p>
+                <b>Business Unit: </b><br>
+                {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : '-' }}
+              </p>
+              <!-- / Business unit -->
             </a-col>
             <a-col :span="12">
               <!-- Volume difference -->
-              <p v-if="volumePercentageDifference !== null">
+<!--              <p v-if="volumePercentageDifference !== null">-->
+              <p>
                 <b>Volume difference: </b><br>
-                {{ volumePercentageDifference }}%
+                {{ volumePercentageDifference !== null ? volumePercentageDifference : 0 }}%
               </p>
               <!-- / Volume difference -->
 
@@ -65,6 +73,13 @@
                 {{ pricePerUnitPercentageDifference }}%
               </p>
               <!-- / Unit price difference -->
+
+              <!-- Time difference -->
+              <p>
+                <b>Time difference: </b><br>
+                {{ timeDifference }}
+              </p>
+              <!-- / Time difference -->
             </a-col>
           </a-row>
 
@@ -83,6 +98,7 @@
 import Orders from "../../../../../../mixins/Orders";
 import {mapGetters} from "vuex";
 const _ = require('lodash');
+import moment from "moment";
 
 export default {
   props: ["insight", "insightsAppliedLocal"],
@@ -95,6 +111,10 @@ export default {
   computed: {
     ...mapGetters('clusterViewer', {
       ordersWithMatches: 'ordersWithMatches'
+    }),
+
+    ...mapGetters('auth', {
+      selectedOrganisationalUnit: 'selectedOrganisationalUnit'
     }),
 
     matchPercentage() {
@@ -142,6 +162,33 @@ export default {
 
     isInsightSelected() {
       return this.insightsAppliedLocal.includes(this.insight['insight_id']);
+    },
+
+    timeDifference() {
+     let comparedToErpOrder = _.find(this.ordersWithMatches, {
+       '_id': this.insight['compared_to_erp_order_id']
+     });
+     let comparedToDatePurchased = comparedToErpOrder['PO Initial Create Date']
+      let comparedToMoment = null;
+      if (comparedToDatePurchased && comparedToDatePurchased['$date'] && comparedToDatePurchased['$date']['$numberLong']) {
+        let timestamp1 = comparedToDatePurchased['$date']['$numberLong'] / 1000;
+        comparedToMoment = moment.unix(timestamp1);
+      }
+
+      let baseOrder = _.find(this.ordersWithMatches, {
+        '_id': this.insight['erp_order_id']
+      });
+      let baseOrderDatePurchased = baseOrder['PO Initial Create Date']
+      let baseOrderMoment = null;
+      if (baseOrderDatePurchased && baseOrderDatePurchased['$date'] && baseOrderDatePurchased['$date']['$numberLong']) {
+        let timestamp2 = baseOrderDatePurchased['$date']['$numberLong'] / 1000;
+        baseOrderMoment = moment.unix(timestamp2);
+      }
+
+      if (comparedToMoment && baseOrderMoment) {
+        return comparedToMoment.from(baseOrderMoment);
+      }
+      return '-';
     }
   },
   methods: {

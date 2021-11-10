@@ -90,17 +90,19 @@ export default {
       let d = _.cloneDeep(this.details);
       d.push(this.detailsToAppend);
       let flattened = _.flatten(d);
-      return _.filter(flattened, f => {
+      let filtered = _.filter(flattened, f => {
         return !(f.variableType && f.variableType === 'categorical');
       });
+      return _.uniqBy(filtered, 'propertyName');
     },
     categoricalDetailsToShow() {
       let d = _.cloneDeep(this.details);
       d.push(this.detailsToAppend);
       let flattened = _.flatten(d);
-      return _.filter(flattened, f => {
+      let filtered = _.filter(flattened, f => {
         return f.variableType && f.variableType === 'categorical';
       });
+      return _.uniqBy(filtered, 'propertyName');
     }
   },
   data() {

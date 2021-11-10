@@ -11,8 +11,11 @@
     <div slot="name" slot-scope="name, record">
       <div class="product-name-wrapper">
         <div class="left">
+          <a target="_blank"
+              :href="getFirstProduct(record) ? getFirstProduct(record)['URL'] : '#'">
           <a-avatar style="margin-right: 20px;"
                     size="large" :src="getImageSrc(getFirstProduct(record))"/>
+          </a>
         </div>
         <div class="right">
           <a v-if="getFirstProduct(record)" target="_blank" :href="getProductLink(getFirstProduct(record))">

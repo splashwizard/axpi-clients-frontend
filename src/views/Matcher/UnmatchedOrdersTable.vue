@@ -1,9 +1,10 @@
 <template>
   <div>
+    <loading-screen :is-loading="isSaving"></loading-screen>
     <a-table class="axpi-table"
              :columns="columns"
              :row-key="record => record.id"
-             :data-source="data"
+             :data-source="dataToShow"
              :pagination="pagination"
              :loading="loading||searchQueryIsDirty"
              @change="handleTableChange"
@@ -13,6 +14,16 @@
       </div>
       <div slot="actions" class="table-actions" slot-scope="actions, row">
         <a-button type="default" @click="selectErpOrder(row)">Match</a-button>
+      </div>
+      <div slot="dropdown" class="table-actions" slot-scope="actions, record">
+        <a-dropdown :trigger="['click']">
+          <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="#" class="text-danger" @click="archive(record)">Archive</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </div>
     </a-table>
   </div>
@@ -62,6 +73,11 @@ const columns = [
     title: '',
     scopedSlots: {customRender: 'actions'},
     width: 10
+  },
+  {
+    title: '',
+    scopedSlots: {customRender: 'dropdown'},
+    width: 10
   }
 ];
 
@@ -75,7 +91,9 @@ export default {
       pagination: {},
       searchQueryIsDirty: false,
       loading: false,
-      columns
+      columns,
+      isSaving: false,
+      archived: []
     }
   },
   mounted() {
@@ -101,10 +119,34 @@ export default {
       // this.fetch();
     }
   },
+  computed: {
+    dataToShow() {
+      let vm = this;
+      return _.filter(this.data, d => {
+        return !vm.archived.includes(d['_id']);
+      });
+    }
+  },
   methods: {
     ...mapActions('matcher', {
       selectErpOrder: 'selectErpOrder'
     }),
+
+    archive(order) {
+      let vm = this;
+      vm.isSaving = true;
+      axios.post(window.API_BASE + '/matcher/archive-order', {
+        erp_order_id: order['_id']
+      }).then(() => {
+        vm.archived.push(order['_id']);
+        vm.isSaving = false;
+        vm.$message.success('Order archived successfully');
+      }).catch(e => {
+        console.log(e);
+        vm.$message.error('Error archiving order');
+        vm.isSaving = false;
+      });
+    },
 
     handleTableChange(pagination, filters, sorter) {
       const pager = {...this.pagination};

@@ -9,12 +9,12 @@
         <th></th>
       </tr>
       </thead>
-      <tbody>
+<!--      <tbody>-->
       <insight-row v-for="(insight, i) in insights" :key="i"
                    :insights-applied-local="insightsAppliedLocal"
                    :insight="insight"
                    @toggle-insight-applied="insight => $emit('toggle-insight-applied', insight)"></insight-row>
-      </tbody>
+<!--      </tbody>-->
     </table>
   </div>
 </template>

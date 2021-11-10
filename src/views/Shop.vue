@@ -371,7 +371,7 @@ export default {
     handleTableChange(pagination, filters, sorter) {
       const pager = {...this.pagination};
       pager.current = pagination.current;
-      // this.setPagination(pager);
+      // this.setTablePagination(pager);
       this.pagination = pager;
       this.search({
         results_per_page: pagination.pageSize,

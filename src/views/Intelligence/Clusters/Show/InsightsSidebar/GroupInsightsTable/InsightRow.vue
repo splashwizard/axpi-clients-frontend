@@ -1,55 +1,13 @@
 <template>
-  <tr>
+  <tbody>
+  <tr :class="{'no-border-bottom': showMoreDetails}">
     <td>
       <a-avatar size="large" :src="getImageSrc(getFirstProduct(insight))"/>
     </td>
     <td>
       <b>{{ getFirstProduct(insight)["name"] }}</b>
 
-      <div v-if="showMoreDetails">
-        <div class="comparison-wrapper">
-
-          <!-- Country comparison -->
-          <p>
-            <b>Country: </b>
-            {{ getProperty('country') }}
-            <a-icon v-if="doesPropertyMatch('country')"
-                    type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
-            <a-icon v-else type="close-circle" theme="twoTone" two-tone-color="#FF0000"></a-icon>
-          </p>
-          <!-- / Country comparison -->
-
-          <!-- Country comparison -->
-          <p>
-            <b>Vendor: </b>
-            {{ getProperty('vendor') }}
-            <a-icon v-if="doesPropertyMatch('vendor')"
-                    type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
-            <a-icon v-else type="close-circle" theme="twoTone" two-tone-color="#FF0000"></a-icon>
-          </p>
-          <!-- / Country comparison -->
-
-          <!-- Volume difference -->
-          <p v-if="volumePercentageDifference !== null">
-            <b>Volume difference: </b>
-            {{ volumePercentageDifference }}%
-          </p>
-          <!-- / Volume difference -->
-
-          <!-- Unit price difference -->
-          <p>
-            <b>Unit price difference: </b>
-            {{ pricePerUnitPercentageDifference }}%
-          </p>
-          <!-- / Unit price difference -->
-
-        </div>
-
-        <a href="#" style="margin-top: 5px;" @click.prevent="toggleShowMoreDetails">View less
-          <a-icon :style="{fontSize: '10px'}" type="up"/>
-        </a>
-      </div>
-      <div v-else>
+      <div v-if="!showMoreDetails">
         <a href="#" @click.prevent="toggleShowMoreDetails">Compare
           <a-icon type="down" :style="{fontSize: '10px'}"/>
         </a>
@@ -65,6 +23,60 @@
       <a-button type="danger" v-else @click.prevent="toggleInsightApplied">Deselect</a-button>
     </td>
   </tr>
+  <tr v-if="showMoreDetails">
+    <td></td>
+    <td colspan="4">
+      <div>
+        <div class="comparison-wrapper">
+
+          <a-row :gutter="5">
+            <a-col :span="12">
+              <!-- Country comparison -->
+              <p>
+                <b>Country: </b><br>
+                {{ getProperty('country') }}
+                <a-icon v-if="doesPropertyMatch('country')"
+                        type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
+                <a-icon v-else type="close-circle" theme="twoTone" two-tone-color="#FF0000"></a-icon>
+              </p>
+              <!-- / Country comparison -->
+
+              <!-- Country comparison -->
+              <p>
+                <b>Vendor: </b><br>
+                {{ getProperty('vendor') }}
+                <a-icon v-if="doesPropertyMatch('vendor')"
+                        type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
+                <a-icon v-else type="close-circle" theme="twoTone" two-tone-color="#FF0000"></a-icon>
+              </p>
+              <!-- / Country comparison -->
+            </a-col>
+            <a-col :span="12">
+              <!-- Volume difference -->
+              <p v-if="volumePercentageDifference !== null">
+                <b>Volume difference: </b><br>
+                {{ volumePercentageDifference }}%
+              </p>
+              <!-- / Volume difference -->
+
+              <!-- Unit price difference -->
+              <p>
+                <b>Unit price difference: </b><br>
+                {{ pricePerUnitPercentageDifference }}%
+              </p>
+              <!-- / Unit price difference -->
+            </a-col>
+          </a-row>
+
+        </div>
+
+        <a href="#" style="margin-top: 5px;" @click.prevent="toggleShowMoreDetails">View less
+          <a-icon :style="{fontSize: '10px'}" type="up"/>
+        </a>
+      </div>
+    </td>
+  </tr>
+  </tbody>
 </template>
 
 <script>
@@ -226,5 +238,9 @@ td {
       margin-left: 5px;
     }
   }
+}
+
+.no-border-bottom {
+  border-bottom: none !important;
 }
 </style>

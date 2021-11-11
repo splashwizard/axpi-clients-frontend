@@ -110,7 +110,8 @@
             </thead>
             <tbody>
             <tr>
-              <td>{{ user.client.name }} Demand Change</td>
+<!--              <td>{{ user.client.name }} Demand Change</td>-->
+              <td>Roche Demand Change</td>
               <td>
                 -
               </td>

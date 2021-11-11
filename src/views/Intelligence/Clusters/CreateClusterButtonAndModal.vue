@@ -4,7 +4,7 @@
       New Cluster
     </a-button>
     <a-modal
-        :width="700"
+        :width="850"
         v-model="visible"
         :centered="true"
         title="Create Cluster"
@@ -71,6 +71,9 @@
               </div>
             </div>
           </div>
+          <div slot="productCode" slot-scope="productCode, order">
+            {{ order['match_details_product_codes'][0] }}
+          </div>
         </a-table>
 
         <div style="text-align: right; margin-top: 15px">
@@ -104,6 +107,14 @@ const columns = [
     scopedSlots: {customRender: 'cost'},
     sorter: true,
     width: 110
+  },
+  {
+    title: "Product Code",
+    // dataIndex: "Cost",
+    dataIndex: "productCode",
+    scopedSlots: {customRender: 'productCode'},
+    sorter: true,
+    width: 150
   }
 ];
 

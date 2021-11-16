@@ -10,7 +10,7 @@ export const state = {
     searchQuery: '',
     tablePagination: {},
     enriched: [],
-    displayMode: 'specs'
+    displayMode: 'prices'
 };
 
 export const mutations = {

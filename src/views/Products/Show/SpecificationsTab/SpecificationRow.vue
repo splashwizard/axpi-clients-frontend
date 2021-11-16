@@ -8,7 +8,7 @@
       <span v-html="getPropertyValue(localDetail)"></span>
     </td>
     <!-- Not editing -->
-    <td v-if="!isEditing">
+    <td v-if="(!isEditing && view == 'edit')">
       <span v-if="localDetail['inequality'] && localDetail['inequality'] !== 'between'"
             style="padding-right: 5px;">{{ getInequalityLabel(localDetail['inequality']) }}</span>
       <span v-if="!(localDetail['inequality'] && localDetail['inequality'] === 'between')"
@@ -16,10 +16,10 @@
       <span v-if="(localDetail['inequality'] && localDetail['inequality'] === 'between')"
             v-html="formatRange(localDetail)"></span>
     </td>
-    <td v-if="!isEditing">
+    <td v-if="(!isEditing && view == 'edit')">
       <span :span="formatUnit(localDetail.normalisedUnitBase)"></span>
     </td>
-    <td v-if="!isEditing" class="text-right">
+    <td v-if="(!isEditing && view == 'edit')" class="text-right">
       <a-button @click.prevent="edit" v-if="!isEditing" size="small" icon="edit" type="default"></a-button>
       <delete-product-detail-button style="margin-left: 6px;"
                                     v-if="!isEditing" :product="product"
@@ -28,7 +28,7 @@
     <!-- / Not editing -->
 
     <!-- Editing -->
-    <td colspan="2" v-if="isEditing">
+    <td colspan="2" v-if="(isEditing && view == 'edit')">
       <div class="editing-fields-wrapper">
         <div class="input-padding-right">
           <a-select v-model="details.inequality" style="width: 110px;">
@@ -61,7 +61,7 @@
         </a-select>
       </div>
     </td>
-    <td class="text-right" v-if="isEditing">
+    <td class="text-right" v-if="isEditing && view == 'edit'">
       <a-button @click.prevent="cancel" style="margin-right: 5px;" v-if="isEditing" size="small" type="default">Cancel
       </a-button>
       <a-button @click.prevent="save" v-if="isEditing" size="small" type="primary">Save</a-button>
@@ -96,7 +96,8 @@ export default {
   computed: {
     ...mapGetters('productViewer', {
       product: 'product',
-      isLoadingDetails: 'isLoadingDetails'
+      isLoadingDetails: 'isLoadingDetails',
+      view: 'view'
     })
   },
   methods: {

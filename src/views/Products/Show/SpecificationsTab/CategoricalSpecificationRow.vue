@@ -8,12 +8,12 @@
       <span v-if="!isEditing">{{ localDetail.propertyValue }}</span>
       <a-input v-if="isEditing" v-model="details.propertyValue"/>
     </td>
-    <td>
+    <td v-if="view == 'edit'">
       -
     </td>
-    <td>
+    <td v-if="view == 'edit'">
     </td>
-    <td class="text-right">
+    <td class="text-right" v-if="view == 'edit'">
       <a-button @click.prevent="edit" v-if="!isEditing" size="small" icon="edit" type="default"></a-button>
       <delete-product-detail-button style="margin-left: 6px;"
                                     v-if="!isEditing" :product="product"
@@ -51,7 +51,8 @@ export default {
   computed: {
     ...mapGetters('productViewer', {
       product: 'product',
-      isLoadingDetails: 'isLoadingDetails'
+      isLoadingDetails: 'isLoadingDetails',
+      view: 'view'
     })
   },
   methods: {

@@ -26,7 +26,7 @@
     </table>
 
 
-    <div class="upload-button-wrapper">
+    <div class="upload-button-wrapper" v-if="view === 'edit'">
       <!--      <a-upload-->
       <!--          :showUploadList="false"-->
       <!--          name="file"-->
@@ -61,7 +61,8 @@ export default {
   computed: {
     ...mapGetters('productViewer', {
       product: 'product',
-      documents: 'documents'
+      documents: 'documents',
+      view: 'view'
     }),
     ...mapGetters('auth', {
       apiToken: 'apiToken'

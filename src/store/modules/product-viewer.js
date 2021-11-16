@@ -12,7 +12,9 @@ export const state = {
     isLoadingDocuments: false,
 
     details: [],
-    isLoadingDetails: false
+    isLoadingDetails: false,
+
+    view: 'view' // view or edit
 };
 
 export const mutations = {
@@ -54,6 +56,10 @@ export const mutations = {
 
     STOP_LOADING_DETAILS(state) {
         state.isLoadingDetails = false;
+    },
+
+    SET_VIEW(state, view) {
+        state.view = view;
     }
 };
 
@@ -105,6 +111,10 @@ export const getters = {
 
     details: (state) => {
         return state.details;
+    },
+
+    view: (state) => {
+        return state.view;
     }
 };
 
@@ -114,6 +124,7 @@ export const actions = {
         commit('SET_ERRORS', []);
         commit('SET_DOCUMENTS', []);
         commit('SET_DETAILS', []);
+        commit('SET_VIEW', 'view');
         axios.get(window.API_BASE + '/products/' + id).then(r => {
             commit('STOP_LOADING');
             commit('SET_PRODUCT', r.data);
@@ -162,5 +173,9 @@ export const actions = {
             this._vm.$message.error('Error loading details');
             console.log(e);
         });
+    },
+
+    setView({commit}, view) {
+        commit('SET_VIEW', view);
     }
 };

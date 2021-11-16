@@ -62,6 +62,14 @@ export const getters = {
 
     selectedOrganisationalUnit: (state) => {
         return state.selectedOrganisationalUnit;
+    },
+
+    canEditProducts: (state) => {
+        if (state.user && state.user.can_edit_products) {
+            return Boolean(state.user.can_edit_products);
+        }
+
+        return false;
     }
 };
 

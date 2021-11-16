@@ -1,13 +1,14 @@
 <template>
   <div>
     <table class="axpi-basic-table">
-      <thead>
+      <thead v-if="view === 'edit'">
       <tr>
-        <th>Field Name</th>
+        <th v-if="view !== 'edit'" width="30">Field Name</th>
+        <th v-else>Field Name</th>
         <th width="200">Value</th>
-        <th width="130">Normalised Value</th>
-        <th></th>
-        <th></th>
+        <th width="130" v-if="view == 'edit'">Normalised Value</th>
+        <th v-if="view == 'edit'"></th>
+        <th v-if="view == 'edit'"></th>
       </tr>
       </thead>
       <tbody>
@@ -70,7 +71,7 @@
       </tbody>
     </table>
 
-    <div v-if="!isAddingNewProperty" style="margin-top: 30px;">
+    <div v-if="(!isAddingNewProperty && view === 'edit')" style="margin-top: 30px;">
       <a-button @click.prevent="addNewProperty"
                 type="primary" icon="plus">Add Property
       </a-button>
@@ -97,7 +98,8 @@ export default {
   computed: {
     ...mapGetters('productViewer', {
       details: 'details',
-      product: 'product'
+      product: 'product',
+      view: 'view'
     }),
     numericDetailsToShow() {
       let d = _.cloneDeep(this.details);

@@ -7,11 +7,11 @@
     <td>
       <span>{{ rawValue }}</span>
     </td>
-    <td>
+    <td v-if="view == 'edit'">
       <span v-html="normalisedValueMagnitudeFormatted" v-if="!isEditing"></span>
       <a-input v-if="isEditing" v-model="normalisedQuantityEditing.normalisedUnitMagnitude"/>
     </td>
-    <td>
+    <td v-if="view == 'edit'">
       <span v-html="normalisedUnitBaseFormatted" v-if="!isEditing"></span>
 <!--      <a-select v-if="isEditing" v-model="normalisedQuantityEditing.normalisedUnitBase" style="width: 100%">-->
 <!--        <a-select-option v-for="(option, i) in unitOptions" :value="option.unit" :key="i">-->
@@ -21,7 +21,7 @@
 <!--        </a-select-option>-->
 <!--      </a-select>-->
     </td>
-    <td class="text-right">
+    <td class="text-right" v-if="view == 'edit'">
       <a-button @click.prevent="edit" v-if="!isEditing" size="small" icon="edit" type="default"></a-button>
 
       <a-button @click.prevent="cancel" style="margin-right: 5px;" v-if="isEditing" size="small" type="default">Cancel
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 const _ = require('lodash');
 import axios from 'axios';
 import Units from "../../../../mixins/Units";
@@ -90,6 +92,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('productViewer', {
+      view: 'view'
+    }),
+
     rawValue() {
       if (this.normalisedQuantity.rawMagnitude) {
         return this.normalisedQuantity.rawMagnitude + ' ' + this.normalisedQuantity.unit

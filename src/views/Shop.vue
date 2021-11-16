@@ -8,13 +8,13 @@
           <a-page-header title="Shop">
             <template slot="extra">
               <a-radio-group v-model="display_mode">
-                <a-radio-button value="specs">
-                  <a-icon style="margin-right: 5px" type="form"></a-icon>
-                  Specs
-                </a-radio-button>
                 <a-radio-button value="prices">
                   <span style="margin-right: 3px;">$</span>
                   Prices
+                </a-radio-button>
+                <a-radio-button value="specs">
+                  <a-icon style="margin-right: 5px" type="form"></a-icon>
+                  Specs
                 </a-radio-button>
               </a-radio-group>
 
@@ -62,6 +62,10 @@
                     size="large"
                     :src="getImageSrc(row)"
                 />
+              </div>
+
+              <div slot="name" slot-scope="name, row">
+                <a :href="getProductPageUrl(row)">{{ name }}</a>
               </div>
 
               <div slot="datasheet" slot-scope="datasheet, row">
@@ -122,7 +126,7 @@
                   <div slot="title">
                     <div class="title-wrapper">
                       <div class="left">
-                        {{ item.name }}
+                        <a :href="getProductPageUrl(item)">{{ item.name }}</a>
                       </div>
                       <div class="right">
                         <div class="price-list-actions-wrapper">
@@ -264,7 +268,8 @@ export default {
           title: 'Name',
           dataIndex: 'name',
           width: 350,
-          fixed: 'left'
+          fixed: 'left',
+          scopedSlots: {customRender: 'name'}
         },
         {
           title: 'Market Data',
@@ -358,6 +363,10 @@ export default {
       setProductQuantity: 'setProductQuantity',
       setDisplayMode: 'setDisplayMode'
     }),
+
+    getProductPageUrl(product) {
+      return '/products/' + product['id'] + '?fromShop=1';
+    },
 
     getImageSrc(order) {
       if (order['imageURLs'] && order['imageURLs'].length) {

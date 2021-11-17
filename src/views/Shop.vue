@@ -94,12 +94,16 @@
               </div>
 
               <div slot="actions" slot-scope="actions, record">
+                <div class="table-add-to-basket-wrapper">
+                <a-input v-if="!isProductInBasket(record)" class="quantity-input" placeholder="1" type="number" v-model="quantities[record.id]"></a-input>
+
                 <a-button v-if="!isProductInBasket(record)"
                           class="add-to-basket-button"
-                          type="primary" @click.prevent="() => addProductToBasket(record)">Add to basket
+                          type="primary" @click.prevent="() => addToBasket(record)">Add to basket
                 </a-button>
+                </div>
 
-                <div v-else class="quantity-changer">
+                <div v-if="isProductInBasket(record)" class="quantity-changer">
                   <a-button @click.prevent="() => decrementProductQuantity(record)"
                             icon="minus">
                   </a-button>
@@ -129,25 +133,7 @@
                         <a :href="getProductPageUrl(item)">{{ item.name }}</a>
                       </div>
                       <div class="right">
-                        <div class="price-list-actions-wrapper">
-                          <a-button v-if="!isProductInBasket(item)"
-                                    type="primary" @click.prevent="() => addProductToBasket(item)">Add to basket
-                          </a-button>
-
-                          <div v-else class="quantity-changer">
-                            <a-button @click.prevent="() => decrementProductQuantity(item)"
-                                      icon="minus">
-                            </a-button>
-                            <div>
-                              <a-input type="number"
-                                       @change="e => setProductQuantity({quantity: e.target.value, id: item['_id']})"
-                                       :value="getQuantityOfProductInBasket(item)"></a-input>
-                            </div>
-                            <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-                            <a-button @click.prevent="() => incrementProductQuantity(item)"
-                                      icon="plus"></a-button>
-                          </div>
-                        </div>
+                        <span class="price">£100 / something</span>
                       </div>
                     </div>
                   </div>
@@ -158,6 +144,29 @@
                     <p>
                       {{ item.description }}
                     </p>
+                    <div class="price-list-actions-wrapper">
+                      <div class="left"></div>
+                      <div class="right">
+                       <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1" v-model="quantities[item.id]" type="number"></a-input>
+                        <a-button v-if="!isProductInBasket(item)"
+                                  type="primary" @click.prevent="() => addToBasket(item)">Add to basket
+                        </a-button>
+
+                        <div v-else class="quantity-changer">
+                          <a-button @click.prevent="() => decrementProductQuantity(item)"
+                                    icon="minus">
+                          </a-button>
+                          <div>
+                            <a-input type="number"
+                                     @change="e => setProductQuantity({quantity: e.target.value, id: item['_id']})"
+                                     :value="getQuantityOfProductInBasket(item)"></a-input>
+                          </div>
+                          <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
+                          <a-button @click.prevent="() => incrementProductQuantity(item)"
+                                    icon="plus"></a-button>
+                        </div>
+                      </div>
+                    </div>
                     <!--                    <div class="price-list-actions-wrapper">-->
                     <!--                      <a-button v-if="!isProductInBasket(item)"-->
                     <!--                                type="primary" @click.prevent="() => addProductToBasket(item)">Add to basket-->
@@ -208,6 +217,11 @@ export default {
   name: "Shop",
   components: {AddSpecToBasketButtonAndModal},
   mixins: [Units],
+  data() {
+   return {
+     quantities: {}
+   }
+  },
   computed: {
     ...mapGetters('shop', {
       searchResults: 'searchResults',
@@ -314,7 +328,7 @@ export default {
         {
           title: "",
           scopedSlots: {customRender: "actions"},
-          width: 10,
+          width: 250,
           fixed: 'right'
         },
       ]
@@ -363,6 +377,17 @@ export default {
       setProductQuantity: 'setProductQuantity',
       setDisplayMode: 'setDisplayMode'
     }),
+
+    addToBasket(record) {
+      let quantity = this.quantities[record['id']];
+      if (!quantity) {
+        quantity = 1;
+      }
+      this.addProductToBasket({
+        quantity: quantity,
+        product: record
+      });
+    },
 
     getProductPageUrl(product) {
       return '/products/' + product['id'] + '?fromShop=1';
@@ -451,8 +476,23 @@ export default {
   }
 
   .price-list-actions-wrapper {
-    max-width: 190px;
     //margin-bottom: 10px;
+
+    display: flex;
+
+    .left {
+      flex-grow: 1;
+    }
+
+    .right {
+      max-width: 250px;
+      flex-shrink: 1;
+      display: flex;
+
+      .quantity-input {
+        margin-right: 10px;
+      }
+    }
 
     .ant-input {
       width: 110px;
@@ -499,6 +539,18 @@ export default {
 
   .right {
     flex-shrink: 1;
+  }
+}
+
+.price {
+  font-size: 15px;
+}
+
+.table-add-to-basket-wrapper {
+  display: flex;
+
+  .ant-input {
+    margin-right: 10px;
   }
 }
 </style>

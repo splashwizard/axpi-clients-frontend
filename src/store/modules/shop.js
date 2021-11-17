@@ -46,13 +46,14 @@ export const mutations = {
         state.searchQuery = query;
     },
 
-    ADD_PRODUCT_TO_BASKET(state, product) {
+    ADD_PRODUCT_TO_BASKET(state, params) {
+        let {product, quantity} = params;
         state.basket.push({
             itemType: 'product',
             id: product['_id'],
             name: product.name,
             product: product,
-            quantity: 1
+            quantity: quantity
         });
     },
 
@@ -280,8 +281,8 @@ export const actions = {
         commit('UPDATE_SPECIFICATION_IN_BASKET', spec);
     },
 
-    addProductToBasket({commit}, product) {
-        commit('ADD_PRODUCT_TO_BASKET', product);
+    addProductToBasket({commit}, params) {
+        commit('ADD_PRODUCT_TO_BASKET', params);
     },
 
     incrementProductQuantity({commit}, product) {

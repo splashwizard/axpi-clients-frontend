@@ -111,11 +111,17 @@
           <!-- Quantity: Not Editing -->
           <div v-if="view !== 'edit'"
                class="quantity-changer-wrapper">
-            <a-button v-if="!isProductInBasket(product)"
-                      type="primary" @click.prevent="() => addProductToBasket(product)">Add to basket
-            </a-button>
 
-            <div v-else class="quantity-changer">
+            <div class="quantity-adder-wrapper">
+              <a-input v-if="!isProductInBasket(product)" class="quantity-input" placeholder="1"
+                       type="number"
+                       v-model="quantityToAdd"></a-input>
+              <a-button v-if="!isProductInBasket(product)"
+                        type="primary" @click.prevent="() => addToBasket(product)">Add to basket
+              </a-button>
+            </div>
+
+            <div v-if="isProductInBasket(product)" class="quantity-changer">
               <a-button @click.prevent="() => decrementProductQuantity(product)"
                         icon="minus">
               </a-button>
@@ -186,7 +192,9 @@ export default {
       descriptionLocal: '',
       descriptionLocalEditing: '',
       isEditingDescription: false,
-      isSavingDescription: false
+      isSavingDescription: false,
+
+      quantityToAdd: 1
     }
   },
   created() {
@@ -248,6 +256,17 @@ export default {
       decrementProductQuantity: 'decrementProductQuantity',
       setProductQuantity: 'setProductQuantity'
     }),
+
+    addToBasket(product) {
+      let quantity = this.quantityToAdd;
+      if (!quantity) {
+        quantity = 1;
+      }
+      this.addProductToBasket({
+        product: product,
+        quantity: quantity
+      });
+    },
 
     toggleDescriptionShowMore() {
       this.descriptionShowMore = !this.descriptionShowMore;
@@ -322,7 +341,7 @@ export default {
 }
 
 .page-inner-wrapper {
-  margin-top: 90px;
+  margin-top: 20px;
   margin-bottom: 80px;
 
   h2 {
@@ -332,7 +351,7 @@ export default {
   .page-section {
     padding: 30px;
     background: #f9f9f9;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     border-radius: 10px;
   }
 }
@@ -382,6 +401,15 @@ export default {
     .ant-input {
       width: 110px;
     }
+  }
+}
+
+.quantity-adder-wrapper {
+  display: flex;
+  max-width: 250px;
+
+  .ant-input {
+    margin-right: 10px;
   }
 }
 </style>

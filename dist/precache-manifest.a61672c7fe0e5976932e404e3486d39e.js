@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.3095e28a.css"
   },
   {
-    "revision": "1435ef422d8b9af62589",
+    "revision": "7784e9307f48a4377172",
     "url": "/css/app.8096af74.css"
   },
   {
@@ -56,8 +56,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "73a6c2e2c7346fbd8cfc",
-    "url": "/css/shop.ac14432e.css"
+    "revision": "74f5a9543239680d221e",
+    "url": "/css/shop.76e1c087.css"
   },
   {
     "revision": "f5d70362b5db1460edb9",
@@ -68,8 +68,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/view-cluster.887a5d43.css"
   },
   {
-    "revision": "03c0dfc488384cf66bd2",
-    "url": "/css/view-product.6e0d5092.css"
+    "revision": "981714ad357e5792a894",
+    "url": "/css/view-product.af0e3255.css"
   },
   {
     "revision": "dcf1f702eb89bc6955e3",
@@ -300,7 +300,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "8a0945017d1cad2228dc11e2cdc1ddd9",
+    "revision": "8c10e95ef985dbf3859a6e43f32cf1c1",
     "url": "/index.html"
   },
   {
@@ -320,8 +320,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics~optimisation~orders.71a807f3.js"
   },
   {
-    "revision": "1435ef422d8b9af62589",
-    "url": "/js/app.af790b6a.js"
+    "revision": "7784e9307f48a4377172",
+    "url": "/js/app.76144288.js"
   },
   {
     "revision": "85f5392d3ef6edbcd4c9",
@@ -360,6 +360,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/orders.7f2c4401.js"
   },
   {
+    "revision": "89b3fafd5615cae9e528",
+    "url": "/js/projects.2f8228b9.js"
+  },
+  {
     "revision": "6646ba52afaadb960afc",
     "url": "/js/report-show.be87042e.js"
   },
@@ -372,8 +376,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.f837bee8.js"
   },
   {
-    "revision": "73a6c2e2c7346fbd8cfc",
-    "url": "/js/shop.833bbb61.js"
+    "revision": "74f5a9543239680d221e",
+    "url": "/js/shop.b4e2a26e.js"
   },
   {
     "revision": "7845e57d3afbb623951f",
@@ -388,8 +392,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/view-cluster.39051428.js"
   },
   {
-    "revision": "03c0dfc488384cf66bd2",
-    "url": "/js/view-product.8f703450.js"
+    "revision": "981714ad357e5792a894",
+    "url": "/js/view-product.91e56776.js"
   },
   {
     "revision": "dcf1f702eb89bc6955e3",

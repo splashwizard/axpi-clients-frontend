@@ -113,6 +113,11 @@
                       theme="filled"></a-icon>
               <span v-if="!menuCollapsed">Specifications</span>
             </a-menu-item>
+            <a-menu-item title="Projects" key="projects">
+              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="carry-out"
+                      theme="filled"></a-icon>
+              <span v-if="!menuCollapsed">Projects</span>
+            </a-menu-item>
             <a-menu-item title="Matcher" key="matcher">
               <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="pushpin"
                       theme="filled"></a-icon>

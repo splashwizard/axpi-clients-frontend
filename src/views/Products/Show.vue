@@ -16,13 +16,13 @@
     </a-page-header>
 
     <!--  Breadcrumb Wrapper -->
-    <div class="breadcrumb-wrapper">
-      <a-breadcrumb separator=">">
-        <a-breadcrumb-item><router-link to="/">Home</router-link></a-breadcrumb-item>
-        <a-breadcrumb-item><router-link to="/shop">Shop</router-link></a-breadcrumb-item>
-        <a-breadcrumb-item>Product Details</a-breadcrumb-item>
-      </a-breadcrumb>
-    </div>
+<!--    <div class="breadcrumb-wrapper">-->
+<!--      <a-breadcrumb separator=">">-->
+<!--        <a-breadcrumb-item><router-link to="/">Home</router-link></a-breadcrumb-item>-->
+<!--        <a-breadcrumb-item><router-link to="/shop">Shop</router-link></a-breadcrumb-item>-->
+<!--        <a-breadcrumb-item>Product Details</a-breadcrumb-item>-->
+<!--      </a-breadcrumb>-->
+<!--    </div>-->
     <!-- / Breadcrumb Wrapper -->
 
     <!-- Product details top -->

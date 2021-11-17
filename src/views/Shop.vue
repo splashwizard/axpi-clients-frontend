@@ -124,7 +124,7 @@
           <!-- Prices display mode -->
           <div class="prices-list-wrapper" v-if="displayMode === 'prices' && tableData && tableData.length">
 
-            <a-list item-layout="horizontal" :data-source="tableData">
+            <a-list item-layout="horizontal" :data-source="tableData" :pagination="pagination">
               <a-list-item slot="renderItem" slot-scope="item">
                 <a-list-item-meta>
                   <div slot="title">
@@ -445,6 +445,7 @@ export default {
 
 .table-wrapper {
   margin-top: 25px;
+  padding-bottom: 20px;
 
   .add-to-basket-button {
     width: 100%;
@@ -453,6 +454,7 @@ export default {
 
 .prices-list-wrapper {
   margin-top: 25px;
+  padding-bottom: 20px;
 
   .ant-list-item-meta {
     padding-top: 10px;

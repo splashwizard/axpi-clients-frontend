@@ -46,6 +46,13 @@
         {{ product['productCode'] ? product['productCode'] : '-' }}
       </div>
       <!-- / Product Code -->
+
+      <!-- Catalog Code -->
+      <div class="product-details-top-property">
+        <b>Catalog Code:</b>
+        {{ product['catalogCode'] ? product['catalogCode'] : '-' }}
+      </div>
+      <!-- / Catalog Code -->
     </div>
     <!-- / Product details top -->
 

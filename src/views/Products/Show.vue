@@ -15,6 +15,16 @@
       </template>
     </a-page-header>
 
+    <!--  Breadcrumb Wrapper -->
+    <div class="breadcrumb-wrapper">
+      <a-breadcrumb separator=">">
+        <a-breadcrumb-item><router-link to="/">Home</router-link></a-breadcrumb-item>
+        <a-breadcrumb-item><router-link to="/shop">Shop</router-link></a-breadcrumb-item>
+        <a-breadcrumb-item>Product Details</a-breadcrumb-item>
+      </a-breadcrumb>
+    </div>
+    <!-- / Breadcrumb Wrapper -->
+
     <!-- Product details top -->
     <div class="product-details-top">
       <!-- Has vendor mapping -->
@@ -73,7 +83,7 @@
           <!-- Not Editing -->
           <div v-if="view !== 'edit'">
             <div v-if="descriptionTooLong">
-              {{ descriptionToShow }}
+              <div v-html="descriptionToShow"></div>
               <div style="margin-top: 10px;">
                 <a v-if="descriptionShowMore"
                    href="#" style="margin-top: 5px;" @click.prevent="toggleDescriptionShowMore">View less
@@ -85,8 +95,7 @@
                 </a>
               </div>
             </div>
-            <div v-if="!descriptionTooLong">
-              {{ description }}
+            <div v-if="!descriptionTooLong" v-html="description">
             </div>
           </div>
           <!-- / Not Editing -->
@@ -94,24 +103,29 @@
           <!-- Editing -->
           <div v-if="view === 'edit'">
             <div v-if="isEditingDescription">
-              <a-textarea
-                  v-model="descriptionLocalEditing"
-                  placeholder="Description..."
-                  :auto-size="{ minRows: 10 }"
-              />
+<!--              <a-textarea-->
+<!--                  v-model="descriptionLocalEditing"-->
+<!--                  placeholder="Description..."-->
+<!--                  :auto-size="{ minRows: 10 }"-->
+<!--              />-->
+
+              <div class="quill-editor-wrapper">
+                <quill-editor
+                    ref="myQuillEditor"
+                    v-model="descriptionLocalEditing"
+                />
+              </div>
 
               <!-- Actions -->
               <div style="margin-top: 10px;">
-                <a-button @click.prevent="cancelEditDescription" style="margin-right: 5px;" v-if="isEditingDescription"
+                <a-button @click.prevent="cancelEditDescription" style="margin-right: 10px;" v-if="isEditingDescription"
                           type="default">Cancel
                 </a-button>
                 <a-button @click.prevent="saveDescription" v-if="isEditingDescription" type="primary">Save</a-button>
               </div>
               <!-- / Actions -->
             </div>
-            <div v-else>
-              {{ description }}
-            </div>
+            <div v-else v-html="description"></div>
           </div>
           <!-- / Editing -->
 
@@ -418,5 +432,14 @@ export default {
   .ant-input {
     margin-right: 10px;
   }
+}
+
+.breadcrumb-wrapper {
+  margin-bottom: 20px;
+}
+
+.quill-editor-wrapper {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 </style>

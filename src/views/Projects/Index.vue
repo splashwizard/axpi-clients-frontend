@@ -1,30 +1,25 @@
 <template>
-<div class="projects">
+  <div class="projects">
 
-  <div class="page-header">
-    <h1 class="page-title">Projects</h1>
-    <div class="actions">
-      <a-button @click="openCreateProjectModal"
-                icon="plus" type="primary">Create Project
-      </a-button>
+    <div class="page-header">
+      <h1 class="page-title">Projects</h1>
+      <div class="actions">
+        <create-project-button-and-modal></create-project-button-and-modal>
+      </div>
     </div>
+
+    <projects-table></projects-table>
+
   </div>
-
-  <projects-table></projects-table>
-
-</div>
 </template>
 
 <script>
 import ProjectsTable from "./Index/ProjectsTable";
+import CreateProjectButtonAndModal from "./Index/CreateProjectButtonAndModal";
+
 export default {
-name: "Index",
-  components: {ProjectsTable},
-  methods: {
-    openCreateProjectModal() {
-      alert('open')
-    }
-  }
+  name: "Index",
+  components: {CreateProjectButtonAndModal, ProjectsTable}
 }
 </script>
 

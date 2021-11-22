@@ -275,11 +275,11 @@ export default {
     }),
 
     noPadding() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
+      return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
     },
 
     menuCollapsed() {
-      return ['Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
+      return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
     }
   }
 }

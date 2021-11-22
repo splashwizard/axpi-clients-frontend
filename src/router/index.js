@@ -223,6 +223,22 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "projects" */ '../views/Projects/Index.vue')
+    },
+    {
+        path: '/projects/:id',
+        name: 'View Project',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "view-project" */ '../views/Projects/Show.vue')
+    },
+    {
+        path: '/projects/:id/team',
+        name: 'Project Team',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "view-project-team" */ '../views/Projects/Team.vue')
     }
 ]
 

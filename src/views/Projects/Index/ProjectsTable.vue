@@ -20,8 +20,11 @@
       <div slot="status" slot-scope="status">
         <a-badge :count="getHumanReadableStatus(status)" :number-style="getStatusBadgeStyle(status)"></a-badge>
       </div>
-      <div slot="updated_at" slot-scope="updated_at">
-        {{ displayTimeAgo(updated_at) }}
+      <div slot="numberOfOrders" slot-scope="numberOfOrders">
+        123
+      </div>
+      <div slot="spend" slot-scope="spend">
+        £1,000,000
       </div>
     </a-table>
   </div>
@@ -37,7 +40,8 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
-    sorter: true
+    sorter: true,
+    scopedSlots: {customRender: 'name'}
   },
   {
     title: 'Status',
@@ -47,8 +51,9 @@ const columns = [
   },
   {
     title: 'Orders',
-    dataIndex: 'number_of_orders',
-    sorter: true
+    dataIndex: 'numberOfOrders',
+    sorter: true,
+    scopedSlots: {customRender: 'numberOfOrders'}
   },
   {
     title: 'Spend',
@@ -86,6 +91,11 @@ export default {
     }
   },
   methods: {
+    handleRecordSelected(project) {
+      // this.$emit('selected', order);
+      this.$router.push('/projects/' + project.id);
+    },
+
     handleTableChange(pagination, filters, sorter) {
       const pager = {...this.pagination};
       pager.current = pagination.current;
@@ -139,6 +149,12 @@ export default {
         return 'Complete';
       }
       return 'Ongoing';
+    },
+
+    getStatusBadgeStyle(status) {
+      return {
+        backgroundColor: this.getStatusColor(status)
+      };
     },
 
     getStatusColor(status) {

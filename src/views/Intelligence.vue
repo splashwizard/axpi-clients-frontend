@@ -2,7 +2,7 @@
   <div class="intellegence">
     <!-- Header -->
     <div class="page-header">
-      <h1 class="page-title">Axiom Intelligence</h1>
+      <h1 class="page-title">Axiom Insights</h1>
       <div class="actions">
         <intelligence-filters
             @filter-updated="handleFilterUpdated"

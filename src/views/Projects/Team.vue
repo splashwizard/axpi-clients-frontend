@@ -1,6 +1,6 @@
 <template>
   <div class="projects">
-    <loading-screen :is-loading="isLoading||isLoadingTeam||isDeleting"></loading-screen>
+    <loading-screen :is-loading="isLoading||isLoadingTeam||isDeleting||isLoadingRoles"></loading-screen>
     <a-layout>
       <left-sidebar :project="project"></left-sidebar>
       <a-layout style="padding: 7px 30px" :key="updateKey">
@@ -9,7 +9,11 @@
           <h1 class="page-title">
             {{ project.name }}
           </h1>
-          <div class="actions"></div>
+          <div class="actions">
+            <add-team-member-button-and-modal :project-id="projectId"
+                                              @reload="fetchTeam"
+            ></add-team-member-button-and-modal>
+          </div>
         </div>
 
         <div>
@@ -20,26 +24,17 @@
               item-layout="horizontal"
               :data-source="team"
           >
-            <a-list-item slot="renderItem" slot-scope="item">
-              <a slot="actions" class="text-danger" @click.prevent="removeTeamMember(item)">Remove</a>
-              <a-list-item-meta
-                  :description="formatTeamMemberProjectRoles(item)"
-              >
-                <a slot="title" href="#">{{ item.user.name }}</a>
-                <a-avatar
-                    slot="avatar"
-                    size="large"
-                    :src="getAvatar(item.user)"
-                />
-              </a-list-item-meta>
-            </a-list-item>
+            <team-list-item @reload="fetchTeam"
+                            :roles="roles"
+                            :project-id="projectId"
+                slot="renderItem" slot-scope="item" :item="item"></team-list-item>
           </a-list>
 
           <!-- Footer actions -->
           <div class="footer-actions">
-            <add-team-member-button-and-modal :project-id="projectId"
-                                              @reload="fetchTeam"
-            ></add-team-member-button-and-modal>
+<!--            <add-team-member-button-and-modal :project-id="projectId"-->
+<!--                                              @reload="fetchTeam"-->
+<!--            ></add-team-member-button-and-modal>-->
           </div>
           <!-- / Footer actions -->
 
@@ -57,17 +52,19 @@ import LeftSidebar from "./LeftSidebar";
 import Forms from "../../mixins/Forms";
 import AddTeamMemberButtonAndModal from "./Team/AddTeamMemberButtonAndModal";
 import Images from "../../mixins/Images";
+import TeamListItem from "./Team/TeamListItem";
 
-const _ = require('lodash');
+// const _ = require('lodash');
 
 export default {
   name: "Team",
-  components: {AddTeamMemberButtonAndModal, LeftSidebar},
+  components: {TeamListItem, AddTeamMemberButtonAndModal, LeftSidebar},
   mixins: [Forms, Images],
   created() {
     this.projectId = this.$route.params.id;
     this.loadProject(this.$route.params.id);
     this.fetchTeam();
+    this.fetchRoles();
   },
   watch: {
     $route() {
@@ -81,7 +78,9 @@ export default {
       updateKey: 1,
       team: [],
       isLoadingTeam: false,
-      isDeleting: false
+      isDeleting: false,
+      isLoadingRoles: false,
+      roles: []
     }
   },
   computed: {
@@ -118,37 +117,33 @@ export default {
       });
     },
 
-    removeTeamMember(teamMember) {
+    fetchRoles() {
       let vm = this;
-      vm.isDeleting = true;
-      axios.delete(window.API_BASE + '/projects/' + this.projectId + '/team/' + teamMember.id).then(() => {
-        vm.$message.success('Team member removed successfully');
-        vm.isDeleting = false;
-        vm.fetchTeam();
+      vm.isLoadingRoles = true;
+      axios.get(window.API_BASE + '/project-roles').then(r => {
+        vm.roles = r.data;
+        vm.isLoadingRoles = false;
       }).catch(e => {
         console.log(e);
-        vm.isDeleting = false;
-        vm.$message.error('Error removing team member');
+        vm.isLoadingRoles = false;
+        vm.roles = [];
+        vm.$message.error('Error loading roles');
       });
-    },
-
-    formatTeamMemberProjectRoles(teamMember) {
-      let roles = [];
-      _.each(teamMember.project_roles, role => {
-        roles.push(role.name);
-      });
-      if (roles.length) {
-        return roles.join(', ');
-      }
-      return 'No roles assigned';
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .projects {
   height: 100%;
+}
+
+.page-header {
+  padding-top: 15px;
+  .actions {
+    padding-top: 7px;
+  }
 }
 
 .footer-actions {

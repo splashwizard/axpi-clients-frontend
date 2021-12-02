@@ -50,7 +50,7 @@ export const mutations = {
         let {product, quantity} = params;
         state.basket.push({
             itemType: 'product',
-            id: product['_id'],
+            id: product['id'],
             name: product.name,
             product: product,
             quantity: quantity
@@ -95,7 +95,7 @@ export const mutations = {
         let p = _.find(state.basket, item => {
             return (
                 item.itemType === 'product'
-                && item.id === product['_id']
+                && item.id === product['id']
             );
         });
         p.quantity++;
@@ -105,7 +105,7 @@ export const mutations = {
         let p = _.find(state.basket, item => {
             return (
                 item.itemType === 'product'
-                && item.id === product['_id']
+                && item.id === product['id']
             );
         });
         p.quantity--;

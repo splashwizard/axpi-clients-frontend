@@ -1,7 +1,5 @@
 <template>
   <div class="shop-index">
-    <loading-screen :is-loading="isLoading||isEnriching"></loading-screen>
-
     <a-layout>
       <a-layout style="padding: 7px 30px">
         <div class="wrapper">
@@ -24,181 +22,118 @@
             </template>
           </a-page-header>
 
-          <!-- Search -->
-          <div class="search-wrapper">
-            <div class="left">
-              <a-input-search
-                  placeholder="Search by catalog number, product name, keyword, application"
-                  enter-button="Search"
-                  v-model="search_query"
-                  size="large"
-                  @search="search"
-              >
-                <a-select slot="addonBefore" default-value="Search all" style="width: 120px">
-                  <a-select-option value="all">
-                    Search all
-                  </a-select-option>
-                </a-select>
-              </a-input-search>
-            </div>
-            <div class="right">
-              <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
-            </div>
-          </div>
-          <!-- / Search -->
+          <!--          &lt;!&ndash; Search &ndash;&gt;-->
+          <!--          <div class="search-wrapper">-->
+          <!--            <div class="left">-->
+          <!--              <a-input-search-->
+          <!--                  placeholder="Search by catalog number, product name, keyword, application"-->
+          <!--                  enter-button="Search"-->
+          <!--                  v-model="search_query"-->
+          <!--                  size="large"-->
+          <!--                  @search="search"-->
+          <!--              >-->
+          <!--                <a-select slot="addonBefore" default-value="Search all" style="width: 120px">-->
+          <!--                  <a-select-option value="all">-->
+          <!--                    Search all-->
+          <!--                  </a-select-option>-->
+          <!--                </a-select>-->
+          <!--              </a-input-search>-->
+          <!--            </div>-->
+          <!--            <div class="right">-->
+          <!--              <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--          &lt;!&ndash; / Search &ndash;&gt;-->
 
-          <!-- Specs display mode -->
-          <div class="table-wrapper" v-if="displayMode === 'specs' && tableData && tableData.length">
-            <a-table v-if="!(isLoading||isEnriching)" class="axpi-table column-dividers"
-                     :scroll="{ x: 'max-content' }"
-                     :columns="columns"
-                     :data-source="tableData"
-                     :pagination="pagination"
-                     @change="handleTableChange"
-                     :loading="isLoading||isEnriching"
-            >
-              <div slot="image" slot-scope="image, row">
-                <a-avatar
-                    size="large"
-                    :src="getImageSrc(row)"
-                />
-              </div>
+          <!-- Instant search -->
+          <ais-instant-search :search-client="searchClient" index-name="products">
+            <ais-configure :hits-per-page.camel="8"/>
 
-              <div slot="name" slot-scope="name, row">
-                <a :href="getProductPageUrl(row)">{{ name }}</a>
-              </div>
+            <a-row :gutter="30">
+              <a-col span="5" style="padding-left: 17px;">
+                <ais-panel>
+                  <ais-clear-refinements></ais-clear-refinements>
+                </ais-panel>
+                <ais-panel>
+                  <h4>Manufacturer</h4>
+                  <ais-refinement-list attribute="manufacturer"/>
+                </ais-panel>
+              </a-col>
+              <a-col :span="19" style="padding-right: 17px;">
+                <ais-panel>
+                  <ais-search-box placeholder=""/>
+                </ais-panel>
 
-              <div slot="datasheet" slot-scope="datasheet, row">
-                <span>
-                  <a :href="row.URL" target="_blank">
-                    <a-icon type="link"></a-icon>
-                    Datasheet
-                  </a>
-                </span>
-              </div>
+                <ais-panel>
+                  <!-- Prices display mode -->
+                  <ais-hits v-if="displayMode == 'prices'">
+                    <template slot="item" slot-scope="{ item }">
+                      <article class="shop-item-result">
+                        <a-row :gutter="20">
+                          <a-col :span="6">
+                            <div class="product-image-wrapper">
+                              <img
+                                  :src="getImageSrc(item)"
+                                  :alt="item['name']"
+                                  class="product-image"
+                              />
+                            </div>
+                          </a-col>
+                          <a-col :span="18">
+                            <h1 class="item-title">
+                              <ais-highlight
+                                  :hit="item"
+                                  attribute="name"
+                                  class="hit-name"
+                              />
+                            </h1>
 
-              <div slot="price">
-                ?
-              </div>
+                            <div class="description-wrapper">
+                              {{ item.description }}
+                            </div>
 
-              <div slot="numberOfAuthorisedSellers">
-                1
-              </div>
+                            <div class="price-list-actions-wrapper">
+                              <div class="left">
+                                <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1"
+                                         v-model="quantities[item.id]" type="number"></a-input>
+                                <a-button v-if="!isProductInBasket(item)"
+                                          type="primary" @click.prevent="() => addToBasket(item)">Add to basket
+                                </a-button>
 
-              <div slot="marketAvailability">
-                1
-              </div>
+                                <div v-else class="quantity-changer">
+                                  <a-button @click.prevent="() => decrementProductQuantity(item)"
+                                            icon="minus">
+                                  </a-button>
+                                  <div>
+                                    <a-input type="number"
+                                             @change="e => setProductQuantity({quantity: e.target.value, id: item['id']})"
+                                             :value="getQuantityOfProductInBasket(item)"></a-input>
+                                  </div>
+                                  <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
+                                  <a-button @click.prevent="() => incrementProductQuantity(item)"
+                                            icon="plus"></a-button>
+                                </div>
+                              </div>
+                            </div>
+                          </a-col>
+                        </a-row>
+                      </article>
+                    </template>
+                  </ais-hits>
+                  <!-- / Prices display mode -->
 
-              <div v-for="(p,i) in uniqueProperties" :slot="p" :key="i" slot-scope="property">
-                <span v-html="property"></span>
-              </div>
+                  <!-- Specs display mode -->
+                  <specs-display :quantities="quantities" v-if="displayMode == 'specs'"></specs-display>
+                  <!-- / Specs display mode -->
+                </ais-panel>
 
-              <div slot="actions" slot-scope="actions, record">
-                <div class="table-add-to-basket-wrapper">
-                <a-input v-if="!isProductInBasket(record)" class="quantity-input" placeholder="1" type="number" v-model="quantities[record.id]"></a-input>
-
-                <a-button v-if="!isProductInBasket(record)"
-                          class="add-to-basket-button"
-                          type="primary" @click.prevent="() => addToBasket(record)">Add to basket
-                </a-button>
-                </div>
-
-                <div v-if="isProductInBasket(record)" class="quantity-changer">
-                  <a-button @click.prevent="() => decrementProductQuantity(record)"
-                            icon="minus">
-                  </a-button>
-                  <!--                  <div>{{ getQuantityOfProductInBasket(record) }}</div>-->
-                  <div>
-                    <a-input type="number"
-                             @change="e => setProductQuantity({quantity: e.target.value, id: record['_id']})"
-                             :value="getQuantityOfProductInBasket(record)"></a-input>
-                  </div>
-                  <a-button @click.prevent="() => incrementProductQuantity(record)"
-                            icon="plus"></a-button>
-                </div>
-              </div>
-            </a-table>
-          </div>
-          <!-- / Specs display mode -->
-
-          <!-- Prices display mode -->
-          <div class="prices-list-wrapper" v-if="displayMode === 'prices' && tableData && tableData.length">
-
-            <a-list item-layout="horizontal" :data-source="tableData" :pagination="pagination">
-              <a-list-item slot="renderItem" slot-scope="item">
-                <a-list-item-meta>
-                  <div slot="title">
-                    <div class="title-wrapper">
-                      <div class="left">
-                        <a :href="getProductPageUrl(item)">{{ item.name }}</a>
-                      </div>
-                      <div class="right">
-                        <span class="price">£100 / something</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div slot="description">
-                    <p>
-                      <b>{{ item.manufacturer }}</b>
-                    </p>
-                    <p>
-                      {{ item.description }}
-                    </p>
-                    <div class="price-list-actions-wrapper">
-                      <div class="left"></div>
-                      <div class="right">
-                       <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1" v-model="quantities[item.id]" type="number"></a-input>
-                        <a-button v-if="!isProductInBasket(item)"
-                                  type="primary" @click.prevent="() => addToBasket(item)">Add to basket
-                        </a-button>
-
-                        <div v-else class="quantity-changer">
-                          <a-button @click.prevent="() => decrementProductQuantity(item)"
-                                    icon="minus">
-                          </a-button>
-                          <div>
-                            <a-input type="number"
-                                     @change="e => setProductQuantity({quantity: e.target.value, id: item['_id']})"
-                                     :value="getQuantityOfProductInBasket(item)"></a-input>
-                          </div>
-                          <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-                          <a-button @click.prevent="() => incrementProductQuantity(item)"
-                                    icon="plus"></a-button>
-                        </div>
-                      </div>
-                    </div>
-                    <!--                    <div class="price-list-actions-wrapper">-->
-                    <!--                      <a-button v-if="!isProductInBasket(item)"-->
-                    <!--                                type="primary" @click.prevent="() => addProductToBasket(item)">Add to basket-->
-                    <!--                      </a-button>-->
-
-                    <!--                      <div v-else class="quantity-changer">-->
-                    <!--                        <a-button @click.prevent="() => decrementProductQuantity(item)"-->
-                    <!--                                  icon="minus">-->
-                    <!--                        </a-button>-->
-                    <!--                        <div>-->
-                    <!--                          <a-input type="number"-->
-                    <!--                                   @change="e => setProductQuantity({quantity: e.target.value, id: item['_id']})"-->
-                    <!--                                   :value="getQuantityOfProductInBasket(item)"></a-input>-->
-                    <!--                        </div>-->
-                    <!--                        &lt;!&ndash;                        <div>{{ getQuantityOfProductInBasket(item) }}</div>&ndash;&gt;-->
-                    <!--                        <a-button @click.prevent="() => incrementProductQuantity(item)"-->
-                    <!--                                  icon="plus"></a-button>-->
-                    <!--                      </div>-->
-                    <!--                    </div>-->
-                  </div>
-                  <a-avatar
-                      size="large"
-                      shape="square"
-                      slot="avatar"
-                      :src="getImageSrc(item)"
-                  />
-                </a-list-item-meta>
-              </a-list-item>
-            </a-list>
-
-          </div>
-          <!-- / Prices display mode -->
+                <ais-panel>
+                  <ais-pagination/>
+                </ais-panel>
+              </a-col>
+            </a-row>
+          </ais-instant-search>
+          <!-- / Instant search -->
 
         </div>
       </a-layout>
@@ -209,30 +144,58 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import Units from "../mixins/Units";
-import AddSpecToBasketButtonAndModal from "./Shop/AddSpecToBasketButtonAndModal";
+// import axios from 'axios';
+// import AddSpecToBasketButtonAndModal from "./Shop/AddSpecToBasketButtonAndModal";
+import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
+import SpecsDisplay from "./Shop/SpecsDisplay";
+
+const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+  server: {
+    apiKey: 'axiom', // Be sure to use an API key that only allows searches, in production
+    nodes: [
+      {
+        host: 'localhost',
+        port: '8108',
+        protocol: 'http',
+      },
+    ],
+  },
+  // The following parameters are directly passed to Typesense's search API endpoint.
+  //  So you can pass any parameters supported by the search endpoint below.
+  //  queryBy is required.
+  //  filterBy is managed and overridden by InstantSearch.js. To set it, you want to use one of the filter widgets like refinementList or use the `configure` widget.
+  additionalSearchParameters: {
+    queryBy: 'name',
+  },
+});
+const searchClient = typesenseInstantsearchAdapter.searchClient;
 
 const _ = require('lodash');
 
 export default {
   name: "Shop",
-  components: {AddSpecToBasketButtonAndModal},
-  mixins: [Units],
+  components: {
+    SpecsDisplay
+    // AddSpecToBasketButtonAndModal
+  },
+  mixins: [
+    Units
+  ],
   data() {
-   return {
-     quantities: {}
-   }
+    return {
+      quantities: {},
+      searchClient
+    }
   },
   computed: {
     ...mapGetters('shop', {
-      searchResults: 'searchResults',
-      isLoading: 'isLoading',
-      searchQuery: 'searchQuery',
-      tablePagination: 'tablePagination',
-      basket: 'basket',
-      enriched: 'enriched',
       displayMode: 'displayMode',
-      isEnriching: 'isEnriching'
+      basket: 'basket'
     }),
+
+    uniqueProperties() {
+      return [];
+    },
 
     display_mode: {
       get() {
@@ -241,126 +204,6 @@ export default {
       set(val) {
         this.setDisplayMode(val);
       }
-    },
-
-    search_query: {
-      get() {
-        return this.searchQuery;
-      },
-      set(val) {
-        this.setSearchQuery(val);
-      }
-    },
-
-    pagination: {
-      get() {
-        return this.tablePagination;
-      },
-      set(val) {
-        this.setTablePagination(val);
-      }
-    },
-
-    uniqueProperties() {
-      let properties = [];
-      _.each(Object.values(this.enriched), ps => {
-        properties.push(_.map(ps, 'propertyName'));
-        properties = _.flatten(properties);
-      });
-      return _.uniq(properties);
-    },
-
-    columns() {
-      return [
-        {
-          title: '',
-          width: 60,
-          fixed: 'left',
-          scopedSlots: {customRender: 'image'}
-        },
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          width: 350,
-          fixed: 'left',
-          scopedSlots: {customRender: 'name'}
-        },
-        {
-          title: 'Market Data',
-          children: [
-            {
-              title: '',
-              dataIndex: 'datasheet',
-              scopedSlots: {customRender: 'datasheet'}
-            },
-            {
-              title: 'Price',
-              dataIndex: 'price',
-              scopedSlots: {customRender: 'price'}
-            },
-            {
-              title: 'Number of authorised sellers',
-              dataIndex: 'numberOfAuthorisedSellers',
-              scopedSlots: {customRender: 'numberOfAuthorisedSellers'}
-            },
-            {
-              title: 'Market availability',
-              dataIndex: 'marketAvailability',
-              scopedSlots: {customRender: 'marketAvailability'}
-            }
-          ]
-        },
-        {
-          title: 'Most Relevant',
-          children: [
-            ..._.map(this.uniqueProperties, (p) => ({
-              title: p,
-              dataIndex: p,
-              sorter: false,
-              width: 200,
-              scopedSlots: {customRender: p}
-            })),
-          ]
-        },
-        {
-          title: '',
-        },
-        {
-          title: "",
-          scopedSlots: {customRender: "actions"},
-          width: 250,
-          fixed: 'right'
-        },
-      ]
-    },
-
-    tableData() {
-      // return this.searchResults.data;
-      return _.map(this.searchResults.data, product => {
-        _.each(this.uniqueProperties, p => {
-          let property = _.find(product.all_properties, {
-            propertyName: p
-          });
-          if (property) {
-            if (property.variableType && property.variableType === 'categorical') {
-              product[p] = property.propertyValue;
-            } else {
-              let magnitudeFormatted = property.propertyValue;
-              if (magnitudeFormatted < 1 && magnitudeFormatted !== 0) {
-                let exp = Number.parseFloat(magnitudeFormatted).toExponential(3);
-                let split = exp.split('e');
-                magnitudeFormatted = split[0] + ' x 10' + '<sup>' + split[1] + '</sup>'
-              }
-
-              let propertyUnitFormatted = this.formatUnit(property.propertyUnit);
-              product[p] = magnitudeFormatted + ' ' + propertyUnitFormatted;
-            }
-          } else {
-            product[p] = '';
-          }
-        });
-        return product;
-      });
     }
   },
   created() {
@@ -368,9 +211,6 @@ export default {
   },
   methods: {
     ...mapActions('shop', {
-      search: 'search',
-      setSearchQuery: 'setSearchQuery',
-      setTablePagination: 'setTablePagination',
       addProductToBasket: 'addProductToBasket',
       incrementProductQuantity: 'incrementProductQuantity',
       decrementProductQuantity: 'decrementProductQuantity',
@@ -403,25 +243,11 @@ export default {
       this.$router.push('/shop/basket');
     },
 
-    handleTableChange(pagination, filters, sorter) {
-      const pager = {...this.pagination};
-      pager.current = pagination.current;
-      // this.setTablePagination(pager);
-      this.pagination = pager;
-      this.search({
-        results_per_page: pagination.pageSize,
-        page: pagination.current,
-        sort_field: sorter.field,
-        sort_order: sorter.order,
-        ...filters,
-      });
-    },
-
     isProductInBasket(product) {
       return _.filter(this.basket, item => {
         return (
             item.itemType === 'product'
-            && item.id === product['_id']
+            && item.id === product['id']
         );
       }).length > 0;
     },
@@ -430,7 +256,7 @@ export default {
       return _.find(this.basket, item => {
         return (
             item.itemType === 'product'
-            && item.id === product['_id']
+            && item.id === product['id']
         );
       }).quantity;
     }
@@ -438,57 +264,64 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .shop-index {
+  .shop-index {
 
-}
-
-.table-wrapper {
-  margin-top: 25px;
-  padding-bottom: 20px;
-
-  .add-to-basket-button {
-    width: 100%;
-  }
-}
-
-.prices-list-wrapper {
-  margin-top: 25px;
-  padding-bottom: 20px;
-
-  .ant-list-item-meta {
-    padding-top: 10px;
-    padding-bottom: 10px;
   }
 
-  .ant-avatar {
-    width: 140px;
-    height: 140px;
-    line-height: 60px;
-    margin-right: 15px;
+  .table-wrapper {
+    margin-top: 25px;
+    padding-bottom: 20px;
+
+    .add-to-basket-button {
+      width: 100%;
+    }
   }
 
-  .ant-list-item-meta-title {
-    font-size: 17px;
-    margin-bottom: 6px;
+  .prices-list-wrapper {
+    margin-top: 20px;
+    padding-bottom: 20px;
 
-    //a {
-    //  color: #000;
-    //}
+    .ant-list-item-meta {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .ant-avatar {
+      width: 140px;
+      height: 140px;
+      line-height: 60px;
+      margin-right: 15px;
+    }
+
+    .ant-list-item-meta-title {
+      font-size: 17px;
+      margin-bottom: 6px;
+
+      //a {
+      //  color: #000;
+      //}
+    }
+
+
   }
 
   .price-list-actions-wrapper {
     //margin-bottom: 10px;
 
+    margin-top: 25px;
+
     display: flex;
 
-    .left {
-      flex-grow: 1;
-    }
+    //.left {
+    //  flex-grow: 1;
+    //}
 
-    .right {
-      max-width: 250px;
-      flex-shrink: 1;
+    .left {
+      max-width: 350px;
+      //flex-shrink: 1;
+      flex-grow: 1;
       display: flex;
 
       .quantity-input {
@@ -500,59 +333,155 @@ export default {
       width: 110px;
     }
   }
-}
 
-.wrapper {
-  max-height: 100%;
-  overflow-y: scroll;
-}
-
-.quantity-changer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 190px;
-
-  .ant-input {
-    width: 110px;
-  }
-}
-
-.search-wrapper {
-  display: flex;
-  align-items: center;
-
-  .left {
-    flex: 1;
+  .wrapper {
+    max-height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 
-  .right {
-    flex-shrink: 1;
-    padding-left: 10px;
-  }
-}
+  .quantity-changer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 190px;
 
-.title-wrapper {
-  display: flex;
-
-  .left {
-    flex-grow: 1;
+    .ant-input {
+      width: 110px;
+    }
   }
 
-  .right {
-    flex-shrink: 1;
+  .search-wrapper {
+    display: flex;
+    align-items: center;
+
+    .left {
+      flex: 1;
+    }
+
+    .right {
+      flex-shrink: 1;
+      padding-left: 10px;
+    }
   }
-}
 
-.price {
-  font-size: 15px;
-}
+  .title-wrapper {
+    display: flex;
 
-.table-add-to-basket-wrapper {
-  display: flex;
+    .left {
+      flex-grow: 1;
+    }
 
-  .ant-input {
-    margin-right: 10px;
+    .right {
+      flex-shrink: 1;
+    }
+  }
+
+  .price {
+    font-size: 15px;
+  }
+
+  .table-add-to-basket-wrapper {
+    display: flex;
+
+    .ant-input {
+      margin-right: 10px;
+    }
+  }
+
+  //em {
+  //  background: cyan;
+  //  font-style: normal;
+  //}
+  //.header {
+  //  display: flex;
+  //  align-items: center;
+  //  min-height: 50px;
+  //  padding: 0.5rem 1rem;
+  //  background-image: linear-gradient(to right, #4dba87, #2f9088);
+  //  color: #fff;
+  //  margin-bottom: 1rem;
+  //}
+  //.header a {
+  //  color: #fff;
+  //  text-decoration: none;
+  //}
+  //.header-title {
+  //  font-size: 1.2rem;
+  //  font-weight: normal;
+  //}
+  //.header-title::after {
+  //  content: ' ▸ ';
+  //  padding: 0 0.5rem;
+  //}
+  //.header-subtitle {
+  //  font-size: 1.2rem;
+  //}
+  //.container {
+  //  max-width: 1200px;
+  //  margin: 0 auto;
+  //  padding: 1rem;
+  //}
+  //.search-panel {
+  //  display: flex;
+  //}
+  //.search-panel__filters {
+  //  flex: 1;
+  //}
+  //.search-panel__results {
+  //  flex: 3;
+  //}
+  //.ais-Highlight-highlighted {
+  //  color: inherit;
+  //  font-size: inherit;
+  //}
+  //.searchbox {
+  //  margin-bottom: 2rem;
+  //}
+  //.pagination {
+  //  margin: 2rem auto;
+  //  text-align: center;
+  //}
+  //.hit-name {
+  //  font-size: 1.1rem;
+  //  font-weight: bold;
+  //  margin-top: 10px;
+  //}
+  //.hit-authors {
+  //  margin-top: 3px;
+  //  font-size: 0.8rem;
+  //}
+  //.hit-publication-year {
+  //  font-size: 0.8rem;
+  //  margin-top: 20px;
+  //}
+  //.hit-rating {
+  //  margin-top: 3px;
+  //  font-size: 0.8rem;
+  //}
+  //.ais-Hits-item {
+  //  padding: 30px;
+  //  box-shadow: none;
+  //  border: 1px solid lighten(lightgray, 8%);
+  //}
+
+  .product-image-wrapper {
+    text-align: center;
+    width: 100%;
+  }
+
+  .product-image {
+    //width: 100%;
+    max-height: 100px;
+    max-width: 100%;
+    //height: 80px;
+  }
+
+  .shop-item-result {
+    .item-title {
+      font-size: 17px;
+      margin-bottom: 20px;
+    }
   }
 }
 </style>

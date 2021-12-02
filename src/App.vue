@@ -14,7 +14,8 @@
             <div class="organisation-unit-selector">
               <a-dropdown :trigger="['click']">
                 <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-                  {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : 'Please select a unit' }} <a-icon type="down" />
+                  {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : 'Please select a unit' }}
+                  <a-icon type="down"/>
                 </a>
                 <a-menu slot="overlay">
                   <a-menu-item v-for="(unit, key) in organisationalUnits" :key="key">
@@ -24,38 +25,45 @@
               </a-dropdown>
             </div>
 
-<!--            <span>-->
-<!--                        {{ user.client.name }}-->
-<!--                    </span>-->
-<!--            <a-icon class="org-group-selector-arrow" type="down"/>-->
+            <!--            <span>-->
+            <!--                        {{ user.client.name }}-->
+            <!--                    </span>-->
+            <!--            <a-icon class="org-group-selector-arrow" type="down"/>-->
           </div>
-<!--          <div class="top-nav-search-bar">-->
-<!--            <a-input ref="userNameInput" placeholder="Search..." size="large">-->
-<!--              <a-icon slot="prefix" type="search"/>-->
-<!--            </a-input>-->
-<!--          </div>-->
+          <!--          <div class="top-nav-search-bar">-->
+          <!--            <a-input ref="userNameInput" placeholder="Search..." size="large">-->
+          <!--              <a-icon slot="prefix" type="search"/>-->
+          <!--            </a-input>-->
+          <!--          </div>-->
           <div class="top-nav-links">
             <div id="nav">
               <feedback-popup></feedback-popup>
-              <a-popover title="Notifications" trigger="click" placement="bottomRight">
+              <a-popover title="Settings" trigger="click" placement="bottomRight" v-model="settingsPopoverVisible">
                 <div slot="content">
-                  <div>
-                    No notifications
+                  <div class="popover-inner">
+                    <div class="popover-menu">
+                      <div>
+                        <a @click="navigateToSpecifications">Specifications</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <a-button>
                   <div>
-                    <bell-icon></bell-icon>
+                    <a-icon type="setting" theme="filled" style="font-size: 16px;"></a-icon>
+                    <!--                    <bell-icon></bell-icon>-->
                   </div>
                 </a-button>
               </a-popover>
               <a-popover title="Help" trigger="click" placement="bottomRight">
                 <div slot="content">
-                  <div>
-                    <a href="#">Documentation</a>
-                  </div>
-                  <div>
-                    <a href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core">API Docs</a>
+                  <div class="popover-inner">
+                    <div>
+                      <a href="#">Documentation</a>
+                    </div>
+                    <div>
+                      <a href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core">API Docs</a>
+                    </div>
                   </div>
                 </div>
                 <a-button>
@@ -64,12 +72,24 @@
                   </div>
                 </a-button>
               </a-popover>
-              <a-popover title="Account" trigger="click" placement="bottomRight">
+              <a-popover title="Account" trigger="click" placement="bottomRight" v-model="userPopoverVisible">
                 <div slot="content">
-                  <div v-if="user.client" class="company-property">
-                    {{ user.client.name }}
+                  <div class="popover-inner">
+                    <div v-if="user.client" class="company-property">
+                      {{ user.client.name }}
+                    </div>
+                    <div class="popover-menu">
+                      <div>
+                        <a @click="navigateToAccount">Account</a>
+                      </div>
+                      <div>
+                        <a @click="navigateToDevelopers">Developers</a>
+                      </div>
+                      <div>
+                        <a @click="logout">Logout</a>
+                      </div>
+                    </div>
                   </div>
-                  <a @click="logout">Logout</a>
                 </div>
                 <a-button>
                   <div>
@@ -108,11 +128,11 @@
               <orders-icon class="nav-icon"></orders-icon>
               <span v-if="!menuCollapsed">Past Orders</span>
             </a-menu-item>
-            <a-menu-item title="Specifications" key="specifications">
-              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save"
-                      theme="filled"></a-icon>
-              <span v-if="!menuCollapsed">Specifications</span>
-            </a-menu-item>
+            <!--            <a-menu-item title="Specifications" key="specifications">-->
+            <!--              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save"-->
+            <!--                      theme="filled"></a-icon>-->
+            <!--              <span v-if="!menuCollapsed">Specifications</span>-->
+            <!--            </a-menu-item>-->
             <a-menu-item title="Projects" key="projects">
               <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="carry-out"
                       theme="filled"></a-icon>
@@ -123,10 +143,10 @@
                       theme="filled"></a-icon>
               <span v-if="!menuCollapsed">Matcher</span>
             </a-menu-item>
-            <a-menu-item title="Intelligence" key="intelligence">
+            <a-menu-item title="Insights" key="intelligence">
               <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="bulb"
                       theme="filled"></a-icon>
-              <span v-if="!menuCollapsed">Intelligence</span>
+              <span v-if="!menuCollapsed">Insights</span>
             </a-menu-item>
             <a-menu-item title="Suppliers" key="suppliers">
               <suppliers-icon class="nav-icon"></suppliers-icon>
@@ -136,18 +156,18 @@
               <goals-icon class="nav-icon"></goals-icon>
               <span v-if="!menuCollapsed">Strategy</span>
             </a-menu-item> -->
-            <a-menu-item title="Optimisations" key="optimisations">
-              <optimise-icon class="nav-icon"></optimise-icon>
-              <span v-if="!menuCollapsed">Optimisations</span>
-            </a-menu-item>
+            <!--            <a-menu-item title="Optimisations" key="optimisations">-->
+            <!--              <optimise-icon class="nav-icon"></optimise-icon>-->
+            <!--              <span v-if="!menuCollapsed">Optimisations</span>-->
+            <!--            </a-menu-item>-->
             <a-menu-item title="Analytics" key="analytics">
               <analytics-icon class="nav-icon"></analytics-icon>
               <span v-if="!menuCollapsed">Analytics</span>
             </a-menu-item>
-            <a-menu-item title="Reports" key="reports" class="menu-space-below">
-              <reports-icon class="nav-icon"></reports-icon>
-              <span v-if="!menuCollapsed">Reports</span>
-            </a-menu-item>
+            <!--            <a-menu-item title="Reports" key="reports" class="menu-space-below">-->
+            <!--              <reports-icon class="nav-icon"></reports-icon>-->
+            <!--              <span v-if="!menuCollapsed">Reports</span>-->
+            <!--            </a-menu-item>-->
             <!--                    <a-sub-menu key="sub1">-->
             <!--                        <span slot="title"><a-icon type="appstore"/><span>Navigation Three</span></span>-->
             <!--                        <a-menu-item key="3">-->
@@ -185,14 +205,14 @@
                       theme="filled"></a-icon>
               <span v-if="!menuCollapsed">Shop</span>
             </a-menu-item>
-            <a-menu-item key="developers" title="Developers">
-              <developers-icon class="nav-icon"></developers-icon>
-              <span v-if="!menuCollapsed">Developers</span>
-            </a-menu-item>
-            <a-menu-item key="account" title="Account">
-              <account-icon class="nav-icon"></account-icon>
-              <span v-if="!menuCollapsed">Account</span>
-            </a-menu-item>
+            <!--            <a-menu-item key="developers" title="Developers">-->
+            <!--              <developers-icon class="nav-icon"></developers-icon>-->
+            <!--              <span v-if="!menuCollapsed">Developers</span>-->
+            <!--            </a-menu-item>-->
+            <!--            <a-menu-item key="account" title="Account">-->
+            <!--              <account-icon class="nav-icon"></account-icon>-->
+            <!--              <span v-if="!menuCollapsed">Account</span>-->
+            <!--            </a-menu-item>-->
           </a-menu>
         </a-layout-sider>
         <a-layout>
@@ -211,14 +231,14 @@ import HomeIcon from "./components/Icons/HomeIcon";
 import OrdersIcon from "./components/Icons/OrdersIcon";
 import SuppliersIcon from "./components/Icons/SuppliersIcon";
 // import GoalsIcon from "./components/Icons/GoalsIcon";
-import OptimiseIcon from "./components/Icons/OptimiseIcon";
+// import OptimiseIcon from "./components/Icons/OptimiseIcon";
 import AnalyticsIcon from "./components/Icons/AnalyticsIcon";
-import ReportsIcon from "./components/Icons/ReportsIcon";
-import DevelopersIcon from "./components/Icons/DevelopersIcon";
-import AccountIcon from "./components/Icons/AccountIcon";
+// import ReportsIcon from "./components/Icons/ReportsIcon";
+// import DevelopersIcon from "./components/Icons/DevelopersIcon";
+// import AccountIcon from "./components/Icons/AccountIcon";
 import UserIcon from "./components/Icons/UserIcon";
 import QuestionMarkIcon from "./components/Icons/QuestionMarkIcon";
-import BellIcon from "./components/Icons/BellIcon";
+// import BellIcon from "./components/Icons/BellIcon";
 import FeedbackPopup from "./components/FeedbackPopup";
 
 export default {
@@ -227,19 +247,18 @@ export default {
     OrdersIcon,
     SuppliersIcon,
     // GoalsIcon,
-    OptimiseIcon,
+    // OptimiseIcon,
     AnalyticsIcon,
-    ReportsIcon,
-    DevelopersIcon,
-    AccountIcon,
+    // ReportsIcon,
     UserIcon,
     QuestionMarkIcon,
-    BellIcon,
     FeedbackPopup
   },
   data() {
     return {
-      selectedMenuKey: this.$router.currentRoute.path.split("/")[1]
+      selectedMenuKey: this.$router.currentRoute.path.split("/")[1],
+      userPopoverVisible: false,
+      settingsPopoverVisible: false
     }
   },
   mounted() {
@@ -265,6 +284,18 @@ export default {
       let navigateTo = e.key;
       this.$router.push("/" + navigateTo);
     },
+    navigateToAccount() {
+      this.$router.push('/account');
+      this.userPopoverVisible = false;
+    },
+    navigateToDevelopers() {
+      this.$router.push('/developers');
+      this.userPopoverVisible = false;
+    },
+    navigateToSpecifications() {
+      this.$router.push('/specifications');
+      this.settingsPopoverVisible = false;
+    }
   },
   computed: {
     ...mapGetters('auth', {
@@ -279,7 +310,8 @@ export default {
     },
 
     menuCollapsed() {
-      return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
+      // return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
+      return true;
     }
   }
 }
@@ -458,6 +490,16 @@ export default {
 
   .ant-dropdown-link {
     font-size: 17px;
+  }
+}
+
+.popover-menu {
+  div {
+    margin-bottom: 5px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 </style>

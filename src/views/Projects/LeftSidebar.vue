@@ -7,7 +7,7 @@
         <a :href="overviewHref" :class="{'selected': isOverview}">Overview</a>
         <a :href="teamHref" :class="{'selected': isTeam}">Team</a>
         <a :href="chatHref" :class="{'selected': isChat}">Chat</a>
-        <a :href="actionsHref" :class="{'selected': isActions}">Chat</a>
+        <a :href="actionsHref" :class="{'selected': isActions}">Actions</a>
         <a :href="ordersHref" :class="{'selected': isOrders}">Orders</a>
         <!--        <a :href="reviewHref" :class="{'selected': isReview}">Review</a>-->
       </div>

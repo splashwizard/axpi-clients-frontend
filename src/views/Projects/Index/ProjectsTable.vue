@@ -21,10 +21,10 @@
         <a-badge :count="getHumanReadableStatus(status)" :number-style="getStatusBadgeStyle(status)"></a-badge>
       </div>
       <div slot="numberOfOrders" slot-scope="numberOfOrders">
-        123
+        {{ numberOfOrders }}
       </div>
       <div slot="spend" slot-scope="spend">
-        £1,000,000
+        £1,000,000 {{spend}}
       </div>
     </a-table>
   </div>

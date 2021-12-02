@@ -1,18 +1,21 @@
 <template>
   <a-popover trigger="click" placement="bottomRight">
     <div slot="content">
-      <div v-if="!submitted">
-        <a-textarea
-            v-model="feedback"
-            placeholder="Leave feedback here..."
-            :auto-size="{ minRows: 4, maxRows: 6 }"
-        />
-        <div class="actions">
-          <a-button @click.prevent="submitFeedback" type="primary" size="small" :loading="isSubmitting">Submit</a-button>
+      <div class="popover-inner">
+        <div v-if="!submitted">
+          <a-textarea
+              v-model="feedback"
+              placeholder="Leave feedback here..."
+              :auto-size="{ minRows: 4, maxRows: 6 }"
+          />
+          <div class="actions">
+            <a-button @click.prevent="submitFeedback" type="primary" size="small" :loading="isSubmitting">Submit
+            </a-button>
+          </div>
         </div>
-      </div>
-      <div v-else>
-        Thank you for your feedback!
+        <div v-else>
+          Thank you for your feedback!
+        </div>
       </div>
     </div>
 

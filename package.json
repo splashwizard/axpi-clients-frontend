@@ -36,6 +36,7 @@
     "react": "16.8.4",
     "react-dom": "16.8.4",
     "register-service-worker": "^1.7.1",
+    "typesense-instantsearch-adapter": "^2.2.0",
     "uuid": "^8.3.2",
     "viser-vue": "^2.4.8",
     "vue": "^2.6.12",

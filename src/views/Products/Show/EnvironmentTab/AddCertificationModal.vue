@@ -63,7 +63,7 @@ export default {
       let vm = this;
       vm.isSaving = true;
 
-      axios.post(window.API_BASE + '/products/' + this.productId + '/esg/certifications', this.form).then(r => {
+      axios.post(window.API_BASE + '/products/' + this.productId + '/esg/certifications', this.form).then(() => {
         vm.isSaving = false;
         vm.resetForm();
         vm.$emit('certification-added');

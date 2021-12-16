@@ -14,6 +14,11 @@ export const state = {
     details: [],
     isLoadingDetails: false,
 
+    prices: [],
+    isLoadingPrices: false,
+
+    selectedPrice: null,
+
     view: 'view' // view or edit
 };
 
@@ -60,6 +65,22 @@ export const mutations = {
 
     SET_VIEW(state, view) {
         state.view = view;
+    },
+
+    START_LOADING_PRICES(state) {
+        state.isLoadingPrices = true;
+    },
+
+    STOP_LOADING_PRICES(state) {
+        state.isLoadingPrices = false;
+    },
+
+    SET_PRICES(state, prices) {
+        state.prices = prices;
+    },
+
+    SET_SELECTED_PRICE(state, price) {
+        state.selectedPrice = price;
     }
 };
 
@@ -115,6 +136,14 @@ export const getters = {
 
     view: (state) => {
         return state.view;
+    },
+
+    prices: (state) => {
+        return state.prices;
+    },
+
+    selectedPrice: (state) => {
+        return state.selectedPrice;
     }
 };
 
@@ -124,12 +153,16 @@ export const actions = {
         commit('SET_ERRORS', []);
         commit('SET_DOCUMENTS', []);
         commit('SET_DETAILS', []);
+        commit('SET_PRICES', []);
+        commit('SET_SELECTED_PRICE', null);
         commit('SET_VIEW', 'view');
+        commit('SET_PRODUCT', null);
         axios.get(window.API_BASE + '/products/' + id).then(r => {
             commit('STOP_LOADING');
             commit('SET_PRODUCT', r.data);
             dispatch('loadDocuments');
             dispatch('loadDetails');
+            dispatch('loadPrices');
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');
@@ -142,6 +175,27 @@ export const actions = {
                 errors = ['Something went wrong. Please try again.'];
             }
             commit('SET_ERRORS', errors);
+        });
+    },
+
+    loadPrices({commit, getters}) {
+        let product = getters.product;
+        let productId = product['id'] ? product['id'] : product['_id'];
+
+        commit('START_LOADING_PRICES');
+        axios.get(window.API_BASE + '/products/' + productId + '/prices').then(r => {
+            let prices = r.data;
+            commit('STOP_LOADING_PRICES');
+            commit('SET_PRICES', prices);
+
+            let cheapestPrice = _.first(_.orderBy(prices, 'price'));
+            if (cheapestPrice) {
+               commit('SET_SELECTED_PRICE', cheapestPrice);
+            }
+        }).catch(e => {
+            commit('STOP_LOADING_PRICES');
+            this._vm.$message.error('Error loading prices');
+            console.log(e);
         });
     },
 
@@ -177,5 +231,9 @@ export const actions = {
 
     setView({commit}, view) {
         commit('SET_VIEW', view);
+    },
+
+    selectPrice({commit}, price) {
+        commit('SET_SELECTED_PRICE', price);
     }
 };

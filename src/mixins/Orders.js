@@ -79,6 +79,19 @@ export default {
             return order.cost;
         },
 
+        formatCostInPence2dp(order) {
+            if (order.cost) {
+                let currency = order.cost_currency ? order.cost_currency : 'GBP';
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: currency,
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(order.cost / 100);
+            }
+            return order.cost;
+        },
+
         formatQuantity(quantity) {
             if (quantity) {
                return new Intl.NumberFormat('en-US', {}).format(quantity);

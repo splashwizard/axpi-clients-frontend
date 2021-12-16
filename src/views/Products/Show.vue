@@ -16,13 +16,13 @@
     </a-page-header>
 
     <!--  Breadcrumb Wrapper -->
-<!--    <div class="breadcrumb-wrapper">-->
-<!--      <a-breadcrumb separator=">">-->
-<!--        <a-breadcrumb-item><router-link to="/">Home</router-link></a-breadcrumb-item>-->
-<!--        <a-breadcrumb-item><router-link to="/shop">Shop</router-link></a-breadcrumb-item>-->
-<!--        <a-breadcrumb-item>Product Details</a-breadcrumb-item>-->
-<!--      </a-breadcrumb>-->
-<!--    </div>-->
+    <!--    <div class="breadcrumb-wrapper">-->
+    <!--      <a-breadcrumb separator=">">-->
+    <!--        <a-breadcrumb-item><router-link to="/">Home</router-link></a-breadcrumb-item>-->
+    <!--        <a-breadcrumb-item><router-link to="/shop">Shop</router-link></a-breadcrumb-item>-->
+    <!--        <a-breadcrumb-item>Product Details</a-breadcrumb-item>-->
+    <!--      </a-breadcrumb>-->
+    <!--    </div>-->
     <!-- / Breadcrumb Wrapper -->
 
     <!-- Product details top -->
@@ -69,10 +69,11 @@
     <!-- Images & Description -->
     <div v-if="product" class="product-show-section">
       <a-row :gutter="10">
-        <a-col :span="12">
+        <a-col :span="9">
           <image-carousel :urls="product['imageURLs']"></image-carousel>
         </a-col>
-        <a-col :span="11">
+
+        <a-col :span="9">
           <div style="margin-bottom: 10px;">
             <h3 style="display: inline;">Description</h3>
             <a-button style="display: inline; margin-left: 10px;"
@@ -103,11 +104,11 @@
           <!-- Editing -->
           <div v-if="view === 'edit'">
             <div v-if="isEditingDescription">
-<!--              <a-textarea-->
-<!--                  v-model="descriptionLocalEditing"-->
-<!--                  placeholder="Description..."-->
-<!--                  :auto-size="{ minRows: 10 }"-->
-<!--              />-->
+              <!--              <a-textarea-->
+              <!--                  v-model="descriptionLocalEditing"-->
+              <!--                  placeholder="Description..."-->
+              <!--                  :auto-size="{ minRows: 10 }"-->
+              <!--              />-->
 
               <div class="quill-editor-wrapper">
                 <quill-editor
@@ -129,42 +130,101 @@
           </div>
           <!-- / Editing -->
 
-          <!-- Quantity: Not Editing -->
-          <div v-if="view !== 'edit'"
-               class="quantity-changer-wrapper">
+        </a-col>
 
-            <div class="quantity-adder-wrapper">
-              <a-input v-if="!isProductInBasket(product)" class="quantity-input" placeholder="1"
-                       type="number"
-                       v-model="quantityToAdd"></a-input>
-              <a-button v-if="!isProductInBasket(product)"
-                        type="primary" @click.prevent="() => addToBasket(product)">Add to basket
-              </a-button>
-            </div>
-
-            <div v-if="isProductInBasket(product)" class="quantity-changer">
-              <a-button @click.prevent="() => decrementProductQuantity(product)"
-                        icon="minus">
-              </a-button>
-              <div>
-                <a-input type="number"
-                         @change="e => setProductQuantity({quantity: e.target.value, id: product['_id']})"
-                         :value="getQuantityOfProductInBasket(product)"></a-input>
+        <a-col :span="6">
+          <div class="add-to-basket-wrapper">
+            <!-- Top row -->
+            <div class="top-row">
+              <div class="left">
+                <span class="price">{{
+                    selectedPrice ? formatCostInPence2dp({
+                      cost: selectedPrice.price,
+                      cost_currency: 'USD'
+                    }) : '-'
+                  }}</span> (Used)
               </div>
-              <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-              <a-button @click.prevent="() => incrementProductQuantity(product)"
-                        icon="plus"></a-button>
+              <div class="right"></div>
             </div>
-          </div>
-          <!-- / Quantity: Not Editing -->
+            <!-- / Top row -->
 
+            <!-- Delivery by -->
+            <div class="delivery-by">
+              Delivery by Mon, Jan 10th
+            </div>
+            <!-- / Delivery by -->
+
+            <!-- General details -->
+            <div class="general-details">
+              <div class="general-details-row">
+                <div class="left">
+                  Dispatches from
+                </div>
+                <div class="right">Chicago, Illinois</div>
+              </div>
+              <div class="general-details-row">
+                <div class="left">
+                  Sold by
+                </div>
+                <div class="right">
+                  <a-dropdown>
+                    <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+                      {{ selectedPrice ? selectedPrice.supplier_name : 'Select supplier' }}
+                      <a-icon type="down"/>
+                    </a>
+                    <a-menu slot="overlay">
+                      <a-menu-item v-for="(price, i) in prices" :key="i">
+                        <a href="#" @click.prevent="() => selectPrice(price)">{{ price.supplier_name }}</a>
+                      </a-menu-item>
+                    </a-menu>
+                  </a-dropdown>
+                </div>
+              </div>
+            </div>
+            <!-- / General details -->
+
+            <!-- Address selector -->
+            <div class="address-selector-wrapper">
+              <address-selector-inline></address-selector-inline>
+            </div>
+            <!-- / Address selector -->
+
+            <!-- Quantity: Not Editing -->
+            <div v-if="view !== 'edit'"
+                 class="quantity-changer-wrapper">
+
+              <div class="quantity-adder-wrapper">
+                <a-input v-if="!isProductInBasket(product)" class="quantity-input" placeholder="1"
+                         type="number"
+                         v-model="quantityToAdd"></a-input>
+                <a-button v-if="!isProductInBasket(product)"
+                          type="primary" @click.prevent="() => addToBasket(product)">Add to basket
+                </a-button>
+              </div>
+
+              <div v-if="isProductInBasket(product)" class="quantity-changer">
+                <a-button @click.prevent="() => decrementProductQuantity(product)"
+                          icon="minus">
+                </a-button>
+                <div>
+                  <a-input type="number"
+                           @change="e => setProductQuantity({quantity: e.target.value, id: product['_id']})"
+                           :value="getQuantityOfProductInBasket(product)"></a-input>
+                </div>
+                <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
+                <a-button @click.prevent="() => incrementProductQuantity(product)"
+                          icon="plus"></a-button>
+              </div>
+            </div>
+            <!-- / Quantity: Not Editing -->
+          </div>
         </a-col>
       </a-row>
     </div>
     <!-- / Images & Description -->
 
     <!-- Properties -->
-    <div class="page-inner-wrapper">
+    <div class="page-inner-wrapper" :key="reloadKey">
       <div class="page-section">
         <h2>Specification</h2>
         <specifications-tab></specifications-tab>
@@ -173,6 +233,11 @@
       <div class="page-section">
         <h2>Documents</h2>
         <documents-tab></documents-tab>
+      </div>
+
+      <div class="page-section">
+        <h2>Environment</h2>
+        <environment-tab></environment-tab>
       </div>
     </div>
     <!-- / Properties -->
@@ -201,12 +266,16 @@ import DocumentsTab from "./Show/DocumentsTab";
 import SpecificationsTab from "./Show/SpecificationsTab";
 import ViewToggler from "./Show/ViewToggler";
 import axios from 'axios';
+import AddressSelectorInline from "./Show/AddressSelectorInline";
+import Orders from "../../mixins/Orders";
+import EnvironmentTab from "./Show/EnvironmentTab";
 
 const _ = require('lodash');
 
 export default {
   name: "Show",
-  components: {ViewToggler, DocumentsTab, SpecificationsTab, ImageCarousel},
+  components: {AddressSelectorInline, ViewToggler, DocumentsTab, SpecificationsTab, ImageCarousel, EnvironmentTab},
+  mixins: [Orders],
   data() {
     return {
       descriptionShowMore: false,
@@ -215,7 +284,9 @@ export default {
       isEditingDescription: false,
       isSavingDescription: false,
 
-      quantityToAdd: 1
+      quantityToAdd: 1,
+
+      reloadKey: 1
     }
   },
   created() {
@@ -233,7 +304,9 @@ export default {
       isLoading: 'isLoading',
       isLoadingDocuments: 'isLoadingDocuments',
       isLoadingDetails: 'isLoadingDetails',
-      view: 'view'
+      view: 'view',
+      prices: 'prices',
+      selectedPrice: 'selectedPrice'
     }),
 
     ...mapGetters('shop', {
@@ -269,6 +342,7 @@ export default {
   methods: {
     ...mapActions('productViewer', {
       loadProduct: 'loadProduct',
+      selectPrice: 'selectPrice'
     }),
 
     ...mapActions('shop', {
@@ -285,7 +359,9 @@ export default {
       }
       this.addProductToBasket({
         product: product,
-        quantity: quantity
+        quantity: quantity,
+        selectedPrice: this.selectedPrice,
+        prices: this.prices
       });
     },
 
@@ -303,6 +379,11 @@ export default {
 
     attemptLoadProduct() {
       this.loadProduct(this.$route.params.id);
+      this.reset();
+    },
+
+    reset() {
+      this.reloadKey += 1;
     },
 
     isProductInBasket(product) {
@@ -362,7 +443,8 @@ export default {
 }
 
 .page-inner-wrapper {
-  margin-top: 20px;
+  //margin-top: 20px;
+  margin-top: 50px;
   margin-bottom: 80px;
 
   h2 {
@@ -395,6 +477,7 @@ export default {
 }
 
 .product-details-top {
+
   .ant-badge {
     margin-right: 5px;
   }
@@ -441,5 +524,47 @@ export default {
 .quill-editor-wrapper {
   padding-top: 15px;
   padding-bottom: 15px;
+}
+
+.add-to-basket-wrapper {
+  margin-left: 30px;
+  padding: 15px;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+
+  .price {
+    font-size: 21px;
+    color: #1890ff;
+  }
+
+  .delivery-by {
+    margin-top: 7px;
+    font-size: 18px;
+  }
+
+  .general-details {
+    margin-top: 14px;
+
+    .general-details-row {
+      display: flex;
+      margin-bottom: 4px;
+
+      .left {
+        flex: 1;
+      }
+
+      .right {
+        flex: 1;
+      }
+    }
+  }
+
+  .address-selector-wrapper {
+    margin-top: 23px;
+  }
+
+  .delivery-details {
+    margin-top: 10px;
+  }
 }
 </style>

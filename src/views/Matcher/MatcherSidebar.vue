@@ -4,7 +4,7 @@
     <div class="top">
 
       <!-- Header -->
-      <a-page-header :title="selectedErpOrder['PO Li Description']"
+      <a-page-header :title="selectedErpOrder['product_name']"
                      @back="clear"></a-page-header>
       <!-- / Header -->
 
@@ -14,25 +14,25 @@
           <a-row>
             <a-col :span="12">
               <p>
-                <b>Manufacturer: </b><br>{{ selectedErpOrder['Manufacturer'] }}
+                <b>Manufacturer: </b><br>{{ selectedErpOrder['manufacturer'] ? selectedErpOrder['manufacturer']['name'] : '-' }}
               </p>
               <p>
-                <b>Vendor: </b><br>{{ selectedErpOrder['Vendor'] }}
+                <b>Vendor: </b><br>{{ selectedErpOrder['supplier'] ? selectedErpOrder['supplier']['name'] : '-' }}
               </p>
               <p>
 <!--                <b>Cost: </b><br>${{ selectedErpOrder['Cost'] }}-->
-                <b>Cost: </b><br>${{ selectedErpOrder['CHF_FLOAT'] }}
+                <b>Cost: </b><br>{{ formatCostInPence({cost_currency: 'USD', cost: selectedErpOrder['cost']}) }}
               </p>
             </a-col>
             <a-col :span="12">
               <p>
-                <b>Manufacturer Part Number: </b><br>{{ selectedErpOrder['Manufacturer Part Number'] }}
+                <b>Manufacturer Part Number: </b><br>{{ selectedErpOrder['properties']['manufacturer_part_number'] ? selectedErpOrder['properties']['manufacturer_part_number'] : '-' }}
               </p>
               <p>
-                <b>Vendor Product ID: </b><br>{{ selectedErpOrder['Vendor Product ID'] }}
+                <b>Vendor Product ID: </b><br>{{ selectedErpOrder['properties']['vendor_product_id'] ? selectedErpOrder['properties']['vendor_product_id'] : '-' }}
               </p>
               <p>
-                <b>PO Number: </b><br>{{ selectedErpOrder['PO Number'] }}
+                <b>PO Number: </b><br>{{ selectedErpOrder['reference_number'] ? selectedErpOrder['reference_number'] : '-' }}
               </p>
             </a-col>
           </a-row>
@@ -71,10 +71,12 @@
 <script>
 import SuggestedMatches from "./MatcherSidebar/SuggestedMatches";
 import SearchProducts from "./MatcherSidebar/SearchProducts";
+import Orders from "../../mixins/Orders";
 import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "MatcherSidebar",
+  mixins: [Orders],
   components: {SuggestedMatches, SearchProducts},
   computed: {
     ...mapGetters('matcher', {

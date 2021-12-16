@@ -9,15 +9,33 @@
              :loading="loading||searchQueryIsDirty"
              @change="handleTableChange"
     >
+      <div slot="type" slot-scope="type, row">
+       <div v-if="isErpOrder(row)">
+        ERP
+       </div>
+        <div v-else>
+          {{ formatType(type) }}
+        </div>
+      </div>
       <div slot="cost" slot-scope="cost">
-        {{ formatCost({cost_currency: 'USD', cost: cost}) }}
+        {{ formatCostInPence({cost_currency: 'USD', cost: cost}) }}
       </div>
       <div slot="status" slot-scope="status, row">
-        <a-badge :count="getStatus(row)" :number-style="getStatusBadgeStyle(row)"></a-badge>
+        <div v-if="isErpOrder(row)">
+          <a-badge :count="getStatus(row)" :number-style="getStatusBadgeStyle(row)"></a-badge>
+        </div>
+        <div v-else>
+          <a-badge :count="getHumanReadableStatus(row.status)" :number-style="getStatusBadgeStyle(row.status)"></a-badge>
+        </div>
       </div>
       <div slot="actions" class="table-actions" slot-scope="actions, row">
-        <a-button block v-if="!hasMatches(row)" type="default" @click="selectErpOrder(row)">Match</a-button>
-        <a-button block v-if="hasMatches(row)" type="primary" @click="selectErpOrder(row)">Edit</a-button>
+        <div v-if="isErpOrder(row)">
+          <a-button block v-if="!hasMatches(row)" type="default" @click="selectErpOrder(row)">Match</a-button>
+          <a-button block v-if="hasMatches(row)" type="primary" @click="selectErpOrder(row)">Edit</a-button>
+        </div>
+        <div v-else>
+          <a-button block v-if="canRequestInformation(row)" type="default" @click="requestInformation(row)">Request Info</a-button>
+        </div>
       </div>
       <div slot="dropdown" class="table-actions" slot-scope="actions, record">
         <a-dropdown :trigger="['click']">
@@ -45,17 +63,22 @@ import LoadingScreen from "../../components/LoadingScreen";
 const columns = [
   {
     title: 'Name',
-    dataIndex: 'PO Li Description',
+    dataIndex: 'product_name',
     sorter: true
   },
   {
+    title: 'Type',
+    dataIndex: 'product_type',
+    scopedSlots: {customRender: 'type'}
+  },
+  {
     title: 'PO Number',
-    dataIndex: 'PO Number',
+    dataIndex: 'reference_number',
     sorter: true
   },
   {
     title: 'Cost',
-    dataIndex: 'CHF_FLOAT',
+    dataIndex: 'cost',
     scopedSlots: {customRender: 'cost'},
     sorter: true
   },
@@ -66,14 +89,14 @@ const columns = [
   // },
   {
     title: 'Vendor',
-    dataIndex: 'Vendor',
+    dataIndex: 'supplier.name',
     sorter: true
   },
-  {
-    title: 'Vendor Product ID',
-    dataIndex: 'Vendor Product ID',
-    sorter: true
-  },
+  // {
+  //   title: 'Vendor Product ID',
+  //   dataIndex: 'properties.vendor_product_id',
+  //   sorter: true
+  // },
   {
     title: 'Status',
     scopedSlots: {customRender: 'status'}
@@ -91,7 +114,7 @@ const columns = [
 ];
 
 export default {
-  props: ['reloadKey'],
+  props: ['reloadKey', 'searchQuery', 'filters'],
   name: "AllOrdersTable",
   components: {LoadingScreen},
   mixins: [Orders],
@@ -108,15 +131,21 @@ export default {
   },
   mounted() {
     this.fetch();
+
+    eventBus.$on('order-filter-updated', () => {
+      this.fetch();
+    });
+
     eventBus.$on('order-matched', (params) => {
-      let {erp_order_id, matches, matches_selected_from_suggestion, matches_selected_manually} = params;
+      // let {erp_order_id, matches, matches_selected_from_suggestion, matches_selected_manually} = params;
+      let {order_id, matches} = params;
       this.data = _.map(this.data, d => {
-        if (d['_id'] === erp_order_id) {
+        if (d['id'] === order_id) {
           return {
             ...d,
-            matches,
-            matches_selected_from_suggestion,
-            matches_selected_manually
+            matches
+            // matches_selected_from_suggestion,
+            // matches_selected_manually
           };
         }
         return d;
@@ -129,13 +158,18 @@ export default {
   watch: {
     reloadKey() {
       // this.fetch();
+    },
+
+    searchQuery: function () {
+      this.searchQueryIsDirty = true;
+      this.fetch();
     }
   },
   computed: {
     dataToShow() {
       let vm = this;
       return _.filter(this.data, d => {
-        return !vm.archived.includes(d['_id']);
+        return !vm.archived.includes(d['id']);
       });
     }
   },
@@ -144,13 +178,33 @@ export default {
       selectErpOrder: 'selectErpOrder'
     }),
 
+    canRequestInformation(order) {
+      return order.status == 0 || order.status == 1;
+    },
+
+    requestInformation(order) {
+      let vm = this;
+      vm.isRequestingInformation = true;
+      axios.post(window.API_BASE + '/request-information', {
+        ids: [order.id]
+      }).then(() => {
+        vm.isRequestingInformation = false;
+        vm.$message.success("Information requested successfully");
+        vm.fetch();
+      }).catch(e => {
+        console.log(e);
+        vm.isRequestingInformation = false;
+        vm.$message.error('Error requesting information');
+      });
+    },
+
     archive(order) {
       let vm = this;
       vm.isSaving = true;
       axios.post(window.API_BASE + '/matcher/archive-order', {
-        erp_order_id: order['_id']
+        order_id: order['id']
       }).then(() => {
-        vm.archived.push(order['_id']);
+        vm.archived.push(order['id']);
         vm.isSaving = false;
         vm.$message.success('Order archived successfully');
       }).catch(e => {
@@ -175,11 +229,19 @@ export default {
 
     determineSearchParams(params) {
       let search = {
-        results_per_page: 10
+        results_per_page: 10,
+        q: this.searchQuery
       };
 
-      if (this.$route.query.erpOrderId) {
-        search['erp_order_id'] = this.$route.query.erpOrderId;
+      if (this.filters && this.filters.filters_enabled.length) {
+        search.filters = {};
+        _.each(this.filters.filters_enabled, filter => {
+          search.filters[filter] = this.filters[filter];
+        });
+      }
+
+      if (this.$route.query.orderId) {
+        search['order_id'] = this.$route.query.orderId;
       }
 
       return {
@@ -214,6 +276,10 @@ export default {
         return true;
       }
       return false;
+    },
+
+    isErpOrder(order) {
+      return order.imported;
     },
 
     getStatus(order) {

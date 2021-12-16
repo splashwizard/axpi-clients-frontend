@@ -143,7 +143,7 @@ export const actions = {
         commit('SET_SUGGESTED_MATCHES', []);
         commit('START_LOADING_SUGGESTED_MATCHES');
         axios.post(window.API_BASE + '/matcher/suggest-matches', {
-            erp_order_id: getters.selectedErpOrder['_id']
+            order_id: getters.selectedErpOrder['id']
         }).then(r => {
             commit('STOP_LOADING_SUGGESTED_MATCHES');
             commit('SET_SUGGESTED_MATCHES', r.data);
@@ -177,7 +177,7 @@ export const actions = {
     saveMatches({commit, getters}) {
         commit('START_SAVING');
         let params = {
-            erp_order_id: getters.selectedErpOrder['_id'],
+            order_id: getters.selectedErpOrder['id'],
             matches: getters.selectedMatches,
             matches_selected_from_suggestion: getters.matchesSelectedFromSuggestions,
             matches_selected_manually: getters.matchesSelectedManually

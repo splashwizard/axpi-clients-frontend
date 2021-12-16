@@ -41,6 +41,7 @@
     "viser-vue": "^2.4.8",
     "vue": "^2.6.12",
     "vue-chartjs": "^3.5.1",
+    "vue-click-outside": "^1.1.0",
     "vue-html2canvas": "^0.0.4",
     "vue-instantsearch": "^4.1.1",
     "vue-loading-overlay": "^3.4.2",

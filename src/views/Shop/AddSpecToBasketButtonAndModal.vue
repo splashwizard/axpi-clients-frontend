@@ -1,6 +1,7 @@
 <template>
-  <div style="display: inline !important;">
-    <a-button size="large" type="default" icon="plus" @click.prevent="showMethodSelectorModal"></a-button>
+  <div class="add-spec-to-basket-button-and-modal" style="display: inline !important;">
+    <a-button size="medium" class="add-spec-btn"
+              type="default" icon="plus" @click.prevent="showMethodSelectorModal"></a-button>
 
     <edit-order-modal v-if="order && type === 'specification'">
     </edit-order-modal>
@@ -336,6 +337,7 @@ export default {
 
     createNewSpecificationAndAddToBasket() {
       this.isExpectingSpecificationToBeAdded = true;
+      this.$router.push('/shop/basket');
       this.createSpecification();
     },
 
@@ -397,6 +399,7 @@ export default {
       });
       vm.isSaving = false;
       vm.savedSpecModalVisible = false;
+      vm.$router.push('/shop/basket');
     },
 
     // Past Orders
@@ -449,6 +452,7 @@ export default {
       });
       vm.isSaving = false;
       vm.pastOrdersModalVisible = false;
+      vm.$router.push('/shop/basket');
     }
   }
 }

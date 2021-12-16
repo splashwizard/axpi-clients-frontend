@@ -10,7 +10,7 @@
              @change="handleTableChange"
     >
       <div slot="cost" slot-scope="cost">
-        {{ formatCost({cost_currency: 'USD', cost: cost}) }}
+        {{ formatCostInPence({cost_currency: 'USD', cost: cost}) }}
       </div>
       <div slot="actions" class="table-actions" slot-scope="actions, row">
         <a-button type="default" @click="selectErpOrder(row)">Match</a-button>
@@ -40,18 +40,18 @@ import {mapActions} from 'vuex';
 const columns = [
   {
     title: 'Name',
-    dataIndex: 'PO Li Description',
+    dataIndex: 'product_name',
     sorter: true
   },
   {
     title: 'Cost',
-    dataIndex: 'CHF_FLOAT',
+    dataIndex: 'cost',
     scopedSlots: {customRender: 'cost'},
     sorter: true
   },
   {
     title: 'PO Number',
-    dataIndex: 'PO Number',
+    dataIndex: 'reference_number',
     sorter: true
   },
   // {
@@ -61,12 +61,12 @@ const columns = [
   // },
   {
     title: 'Vendor',
-    dataIndex: 'Vendor',
+    dataIndex: 'supplier.name',
     sorter: true
   },
   {
     title: 'Vendor Product ID',
-    dataIndex: 'Vendor Product ID',
+    dataIndex: 'properties.vendor_product_id',
     sorter: true
   },
   {
@@ -82,7 +82,7 @@ const columns = [
 ];
 
 export default {
-  props: ['reloadKey'],
+  props: ['reloadKey', 'searchQuery'],
   name: "UnmatchedOrdersTable",
   mixins: [Orders],
   data() {
@@ -117,13 +117,18 @@ export default {
   watch: {
     reloadKey() {
       // this.fetch();
+    },
+
+    searchQuery: function () {
+      this.searchQueryIsDirty = true;
+      this.fetch();
     }
   },
   computed: {
     dataToShow() {
       let vm = this;
       return _.filter(this.data, d => {
-        return !vm.archived.includes(d['_id']);
+        return !vm.archived.includes(d['id']);
       });
     }
   },
@@ -136,9 +141,9 @@ export default {
       let vm = this;
       vm.isSaving = true;
       axios.post(window.API_BASE + '/matcher/archive-order', {
-        erp_order_id: order['_id']
+        order_id: order['id']
       }).then(() => {
-        vm.archived.push(order['_id']);
+        vm.archived.push(order['id']);
         vm.isSaving = false;
         vm.$message.success('Order archived successfully');
       }).catch(e => {
@@ -163,7 +168,8 @@ export default {
 
     determineSearchParams(params) {
       let search = {
-        results_per_page: 10
+        results_per_page: 10,
+        q: this.searchQuery
       };
 
       return {

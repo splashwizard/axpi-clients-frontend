@@ -2,7 +2,8 @@
   <div>
     <!-- Specs display mode -->
     <ais-hits>
-      <template slot-scope="{items}">
+      <!--      <template slot-scope="{items}">-->
+      <template>
 
         <a-table class="axpi-table column-dividers"
                  :scroll="{ x: 'max-content' }"
@@ -18,6 +19,10 @@
             />
           </div>
 
+          <div slot="name" slot-scope="name, item">
+            <router-link :to="getProductPageUrl(item)">{{ item['name'] }}</router-link>
+          </div>
+
           <div slot="datasheet" slot-scope="datasheet, row">
                 <span>
                   <a :href="row.URL" target="_blank">
@@ -27,8 +32,12 @@
                 </span>
           </div>
 
-          <div slot="price">
-            ?
+          <div slot="price" slot-scope="price, item">
+            <span v-if="!isLoadingPrices">
+           {{ getPriceRange(item.id) }}
+            </span>
+<!--            <span v-else>-</span>-->
+            <a-spin size="small" v-else />
           </div>
 
           <div slot="numberOfAuthorisedSellers">
@@ -81,12 +90,13 @@ import axios from 'axios';
 import {connectHitsWithInsights} from 'instantsearch.js/es/connectors';
 import {createWidgetMixin} from 'vue-instantsearch/src/mixins/widget';
 import Units from "../../mixins/Units";
+import Orders from "../../mixins/Orders";
 
 const _ = require('lodash');
 
 export default {
   name: "SpecsDisplay",
-  props: ['quantities'],
+  props: ['quantities', 'prices', 'isLoadingPrices'],
   data() {
     return {
       isEnriching: false,
@@ -96,6 +106,7 @@ export default {
   },
   mixins: [
     Units,
+    Orders,
     createWidgetMixin({connector: connectHitsWithInsights})
   ],
   watch: {
@@ -271,6 +282,35 @@ export default {
             && item.id === product['id']
         );
       }).quantity;
+    },
+
+    getPriceRange(productId) {
+      let prices = this.prices[productId];
+      if (prices !== undefined) {
+        let ordered = _.orderBy(prices, 'price');
+        let minPrice = _.first(ordered);
+        let maxPrice = _.last(ordered);
+
+        if (minPrice !== maxPrice) {
+          let minPriceFormatted = this.formatCostInPence2dp({
+            cost: minPrice.price,
+            cost_currency: 'USD'
+          });
+
+          let maxPriceFormatted = this.formatCostInPence2dp({
+            cost: maxPrice.price,
+            cost_currency: 'USD'
+          });
+
+          return minPriceFormatted + ' - ' + maxPriceFormatted;
+        } else {
+          return this.formatCostInPence2dp({
+            cost: minPrice.price,
+            cost_currency: 'USD'
+          });
+        }
+      }
+      return '-';
     },
 
     enrichInBackground() {

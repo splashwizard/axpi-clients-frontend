@@ -10,7 +10,9 @@ export const state = {
     searchQuery: '',
     tablePagination: {},
     enriched: [],
-    displayMode: 'prices'
+    displayMode: 'prices',
+
+    selectedAddress: null
 };
 
 export const mutations = {
@@ -38,8 +40,8 @@ export const mutations = {
         state.tablePagination = pagination;
     },
 
-    SET_BASKET(state) {
-        state.basket = [];
+    SET_BASKET(state, basket) {
+        state.basket = basket;
     },
 
     SET_SEARCH_QUERY(state, query) {
@@ -47,20 +49,33 @@ export const mutations = {
     },
 
     ADD_PRODUCT_TO_BASKET(state, params) {
-        let {product, quantity} = params;
+        let {product, quantity, prices, selectedPrice} = params;
+
+        let id = product['id'];
+        if (!id) {
+            id = product['_id'];
+        }
+
         state.basket.push({
             itemType: 'product',
-            id: product['id'],
+            id: id,
             name: product.name,
             product: product,
-            quantity: quantity
+            quantity: quantity,
+            prices: prices,
+            selectedPrice: selectedPrice
         });
     },
 
     ADD_PAST_ORDER_TO_BASKET(state, order) {
+        let id = order['id'];
+        if (!id) {
+            id = order['_id'];
+        }
+
         state.basket.push({
             itemType: 'order',
-            id: order['id'],
+            id: id,
             name: order['product_name'],
             order: order,
             quantity: 1
@@ -68,9 +83,14 @@ export const mutations = {
     },
 
     ADD_SPECIFICATION_TO_BASKET(state, spec) {
+        let id = spec['id'];
+        if (!id) {
+            id = spec['_id'];
+        }
+
         state.basket.push({
             itemType: 'specification',
-            id: spec['id'],
+            id: id,
             name: spec['product_name'],
             specification: spec,
             quantity: 1
@@ -78,10 +98,15 @@ export const mutations = {
     },
 
     UPDATE_SPECIFICATION_IN_BASKET(state, spec) {
+        let id = spec['id'];
+        if (!id) {
+            id = spec['_id'];
+        }
+
         state.basket = _.map(state.basket, item => {
             if (
                 item.itemType === 'specification'
-                && item.id === spec.id
+                && item.id === id
             ) {
                 item['name'] = spec.product_name;
                 item['specification']['product_name'] = spec.product_name;
@@ -92,20 +117,30 @@ export const mutations = {
     },
 
     INCREMENT_PRODUCT_QUANTITY(state, product) {
+        let id = product['id'];
+        if (!id) {
+            id = product['_id'];
+        }
+
         let p = _.find(state.basket, item => {
             return (
                 item.itemType === 'product'
-                && item.id === product['id']
+                && item.id === id
             );
         });
         p.quantity++;
     },
 
     DECREMENT_PRODUCT_QUANTITY(state, product) {
+        let id = product['id'];
+        if (!id) {
+            id = product['_id'];
+        }
+
         let p = _.find(state.basket, item => {
             return (
                 item.itemType === 'product'
-                && item.id === product['id']
+                && item.id === id
             );
         });
         p.quantity--;
@@ -116,6 +151,7 @@ export const mutations = {
 
     SET_PRODUCT_QUANTITY(state, params) {
         let {id, quantity} = params;
+
         let p = _.find(state.basket, item => {
             return (
                 item.itemType === 'product'
@@ -208,6 +244,26 @@ export const mutations = {
 
     SET_DISPLAY_MODE(state, displayMode) {
         state.displayMode = displayMode;
+    },
+
+    SET_SELECTED_ADDRESS(state, address) {
+        state.selectedAddress = address;
+    },
+
+    UPDATE_BASKET_SELECTED_PRICE(state, params) {
+        let {selectedPrice, basketItem} = params;
+        state.basket = _.map(state.basket, item => {
+            if (
+                basketItem.itemType === item.itemType
+                && basketItem.id === item.id
+            ) {
+               return {
+                   ...item,
+                   selectedPrice: selectedPrice
+               }
+            }
+            return item;
+        });
     }
 };
 
@@ -235,6 +291,9 @@ export const getters = {
     },
     displayMode: (state) => {
         return state.displayMode;
+    },
+    selectedAddress: (state) => {
+        return state.selectedAddress;
     }
 };
 
@@ -294,7 +353,7 @@ export const actions = {
     },
 
     setProductQuantity({commit}, params) {
-       commit('SET_PRODUCT_QUANTITY', params);
+        commit('SET_PRODUCT_QUANTITY', params);
     },
 
     incrementPastOrderQuantity({commit}, product) {
@@ -344,5 +403,17 @@ export const actions = {
 
     setDisplayMode({commit}, displayMode) {
         commit('SET_DISPLAY_MODE', displayMode);
+    },
+
+    selectAddress({commit}, address) {
+        commit('SET_SELECTED_ADDRESS', address);
+    },
+
+    updateBasketSelectedPrice({commit}, params) {
+        commit('UPDATE_BASKET_SELECTED_PRICE', params);
+    },
+
+    setBasket({commit}, basket) {
+        commit('SET_BASKET', basket);
     }
 };

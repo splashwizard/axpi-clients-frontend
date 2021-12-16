@@ -135,10 +135,10 @@
                               </router-link>
                             </div>
                             <div class="right">
-<!--                              <span v-if="!isLoadingPrices">-->
-<!--                              {{ getPriceRange(item.id) }}-->
-<!--                              </span>-->
-<!--                              <a-spin size="small" v-else></a-spin>-->
+                              <span v-if="!isLoadingPrices">
+                              {{ getPriceRange(item.id) }}
+                              </span>
+                              <a-spin size="small" v-else></a-spin>
                             </div>
                           </div>
 
@@ -146,35 +146,32 @@
                             {{ item.description }}
                           </div>
 
-<!--                          <div class="price-list-actions-wrapper">-->
-<!--                            <div class="left"></div>-->
-<!--                            <div class="right">-->
-<!--                              <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1"-->
-<!--                                       v-model="quantities[item.id]" type="number"></a-input>-->
-<!--                              <a-button v-if="!isProductInBasket(item)" :disabled="isLoadingPrices"-->
-<!--                                        type="primary" @click.prevent="() => addToBasket(item)">Add to basket-->
-<!--                              </a-button>-->
+                          <div class="price-list-actions-wrapper">
+                            <div class="left"></div>
+                            <div class="right">
+                              <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1"
+                                       v-model="quantities[item.id]" type="number"></a-input>
+                              <a-button v-if="!isProductInBasket(item)" :disabled="isLoadingPrices"
+                                        type="primary" @click.prevent="() => addToBasket(item)">Add to basket
+                              </a-button>
 
-<!--                              <div v-else class="quantity-changer">-->
-<!--                                <a-button @click.prevent="() => decrementProductQuantity(item)"-->
-<!--                                          icon="minus">-->
-<!--                                </a-button>-->
-<!--                                <div>-->
-<!--                                  <a-input type="number"-->
-<!--                                           @change="e => setProductQuantity({quantity: e.target.value, id: item['id']})"-->
-<!--                                           :value="getQuantityOfProductInBasket(item)"></a-input>-->
-<!--                                </div>-->
-<!--                                &lt;!&ndash;                        <div>{{ getQuantityOfProductInBasket(item) }}</div>&ndash;&gt;-->
-<!--                                <a-button @click.prevent="() => incrementProductQuantity(item)"-->
-<!--                                          icon="plus"></a-button>-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
+                              <div v-else class="quantity-changer">
+                                <a-button @click.prevent="() => decrementProductQuantity(item)"
+                                          icon="minus">
+                                </a-button>
+                                <div>
+                                  <a-input type="number"
+                                           @change="e => setProductQuantity({quantity: e.target.value, id: item['id']})"
+                                           :value="getQuantityOfProductInBasket(item)"></a-input>
+                                </div>
+                                <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
+                                <a-button @click.prevent="() => incrementProductQuantity(item)"
+                                          icon="plus"></a-button>
+                              </div>
+                            </div>
+                          </div>
                         </a-col>
                       </a-row>
-
-                      <product-group :quantities="quantities" class="product-group"
-                          :product-code="item.productCode" :product="item"></product-group>
                     </article>
                   </template>
                 </ais-hits>
@@ -209,7 +206,6 @@ import axios from 'axios';
 // import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
 import SpecsDisplay from "./Shop/SpecsDisplay";
 import Orders from "../mixins/Orders";
-import ProductGroup from "./Shop/ProductGroup";
 
 // const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
 //   server: {
@@ -240,8 +236,7 @@ import {createWidgetMixin} from 'vue-instantsearch/src/mixins/widget';
 export default {
   name: "Shop",
   components: {
-    SpecsDisplay,
-    ProductGroup
+    SpecsDisplay
     // AddSpecToBasketButtonAndModal
   },
   mixins: [
@@ -252,7 +247,7 @@ export default {
   watch: {
     'state.hits'() {
       if (this.state.hits && this.state.hits.length) {
-        // this.enrichWithPrices()
+        this.enrichWithPrices()
       }
     }
   },
@@ -680,9 +675,5 @@ export default {
    height: 32px;
     line-height: 25px;
   }
-}
-
-.product-group {
-  margin-top: 25px;
 }
 </style>

@@ -55,6 +55,10 @@ export default {
       unsavedReloadKey: 1,
       typeOptions: [
         {
+         value: 'ERP',
+         label: 'ERP'
+        },
+        {
           value: 'print',
           label: 'Print'
         },

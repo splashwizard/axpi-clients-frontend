@@ -1,5 +1,11 @@
 <template>
   <div class="matcher">
+    <loading-screen
+        :is-loading="isLoadingSuppliers"
+    ></loading-screen>
+
+    <edit-order-modal :suppliers="suppliers" v-if="order && type === 'order'">
+    </edit-order-modal>
 
     <a-layout>
       <a-layout style="padding: 7px 30px">
@@ -20,6 +26,15 @@
                   @set-filters="setFilters"
                   :filters="filters"
               ></orders-filters>
+
+              <a-button
+                  v-if="currentTab === 'all-transactions'"
+                  @click="createOrder"
+                  icon="plus"
+                  type="primary"
+                  :loading="isLoading"
+              >Add Order
+              </a-button>
             </div>
           </div>
 
@@ -33,6 +48,7 @@
             </a-tab-pane>
             <a-tab-pane key="all-transactions" tab="All Orders">
               <all-orders-table :search-query="searchQuery" :filters="filters"
+                                @edit-order="editOrder"
                                 :reload-key="reloadKey"></all-orders-table>
             </a-tab-pane>
           </a-tabs>
@@ -56,6 +72,8 @@ import MatcherSidebar from "./Matcher/MatcherSidebar";
 import MatcherOverview from "./Matcher/MatcherOverview";
 import eventBus from "../event-bus";
 import OrdersFilters from "../components/Orders/OrdersFilters";
+import EditOrderModal from "../components/Orders/EditOrderModal";
+import axios from "axios";
 
 export default {
   name: "Specifications",
@@ -65,15 +83,25 @@ export default {
       reloadKey: 'reloadKey'
     }),
 
+    ...mapGetters('orderEditor', {
+      order: 'order',
+      type: 'type',
+      isLoading: 'isLoading'
+    }),
+
     shouldHideSidebar() {
       return (this.selectedErpOrder == null);
     }
   },
   components: {
-    UnmatchedOrdersTable, AllOrdersTable, MatcherSidebar, MatcherOverview, OrdersFilters
+    UnmatchedOrdersTable, AllOrdersTable, MatcherSidebar, MatcherOverview, OrdersFilters,
+    EditOrderModal
   },
   data() {
     return {
+      isLoadingSuppliers: false,
+      suppliers: [],
+
       currentTab: 'overview',
 
       searchQuery: '',
@@ -83,14 +111,42 @@ export default {
     }
   },
   created() {
+    this.loadSuppliers();
     if (this.$route.query.orderId) {
       this.currentTab = 'all-transactions';
     }
   },
   methods: {
+    ...mapActions('orderEditor', {
+      createOrder: 'createOrder',
+      setWizardStage: 'setWizardStage',
+      loadOrder: 'loadOrder'
+    }),
+
     ...mapActions('matcher', {
       selectErpOrder: 'selectErpOrder'
     }),
+
+    editOrder(order) {
+      this.setWizardStage(0);
+      this.loadOrder(order.id);
+    },
+
+    loadSuppliers() {
+      let vm = this;
+      vm.isLoadingSuppliers = true;
+      axios
+          .get(window.API_BASE + "/suppliers")
+          .then((r) => {
+            vm.suppliers = r.data;
+            vm.isLoadingSuppliers = false;
+          })
+          .catch((e) => {
+            console.log(e);
+            vm.isLoadingSuppliers = false;
+            vm.$message.error("Error loading suppliers");
+          });
+    },
 
     setFilters(filters) {
       this.filters = filters;

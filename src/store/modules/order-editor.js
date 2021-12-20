@@ -285,6 +285,7 @@ export const actions = {
 
             if (getters.type === 'order') {
                 this._vm.$message.success('Order saved successfully!');
+                dispatch('matcher/incrementOrderUpdatedReloadKey', {}, {root: true});
             } else if (getters.type === 'specification') {
                 this._vm.$message.success('Specification saved successfully!');
             } else if (getters.type === 'optimisation-specification') {

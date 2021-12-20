@@ -10,9 +10,9 @@
              @change="handleTableChange"
     >
       <div slot="type" slot-scope="type, row">
-       <div v-if="isErpOrder(row)">
-        ERP
-       </div>
+        <div v-if="isErpOrder(row)">
+          ERP
+        </div>
         <div v-else>
           {{ formatType(type) }}
         </div>
@@ -25,7 +25,8 @@
           <a-badge :count="getStatus(row)" :number-style="getStatusBadgeStyle(row)"></a-badge>
         </div>
         <div v-else>
-          <a-badge :count="getHumanReadableStatus(row.status)" :number-style="getStatusBadgeStyle(row.status)"></a-badge>
+          <a-badge :count="getHumanReadableStatus(row.status)"
+                   :number-style="getStatusBadgeStyle(row.status)"></a-badge>
         </div>
       </div>
       <div slot="actions" class="table-actions" slot-scope="actions, row">
@@ -34,13 +35,18 @@
           <a-button block v-if="hasMatches(row)" type="primary" @click="selectErpOrder(row)">Edit</a-button>
         </div>
         <div v-else>
-          <a-button block v-if="canRequestInformation(row)" type="default" @click="requestInformation(row)">Request Info</a-button>
+          <a-button block v-if="canRequestInformation(row)" type="default" @click="requestInformation(row)">Request
+            Info
+          </a-button>
         </div>
       </div>
       <div slot="dropdown" class="table-actions" slot-scope="actions, record">
         <a-dropdown :trigger="['click']">
           <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
           <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="#" @click="$emit('edit-order', record)">Edit</a>
+            </a-menu-item>
             <a-menu-item>
               <a href="#" class="text-danger" @click="archive(record)">Archive</a>
             </a-menu-item>
@@ -55,7 +61,7 @@
 import axios from 'axios';
 
 const _ = require('lodash');
-import {mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import eventBus from "../../event-bus";
 import Orders from "../../mixins/Orders";
 import LoadingScreen from "../../components/LoadingScreen";
@@ -160,12 +166,20 @@ export default {
       // this.fetch();
     },
 
+    orderUpdatedReloadKey() {
+      this.fetch();
+    },
+
     searchQuery: function () {
       this.searchQueryIsDirty = true;
       this.fetch();
     }
   },
   computed: {
+    ...mapGetters('matcher', {
+      orderUpdatedReloadKey: 'orderUpdatedReloadKey'
+    }),
+
     dataToShow() {
       let vm = this;
       return _.filter(this.data, d => {

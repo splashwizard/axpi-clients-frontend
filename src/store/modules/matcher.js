@@ -18,7 +18,9 @@ export const state = {
     reloadKey: 1,
 
     matchSelectedReloadKey: 1,
-    sidebarReloadKey: 1
+    sidebarReloadKey: 1,
+
+    orderUpdatedReloadKey: 1
 };
 
 export const mutations = {
@@ -76,6 +78,10 @@ export const mutations = {
 
     INCREMENT_SIDEBAR_RELOAD_KEY(state) {
         state.sidebarReloadKey += 1;
+    },
+
+    INCREMENT_ORDER_UPDATED_RELOAD_KEY(state) {
+        state.orderUpdatedReloadKey += 1;
     }
 };
 
@@ -124,6 +130,10 @@ export const getters = {
 
     sidebarReloadKey: (state) => {
         return state.sidebarReloadKey;
+    },
+
+    orderUpdatedReloadKey: (state) => {
+        return state.orderUpdatedReloadKey;
     }
 };
 
@@ -172,6 +182,10 @@ export const actions = {
     toggleMatchSelected({commit}, match) {
         commit('TOGGLE_MATCH_SELECTED', match);
         commit('INCREMENT_MATCH_SELECTED_RELOAD_KEY');
+    },
+
+    incrementOrderUpdatedReloadKey({commit}) {
+        commit('INCREMENT_ORDER_UPDATED_RELOAD_KEY');
     },
 
     saveMatches({commit, getters}) {

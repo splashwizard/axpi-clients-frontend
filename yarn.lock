@@ -2427,6 +2427,11 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.npmjs.org/alphanum-sort/-/alphanum-sort-1.0.2.tgz"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
+amazon-quicksight-embedding-sdk@^1.18.0:
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/amazon-quicksight-embedding-sdk/-/amazon-quicksight-embedding-sdk-1.18.0.tgz#adb02a2153901c1187c1481d236c63c44b4363bc"
+  integrity sha512-kla2k+jxisQDPPsovFhNC9EI9a/K9lse8WD7eKeJ9JbdNY222GRrCcU2wYi9x7xPhS3QWDJRVb2ywesyUi1VSw==
+
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.npmjs.org/amdefine/-/amdefine-1.0.1.tgz"

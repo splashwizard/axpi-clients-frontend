@@ -189,11 +189,11 @@
                         theme="filled"></a-icon>
                 <span v-if="!menuCollapsed">Projects</span>
               </a-menu-item>
-<!--              <a-menu-item title="Matcher" key="matcher">-->
-<!--                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="pushpin"-->
-<!--                        theme="filled"></a-icon>-->
-<!--                <span v-if="!menuCollapsed">Matcher</span>-->
-<!--              </a-menu-item>-->
+              <!--              <a-menu-item title="Matcher" key="matcher">-->
+              <!--                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="pushpin"-->
+              <!--                        theme="filled"></a-icon>-->
+              <!--                <span v-if="!menuCollapsed">Matcher</span>-->
+              <!--              </a-menu-item>-->
               <a-menu-item title="Insights" key="intelligence">
                 <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="bulb"
                         theme="filled"></a-icon>
@@ -300,11 +300,16 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
     apiKey: 'axiom', // Be sure to use an API key that only allows searches, in production
     nodes: [
+      // {
+      //   host: 'localhost',
+      //   port: '8108',
+      //   protocol: 'http',
+      // },
       {
-        host: 'localhost',
+        host: 'jcmib1wyvr5en7xap-1.a1.typesense.net',
         port: '8108',
-        protocol: 'http',
-      },
+        protocol: 'https'
+      }
     ],
   },
   // The following parameters are directly passed to Typesense's search API endpoint.

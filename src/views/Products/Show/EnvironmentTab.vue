@@ -19,6 +19,7 @@
         <template slot="actions" slot-scope="actions, innerRow">
           <div class="actions">
             <delete-property-button
+                v-if="view === 'edit'"
                 @material-deleted="handleMaterialDeleted"
                 @certification-deleted="handleCertificationDeleted"
                 @transportation-deleted="handleTransportationDeleted"
@@ -28,7 +29,7 @@
       </a-table>
 
       <template slot="actions" slot-scope="actions, record">
-        <div v-if="record.actionButton" class="actions">
+        <div v-if="record.actionButton && view === 'edit'" class="actions">
           <a-button class="action-button" type="primary" icon="plus" @click.prevent="record.actionButtonClicked">{{
               record.actionButton
             }}
@@ -109,7 +110,8 @@ export default {
   },
   computed: {
     ...mapGetters('productViewer', {
-      product: 'product'
+      product: 'product',
+      view: 'view'
     }),
 
     productId() {

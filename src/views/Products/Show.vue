@@ -239,6 +239,11 @@
         <h2>Environment</h2>
         <environment-tab></environment-tab>
       </div>
+
+      <div class="page-section">
+        <h2>Vendors</h2>
+        <pricing-tab></pricing-tab>
+      </div>
     </div>
     <!-- / Properties -->
 
@@ -269,12 +274,13 @@ import axios from 'axios';
 import AddressSelectorInline from "./Show/AddressSelectorInline";
 import Orders from "../../mixins/Orders";
 import EnvironmentTab from "./Show/EnvironmentTab";
+import PricingTab from "./Show/PricingTab";
 
 const _ = require('lodash');
 
 export default {
   name: "Show",
-  components: {AddressSelectorInline, ViewToggler, DocumentsTab, SpecificationsTab, ImageCarousel, EnvironmentTab},
+  components: {AddressSelectorInline, ViewToggler, DocumentsTab, SpecificationsTab, ImageCarousel, EnvironmentTab, PricingTab},
   mixins: [Orders],
   data() {
     return {

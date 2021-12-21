@@ -6,7 +6,7 @@
         <div class="wrapper">
           <a-page-header title="Basket" @back="goBackToShop">
             <template slot="extra">
-              <a-button type="primary">Checkout</a-button>
+              <a-button icon="shopping-cart" type="primary">Checkout</a-button>
             </template>
           </a-page-header>
         </div>
@@ -18,6 +18,9 @@
                    :data-source="basket"
                    :loading="isLoading"
           >
+            <div slot="name" slot-scope="name, record">
+              <router-link :to="getProductPageUrl(record)">{{ name }}</router-link>
+            </div>
 
             <div slot="image" slot-scope="image, row">
               <a-avatar
@@ -82,9 +85,13 @@
               }}
             </div>
 
+            <div slot="co2e">
+              -
+            </div>
+
             <div slot="actions">
               <div class="actions">
-                <a-button>Request Quote</a-button>
+                <request-quote-button></request-quote-button>
               </div>
             </div>
 
@@ -120,6 +127,7 @@
 import Orders from "../../mixins/Orders";
 import {mapGetters, mapActions} from 'vuex';
 import OptimiseBasket from "./Basket/OptimiseBasket";
+import RequestQuoteButton from "./Basket/RequestQuoteButton";
 
 const innerColumns = [
   {title: 'Supplier', dataIndex: 'supplier_name', key: 'supplier_name'},
@@ -129,7 +137,7 @@ const innerColumns = [
 export default {
   name: "Basket",
   mixins: [Orders],
-  components: {OptimiseBasket},
+  components: {RequestQuoteButton, OptimiseBasket},
   data() {
     return {
       innerColumns,
@@ -143,6 +151,7 @@ export default {
           title: 'Name',
           dataIndex: 'name',
           width: 200,
+          scopedSlots: {customRender: 'name'}
         },
         {
           title: 'Quantity',
@@ -160,6 +169,12 @@ export default {
           title: 'Cost',
           dataIndex: 'cost',
           scopedSlots: {customRender: "cost"},
+          width: 100
+        },
+        {
+          title: 'CO2e',
+          dataIndex: 'co2e',
+          scopedSlots: {customRender: "co2e"},
           width: 100
         },
         {
@@ -183,6 +198,10 @@ export default {
 
       updateBasketSelectedPrice: 'updateBasketSelectedPrice'
     }),
+
+    getProductPageUrl(product) {
+      return '/products/' + product['id'] + '?fromBasket=1';
+    },
 
     goBackToShop() {
       this.$router.push('/shop');

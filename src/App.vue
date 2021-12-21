@@ -459,6 +459,14 @@ export default {
   .top-nav {
     display: flex;
 
+    @media screen and (min-width: 1200px) {
+      .logo {
+        min-width: 260px;
+        width: 260px;
+        max-width: 260px;
+      }
+    }
+
     .top-nav-search-bar {
       padding-left: 35px;
       padding-right: 35px;
@@ -502,6 +510,8 @@ export default {
     .top-nav-links {
       flex-shrink: 1;
       line-height: 60px;
+      min-width: 260px;
+      text-align: right;
 
       .ant-btn {
         /*margin-left: 5px;*/

@@ -2,14 +2,14 @@
   <div class="product-show">
     <loading-screen :is-loading="isLoading||isLoadingDocuments||isLoadingDetails||isSavingDescription"></loading-screen>
 
-    <a-page-header v-if="product && fromShop" :title="product.name"
-                   @back="backToShop"
+    <a-page-header v-if="product && (fromShop||fromBasket)" :title="product.name"
+                   @back="handleBackButton"
     >
       <template slot="extra">
         <view-toggler></view-toggler>
       </template>
     </a-page-header>
-    <a-page-header v-if="product && !fromShop" :title="product.name">
+    <a-page-header v-if="product && !(fromShop||fromBasket)" :title="product.name">
       <template slot="extra">
         <view-toggler></view-toggler>
       </template>
@@ -74,6 +74,21 @@
         </a-col>
 
         <a-col :span="9">
+          <div style="margin-bottom: 15px;" class="price-description">
+            <h3 style="display: inline;">Price: </h3>
+            <span class="price">
+             {{
+                selectedPrice ? formatCostInPence2dp({
+                  cost: selectedPrice.price,
+                  cost_currency: 'USD'
+                }) : '-'
+              }}
+           </span>
+            ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency: 'USD'}) }}/{{ unit }})
+
+            <a href="#" @click.prevent="scrollToPrices">View more</a>
+          </div>
+
           <div style="margin-bottom: 10px;">
             <h3 style="display: inline;">Description</h3>
             <a-button style="display: inline; margin-left: 10px;"
@@ -197,8 +212,8 @@
                 <a-input v-if="!isProductInBasket(product)" class="quantity-input" placeholder="1"
                          type="number"
                          v-model="quantityToAdd"></a-input>
-                <a-button v-if="!isProductInBasket(product)"
-                          type="primary" @click.prevent="() => addToBasket(product)">Add to basket
+                <a-button v-if="!isProductInBasket(product)" class="button-yellow"
+                          type="default" @click.prevent="() => addToBasket(product)">Add to basket
                 </a-button>
               </div>
 
@@ -240,7 +255,7 @@
         <environment-tab></environment-tab>
       </div>
 
-      <div class="page-section">
+      <div class="page-section" ref="pricing-tab">
         <h2>Vendors</h2>
         <pricing-tab :prices="prices"></pricing-tab>
       </div>
@@ -280,7 +295,15 @@ const _ = require('lodash');
 
 export default {
   name: "Show",
-  components: {AddressSelectorInline, ViewToggler, DocumentsTab, SpecificationsTab, ImageCarousel, EnvironmentTab, PricingTab},
+  components: {
+    AddressSelectorInline,
+    ViewToggler,
+    DocumentsTab,
+    SpecificationsTab,
+    ImageCarousel,
+    EnvironmentTab,
+    PricingTab
+  },
   mixins: [Orders],
   data() {
     return {
@@ -323,6 +346,10 @@ export default {
       return this.$route.query.fromShop;
     },
 
+    fromBasket() {
+      return this.$route.query.fromBasket;
+    },
+
     description() {
       if (this.descriptionLocal) {
         return this.descriptionLocal;
@@ -343,6 +370,27 @@ export default {
         return this.description;
       }
       return this.description.substring(0, 1000);
+    },
+
+    pricePerUnit() {
+      let selectedPrice = this.selectedPrice ? this.selectedPrice.price : null;
+      let normalisedUnitMagnitude = this.product.normalisedQuantity ? this.product.normalisedQuantity.normalisedUnitMagnitude : null;
+
+      if (selectedPrice && normalisedUnitMagnitude) {
+        return selectedPrice / normalisedUnitMagnitude;
+      }
+
+      return '-';
+    },
+
+    unit() {
+      if (this.product.normalisedQuantity) {
+        if (this.product.normalisedQuantity.normalisedUnitBase === 'dimensionless') {
+          return 'count';
+        }
+        return this.product.normalisedQuantity.normalisedUnitBase;
+      }
+      return '-';
     }
   },
   methods: {
@@ -381,6 +429,19 @@ export default {
 
     backToShop() {
       this.$router.push('/shop');
+    },
+
+    backToBasket() {
+      this.$router.push('/shop/basket')
+    },
+
+    handleBackButton() {
+      if (this.fromBasket) {
+        this.backToBasket();
+      }
+      if (this.fromShop) {
+        this.backToShop();
+      }
     },
 
     attemptLoadProduct() {
@@ -434,6 +495,10 @@ export default {
         vm.isSavingDescription = false;
         vm.$message.error('Error saving description');
       });
+    },
+
+    scrollToPrices() {
+      this.$refs['pricing-tab'].scrollIntoView({behavior: "smooth"});
     }
   }
 }
@@ -571,6 +636,15 @@ export default {
 
   .delivery-details {
     margin-top: 10px;
+  }
+}
+
+.price-description {
+  .price {
+    font-size: 17px;
+    margin-left: 4px;
+    margin-right: 4px;
+    color: #1890ff;
   }
 }
 </style>

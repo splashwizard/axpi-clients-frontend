@@ -12,6 +12,12 @@
       <a-table class="axpi-table"
                :pagination="false" :columns="columns" :data-source="productsToShow">
 
+        <template slot="name" slot-scope="name, row">
+          <router-link :to="getProductPageUrl(row)">
+            {{ name }}
+          </router-link>
+        </template>
+
         <template slot="price" slot-scope="price, row">
           {{ getPriceRange(row.id) }}
         </template>
@@ -60,6 +66,7 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
+    scopedSlots: {customRender: 'name'},
     width: 300
   },
   {

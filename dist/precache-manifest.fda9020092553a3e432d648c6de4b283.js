@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.4c7c21b9.css"
   },
   {
-    "revision": "bff4e717a476a571948b",
-    "url": "/css/app.c31cff46.css"
+    "revision": "f5a02f6ec47777d6de46",
+    "url": "/css/app.d793d327.css"
   },
   {
-    "revision": "d1ebb3154b4df036f0e2",
-    "url": "/css/basket.90209bf9.css"
+    "revision": "32d61f6ba19c25b33f7e",
+    "url": "/css/basket.f4915959.css"
   },
   {
     "revision": "8b78a284088515a9149f",
@@ -60,8 +60,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "42c3fa90303f8913b438",
-    "url": "/css/shop.da724f56.css"
+    "revision": "60e5bf70c1e1c752e48c",
+    "url": "/css/shop.7bba2f6a.css"
   },
   {
     "revision": "1520eda719d99a6a97b3",
@@ -72,8 +72,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/view-cluster.887a5d43.css"
   },
   {
-    "revision": "4ea27dae824087080993",
-    "url": "/css/view-product.1532c4f8.css"
+    "revision": "c1261b217c8849a947fd",
+    "url": "/css/view-product.2417c7ff.css"
   },
   {
     "revision": "2338d5f8ad8da026e608",
@@ -312,7 +312,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "63b38547bb6d60c88dd307d5d5dff31b",
+    "revision": "89c493a7f6e30790903df490059ee4ab",
     "url": "/index.html"
   },
   {
@@ -328,12 +328,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics.8fb3a0ab.js"
   },
   {
-    "revision": "bff4e717a476a571948b",
-    "url": "/js/app.a8431628.js"
+    "revision": "f5a02f6ec47777d6de46",
+    "url": "/js/app.e3b1a3cb.js"
   },
   {
-    "revision": "d1ebb3154b4df036f0e2",
-    "url": "/js/basket.60e0ad5c.js"
+    "revision": "32d61f6ba19c25b33f7e",
+    "url": "/js/basket.82436533.js"
   },
   {
     "revision": "8b78a284088515a9149f",
@@ -384,8 +384,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.a2176455.js"
   },
   {
-    "revision": "42c3fa90303f8913b438",
-    "url": "/js/shop.38abc293.js"
+    "revision": "60e5bf70c1e1c752e48c",
+    "url": "/js/shop.a0f100f9.js"
   },
   {
     "revision": "af00ce6028d3a17d97ec",
@@ -400,8 +400,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/view-cluster.2514bac1.js"
   },
   {
-    "revision": "4ea27dae824087080993",
-    "url": "/js/view-product.3a73024f.js"
+    "revision": "c1261b217c8849a947fd",
+    "url": "/js/view-product.b949304b.js"
   },
   {
     "revision": "2338d5f8ad8da026e608",

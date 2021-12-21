@@ -1,19 +1,24 @@
 <template>
   <div>
-    <h2>Optimise</h2>
+    <h2>Scenarios</h2>
 
     <div class="table-wrapper">
       <a-table class="axpi-table"
                :data-source="scenarios"
+               :pagination="false"
                :columns="columns">
 
         <div slot="expectedCost" slot-scope="cost">
-         {{ formatCostInPence2dp({cost: cost, cost_currency: 'USD'}) }}
+          {{ formatCostInPence2dp({cost: cost, cost_currency: 'USD'}) }}
+        </div>
+
+        <div slot="co2e">
+          -
         </div>
 
         <div slot="actions" slot-scope="actions,row">
           <div class="actions">
-            <a-button @click.prevent="() => optimise(row.minimise)">Optimise</a-button>
+            <a-button @click.prevent="() => optimise(row.minimise)">Select</a-button>
           </div>
         </div>
 
@@ -38,6 +43,11 @@ const columns = [
     scopedSlots: {customRender: 'expectedCost'}
   },
   {
+    title: 'CO2e',
+    dataIndex: 'co2e',
+    scopedSlots: {customRender: 'co2e'}
+  },
+  {
     title: '',
     scopedSlots: {customRender: 'actions'}
   }
@@ -52,9 +62,9 @@ export default {
     }
   },
   methods: {
-   ...mapActions('shop', {
-     setBasket: 'setBasket'
-   }),
+    ...mapActions('shop', {
+      setBasket: 'setBasket'
+    }),
 
     optimise(fieldToMinimise) {
       if (fieldToMinimise === 'cost') {
@@ -82,6 +92,11 @@ export default {
       return [
         {
           name: 'Best Price',
+          minimise: 'cost',
+          expectedCost: _.sum(minPricesMultipliedByQuantities)
+        },
+        {
+          name: 'Environmentally Friendly',
           minimise: 'cost',
           expectedCost: _.sum(minPricesMultipliedByQuantities)
         }

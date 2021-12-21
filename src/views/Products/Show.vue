@@ -242,7 +242,7 @@
 
       <div class="page-section">
         <h2>Vendors</h2>
-        <pricing-tab></pricing-tab>
+        <pricing-tab :prices="prices"></pricing-tab>
       </div>
     </div>
     <!-- / Properties -->

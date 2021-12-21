@@ -25,22 +25,16 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
 import Orders from "../../../mixins/Orders";
 
 export default {
   name: "PricingTab",
+  props: ['prices'],
   mixins: [Orders],
   data() {
     return {
-      isLoading: false,
-      prices: []
+      isLoading: false
     }
-  },
-  computed: {
-    ...mapGetters('productViewer', {
-      prices: 'prices'
-    })
   }
 }
 </script>

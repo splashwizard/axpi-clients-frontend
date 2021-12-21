@@ -241,23 +241,23 @@
     <!-- Properties -->
     <div class="page-inner-wrapper" :key="reloadKey">
       <div class="page-section">
-        <h2>Specification</h2>
+        <h2>PROPERTIES</h2>
         <specifications-tab></specifications-tab>
       </div>
 
-      <div class="page-section">
-        <h2>Documents</h2>
-        <documents-tab></documents-tab>
+      <div class="page-section" ref="pricing-tab">
+        <h2>PRICING</h2>
+        <pricing-tab :prices="prices"></pricing-tab>
       </div>
 
       <div class="page-section">
-        <h2>Environment</h2>
+        <h2>ENVIRONMENT</h2>
         <environment-tab></environment-tab>
       </div>
 
-      <div class="page-section" ref="pricing-tab">
-        <h2>Vendors</h2>
-        <pricing-tab :prices="prices"></pricing-tab>
+      <div class="page-section">
+        <h2>DOCUMENTS</h2>
+        <documents-tab></documents-tab>
       </div>
     </div>
     <!-- / Properties -->

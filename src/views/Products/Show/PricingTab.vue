@@ -3,7 +3,7 @@
     <table class="axpi-basic-table">
       <thead>
       <tr>
-        <th>Supplier</th>
+        <th width="300">Supplier</th>
         <th>Price</th>
       </tr>
       </thead>

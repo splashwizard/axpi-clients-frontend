@@ -69,7 +69,8 @@ const _ = require('lodash');
 const columns = [
   {
     title: 'Section',
-    dataIndex: 'section'
+    dataIndex: 'section',
+    width: 245
   },
   {
     title: 'Measure',

@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td>
+    <td width="300">
       <loading-screen :is-loading="isSaving||isLoadingDetails"></loading-screen>
       {{ localDetail['propertyName'] }}
     </td>

@@ -3,7 +3,7 @@
     <table class="axpi-basic-table">
       <thead v-if="view === 'edit'">
       <tr>
-        <th v-if="view !== 'edit'" width="30">Field Name</th>
+        <th v-if="view !== 'edit'" width="300">Field Name</th>
         <th v-else>Field Name</th>
         <th width="200">Value</th>
         <th width="130" v-if="view == 'edit'">Normalised Value</th>

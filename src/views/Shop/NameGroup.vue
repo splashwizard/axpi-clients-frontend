@@ -66,10 +66,6 @@ const columns = [
     title: 'Product Code',
     dataIndex: 'productCode'
   },
-  // {
-  //   title: 'Catalog Code',
-  //   dataIndex: 'catalogCode'
-  // },
   {
     title: 'Price',
     scopedSlots: {customRender: 'price'},
@@ -82,11 +78,11 @@ const columns = [
 ];
 
 export default {
-  name: "ProductGroup",
-  props: ['productCode', 'product', 'quantities'],
+  name: "NameGroup",
+  props: ['name', 'product', 'quantities'],
   mixins: [Orders],
   created() {
-    if (this.productCode) {
+    if (this.name) {
       this.fetch();
     }
   },
@@ -130,8 +126,8 @@ export default {
     fetch() {
       let vm = this;
       vm.isLoading = true;
-      axios.post(window.API_BASE + '/products/get-product-code-group', {
-        product_code: vm.productCode
+      axios.post(window.API_BASE + '/products/get-name-group', {
+        name: vm.name
       }).then(r => {
         vm.isLoading = false;
         vm.group = r.data;

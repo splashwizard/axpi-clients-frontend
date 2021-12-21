@@ -318,7 +318,8 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   //  filterBy is managed and overridden by InstantSearch.js. To set it, you want to use one of the filter widgets like refinementList or use the `configure` widget.
   additionalSearchParameters: {
     queryBy: 'name,productCode,catalogCode',
-    groupBy: 'productCode',
+    // groupBy: 'productCode',
+    groupBy: 'name',
     groupLimit: 1
   },
 });

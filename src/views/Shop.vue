@@ -173,8 +173,11 @@
                         </a-col>
                       </a-row>
 
-                      <product-group :quantities="quantities" class="product-group"
-                          :product-code="item.productCode" :product="item"></product-group>
+<!--                      <product-group :quantities="quantities" class="product-group"-->
+<!--                          :product-code="item.productCode" :product="item"></product-group>-->
+
+                      <name-group :quantities="quantities" class="product-group"
+                                     :name="item.name" :product="item"></name-group>
                     </article>
                   </template>
                 </ais-hits>
@@ -209,7 +212,8 @@ import axios from 'axios';
 // import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
 import SpecsDisplay from "./Shop/SpecsDisplay";
 import Orders from "../mixins/Orders";
-import ProductGroup from "./Shop/ProductGroup";
+// import ProductGroup from "./Shop/ProductGroup";
+import NameGroup from "./Shop/NameGroup";
 
 // const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
 //   server: {
@@ -241,7 +245,8 @@ export default {
   name: "Shop",
   components: {
     SpecsDisplay,
-    ProductGroup
+    // ProductGroup,
+    NameGroup
     // AddSpecToBasketButtonAndModal
   },
   mixins: [

@@ -62,6 +62,7 @@ export default {
   display: flex;
 
   .quicksight-iframe {
+    border: 0 !important;
     flex-grow: 1;
     width: 100%;
     height: 100%;

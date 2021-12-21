@@ -298,7 +298,7 @@ import AddSpecToBasketButtonAndModal from "./views/Shop/AddSpecToBasketButtonAnd
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
-    apiKey: 'axiom', // Be sure to use an API key that only allows searches, in production
+    apiKey: 'zBpwkAIxhaS03cvrGPF8HK0qnWluTEwE', // Be sure to use an API key that only allows searches, in production
     nodes: [
       // {
       //   host: 'localhost',

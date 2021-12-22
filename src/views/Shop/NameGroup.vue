@@ -21,7 +21,7 @@
         <a-table slot="expandedRowRender"
                  slot-scope="item"
                  :columns="innerColumns"
-                 :data-source="getPrices(item.id)"
+                 :data-source="getPricesWithProductDetails(item)"
                  :pagination="false">
           <template slot="price" slot-scope="price">
             {{ formatCostInPence2dp({cost: price, cost_currency: 'USD'}) }}
@@ -48,6 +48,10 @@
                           icon="plus"></a-button>
               </div>
             </div>
+          </template>
+          <template slot="availability">
+            <a-icon type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
+            <span class="availability-text">In stock and ready to ship</span>
           </template>
         </a-table>
 
@@ -116,6 +120,15 @@ const innerColumns = [
     title: 'Price',
     dataIndex: 'price',
     scopedSlots: {customRender: 'price'}
+  },
+  {
+    title: 'Catalog Code',
+    dataIndex: 'catalogCode'
+  },
+  {
+    title: 'Availability',
+    dataIndex: 'availability',
+    scopedSlots: {customRender: 'availability'}
   },
   {
     title: '',
@@ -206,6 +219,13 @@ export default {
 
     getPrices(productId) {
       return this.group.prices[productId];
+    },
+
+    getPricesWithProductDetails(product) {
+      return _.map(this.group.prices[product.id], price => ({
+        ...price,
+        catalogCode: product.catalogCode
+      }))
     },
 
     getPriceRange(productId) {
@@ -324,6 +344,10 @@ export default {
 
   .ant-table-expanded-row tbody tr:last-child td {
     border-bottom: none;
+  }
+
+  .availability-text {
+    margin-left: 10px;
   }
 }
 </style>

@@ -274,6 +274,9 @@ export const mutations = {
             }
             return item;
         });
+
+        // Merge similar matching prices
+
     }
 };
 

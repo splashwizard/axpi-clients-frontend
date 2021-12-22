@@ -205,30 +205,32 @@
             <!-- / Address selector -->
 
             <!-- Quantity: Not Editing -->
-            <div v-if="view !== 'edit'"
+            <div v-if="view !== 'edit' && selectedPrice"
                  class="quantity-changer-wrapper">
 
               <div class="quantity-adder-wrapper">
-                <a-input v-if="!isProductInBasket(product)" class="quantity-input" placeholder="1"
+                <a-input v-if="!isProductInBasket" class="quantity-input" placeholder="1"
                          type="number"
                          v-model="quantityToAdd"></a-input>
-                <a-button v-if="!isProductInBasket(product)" class="button-yellow"
-                          type="default" @click.prevent="() => addToBasket(product)">Add to basket
+                <a-button v-if="!isProductInBasket" class="button-yellow"
+                          type="default" @click.prevent="() => addToBasket()">Add to basket
                 </a-button>
               </div>
 
-              <div v-if="isProductInBasket(product)" class="quantity-changer">
-                <a-button @click.prevent="() => decrementProductQuantity(product)"
-                          icon="minus">
+              <div v-if="isProductInBasket" class="quantity-changer">
+                <a-button
+                    @click.prevent="() => decrementProductQuantity({product: product, selectedPriceId: selectedPrice.id})"
+                    icon="minus">
                 </a-button>
                 <div>
                   <a-input type="number"
-                           @change="e => setProductQuantity({quantity: e.target.value, id: product['_id']})"
-                           :value="getQuantityOfProductInBasket(product)"></a-input>
+                           @change="e => setProductQuantity({quantity: e.target.value, id: product['_id'], selectedPriceId: selectedPrice.id})"
+                           :value="quantityOfProductInBasket"></a-input>
                 </div>
                 <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-                <a-button @click.prevent="() => incrementProductQuantity(product)"
-                          icon="plus"></a-button>
+                <a-button
+                    @click.prevent="() => incrementProductQuantity({product: product, selectedPriceId: selectedPrice.id})"
+                    icon="plus"></a-button>
               </div>
             </div>
             <!-- / Quantity: Not Editing -->
@@ -240,7 +242,21 @@
 
     <!-- Properties -->
     <div class="page-inner-wrapper" :key="reloadKey">
-      <div class="page-section">
+
+      <!-- Navbar -->
+      <div class="product-navbar" ref="product-navbar" :class="{'fixed': isNavbarFixed}">
+        <div class="nav-link">
+          <a-tabs v-model="selectedTab" @tabClick="handleTabClicked">
+            <a-tab-pane key="properties" tab="Properties"></a-tab-pane>
+            <a-tab-pane key="pricing" tab="Pricing"></a-tab-pane>
+            <a-tab-pane key="environment" tab="Environment"></a-tab-pane>
+            <a-tab-pane key="documents" tab="Documents"></a-tab-pane>
+          </a-tabs>
+        </div>
+      </div>
+      <!-- / Navbar -->
+
+      <div class="page-section" ref="properties-tab">
         <h2>PROPERTIES</h2>
         <specifications-tab></specifications-tab>
       </div>
@@ -250,15 +266,16 @@
         <pricing-tab :prices="prices"></pricing-tab>
       </div>
 
-      <div class="page-section">
+      <div class="page-section" ref="environment-tab">
         <h2>ENVIRONMENT</h2>
         <environment-tab></environment-tab>
       </div>
 
-      <div class="page-section">
+      <div class="page-section" ref="documents-tab">
         <h2>DOCUMENTS</h2>
         <documents-tab></documents-tab>
       </div>
+
     </div>
     <!-- / Properties -->
 
@@ -315,11 +332,18 @@ export default {
 
       quantityToAdd: 1,
 
-      reloadKey: 1
+      reloadKey: 1,
+      isMounted: false,
+      selectedTab: 'properties',
+
+      isNavbarFixed: false
     }
   },
   created() {
     this.attemptLoadProduct();
+  },
+  mounted() {
+    this.isMounted = true;
   },
   watch: {
     '$route'() {
@@ -341,6 +365,33 @@ export default {
     ...mapGetters('shop', {
       basket: 'basket'
     }),
+
+    productId() {
+      if (this.product) {
+        return this.product['id'] ? this.product['id'] : this.product['_id'];
+      }
+      return null;
+    },
+
+    isProductInBasket() {
+      return _.filter(this.basket, item => {
+        return (
+            item.itemType === 'product'
+            && item.id === this.productId
+            && item.selectedPriceId === this.selectedPrice.id
+        );
+      }).length > 0;
+    },
+
+    quantityOfProductInBasket() {
+      return _.find(this.basket, item => {
+        return (
+            item.itemType === 'product'
+            && item.id === this.productId
+            && item.selectedPriceId === this.selectedPrice.id
+        );
+      }).quantity;
+    },
 
     fromShop() {
       return this.$route.query.fromShop;
@@ -406,15 +457,20 @@ export default {
       setProductQuantity: 'setProductQuantity'
     }),
 
-    addToBasket(product) {
+    handleTabClicked(e) {
+      this.$refs[e + '-tab'].scrollIntoView({behavior: "smooth"});
+    },
+
+    addToBasket() {
       let quantity = this.quantityToAdd;
       if (!quantity) {
         quantity = 1;
       }
       this.addProductToBasket({
-        product: product,
+        product: this.product,
         quantity: quantity,
         selectedPrice: this.selectedPrice,
+        selectedPriceId: this.selectedPrice.id,
         prices: this.prices
       });
     },
@@ -451,24 +507,6 @@ export default {
 
     reset() {
       this.reloadKey += 1;
-    },
-
-    isProductInBasket(product) {
-      return _.filter(this.basket, item => {
-        return (
-            item.itemType === 'product'
-            && item.id === product['_id']
-        );
-      }).length > 0;
-    },
-
-    getQuantityOfProductInBasket(product) {
-      return _.find(this.basket, item => {
-        return (
-            item.itemType === 'product'
-            && item.id === product['_id']
-        );
-      }).quantity;
     },
 
     editDescription() {
@@ -514,6 +552,14 @@ export default {
 }
 
 .page-inner-wrapper {
+  .product-navbar {
+    margin-top: 60px;
+    margin-bottom: 10px;
+    //padding: 15px;
+    //border: 1px solid #d9d9d9;
+    //border-radius: 5px;
+  }
+
   //margin-top: 20px;
   margin-top: 50px;
   margin-bottom: 80px;

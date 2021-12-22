@@ -63,7 +63,8 @@ export const mutations = {
             product: product,
             quantity: quantity,
             prices: prices,
-            selectedPrice: selectedPrice
+            selectedPrice: selectedPrice,
+            selectedPriceId: selectedPrice.id
         });
     },
 
@@ -116,7 +117,9 @@ export const mutations = {
         });
     },
 
-    INCREMENT_PRODUCT_QUANTITY(state, product) {
+    INCREMENT_PRODUCT_QUANTITY(state, params) {
+       let {product, selectedPriceId} = params;
+
         let id = product['id'];
         if (!id) {
             id = product['_id'];
@@ -126,12 +129,15 @@ export const mutations = {
             return (
                 item.itemType === 'product'
                 && item.id === id
+                && item.selectedPriceId === selectedPriceId
             );
         });
         p.quantity++;
     },
 
-    DECREMENT_PRODUCT_QUANTITY(state, product) {
+    DECREMENT_PRODUCT_QUANTITY(state, params) {
+       let {product, selectedPriceId} = params;
+
         let id = product['id'];
         if (!id) {
             id = product['_id'];
@@ -141,6 +147,7 @@ export const mutations = {
             return (
                 item.itemType === 'product'
                 && item.id === id
+                && item.selectedPriceId === selectedPriceId
             );
         });
         p.quantity--;
@@ -150,12 +157,13 @@ export const mutations = {
     },
 
     SET_PRODUCT_QUANTITY(state, params) {
-        let {id, quantity} = params;
+        let {id, selectedPriceId, quantity} = params;
 
         let p = _.find(state.basket, item => {
             return (
                 item.itemType === 'product'
                 && item.id === id
+                && item.selectedPriceId === selectedPriceId
             );
         });
         p.quantity = quantity;
@@ -256,10 +264,12 @@ export const mutations = {
             if (
                 basketItem.itemType === item.itemType
                 && basketItem.id === item.id
+                && basketItem.selectedPriceId === item.selectedPriceId
             ) {
                return {
                    ...item,
-                   selectedPrice: selectedPrice
+                   selectedPrice: selectedPrice,
+                   selectedPriceId: selectedPrice.id
                }
             }
             return item;

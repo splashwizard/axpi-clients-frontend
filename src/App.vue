@@ -461,9 +461,15 @@ export default {
 
     @media screen and (min-width: 1200px) {
       .logo {
-        min-width: 260px;
-        width: 260px;
-        max-width: 260px;
+        min-width: 300px;
+        width: 300px;
+        max-width: 300px;
+      }
+
+      .top-nav-links {
+        min-width: 300px;
+        width: 300px;
+        max-width: 300px;
       }
     }
 
@@ -510,7 +516,6 @@ export default {
     .top-nav-links {
       flex-shrink: 1;
       line-height: 60px;
-      min-width: 260px;
       text-align: right;
 
       .ant-btn {

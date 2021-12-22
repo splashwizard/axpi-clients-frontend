@@ -32,12 +32,14 @@
             <div slot="quantity" slot-scope="quantity, record">
               <!-- Product -->
               <div v-if="record.itemType === 'product'" class="quantity-changer">
-                <a-button @click.prevent="() => decrementProductQuantity(record.product)"
-                          icon="minus">
+                <a-button
+                    @click.prevent="() => decrementProductQuantity({product: record.product, selectedPriceId: record.selectedPriceId})"
+                    icon="minus">
                 </a-button>
                 <div>{{ record.quantity }}</div>
-                <a-button @click.prevent="() => incrementProductQuantity(record.product)"
-                          icon="plus"></a-button>
+                <a-button
+                    @click.prevent="() => incrementProductQuantity({product: record.product, selectedPriceId: record.selectedPriceId})"
+                    icon="plus"></a-button>
               </div>
               <!-- / Product -->
               <!-- Order -->

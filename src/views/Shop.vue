@@ -24,6 +24,8 @@
                 </ais-stats>
               </div>
               <div class="right">
+                <a-button>Compare</a-button>
+
                 <div class="sort-by-wrapper">
                   <ais-sort-by
                       :items="[
@@ -186,7 +188,7 @@
                 <!-- Specs display mode -->
                 <specs-display
                     :prices="prices" :is-loading-prices="isLoadingPrices"
-                               :quantities="quantities" v-if="displayMode == 'specs' && false"></specs-display>
+                               :quantities="quantities" v-if="displayMode == 'specs'"></specs-display>
                 <!-- / Specs display mode -->
               </ais-panel>
 
@@ -679,6 +681,7 @@ export default {
 }
 
 .sort-by-wrapper {
+  margin-left: 10px;
   margin-right: 10px;
 
   .ais-SortBy-select {

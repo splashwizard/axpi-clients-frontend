@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="name-group-table">
     <!-- Is Loading -->
     <div class="loader" v-if="isLoading">
       <a-spin></a-spin>
@@ -10,45 +10,62 @@
     <div v-if="!isLoading">
 
       <a-table class="axpi-table"
+               :expandIconAsCell="false"
+               :expand-icon-column-index="3"
                :pagination="false" :columns="columns" :data-source="productsToShow">
 
-        <template slot="name" slot-scope="name, row">
+        <template slot="checkbox">
+          <a-checkbox></a-checkbox>
+        </template>
+
+        <a-table slot="expandedRowRender"
+                 slot-scope="item"
+                 :columns="innerColumns"
+                 :data-source="getPrices(item.id)"
+                 :pagination="false">
+          <template slot="price" slot-scope="price">
+            {{ formatCostInPence2dp({cost: price, cost_currency: 'USD'}) }}
+          </template>
+          <template slot="actions" slot-scope="actions, row">
+            <div class="actions-wrapper">
+              <a-input v-if="!isProductInBasket(item, row)" class="quantity-input" placeholder="1"
+                       v-model="quantities[row.id]" type="number"></a-input>
+              <a-button v-if="!isProductInBasket(item, row)"
+                        type="primary" @click.prevent="() => addToBasket(item, row)">Add to basket
+              </a-button>
+
+              <div v-else class="quantity-changer">
+                <a-button @click.prevent="() => decrementProductQuantity({product:item, selectedPriceId: row.id})"
+                          icon="minus">
+                </a-button>
+                <div>
+                  <a-input type="number"
+                           @change="e => setProductQuantity({quantity: e.target.value, selectedPriceId: row.id, id: item['id']})"
+                           :value="getQuantityOfProductInBasket(item, row)"></a-input>
+                </div>
+                <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
+                <a-button @click.prevent="() => incrementProductQuantity({product: item, selectedPriceId: row.id})"
+                          icon="plus"></a-button>
+              </div>
+            </div>
+          </template>
+        </a-table>
+
+        <template slot="productCode" slot-scope="productCode, row">
           <router-link :to="getProductPageUrl(row)">
-            {{ name }}
+            {{ productCode }}
           </router-link>
         </template>
 
         <template slot="price" slot-scope="price, row">
           {{ getPriceRange(row.id) }}
         </template>
-
-        <template slot="actions" slot-scope="action, item">
-
-          <div class="actions-wrapper">
-            <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1"
-                     v-model="quantities[item.id]" type="number"></a-input>
-            <a-button v-if="!isProductInBasket(item)"
-                      type="primary" @click.prevent="() => addToBasket(item)">Add to basket
-            </a-button>
-
-            <div v-else class="quantity-changer">
-              <a-button @click.prevent="() => decrementProductQuantity(item)"
-                        icon="minus">
-              </a-button>
-              <div>
-                <a-input type="number"
-                         @change="e => setProductQuantity({quantity: e.target.value, id: item['id']})"
-                         :value="getQuantityOfProductInBasket(item)"></a-input>
-              </div>
-              <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-              <a-button @click.prevent="() => incrementProductQuantity(item)"
-                        icon="plus"></a-button>
-            </div>
-          </div>
-
-        </template>
-
       </a-table>
+
+      <div class="show-more-toggle" v-if="canShowMore">
+        <a @click.prevent="showMore" v-if="!isShowingMore">Show more</a>
+        <a @click.prevent="showLess" v-if="isShowingMore">Show less</a>
+      </div>
 
     </div>
     <!-- / Loaded -->
@@ -64,19 +81,41 @@ import {mapActions, mapGetters} from "vuex";
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    scopedSlots: {customRender: 'name'},
-    width: 300
+    title: '',
+    scopedSlots: {customRender: 'checkbox'},
+    width: 30
   },
+  // {
+  //   title: 'Name',
+  //   dataIndex: 'name',
+  //   scopedSlots: {customRender: 'name'},
+  //   width: 300
+  // },
   {
     title: 'Product Code',
-    dataIndex: 'productCode'
+    dataIndex: 'productCode',
+    scopedSlots: {customRender: 'productCode'}
   },
   {
     title: 'Price',
     scopedSlots: {customRender: 'price'},
     width: 150
+  },
+  {
+    title: '',
+    scopedSlots: {customRender: 'actions'}
+  }
+];
+
+const innerColumns = [
+  {
+    title: 'Supplier',
+    dataIndex: 'supplier_name',
+  },
+  {
+    title: 'Price',
+    dataIndex: 'price',
+    scopedSlots: {customRender: 'price'}
   },
   {
     title: '',
@@ -105,9 +144,19 @@ export default {
       return [];
     },
 
+    canShowMore() {
+      if (this.group && this.group.hits && this.group.hits.length > 5) {
+        return true;
+      }
+      return false;
+    },
+
     productsToShow() {
       if (this.group) {
-        return this.group.hits;
+        if (this.isShowingMore) {
+          return this.group.hits;
+        }
+        return this.group.hits.slice(0, 5);
         // return _.map(this.group.hits, 'document');
       }
       return [
@@ -119,7 +168,9 @@ export default {
     return {
       isLoading: false,
       group: null,
-      columns
+      columns,
+      innerColumns,
+      isShowingMore: false
     }
   },
   methods: {
@@ -129,6 +180,14 @@ export default {
       decrementProductQuantity: 'decrementProductQuantity',
       setProductQuantity: 'setProductQuantity'
     }),
+
+    showMore() {
+      this.isShowingMore = true;
+    },
+
+    showLess() {
+      this.isShowingMore = false;
+    },
 
     fetch() {
       let vm = this;
@@ -143,6 +202,10 @@ export default {
         vm.isLoading = false;
         vm.$message.error('Error loading group');
       });
+    },
+
+    getPrices(productId) {
+      return this.group.prices[productId];
     },
 
     getPriceRange(productId) {
@@ -174,20 +237,26 @@ export default {
       return '-';
     },
 
-    addToBasket(record) {
+    addToBasket(record, price) {
       let prices = this.prices[record['id']];
       if (!prices) {
         prices = [];
       }
 
-      let quantity = this.quantities[record['id']];
+      let priceToUse = price;
+      if (!priceToUse) {
+        priceToUse = _.first(prices);
+      }
+
+      let quantity = this.quantities[priceToUse.id];
       if (!quantity) {
         quantity = 1;
       }
       this.addProductToBasket({
         quantity: quantity,
         product: record,
-        selectedPrice: _.first(prices),
+        selectedPrice: priceToUse,
+        selectedPriceId: priceToUse.id,
         prices: prices
       });
     },
@@ -196,20 +265,22 @@ export default {
       return '/products/' + product['id'] + '?fromShop=1';
     },
 
-    isProductInBasket(product) {
+    isProductInBasket(product, price) {
       return _.filter(this.basket, item => {
         return (
             item.itemType === 'product'
             && item.id === product['id']
+            && item.selectedPriceId === price.id
         );
       }).length > 0;
     },
 
-    getQuantityOfProductInBasket(product) {
+    getQuantityOfProductInBasket(product, price) {
       return _.find(this.basket, item => {
         return (
             item.itemType === 'product'
             && item.id === product['id']
+            && item.selectedPriceId === price.id
         );
       }).quantity;
     }
@@ -217,23 +288,42 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-.loader {
-  text-align: center;
-}
-
-.actions-wrapper {
-  max-width: 350px;
-  flex-shrink: 1;
-  //flex-grow: 1;
-  display: flex;
-
-  .quantity-input {
-    margin-right: 10px;
+<style lang="scss">
+.name-group-table {
+  .loader {
+    text-align: center;
   }
 
-  .ant-input {
-    width: 90px;
+  tr td:last-child {
+    text-align: right;
+  }
+
+  .actions-wrapper {
+    float: right;
+    max-width: 350px;
+    flex-shrink: 1;
+    //flex-grow: 1;
+    display: flex;
+
+    .quantity-input {
+      margin-right: 10px;
+    }
+
+    .ant-input {
+      width: 90px;
+    }
+  }
+
+  .show-more-toggle {
+    margin-top: 20px;
+  }
+
+  tr.ant-table-expanded-row td > .ant-table-wrapper {
+    margin: -5px 0 10px 0 !important;
+  }
+
+  .ant-table-expanded-row tbody tr:last-child td {
+    border-bottom: none;
   }
 }
 </style>

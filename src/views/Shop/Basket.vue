@@ -32,34 +32,47 @@
             <div slot="quantity" slot-scope="quantity, record">
               <!-- Product -->
               <div v-if="record.itemType === 'product'" class="quantity-changer">
-                <a-button
-                    @click.prevent="() => decrementProductQuantity({product: record.product, selectedPriceId: record.selectedPriceId})"
-                    icon="minus">
-                </a-button>
-                <div>{{ record.quantity }}</div>
-                <a-button
-                    @click.prevent="() => incrementProductQuantity({product: record.product, selectedPriceId: record.selectedPriceId})"
-                    icon="plus"></a-button>
+                <a-input-group compact>
+                  <a-button
+                      @click.prevent="() => decrementProductQuantity({product: record.product, selectedPriceId: record.selectedPriceId})"
+                      icon="minus">
+                  </a-button>
+                  <!--                  <div>{{ record.quantity }}</div>-->
+                  <a-input type="number" class="quantity-input"
+                           @change="e => setProductQuantity({quantity: e.target.value, id: record['id'], selectedPriceId: record.selectedPriceId})"
+                           :value="record.quantity"></a-input>
+                  <a-button
+                      @click.prevent="() => incrementProductQuantity({product: record.product, selectedPriceId: record.selectedPriceId})"
+                      icon="plus"></a-button>
+                </a-input-group>
               </div>
               <!-- / Product -->
               <!-- Order -->
               <div v-if="record.itemType === 'order'" class="quantity-changer">
-                <a-button @click.prevent="() => decrementPastOrderQuantity(record.order)"
-                          icon="minus">
-                </a-button>
-                <div>{{ record.quantity }}</div>
-                <a-button @click.prevent="() => incrementPastOrderQuantity(record.order)"
-                          icon="plus"></a-button>
+                <a-input-group compact>
+                  <a-button @click.prevent="() => decrementPastOrderQuantity(record.order)"
+                            icon="minus">
+                  </a-button>
+                  <a-input type="number" class="quantity-input"
+                           @change="e => setPastOrderQuantity({quantity: e.target.value, id: record['id']})"
+                           :value="record.quantity"></a-input>
+                  <a-button @click.prevent="() => incrementPastOrderQuantity(record.order)"
+                            icon="plus"></a-button>
+                </a-input-group>
               </div>
               <!-- / Order -->
               <!-- Specification -->
               <div v-if="record.itemType === 'specification'" class="quantity-changer">
-                <a-button @click.prevent="() => decrementSpecificationQuantity(record.specification)"
-                          icon="minus">
-                </a-button>
-                <div>{{ record.quantity }}</div>
-                <a-button @click.prevent="() => incrementSpecificationQuantity(record.specification)"
-                          icon="plus"></a-button>
+                <a-input-group compact>
+                  <a-button @click.prevent="() => decrementSpecificationQuantity(record.specification)"
+                            icon="minus">
+                  </a-button>
+                  <a-input type="number" class="quantity-input"
+                           @change="e => setSpecificationQuantity({quantity: e.target.value, id: record['id']})"
+                           :value="record.quantity"></a-input>
+                  <a-button @click.prevent="() => incrementSpecificationQuantity(record.specification)"
+                            icon="plus"></a-button>
+                </a-input-group>
               </div>
               <!-- / Specification -->
             </div>
@@ -159,7 +172,7 @@ export default {
           title: 'Quantity',
           dataIndex: 'quantity',
           scopedSlots: {customRender: "quantity"},
-          width: 80
+          width: 120
         },
         {
           title: 'Supplier',
@@ -191,12 +204,15 @@ export default {
     ...mapActions('shop', {
       incrementProductQuantity: 'incrementProductQuantity',
       decrementProductQuantity: 'decrementProductQuantity',
+      setProductQuantity: 'setProductQuantity',
 
       incrementPastOrderQuantity: 'incrementPastOrderQuantity',
       decrementPastOrderQuantity: 'decrementPastOrderQuantity',
+      setPastOrderQuantity: 'setPastOrderQuantity',
 
       incrementSpecificationQuantity: 'incrementSpecificationQuantity',
       decrementSpecificationQuantity: 'decrementSpecificationQuantity',
+      setSpecificationQuantity: 'setSpecificationQuantity',
 
       updateBasketSelectedPrice: 'updateBasketSelectedPrice'
     }),
@@ -245,6 +261,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  .quantity-input {
+    width: calc(100% - 32px - 32px);
+  }
 }
 
 .ant-table-expanded-row-level-1 {

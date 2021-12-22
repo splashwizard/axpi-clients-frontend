@@ -28,24 +28,31 @@
           </template>
           <template slot="actions" slot-scope="actions, row">
             <div class="actions-wrapper">
-              <a-input v-if="!isProductInBasket(item, row)" class="quantity-input" placeholder="1"
-                       v-model="quantities[row.id]" type="number"></a-input>
+
+              <a-input-group v-if="!isProductInBasket(item, row)"
+                             class="quantity-input-group" compact>
+                <a-button icon="minus" @click.prevent="() => decrementPreBasketQuantity(row.id)"></a-button>
+                <a-input class="quantity-input" placeholder="1"
+                         v-model="quantities[row.id]" type="number"></a-input>
+                <a-button icon="plus" @click.prevent="() => incrementPreBasketQuantity(row.id)"></a-button>
+              </a-input-group>
+
               <a-button v-if="!isProductInBasket(item, row)"
                         type="primary" @click.prevent="() => addToBasket(item, row)">Add to basket
               </a-button>
 
               <div v-else class="quantity-changer">
-                <a-button @click.prevent="() => decrementProductQuantity({product:item, selectedPriceId: row.id})"
-                          icon="minus">
-                </a-button>
-                <div>
+                <a-input-group compact>
+                  <a-button @click.prevent="() => decrementProductQuantity({product:item, selectedPriceId: row.id})"
+                            icon="minus">
+                  </a-button>
                   <a-input type="number"
                            @change="e => setProductQuantity({quantity: e.target.value, selectedPriceId: row.id, id: item['id']})"
                            :value="getQuantityOfProductInBasket(item, row)"></a-input>
-                </div>
-                <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-                <a-button @click.prevent="() => incrementProductQuantity({product: item, selectedPriceId: row.id})"
-                          icon="plus"></a-button>
+                  <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
+                  <a-button @click.prevent="() => incrementProductQuantity({product: item, selectedPriceId: row.id})"
+                            icon="plus"></a-button>
+                </a-input-group>
               </div>
             </div>
           </template>
@@ -202,6 +209,31 @@ export default {
       this.isShowingMore = false;
     },
 
+    decrementPreBasketQuantity(id) {
+      if (this.quantities[id] && !isNaN(this.quantities[id])) {
+        this.quantities[id]--;
+        if (this.quantities[id] < 1) {
+          this.quantities[id] = 1;
+        }
+      } else {
+        this.quantities[id] = 1;
+      }
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      })
+    },
+
+    incrementPreBasketQuantity(id) {
+      if (this.quantities[id] && !isNaN(this.quantities[id])) {
+        this.quantities[id]++;
+      } else {
+        this.quantities[id] = 1;
+      }
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      })
+    },
+
     fetch() {
       let vm = this;
       vm.isLoading = true;
@@ -325,8 +357,12 @@ export default {
     //flex-grow: 1;
     display: flex;
 
-    .quantity-input {
+    .quantity-input-group {
       margin-right: 10px;
+    }
+
+    .quantity-input {
+      //margin-right: 10px;
     }
 
     .ant-input {

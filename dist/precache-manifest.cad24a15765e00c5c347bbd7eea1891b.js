@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.4c7c21b9.css"
   },
   {
-    "revision": "2525a0f3892e5fb737eb",
+    "revision": "9fce025c0a0ce33b4116",
     "url": "/css/app.67d73bf2.css"
   },
   {
-    "revision": "5ee371280576fbc17385",
-    "url": "/css/basket.5e676345.css"
+    "revision": "10c61f41acb4be141cc5",
+    "url": "/css/basket.53d4b918.css"
   },
   {
     "revision": "8b78a284088515a9149f",
@@ -60,8 +60,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "d0246c62fe9ccf7df2aa",
-    "url": "/css/shop.5848b890.css"
+    "revision": "f3e35cbeb06c492f5c5f",
+    "url": "/css/shop.8f1c6041.css"
   },
   {
     "revision": "1520eda719d99a6a97b3",
@@ -72,8 +72,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/view-cluster.887a5d43.css"
   },
   {
-    "revision": "c5bcaed95db1856665dc",
-    "url": "/css/view-product.99a80da1.css"
+    "revision": "0a656ca459894d002684",
+    "url": "/css/view-product.2f2a65d2.css"
   },
   {
     "revision": "2338d5f8ad8da026e608",
@@ -312,7 +312,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "a5374a512c018f62a8f47fe336228bea",
+    "revision": "9e0b030583936bfbea48e0500b0cd1f0",
     "url": "/index.html"
   },
   {
@@ -328,12 +328,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics.8fb3a0ab.js"
   },
   {
-    "revision": "2525a0f3892e5fb737eb",
-    "url": "/js/app.aaf0addd.js"
+    "revision": "9fce025c0a0ce33b4116",
+    "url": "/js/app.6c987cf7.js"
   },
   {
-    "revision": "5ee371280576fbc17385",
-    "url": "/js/basket.63e7eae3.js"
+    "revision": "10c61f41acb4be141cc5",
+    "url": "/js/basket.3e5c7bc7.js"
   },
   {
     "revision": "8b78a284088515a9149f",
@@ -384,8 +384,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.a2176455.js"
   },
   {
-    "revision": "d0246c62fe9ccf7df2aa",
-    "url": "/js/shop.895e7cf6.js"
+    "revision": "f3e35cbeb06c492f5c5f",
+    "url": "/js/shop.34c0e619.js"
   },
   {
     "revision": "af00ce6028d3a17d97ec",
@@ -400,8 +400,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/view-cluster.2514bac1.js"
   },
   {
-    "revision": "c5bcaed95db1856665dc",
-    "url": "/js/view-product.3f6ab4de.js"
+    "revision": "0a656ca459894d002684",
+    "url": "/js/view-product.a17d0092.js"
   },
   {
     "revision": "2338d5f8ad8da026e608",

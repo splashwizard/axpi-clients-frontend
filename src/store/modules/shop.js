@@ -275,8 +275,7 @@ export const mutations = {
             return item;
         });
 
-        // Merge similar matching prices
-
+        // TODO: Merge similar matching prices
     }
 };
 

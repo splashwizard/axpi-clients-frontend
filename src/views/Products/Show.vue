@@ -209,28 +209,33 @@
                  class="quantity-changer-wrapper">
 
               <div class="quantity-adder-wrapper">
-                <a-input v-if="!isProductInBasket" class="quantity-input" placeholder="1"
-                         type="number"
-                         v-model="quantityToAdd"></a-input>
-                <a-button v-if="!isProductInBasket" class="button-yellow"
+                <a-input-group v-if="!isProductInBasket" class="quantity-input-group" compact>
+                  <a-button icon="minus" @click.prevent="decrementQuantityToAdd"></a-button>
+                  <a-input class="quantity-input" placeholder="1"
+                           type="number"
+                           v-model="quantityToAdd"></a-input>
+                  <a-button icon="plus" @click.prevent="incrementQuantityToAdd"></a-button>
+                </a-input-group>
+                <a-button v-if="!isProductInBasket" class="add-button button-yellow"
                           type="default" @click.prevent="() => addToBasket()">Add to basket
                 </a-button>
               </div>
 
               <div v-if="isProductInBasket" class="quantity-changer">
-                <a-button
-                    @click.prevent="() => decrementProductQuantity({product: product, selectedPriceId: selectedPrice.id})"
-                    icon="minus">
-                </a-button>
-                <div>
-                  <a-input type="number"
+                <a-input-group compact class="quantity-input-group">
+                  <a-button
+                      @click.prevent="() => decrementProductQuantity({product: product, selectedPriceId: selectedPrice.id})"
+                      icon="minus">
+                  </a-button>
+                  <a-input type="number" class="quantity-input"
                            @change="e => setProductQuantity({quantity: e.target.value, id: product['_id'], selectedPriceId: selectedPrice.id})"
                            :value="quantityOfProductInBasket"></a-input>
-                </div>
+                  <a-button
+                      @click.prevent="() => incrementProductQuantity({product: product, selectedPriceId: selectedPrice.id})"
+                      icon="plus"></a-button>
+                </a-input-group>
                 <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-                <a-button
-                    @click.prevent="() => incrementProductQuantity({product: product, selectedPriceId: selectedPrice.id})"
-                    icon="plus"></a-button>
+
               </div>
             </div>
             <!-- / Quantity: Not Editing -->
@@ -457,6 +462,31 @@ export default {
       setProductQuantity: 'setProductQuantity'
     }),
 
+    decrementQuantityToAdd() {
+      if (this.quantityToAdd && !isNaN(this.quantityToAdd)) {
+        this.quantityToAdd--;
+        if (this.quantityToAdd < 1) {
+          this.quantityToAdd = 1;
+        }
+      } else {
+        this.quantityToAdd = 1;
+      }
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      })
+    },
+
+    incrementQuantityToAdd() {
+      if (this.quantityToAdd && !isNaN(this.quantityToAdd)) {
+        this.quantityToAdd++;
+      } else {
+        this.quantityToAdd = 1;
+      }
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
+    },
+
     handleTabClicked(e) {
       this.$refs[e + '-tab'].scrollIntoView({behavior: "smooth"});
     },
@@ -613,25 +643,60 @@ export default {
 .quantity-changer-wrapper {
   margin-top: 25px;
 
-  .quantity-changer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 190px;
+  .quantity-input-group {
+    margin-left: auto;
+    margin-right: auto;
 
-    .ant-input {
-      width: 110px;
+    .quantity-input {
+      width: calc(100% - 32px - 32px);
     }
   }
+
+  //.quantity-changer {
+  //  display: flex;
+  //  align-items: center;
+  //  justify-content: space-between;
+  //  width: 190px;
+  //
+  //  .ant-input {
+  //    width: 110px;
+  //  }
+  //}
 }
 
 .quantity-adder-wrapper {
-  display: flex;
-  max-width: 250px;
 
-  .ant-input {
-    margin-right: 10px;
+  .add-button {
+    width: 100%;
+    margin-top: 10px;
   }
+
+  //@media screen and (min-width: 1390px) {
+  //  //display: flex;
+  //  //max-width: 250px;
+  //
+  //  //.add-button {
+  //  //  margin-top: 0;
+  //  //}
+  //
+  //  .quantity-input-group {
+  //    margin-right: 10px;
+  //
+  //    .quantity-input {
+  //      width: 30px !important;
+  //    }
+  //  }
+  //}
+
+  .quantity-input-group {
+    margin-left: auto;
+    margin-right: auto;
+
+    .quantity-input {
+      width: calc(100% - 32px - 32px);
+    }
+  }
+
 }
 
 .breadcrumb-wrapper {

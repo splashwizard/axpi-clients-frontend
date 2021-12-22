@@ -145,7 +145,7 @@
                           </div>
 
                           <div class="description-wrapper">
-                            {{ item.description }}
+                            {{ truncateDescription(item.description) }}
                           </div>
 
 <!--                          <div class="price-list-actions-wrapper">-->
@@ -400,6 +400,13 @@ export default {
         vm.isLoadingPrices = false;
         vm.$message.error('Error loading product prices');
       });
+    },
+
+    truncateDescription(description) {
+      if (description && description.length > 300) {
+        return description.slice(0, 300) + '...';
+      }
+      return description;
     }
   }
 }

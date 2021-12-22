@@ -159,7 +159,9 @@
                     }) : '-'
                   }}</span> (Used)
               </div>
-              <div class="right"></div>
+              <div class="right">
+                32kg CO2e
+              </div>
             </div>
             <!-- / Top row -->
 
@@ -713,6 +715,18 @@ export default {
   padding: 15px;
   border: 1px solid #d9d9d9;
   border-radius: 5px;
+
+  .top-row {
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    .left {
+      flex-grow: 1;
+    }
+    .right {
+      flex-shrink: 1;
+    }
+  }
 
   .price {
     font-size: 21px;

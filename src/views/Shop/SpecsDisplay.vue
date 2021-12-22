@@ -33,11 +33,7 @@
           </div>
 
           <div slot="price" slot-scope="price, item">
-            <span v-if="!isLoadingPrices">
-           {{ getPriceRange(item.id) }}
-            </span>
-<!--            <span v-else>-</span>-->
-            <a-spin size="small" v-else />
+            {{ price }}{{item }}
           </div>
 
           <div slot="numberOfAuthorisedSellers">
@@ -153,11 +149,11 @@ export default {
               dataIndex: 'datasheet',
               scopedSlots: {customRender: 'datasheet'}
             },
-            {
-              title: 'Price',
-              dataIndex: 'price',
-              scopedSlots: {customRender: 'price'}
-            },
+            // {
+            //   title: 'Price',
+            //   dataIndex: 'price',
+            //   scopedSlots: {customRender: 'price'}
+            // },
             {
               title: 'Number of authorised sellers',
               dataIndex: 'numberOfAuthorisedSellers',
@@ -185,12 +181,12 @@ export default {
         {
           title: '',
         },
-        {
-          title: "",
-          scopedSlots: {customRender: "actions"},
-          width: 250,
-          fixed: 'right'
-        },
+        // {
+        //   title: "",
+        //   scopedSlots: {customRender: "actions"},
+        //   width: 250,
+        //   fixed: 'right'
+        // },
       ]
     },
 

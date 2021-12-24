@@ -50,6 +50,13 @@
       </div>
       <!-- / Manufacturer -->
 
+      <!-- Manufacturer -->
+      <div class="product-details-top-property">
+        <b>Category:</b>
+        {{ getCategory(product) }}
+      </div>
+      <!-- / Manufacturer -->
+
       <!-- Product Code -->
       <div class="product-details-top-property">
         <b>Product Code:</b>
@@ -474,6 +481,13 @@ export default {
       decrementProductQuantity: 'decrementProductQuantity',
       setProductQuantity: 'setProductQuantity'
     }),
+
+    getCategory(product) {
+      if (product.taxonomyCategory) {
+        return product.taxonomyCategory[product.taxonomyCategory.length - 1];
+      }
+      return 'Miscellaneous';
+    },
 
     decrementQuantityToAdd() {
       if (this.quantityToAdd && !isNaN(this.quantityToAdd)) {

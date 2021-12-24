@@ -247,6 +247,15 @@
     </div>
     <!-- / Images & Description -->
 
+    <!-- Suggested Products -->
+    <div class="suggested-products-wrapper">
+      <div class="title">
+        <h2>Similar products you might be interested in...</h2>
+      </div>
+      <suggested-products v-if="product" :product="product"></suggested-products>
+    </div>
+    <!-- / Suggested Products -->
+
     <!-- Properties -->
     <div class="page-inner-wrapper" :key="reloadKey">
 
@@ -314,6 +323,7 @@ import AddressSelectorInline from "./Show/AddressSelectorInline";
 import Orders from "../../mixins/Orders";
 import EnvironmentTab from "./Show/EnvironmentTab";
 import PricingTab from "./Show/PricingTab";
+import SuggestedProducts from "../../components/Products/SuggestedProducts";
 
 const _ = require('lodash');
 
@@ -326,7 +336,8 @@ export default {
     SpecificationsTab,
     ImageCarousel,
     EnvironmentTab,
-    PricingTab
+    PricingTab,
+    SuggestedProducts
   },
   mixins: [Orders],
   data() {
@@ -583,6 +594,15 @@ export default {
   margin-top: 40px;
 }
 
+.suggested-products-wrapper {
+  margin-top: 100px;
+  margin-bottom: 30px;
+
+  .title {
+    margin-bottom: 20px;
+  }
+}
+
 .page-inner-wrapper {
   .product-navbar {
     margin-top: 60px;
@@ -720,9 +740,11 @@ export default {
     margin-bottom: 18px;
     display: flex;
     align-items: center;
+
     .left {
       flex-grow: 1;
     }
+
     .right {
       flex-shrink: 1;
     }

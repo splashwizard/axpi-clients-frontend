@@ -41,6 +41,7 @@
     "uuid": "^8.3.2",
     "viser-vue": "^2.4.8",
     "vue": "^2.6.12",
+    "vue-carousel": "^0.18.0",
     "vue-chartjs": "^3.5.1",
     "vue-click-outside": "^1.1.0",
     "vue-html2canvas": "^0.0.4",

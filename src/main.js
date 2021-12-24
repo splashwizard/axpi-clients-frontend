@@ -26,6 +26,9 @@ window.API_TOKEN_URL = 'https://api.axiomdata.io/api/token';
 import VueHtml2Canvas from 'vue-html2canvas';
 Vue.use(VueHtml2Canvas);
 
+import VueCarousel from 'vue-carousel';
+Vue.use(VueCarousel);
+
 // Algolia
 import InstantSearch from 'vue-instantsearch';
 Vue.use(InstantSearch);

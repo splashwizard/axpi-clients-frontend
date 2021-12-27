@@ -363,10 +363,19 @@ export default {
 
     .quantity-input {
       //margin-right: 10px;
+      -moz-appearance: textfield;
+      text-align: center;
+      padding-left: 7px;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
     }
 
     .ant-input {
-      width: 90px;
+      width: 70px;
     }
   }
 

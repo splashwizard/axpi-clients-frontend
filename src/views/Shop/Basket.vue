@@ -92,12 +92,15 @@
             </div>
 
             <div slot="cost" slot-scope="cost, record">
+              <a-spin v-if="record.isLoadingPrices" size="small"></a-spin>
+              <span v-else>
               {{
-                record.selectedPrice ? formatCostInPence2dp({
-                  cost: record.selectedPrice.price,
-                  cost_currency: 'USD'
-                }) : '-'
-              }}
+                  record.selectedPrice ? formatCostInPence2dp({
+                    cost: record.selectedPrice.price,
+                    cost_currency: 'USD'
+                  }) : '-'
+                }}
+              </span>
             </div>
 
             <div slot="co2e">
@@ -178,7 +181,7 @@ export default {
           title: 'Supplier',
           dataIndex: 'supplier',
           scopedSlots: {customRender: "supplier"},
-          width: 100
+          width: 130
         },
         {
           title: 'Cost',
@@ -264,6 +267,15 @@ export default {
 
   .quantity-input {
     width: calc(100% - 32px - 32px);
+    -moz-appearance: textfield;
+    text-align: center;
+    padding-left: 7px;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 }
 
@@ -280,5 +292,6 @@ export default {
 
 .optimise-wrapper {
   margin-top: 60px;
+  margin-bottom: 40px;
 }
 </style>

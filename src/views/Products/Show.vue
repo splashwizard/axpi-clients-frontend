@@ -678,6 +678,16 @@ export default {
 
     .quantity-input {
       width: calc(100% - 32px - 32px);
+
+      -moz-appearance: textfield;
+      text-align: center;
+      padding-left: 7px;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
     }
   }
 
@@ -723,6 +733,16 @@ export default {
 
     .quantity-input {
       width: calc(100% - 32px - 32px);
+
+      -moz-appearance: textfield;
+      text-align: center;
+      padding-left: 7px;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
     }
   }
 

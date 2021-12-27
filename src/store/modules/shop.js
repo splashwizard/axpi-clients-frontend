@@ -79,7 +79,9 @@ export const mutations = {
             id: id,
             name: order['product_name'],
             order: order,
-            quantity: 1
+            quantity: 1,
+            isLoadingPrices: true,
+            prices: []
         });
     },
 
@@ -118,7 +120,7 @@ export const mutations = {
     },
 
     INCREMENT_PRODUCT_QUANTITY(state, params) {
-       let {product, selectedPriceId} = params;
+        let {product, selectedPriceId} = params;
 
         let id = product['id'];
         if (!id) {
@@ -136,7 +138,7 @@ export const mutations = {
     },
 
     DECREMENT_PRODUCT_QUANTITY(state, params) {
-       let {product, selectedPriceId} = params;
+        let {product, selectedPriceId} = params;
 
         let id = product['id'];
         if (!id) {
@@ -195,6 +197,22 @@ export const mutations = {
         }
     },
 
+    ADD_TRUEPRICES_TO_ORDER(state, params) {
+        let {order, prices} = params;
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'order'
+                && item.id === order['id']
+            );
+        });
+        p.isLoadingPrices = false;
+        p.prices = prices;
+        if (prices.length) {
+            p.selectedPrice = _.first(prices);
+            p.selectedPriceId = p.selectedPrice.id;
+        }
+    },
+
     SET_PAST_ORDER_QUANTITY(state, params) {
         let {id, quantity} = params;
         let p = _.find(state.basket, item => {
@@ -246,6 +264,22 @@ export const mutations = {
         }
     },
 
+    ADD_TRUEPRICES_TO_SPECIFICATION(state, params) {
+        let {specification, prices} = params;
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'specification'
+                && item.id === specification['id']
+            );
+        });
+        p.isLoadingPrices = false;
+        p.prices = prices;
+        if (prices.length) {
+            p.selectedPrice = _.first(prices);
+            p.selectedPriceId = p.selectedPrice.id;
+        }
+    },
+
     SET_ENRICHED(state, enriched) {
         state.enriched = enriched;
     },
@@ -266,11 +300,11 @@ export const mutations = {
                 && basketItem.id === item.id
                 && basketItem.selectedPriceId === item.selectedPriceId
             ) {
-               return {
-                   ...item,
-                   selectedPrice: selectedPrice,
-                   selectedPriceId: selectedPrice.id
-               }
+                return {
+                    ...item,
+                    selectedPrice: selectedPrice,
+                    selectedPriceId: selectedPrice.id
+                }
             }
             return item;
         });
@@ -340,12 +374,38 @@ export const actions = {
         commit('SET_TABLE_PAGINATION', pagination);
     },
 
-    addPastOrderToBasket({commit}, order) {
+    addPastOrderToBasket({commit, dispatch}, order) {
         commit('ADD_PAST_ORDER_TO_BASKET', order);
+        dispatch('loadTruepricesForOrder', order);
     },
 
-    addSpecificationToBasket({commit}, spec) {
+    loadTruepricesForOrder({commit}, order) {
+        axios.get(window.API_BASE + '/orders/' + order.id + '/prices').then(r => {
+            commit('ADD_TRUEPRICES_TO_ORDER', {
+                order: order,
+                prices: r.data
+            });
+        }).catch(e => {
+            console.log(e);
+            this._vm.$message.error('Error loading prices for order');
+        });
+    },
+
+    addSpecificationToBasket({commit, dispatch}, spec) {
         commit('ADD_SPECIFICATION_TO_BASKET', spec);
+        dispatch('loadTruepricesForSpecification', spec);
+    },
+
+    loadTruepricesForSpecification({commit}, spec) {
+        axios.get(window.API_BASE + '/specifications/' + spec.id + '/prices').then(r => {
+            commit('ADD_TRUEPRICES_TO_SPECIFICATION', {
+                specification: spec,
+                prices: r.data
+            });
+        }).catch(e => {
+            console.log(e);
+            this._vm.$message.error('Error loading prices for specification');
+        });
     },
 
     updateSpecificationInBasket({commit}, spec) {

@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.4c7c21b9.css"
   },
   {
-    "revision": "5b05c3d4983f56710d80",
+    "revision": "cde6773dd42008b8b271",
     "url": "/css/app.67d73bf2.css"
   },
   {
-    "revision": "53856ff0a387b8224dcc",
-    "url": "/css/basket.53d4b918.css"
+    "revision": "867a60c8dc7a89a0767f",
+    "url": "/css/basket.81c94c24.css"
   },
   {
     "revision": "8396c4362f6b18f655aa",
@@ -60,8 +60,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "563eb271031b899b0508",
-    "url": "/css/shop.3fb66895.css"
+    "revision": "1d1221411fe48b083583",
+    "url": "/css/shop.8a9e6b30.css"
   },
   {
     "revision": "2254a024d7654e73d92a",
@@ -72,8 +72,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/view-cluster.887a5d43.css"
   },
   {
-    "revision": "fcfd6e1dd5b16fecccaf",
-    "url": "/css/view-product.be2f510d.css"
+    "revision": "eaf3365495d7099b83ce",
+    "url": "/css/view-product.173cdaac.css"
   },
   {
     "revision": "4c462fb1275d02752fa4",
@@ -312,7 +312,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "1acebce726d625005471b3e10a7f8079",
+    "revision": "0035f89923ab9d52275416fb37b6cca6",
     "url": "/index.html"
   },
   {
@@ -328,12 +328,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics.ad81c438.js"
   },
   {
-    "revision": "5b05c3d4983f56710d80",
-    "url": "/js/app.9007025f.js"
+    "revision": "cde6773dd42008b8b271",
+    "url": "/js/app.00039414.js"
   },
   {
-    "revision": "53856ff0a387b8224dcc",
-    "url": "/js/basket.53339c5b.js"
+    "revision": "867a60c8dc7a89a0767f",
+    "url": "/js/basket.6573eb6e.js"
   },
   {
     "revision": "8396c4362f6b18f655aa",
@@ -384,8 +384,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.d3a2c81f.js"
   },
   {
-    "revision": "563eb271031b899b0508",
-    "url": "/js/shop.d9d63764.js"
+    "revision": "1d1221411fe48b083583",
+    "url": "/js/shop.3ebe0343.js"
   },
   {
     "revision": "34e5bb77ed2beb2acb3a",
@@ -400,8 +400,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/view-cluster.7008c3f6.js"
   },
   {
-    "revision": "fcfd6e1dd5b16fecccaf",
-    "url": "/js/view-product.2fab39df.js"
+    "revision": "eaf3365495d7099b83ce",
+    "url": "/js/view-product.35418f3f.js"
   },
   {
     "revision": "4c462fb1275d02752fa4",

@@ -1,19 +1,14 @@
 <template>
   <div class="suggested-product-card-wrapper">
     <div class="suggested-product-card" @click.prevent="navigateToProduct(product)">
-      <div class="top" :style="{backgroundImage: 'url(' + getImageSrc(product) + ')'}">
+      <div class="left" :style="{backgroundImage: 'url(' + getImageSrc(product) + ')'}">
       </div>
-      <div class="bottom">
-        <div class="left">
-          <div class="title">
-            {{ truncate(product.name, 50) }}
-          </div>
-          <div class="category">
-            {{ getCategory(product) }}
-          </div>
+      <div class="right">
+        <div class="category">
+          {{ getCategory(product) }}
         </div>
-        <div class="right">
-          £109
+        <div class="title">
+          {{ truncate(product.name, 70) }}
         </div>
       </div>
     </div>
@@ -58,44 +53,47 @@ export default {
 
 <style lang="scss" scoped>
 .suggested-product-card-wrapper {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
   cursor: pointer;
 
   .suggested-product-card {
+    //border: 1px solid #f9f9f9;
+    border: 1px solid #d9d9d9;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 15px;
 
-    .top {
-      width: 100%;
-      height: 300px;
-      background-position: center;
+    display: flex;
+
+    .left {
+      width: 100px;
+      min-width: 80px;
+      max-width: 80px;
+      height: 100px;
+      flex-shrink: 1;
+      display: flex;
+      background-size: contain;
+      background-position: center left;
       background-repeat: no-repeat;
     }
 
-    .bottom {
+    .right {
+      padding-left: 15px;
+      flex-grow: 1;
       display: flex;
+      flex-direction: column;
+      justify-content: center;
 
-      .left {
-        flex-grow: 1;
-
-        .title {
-          font-weight: 600;
-          color: #111;
-        }
-
-        .category {
-          font-size: 15px;
-          color: #757575;
-        }
+      .category {
+        font-style: italic;
       }
 
-      .right {
-        flex-shrink: 1;
-        min-width: 60px;
-        text-align: right;
-        padding-right: 15px;
+      .title {
+        font-weight: 500;
+        margin-top: 8px;
       }
     }
-
   }
 }
 </style>

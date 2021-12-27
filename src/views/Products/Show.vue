@@ -256,9 +256,6 @@
 
     <!-- Suggested Products -->
     <div class="suggested-products-wrapper">
-      <div class="title">
-        <h2>Similar products you might be interested in...</h2>
-      </div>
       <suggested-products v-if="product" :product="product"></suggested-products>
     </div>
     <!-- / Suggested Products -->
@@ -611,10 +608,6 @@ export default {
 .suggested-products-wrapper {
   margin-top: 100px;
   margin-bottom: 30px;
-
-  .title {
-    margin-bottom: 20px;
-  }
 }
 
 .page-inner-wrapper {

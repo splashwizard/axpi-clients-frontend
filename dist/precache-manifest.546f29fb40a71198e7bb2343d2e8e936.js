@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.4c7c21b9.css"
   },
   {
-    "revision": "b98fd23af9a9b6ed9527",
+    "revision": "5b05c3d4983f56710d80",
     "url": "/css/app.67d73bf2.css"
   },
   {
@@ -60,8 +60,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "07a4e1801702197fa3ad",
-    "url": "/css/shop.8f1c6041.css"
+    "revision": "563eb271031b899b0508",
+    "url": "/css/shop.3fb66895.css"
   },
   {
     "revision": "2254a024d7654e73d92a",
@@ -72,8 +72,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/view-cluster.887a5d43.css"
   },
   {
-    "revision": "e0bbdc339d44e93c5bcb",
-    "url": "/css/view-product.58ba294a.css"
+    "revision": "fcfd6e1dd5b16fecccaf",
+    "url": "/css/view-product.be2f510d.css"
   },
   {
     "revision": "4c462fb1275d02752fa4",
@@ -312,7 +312,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "c3f917bf0569fbf6526446cb55d3cafb",
+    "revision": "1acebce726d625005471b3e10a7f8079",
     "url": "/index.html"
   },
   {
@@ -328,8 +328,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics.ad81c438.js"
   },
   {
-    "revision": "b98fd23af9a9b6ed9527",
-    "url": "/js/app.1715d5a0.js"
+    "revision": "5b05c3d4983f56710d80",
+    "url": "/js/app.9007025f.js"
   },
   {
     "revision": "53856ff0a387b8224dcc",
@@ -384,8 +384,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.d3a2c81f.js"
   },
   {
-    "revision": "07a4e1801702197fa3ad",
-    "url": "/js/shop.dbc2b49a.js"
+    "revision": "563eb271031b899b0508",
+    "url": "/js/shop.d9d63764.js"
   },
   {
     "revision": "34e5bb77ed2beb2acb3a",
@@ -400,8 +400,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/view-cluster.7008c3f6.js"
   },
   {
-    "revision": "e0bbdc339d44e93c5bcb",
-    "url": "/js/view-product.8c05b59d.js"
+    "revision": "fcfd6e1dd5b16fecccaf",
+    "url": "/js/view-product.2fab39df.js"
   },
   {
     "revision": "4c462fb1275d02752fa4",

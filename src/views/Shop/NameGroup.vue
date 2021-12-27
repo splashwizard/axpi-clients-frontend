@@ -74,8 +74,8 @@
       </a-table>
 
       <div class="show-more-toggle" v-if="canShowMore">
-        <a @click.prevent="showMore" v-if="!isShowingMore">Show more</a>
-        <a @click.prevent="showLess" v-if="isShowingMore">Show less</a>
+        <a @click.prevent="showMore" v-if="!isShowingMore">Show More <a-icon :style="{fontSize: '10px'}" type="down"/></a>
+        <a @click.prevent="showLess" v-if="isShowingMore">Show Less <a-icon :style="{fontSize: '10px'}" type="up"/></a>
       </div>
 
     </div>
@@ -372,6 +372,7 @@ export default {
 
   .show-more-toggle {
     margin-top: 20px;
+    font-weight: 500;
   }
 
   tr.ant-table-expanded-row td > .ant-table-wrapper {

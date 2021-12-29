@@ -267,7 +267,7 @@
             </a-menu>
           </a-layout-sider>
           <a-layout>
-            <a-layout-content :style="{ padding: (noPadding ? 0 : '20px 30px'), background: '#fff' }">
+            <a-layout-content :style="{ padding: (noPadding ? 0 : '20px 30px'), background: '#fff', height: '100%' }">
               <router-view/>
             </a-layout-content>
           </a-layout>

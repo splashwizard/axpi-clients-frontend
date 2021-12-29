@@ -7,8 +7,9 @@
     <a-form layout="vertical">
       <a-form-item label="Aspect">
         <a-select v-model="form.aspect"
+                  :disabled="isLoadingAspectOptions"
                   show-search size="large">
-          <a-select-option v-for="option in aspectOptions"
+          <a-select-option v-for="option in aspectDropdownOptions"
                            :key="option"
                            :value="option">
             {{ option }}
@@ -18,8 +19,9 @@
 
       <a-form-item label="Material">
         <a-select v-model="form.material"
+                  :disabled="isLoadingMaterialOptions"
                   show-search size="large">
-          <a-select-option v-for="option in materialOptions"
+          <a-select-option v-for="option in materialDropdownOptions"
                            :key="option"
                            :value="option">
             {{ option }}
@@ -46,9 +48,11 @@
 
 <script>
 import axios from 'axios';
+
+const _ = require('lodash');
 export default {
   name: "AddMaterialModal",
-  props: ['visible', 'productId'],
+  props: ['visible', 'productId', 'isLoadingMaterialOptions', 'materialOptions', 'isLoadingAspectOptions', 'aspectOptions'],
   data() {
     return {
       isSaving: false,
@@ -58,10 +62,7 @@ export default {
         material: null,
         weight: null,
         weight_unit: 'kg'
-      },
-
-      aspectOptions: ['Aspect 1', 'Aspect 2', 'Aspect 3', 'Aspect 4'],
-      materialOptions: ['Material 1', 'Material 2', 'Material 3', 'Material 4']
+      }
     }
   },
   computed: {
@@ -74,6 +75,20 @@ export default {
           this.closeModal();
         }
       }
+    },
+
+    materialDropdownOptions() {
+      if (this.materialOptions) {
+        return _.map(this.materialOptions, 'name');
+      }
+      return [];
+    },
+
+    aspectDropdownOptions() {
+      if (this.aspectOptions) {
+        return _.map(this.aspectOptions, 'name');
+      }
+      return [];
     }
   },
   methods: {

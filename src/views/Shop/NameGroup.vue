@@ -11,7 +11,8 @@
 
       <a-table class="axpi-table"
                :expandIconAsCell="false"
-               :expand-icon-column-index="3"
+               :expand-icon="getExpandIcon"
+               :expand-icon-column-index="2"
                :pagination="false" :columns="columns" :data-source="productsToShow">
 
         <template slot="checkbox">
@@ -63,7 +64,7 @@
         </a-table>
 
         <template slot="productCode" slot-scope="productCode, row">
-          <router-link :to="getProductPageUrl(row)">
+          <router-link style="font-weight: 500;" :to="getProductPageUrl(row)">
             {{ productCode }}
           </router-link>
         </template>
@@ -74,8 +75,12 @@
       </a-table>
 
       <div class="show-more-toggle" v-if="canShowMore">
-        <a @click.prevent="showMore" v-if="!isShowingMore">Show More <a-icon :style="{fontSize: '10px'}" type="down"/></a>
-        <a @click.prevent="showLess" v-if="isShowingMore">Show Less <a-icon :style="{fontSize: '10px'}" type="up"/></a>
+        <a @click.prevent="showMore" v-if="!isShowingMore">Show More
+          <a-icon :style="{fontSize: '10px'}" type="down"/>
+        </a>
+        <a @click.prevent="showLess" v-if="isShowingMore">Show Less
+          <a-icon :style="{fontSize: '10px'}" type="up"/>
+        </a>
       </div>
 
     </div>
@@ -107,11 +112,11 @@ const columns = [
     dataIndex: 'productCode',
     scopedSlots: {customRender: 'productCode'}
   },
-  {
-    title: 'Price',
-    scopedSlots: {customRender: 'price'},
-    width: 150
-  },
+  // {
+  //   title: 'Price',
+  //   scopedSlots: {customRender: 'price'},
+  //   width: 150
+  // },
   {
     title: '',
     scopedSlots: {customRender: 'actions'}
@@ -335,6 +340,22 @@ export default {
             && item.selectedPriceId === price.id
         );
       }).quantity;
+    },
+
+    getExpandIcon({expanded, record, onExpand}) {
+      return (
+          <a-button style="font-weight: 500;"
+              type="link"
+              {...{
+                on: {
+                  click: onExpand.bind(this, [expanded, record])
+                }
+              }}
+          >
+            <span>{expanded ? 'Hide' : 'Expand'}</span>
+            <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? 'up' : 'down'}></a-icon>
+          </a-button>
+      );
     }
   }
 }

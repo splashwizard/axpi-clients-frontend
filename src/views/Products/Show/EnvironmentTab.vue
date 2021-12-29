@@ -16,6 +16,9 @@
         <template slot="to_address" slot-scope="to_address">
           {{ to_address ? formatAddress(to_address) : '-' }}
         </template>
+        <template slot="tags" slot-scope="tags, innerRow">
+          <a-tag color="#000" v-if="isMaterialBanned(innerRow.material)">Banned</a-tag>
+        </template>
         <template slot="actions" slot-scope="actions, innerRow">
           <div class="actions">
             <delete-property-button
@@ -27,6 +30,10 @@
           </div>
         </template>
       </a-table>
+
+      <template slot="tags" slot-scope="tags, record">
+        <a-tag color="#000" v-if="hasBannedMaterials && record.section === 'Materials'">Has Banned Materials</a-tag>
+      </template>
 
       <template slot="actions" slot-scope="actions, record">
         <div v-if="record.actionButton && view === 'edit'" class="actions">
@@ -40,13 +47,17 @@
 
     <add-material-modal :product-id="productId"
                         :visible="addMaterialModalVisible"
+                        :is-loading-material-options="isLoadingMaterialOptions"
+                        :material-options="materialOptions"
+                        :is-loading-aspect-options="isLoadingAspectOptions"
+                        :aspect-options="aspectOptions"
                         @material-added="handleMaterialAdded"
                         @close-modal="closeAddMaterialModal"></add-material-modal>
 
     <add-transportation-modal :product-id="productId"
-                        :visible="addTransportationModalVisible"
-                        @transportation-added="handleTransportationAdded"
-                        @close-modal="closeAddTransportationModal"></add-transportation-modal>
+                              :visible="addTransportationModalVisible"
+                              @transportation-added="handleTransportationAdded"
+                              @close-modal="closeAddTransportationModal"></add-transportation-modal>
 
 
     <add-certification-modal :product-id="productId"
@@ -64,6 +75,7 @@ import AddMaterialModal from "./EnvironmentTab/AddMaterialModal";
 import AddCertificationModal from "./EnvironmentTab/AddCertificationModal";
 import DeletePropertyButton from "./EnvironmentTab/DeletePropertyButton";
 import AddTransportationModal from "./EnvironmentTab/AddTransportationModal";
+
 const _ = require('lodash');
 
 const columns = [
@@ -75,6 +87,10 @@ const columns = [
   {
     title: 'Measure',
     dataIndex: 'measure'
+  },
+  {
+    title: '',
+    scopedSlots: {customRender: 'tags'}
   },
   {
     title: '',
@@ -101,10 +117,18 @@ export default {
 
       isLoadingTransportations: false,
       transportations: [],
-      addTransportationModalVisible: false
+      addTransportationModalVisible: false,
+
+      isLoadingMaterialOptions: false,
+      materialOptions: [],
+
+      isLoadingAspectOptions: false,
+      aspectOptions: []
     }
   },
   created() {
+    this.loadAspectOptions();
+    this.loadMaterialOptions();
     this.loadMaterials();
     this.loadCertifications();
     this.loadTransportations();
@@ -171,11 +195,15 @@ export default {
               dataIndex: 'water'
             },
             {
+              scopedSlots: {customRender: 'tags'},
+              width: 100
+            },
+            {
               scopedSlots: {customRender: 'actions'}
             }
           ],
           innerTableData: this.materialsTableData,
-          isLoading: this.isLoadingMaterials
+          isLoading: (this.isLoadingMaterials || this.isLoadingAspectOptions || this.isLoadingMaterialOptions)
         },
         // {
         //   section: 'Efficiency',
@@ -246,9 +274,46 @@ export default {
         //   actionButton: 'Add Feature'
         // }
       ];
+    },
+
+    hasBannedMaterials() {
+      let hasBannedMaterials = false;
+
+      _.each(this.materials, material => {
+        let m = _.find(this.materialOptions, {name: material.material});
+        if (m && m.banned) {
+          hasBannedMaterials = true;
+        }
+      });
+
+      return hasBannedMaterials;
     }
   },
   methods: {
+    loadAspectOptions() {
+      let vm = this;
+      vm.isLoadingAspectOptions = true;
+      axios.get(window.API_COMMON_BASE + '/aspects').then(r => {
+        vm.isLoadingAspectOptions = false;
+        vm.aspectOptions = r.data;
+      }).catch(e => {
+        console.log(e);
+        vm.$message.error('Error loading aspect options');
+      });
+    },
+
+    loadMaterialOptions() {
+      let vm = this;
+      vm.isLoadingMaterialOptions = true;
+      axios.get(window.API_COMMON_BASE + '/materials').then(r => {
+        vm.isLoadingMaterialOptions = false;
+        vm.materialOptions = r.data;
+      }).catch(e => {
+        console.log(e);
+        vm.$message.error('Error loading material dropdown options');
+      });
+    },
+
     loadMaterials() {
       let vm = this;
       vm.isLoadingMaterials = true;
@@ -334,6 +399,14 @@ export default {
 
     handleTransportationDeleted() {
       this.loadTransportations();
+    },
+
+    isMaterialBanned(material) {
+      if (this.materialOptions) {
+        let m = _.find(this.materialOptions, {name: material});
+        return m ? m.banned : false;
+      }
+      return false;
     }
   }
 }

@@ -627,13 +627,14 @@ export default {
 }
 
 .suggested-products-wrapper {
-  margin-top: 100px;
-  margin-bottom: 30px;
+  //margin-top: 100px;
+  margin-top: 70px;
+  //margin-bottom: 30px;
 }
 
 .page-inner-wrapper {
   .product-navbar {
-    margin-top: 60px;
+    margin-top: 10px;
     margin-bottom: 10px;
     //padding: 15px;
     //border: 1px solid #d9d9d9;
@@ -641,7 +642,7 @@ export default {
   }
 
   //margin-top: 20px;
-  margin-top: 50px;
+  //margin-top: 50px;
   margin-bottom: 80px;
 
   h2 {

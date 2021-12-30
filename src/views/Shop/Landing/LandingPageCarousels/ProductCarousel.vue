@@ -2,7 +2,7 @@
   <div>
     <div class="title">
       <div class="left">
-        <h2>Recommended Products</h2>
+        <h2>{{ carousel.name }}</h2>
       </div>
       <div class="right">
         <a-button @click.prevent="scrollLeft" type="default" shape="circle" icon="left" size="large"
@@ -11,68 +11,25 @@
       </div>
     </div>
 
-    <!-- Loading -->
-    <div v-if="isLoading">
-      <a-spin></a-spin>
-    </div>
-    <!-- / Loading -->
-
-    <!-- Loaded -->
-    <div v-if="!isLoading">
-      <a-alert message="No suggested products to show" v-if="suggestedProducts.length === 0" banner/>
+    <div>
+      <a-alert message="No products to show" v-if="products.length === 0" banner/>
 
       <div class="carousel-container" ref="carousel">
-        <div class="carousel-card" v-for="(suggestedProduct, i) in suggestedProducts" :key="i">
-          <suggested-product-card :product="suggestedProduct"></suggested-product-card>
+        <div class="carousel-card" v-for="(product, i) in products" :key="i">
+          <product-card :product="product"></product-card>
         </div>
       </div>
     </div>
-    <!-- / Loaded -->
   </div>
 </template>
 
 <script>
-import SuggestedProductCard from "./SuggestedProducts/SuggestedProductCard";
-import axios from 'axios';
-
+import ProductCard from "./ProductCarousel/ProductCard";
 export default {
-  name: "SuggestedProducts",
-  props: ['product'],
-  components: {SuggestedProductCard},
-  data() {
-    return {
-      isLoading: false,
-      suggestedProducts: []
-    }
-  },
-  watch: {
-    product() {
-      this.loadSuggestedProducts();
-    }
-  },
-  created() {
-    this.loadSuggestedProducts();
-  },
+  name: "ProductCarousel",
+  components: {ProductCard},
+  props: ['carousel'],
   methods: {
-    loadSuggestedProducts() {
-      let vm = this;
-
-      let id = this.product.id;
-      if (!id) {
-        id = this.product['_id'];
-      }
-
-      vm.isLoading = true;
-      axios.get(window.API_BASE + '/products/' + id + '/suggestions').then(r => {
-        vm.suggestedProducts = r.data;
-        vm.isLoading = false;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.$message.error('Error loading suggested products');
-      });
-    },
-
     scrollLeft() {
       let scrollStep = 400;
       let carousel = this.$refs['carousel'];
@@ -115,6 +72,11 @@ export default {
         });
       }
     }
+  },
+  computed: {
+    products() {
+      return this.carousel.shop_landing_carousel_products;
+    }
   }
 }
 </script>
@@ -126,6 +88,9 @@ export default {
 
   .left {
     flex-grow: 1;
+    h2 {
+      font-size: 25px;
+    }
   }
 
   .right {

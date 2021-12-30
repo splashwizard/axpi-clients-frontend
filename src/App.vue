@@ -47,6 +47,7 @@
                         :value="currentRefinement"
                         @focus="searchBarFocussed = true"
                         @pressEnter="$router.push('/shop')"
+                        @search="$router.push('/shop')"
                         @input="refine($event.currentTarget.value)"
                         placeholder="Search products..." style="width: 200px"/>
                     <span :hidden="!isSearchStalled">Loading...</span>
@@ -251,9 +252,10 @@
               <!--                            Option 10-->
               <!--                        </a-menu-item>-->
               <!--                    </a-sub-menu>-->
-              <a-menu-item key="shop" title="Shop">
-                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping"
-                        theme="filled"></a-icon>
+              <a-menu-item key="shop/landing" title="Shop">
+<!--                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping"-->
+<!--                        theme="filled"></a-icon>-->
+                <shop-icon></shop-icon>
                 <span v-if="!menuCollapsed">Shop</span>
               </a-menu-item>
               <!--            <a-menu-item key="developers" title="Developers">-->
@@ -295,6 +297,7 @@ import FeedbackPopup from "./components/FeedbackPopup";
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
 import ClickOutside from 'vue-click-outside'
 import AddSpecToBasketButtonAndModal from "./views/Shop/AddSpecToBasketButtonAndModal";
+import ShopIcon from "./components/Icons/ShopIcon";
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -327,6 +330,7 @@ const searchClient = typesenseInstantsearchAdapter.searchClient;
 
 export default {
   components: {
+    ShopIcon,
     HomeIcon,
     OrdersIcon,
     SuppliersIcon,
@@ -428,7 +432,7 @@ export default {
     },
 
     noPadding() {
-      return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Analytics'].includes(this.$route.name);
+      return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Analytics', 'Shop Landing'].includes(this.$route.name);
     },
 
     menuCollapsed() {

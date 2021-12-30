@@ -1,9 +1,17 @@
 <template>
-  <a-button :disabled="requested"
-            @click.prevent="requestQuote"
-            :loading="isSaving">
+  <a-dropdown-button :disabled="requested||isSaving"
+                     @click.prevent="requestQuote"
+                     :trigger="['click']">
     {{ buttonText }}
-  </a-button>
+
+    <a-icon slot="icon" type="down" />
+    <a-menu slot="overlay">
+      <a-menu-item key="1">
+        <a-icon type="clock-circle"/>
+        Create order window
+      </a-menu-item>
+    </a-menu>
+  </a-dropdown-button>
 </template>
 
 <script>
@@ -17,6 +25,10 @@ export default {
   },
   computed: {
     buttonText() {
+     if (this.isSaving) {
+         return 'Requesting Quote...';
+     }
+
       if (this.requested) {
         return 'Quote Requested';
       }

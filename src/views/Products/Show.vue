@@ -299,7 +299,7 @@
 
       <div class="page-section" ref="pricing-tab">
         <h2>PRICING</h2>
-        <pricing-tab :prices="prices"></pricing-tab>
+        <pricing-tab :prices="prices" :stocks="stocks"></pricing-tab>
       </div>
 
       <div class="page-section" ref="environment-tab">

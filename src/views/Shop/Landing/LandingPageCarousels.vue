@@ -45,7 +45,7 @@ export default {
 
 <style scoped>
 .carousels-wrapper {
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 </style>

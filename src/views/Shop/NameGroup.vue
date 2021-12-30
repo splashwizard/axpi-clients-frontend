@@ -221,7 +221,7 @@ export default {
       }
 
       if (stock && stock > 0) {
-        return stock + ' in stock and ready to ship.';
+        return stock + ' in stock and ready to ship';
       }
 
       return 'In stock and ready to ship';

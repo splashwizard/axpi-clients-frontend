@@ -12,17 +12,19 @@
       <a-table class="axpi-table"
                :expandIconAsCell="false"
                :expand-icon="getExpandIcon"
-               :expand-icon-column-index="2"
+               :expand-icon-column-index="3"
                :pagination="false" :columns="columns" :data-source="productsToShow">
 
         <template slot="checkbox">
-          <a-checkbox></a-checkbox>
+          <div class="checkbox-wrapper">
+            <a-checkbox></a-checkbox>
+          </div>
         </template>
 
         <a-table slot="expandedRowRender"
                  slot-scope="item"
                  :columns="innerColumns"
-                 :data-source="getPricesWithProductDetails(item)"
+                 :data-source="getPricesAndStockWithProductDetails(item)"
                  :pagination="false">
           <template slot="price" slot-scope="price">
             {{ formatCostInPence2dp({cost: price, cost_currency: 'USD'}) }}
@@ -57,9 +59,12 @@
               </div>
             </div>
           </template>
-          <template slot="availability">
-            <a-icon type="check-circle" theme="twoTone" two-tone-color="#52c41a"></a-icon>
-            <span class="availability-text">In stock and ready to ship</span>
+          <template slot="availability" slot-scope="availability, price">
+            <a-icon v-if="(price.stock && price.stock !== 0) || price.stock == null" type="check-circle" theme="twoTone"
+                    two-tone-color="#52c41a"></a-icon>
+            <a-icon v-if="price.stock !== null && price.stock === 0" type="close-circle" theme="twoTone"
+                    two-tone-color="#FF0000"></a-icon>
+            <span class="availability-text">{{ getStockText(price.stock) }}</span>
           </template>
         </a-table>
 
@@ -97,9 +102,9 @@ import {mapActions, mapGetters} from "vuex";
 
 const columns = [
   {
-    title: '',
+    title: 'Compare',
     scopedSlots: {customRender: 'checkbox'},
-    width: 30
+    width: 100
   },
   // {
   //   title: 'Name',
@@ -120,6 +125,10 @@ const columns = [
   {
     title: '',
     scopedSlots: {customRender: 'actions'}
+  },
+  {
+    title: 'Pricing',
+    width: 80
   }
 ];
 
@@ -206,6 +215,18 @@ export default {
       setProductQuantity: 'setProductQuantity'
     }),
 
+    getStockText(stock) {
+      if (stock === 0) {
+        return 'Out of stock';
+      }
+
+      if (stock && stock > 0) {
+        return stock + ' in stock and ready to ship.';
+      }
+
+      return 'In stock and ready to ship';
+    },
+
     showMore() {
       this.isShowingMore = true;
     },
@@ -258,11 +279,18 @@ export default {
       return this.group.prices[productId];
     },
 
-    getPricesWithProductDetails(product) {
+    getPricesAndStockWithProductDetails(product) {
       return _.map(this.group.prices[product.id], price => ({
         ...price,
-        catalogCode: product.catalogCode
+        catalogCode: product.catalogCode,
+        stock: this.getStockForProduct(product.id, price.supplier_id)
       }))
+    },
+
+    getStockForProduct(productId, supplierId) {
+      let stocks = this.group.stocks[productId];
+      let stock = _.find(stocks, {supplier_id: supplierId});
+      return stock !== undefined ? stock.stock : null;
     },
 
     getPriceRange(productId) {
@@ -344,13 +372,13 @@ export default {
 
     getExpandIcon({expanded, record, onExpand}) {
       return (
-          <a-button style="font-weight: 500;"
-              type="link"
-              {...{
-                on: {
-                  click: onExpand.bind(this, [expanded, record])
-                }
-              }}
+          <a-button style="font-weight: 500; padding-left: 0; padding-right; 0;"
+                    type="link"
+                    {...{
+                      on: {
+                        click: onExpand.bind(this, [expanded, record])
+                      }
+                    }}
           >
             <span>{expanded ? 'Hide' : 'Expand'}</span>
             <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? 'up' : 'down'}></a-icon>
@@ -368,7 +396,7 @@ export default {
   }
 
   tr td:last-child {
-    text-align: right;
+    //text-align: right;
   }
 
   .actions-wrapper {
@@ -416,5 +444,9 @@ export default {
   .availability-text {
     margin-left: 10px;
   }
+}
+
+.checkbox-wrapper {
+  //text-align: center;
 }
 </style>

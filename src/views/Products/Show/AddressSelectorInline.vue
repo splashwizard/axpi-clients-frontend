@@ -6,7 +6,7 @@
         <a-icon type="environment"/>
       </div>
       <div class="right">
-        {{ selectedAddress ? formatAddress(selectedAddress) : 'No address selected' }}
+        {{ selectedAddress ? formatAddressShort(selectedAddress, 'Deliver to ' + user.client.name + ' - ') : 'No address selected' }}
       </div>
     </div>
     <!-- / Selected address -->
@@ -108,6 +108,10 @@ export default {
   computed: {
     ...mapGetters('shop', {
       selectedAddress: 'selectedAddress'
+    }),
+
+    ...mapGetters('auth', {
+      user: 'user'
     })
   },
   methods: {

@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.607c716e.css"
   },
   {
-    "revision": "0fb690bcafdd296311c6",
+    "revision": "a05d4e2159b825fbb928",
     "url": "/css/app.67d73bf2.css"
   },
   {
@@ -60,7 +60,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/roche.97f67bed.css"
   },
   {
-    "revision": "5e1ff87bb2dff5ee6cb2",
+    "revision": "9142010d5f47bcbe5fd9",
     "url": "/css/shop.0cfd3888.css"
   },
   {
@@ -72,8 +72,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/view-cluster.887a5d43.css"
   },
   {
-    "revision": "b08d8ca4da9e39a76d3e",
-    "url": "/css/view-product.8b504267.css"
+    "revision": "82a4f5cc0b305bcb3356",
+    "url": "/css/view-product.f0f7dddb.css"
   },
   {
     "revision": "4c462fb1275d02752fa4",
@@ -158,6 +158,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "48d06be204a66c7e5348becc12f5ec08",
     "url": "/img/icons.zip"
+  },
+  {
+    "revision": "abd3304e890ec8877f52be22178566b5",
+    "url": "/img/leaf.jpg"
   },
   {
     "revision": "f631575f789d5e7597c1bcbe7edccc29",
@@ -312,7 +316,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "dce2208e6210def36c4f78db061911eb",
+    "revision": "ed4ff4f8aef47a515f15e980136f2bac",
     "url": "/index.html"
   },
   {
@@ -328,8 +332,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics.c1b956dc.js"
   },
   {
-    "revision": "0fb690bcafdd296311c6",
-    "url": "/js/app.f421fcbe.js"
+    "revision": "a05d4e2159b825fbb928",
+    "url": "/js/app.70a9a972.js"
   },
   {
     "revision": "867a60c8dc7a89a0767f",
@@ -384,8 +388,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/roche.d3a2c81f.js"
   },
   {
-    "revision": "5e1ff87bb2dff5ee6cb2",
-    "url": "/js/shop.d0ee69f2.js"
+    "revision": "9142010d5f47bcbe5fd9",
+    "url": "/js/shop.205df26f.js"
   },
   {
     "revision": "34e5bb77ed2beb2acb3a",
@@ -400,8 +404,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/view-cluster.7008c3f6.js"
   },
   {
-    "revision": "b08d8ca4da9e39a76d3e",
-    "url": "/js/view-product.02e5b77c.js"
+    "revision": "82a4f5cc0b305bcb3356",
+    "url": "/js/view-product.a26b5330.js"
   },
   {
     "revision": "4c462fb1275d02752fa4",

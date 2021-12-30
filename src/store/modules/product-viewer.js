@@ -17,6 +17,9 @@ export const state = {
     prices: [],
     isLoadingPrices: false,
 
+    stocks: [],
+    isLoadingStocks: false,
+
     selectedPrice: null,
 
     view: 'view' // view or edit
@@ -79,6 +82,18 @@ export const mutations = {
         state.prices = prices;
     },
 
+    START_LOADING_STOCKS(state) {
+        state.isLoadingStocks = true;
+    },
+
+    STOP_LOADING_STOCKS(state) {
+        state.isLoaadingStocks = false;
+    },
+
+    SET_STOCKS(state, stocks) {
+        state.stocks = stocks;
+    },
+
     SET_SELECTED_PRICE(state, price) {
         state.selectedPrice = price;
     }
@@ -95,6 +110,14 @@ export const getters = {
 
     isLoadingDetails: (state) => {
         return state.isLoadingDetails;
+    },
+
+    isLoadingPrices: (state) => {
+        return state.isLoadingPrices;
+    },
+
+    isLoadingStocks: (state) => {
+        return state.isLoadingStocks;
     },
 
     product: (state) => {
@@ -142,8 +165,22 @@ export const getters = {
         return state.prices;
     },
 
+    stocks: (state) => {
+        return state.stocks;
+    },
+
     selectedPrice: (state) => {
         return state.selectedPrice;
+    },
+
+    stockForSelectedPrice: (state) => {
+        if (!state.selectedPrice) {
+            return null;
+        }
+        let stock = _.find(state.stocks, {
+            supplier_id: state.selectedPrice.supplier_id
+        });
+        return stock;
     }
 };
 
@@ -154,6 +191,7 @@ export const actions = {
         commit('SET_DOCUMENTS', []);
         commit('SET_DETAILS', []);
         commit('SET_PRICES', []);
+        commit('SET_STOCKS', []);
         commit('SET_SELECTED_PRICE', null);
         commit('SET_VIEW', 'view');
         commit('SET_PRODUCT', null);
@@ -163,6 +201,7 @@ export const actions = {
             dispatch('loadDocuments');
             dispatch('loadDetails');
             dispatch('loadPrices');
+            dispatch('loadStocks');
         }).catch(e => {
             commit('STOP_LOADING');
             this._vm.$message.error('Error loading order');
@@ -190,11 +229,27 @@ export const actions = {
 
             let cheapestPrice = _.first(_.orderBy(prices, 'price'));
             if (cheapestPrice) {
-               commit('SET_SELECTED_PRICE', cheapestPrice);
+                commit('SET_SELECTED_PRICE', cheapestPrice);
             }
         }).catch(e => {
             commit('STOP_LOADING_PRICES');
             this._vm.$message.error('Error loading prices');
+            console.log(e);
+        });
+    },
+
+    loadStocks({commit, getters}) {
+        let product = getters.product;
+        let productId = product['id'] ? product['id'] : product['_id'];
+
+        commit('START_LOADING_STOCKS');
+        axios.get(window.API_BASE + '/products/' + productId + '/stocks').then(r => {
+            let stocks = r.data;
+            commit('STOP_LOADING_STOCKS');
+            commit('SET_STOCKS', stocks);
+        }).catch(e => {
+            commit('STOP_LOADING_STOCKS');
+            this._vm.$message.error('Error loading stocks');
             console.log(e);
         });
     },

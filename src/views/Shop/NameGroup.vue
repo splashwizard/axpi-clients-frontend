@@ -60,9 +60,9 @@
             </div>
           </template>
           <template slot="availability" slot-scope="availability, price">
-            <a-icon v-if="(price.stock && price.stock !== 0) || price.stock == null" type="check-circle" theme="twoTone"
+            <a-icon v-if="isInStock(price.stock)" type="check-circle" theme="twoTone"
                     two-tone-color="#52c41a"></a-icon>
-            <a-icon v-if="price.stock !== null && price.stock === 0" type="close-circle" theme="twoTone"
+            <a-icon v-if="isOutOfStock(price.stock)" type="close-circle" theme="twoTone"
                     two-tone-color="#FF0000"></a-icon>
             <span class="availability-text">{{ getStockText(price.stock) }}</span>
           </template>
@@ -98,6 +98,7 @@ import axios from 'axios';
 
 const _ = require('lodash');
 import Orders from "../../mixins/Orders";
+import StockManagement from "../../mixins/StockManagement";
 import {mapActions, mapGetters} from "vuex";
 
 const columns = [
@@ -160,7 +161,7 @@ const innerColumns = [
 export default {
   name: "NameGroup",
   props: ['name', 'product', 'quantities'],
-  mixins: [Orders],
+  mixins: [Orders, StockManagement],
   created() {
     if (this.name) {
       this.fetch();
@@ -214,18 +215,6 @@ export default {
       decrementProductQuantity: 'decrementProductQuantity',
       setProductQuantity: 'setProductQuantity'
     }),
-
-    getStockText(stock) {
-      if (stock === 0) {
-        return 'Out of stock';
-      }
-
-      if (stock && stock > 0) {
-        return stock + ' in stock and ready to ship';
-      }
-
-      return 'In stock and ready to ship';
-    },
 
     showMore() {
       this.isShowingMore = true;

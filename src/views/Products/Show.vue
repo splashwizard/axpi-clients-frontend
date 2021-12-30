@@ -1,6 +1,7 @@
 <template>
   <div class="product-show">
-    <loading-screen :is-loading="isLoading||isLoadingDocuments||isLoadingDetails||isSavingDescription"></loading-screen>
+    <loading-screen
+        :is-loading="isLoading||isLoadingDocuments||isLoadingDetails||isSavingDescription||isLoadingPrices"></loading-screen>
 
     <a-page-header v-if="product && (fromShop||fromBasket)" :title="product.name"
                    @back="handleBackButton"
@@ -164,18 +165,33 @@
                       cost: selectedPrice.price,
                       cost_currency: 'USD'
                     }) : '-'
-                  }}</span> (Used)
+                  }}</span>
+                ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency: 'USD'}) }}/{{ unit }})
               </div>
               <div class="right">
+                <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">
                 32kg CO2e
               </div>
             </div>
             <!-- / Top row -->
 
-            <!-- Delivery by -->
-            <div class="delivery-by">
-              Delivery by Mon, Jan 10th
+            <!-- Stock -->
+            <div class="stock-wrapper">
+              <!--              <a-icon v-if="isInStock(stockForSelectedPrice)" type="check-circle" theme="twoTone"-->
+              <!--                      two-tone-color="#52c41a"></a-icon>-->
+              <!--              <a-icon v-if="isOutOfStock(stockForSelectedPrice)" type="close-circle" theme="twoTone"-->
+              <!--                      two-tone-color="#FF0000"></a-icon>-->
+              <span class="stock-text"
+                    :class="{'in-stock': isInStock(stockForSelectedPrice.stock), 'out-of-stock': isOutOfStock(stockForSelectedPrice.stock)}">{{
+                  getStockText(stockForSelectedPrice.stock, false)
+                }}</span>
             </div>
+            <!-- / Stock -->
+
+            <!-- Delivery by -->
+            <!--            <div class="delivery-by">-->
+            <!--              Delivery by Mon, Jan 10th-->
+            <!--            </div>-->
             <!-- / Delivery by -->
 
             <!-- General details -->
@@ -328,6 +344,7 @@ import Orders from "../../mixins/Orders";
 import EnvironmentTab from "./Show/EnvironmentTab";
 import PricingTab from "./Show/PricingTab";
 import SuggestedProducts from "../../components/Products/SuggestedProducts";
+import StockManagement from "../../mixins/StockManagement";
 
 const _ = require('lodash');
 
@@ -343,7 +360,7 @@ export default {
     PricingTab,
     SuggestedProducts
   },
-  mixins: [Orders],
+  mixins: [Orders, StockManagement],
   data() {
     return {
       descriptionShowMore: false,
@@ -379,9 +396,13 @@ export default {
       isLoading: 'isLoading',
       isLoadingDocuments: 'isLoadingDocuments',
       isLoadingDetails: 'isLoadingDetails',
+      isLoadingPrices: 'isLoadingPrices',
+      isLoadingStocks: 'isLoadingStocks',
       view: 'view',
       prices: 'prices',
-      selectedPrice: 'selectedPrice'
+      stocks: 'stocks',
+      selectedPrice: 'selectedPrice',
+      stockForSelectedPrice: 'stockForSelectedPrice'
     }),
 
     ...mapGetters('shop', {
@@ -459,7 +480,7 @@ export default {
     unit() {
       if (this.product.normalisedQuantity) {
         if (this.product.normalisedQuantity.normalisedUnitBase === 'dimensionless') {
-          return 'count';
+          return 'unit';
         }
         return this.product.normalisedQuantity.normalisedUnitBase;
       }
@@ -773,7 +794,13 @@ export default {
     }
 
     .right {
+      align-items: center;
+      display: flex;
       flex-shrink: 1;
+
+      .leaf {
+        margin-right: 6px;
+      }
     }
   }
 
@@ -801,6 +828,28 @@ export default {
       .right {
         flex: 1;
       }
+    }
+  }
+
+  .stock-wrapper {
+    //margin-top: 23px;
+    display: flex;
+    align-items: center;
+
+    .stock-text {
+      font-size: 20px;
+
+      &.in-stock {
+        color: #52c41a;
+      }
+
+      &.out-of-stock {
+        color: #FF0000;
+      }
+    }
+
+    .anticon {
+      margin-right: 10px;
     }
   }
 

@@ -182,8 +182,8 @@
               <!--              <a-icon v-if="isOutOfStock(stockForSelectedPrice)" type="close-circle" theme="twoTone"-->
               <!--                      two-tone-color="#FF0000"></a-icon>-->
               <span class="stock-text"
-                    :class="{'in-stock': isInStock(stockForSelectedPrice.stock), 'out-of-stock': isOutOfStock(stockForSelectedPrice.stock)}">{{
-                  getStockText(stockForSelectedPrice.stock, false)
+                    :class="{'in-stock': isInStock(stockForSelectedPrice ? stockForSelectedPrice.stock : null), 'out-of-stock': isOutOfStock(stockForSelectedPrice ? stockForSelectedPrice.stock : null)}">{{
+                  getStockText(stockForSelectedPrice ? stockForSelectedPrice.stock : null, false)
                 }}</span>
             </div>
             <!-- / Stock -->

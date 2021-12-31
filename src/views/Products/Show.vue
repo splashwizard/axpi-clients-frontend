@@ -799,6 +799,10 @@ export default {
       display: flex;
       flex-shrink: 1;
 
+      min-width: 110px;
+      text-align: right;
+      justify-content: flex-end;
+
       .leaf {
         margin-right: 6px;
       }

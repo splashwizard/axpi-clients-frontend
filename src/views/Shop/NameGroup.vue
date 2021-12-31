@@ -26,8 +26,8 @@
                  :columns="innerColumns"
                  :data-source="getPricesAndStockWithProductDetails(item)"
                  :pagination="false">
-          <template slot="price" slot-scope="price">
-            {{ formatCostInPence2dp({cost: price, cost_currency: 'USD'}) }}
+          <template slot="price" slot-scope="price, record">
+            {{ formatCostInPence2dp({cost: price, cost_currency: record.price_currency}) }}
           </template>
           <template slot="actions" slot-scope="actions, row">
             <div class="actions-wrapper">
@@ -74,9 +74,9 @@
           </router-link>
         </template>
 
-        <template slot="price" slot-scope="price, row">
-          {{ getPriceRange(row.id) }}
-        </template>
+<!--        <template slot="price" slot-scope="price, row">-->
+<!--          {{ getPriceRange(row.id) }}-->
+<!--        </template>-->
       </a-table>
 
       <div class="show-more-toggle" v-if="canShowMore">
@@ -282,34 +282,34 @@ export default {
       return stock !== undefined ? stock.stock : null;
     },
 
-    getPriceRange(productId) {
-      let prices = this.group.prices[productId];
-      if (prices && prices.length) {
-        let ordered = _.orderBy(prices, 'price');
-        let minPrice = _.first(ordered);
-        let maxPrice = _.last(ordered);
-
-        if (minPrice !== maxPrice) {
-          let minPriceFormatted = this.formatCostInPence2dp({
-            cost: minPrice.price,
-            cost_currency: 'USD'
-          });
-
-          let maxPriceFormatted = this.formatCostInPence2dp({
-            cost: maxPrice.price,
-            cost_currency: 'USD'
-          });
-
-          return minPriceFormatted + ' - ' + maxPriceFormatted;
-        } else {
-          return this.formatCostInPence2dp({
-            cost: minPrice.price,
-            cost_currency: 'USD'
-          });
-        }
-      }
-      return '-';
-    },
+    // getPriceRange(productId) {
+    //   let prices = this.group.prices[productId];
+    //   if (prices && prices.length) {
+    //     let ordered = _.orderBy(prices, 'price');
+    //     let minPrice = _.first(ordered);
+    //     let maxPrice = _.last(ordered);
+    //
+    //     if (minPrice !== maxPrice) {
+    //       let minPriceFormatted = this.formatCostInPence2dp({
+    //         cost: minPrice.price,
+    //         cost_currency: 'USD'
+    //       });
+    //
+    //       let maxPriceFormatted = this.formatCostInPence2dp({
+    //         cost: maxPrice.price,
+    //         cost_currency: 'USD'
+    //       });
+    //
+    //       return minPriceFormatted + ' - ' + maxPriceFormatted;
+    //     } else {
+    //       return this.formatCostInPence2dp({
+    //         cost: minPrice.price,
+    //         cost_currency: 'USD'
+    //       });
+    //     }
+    //   }
+    //   return '-';
+    // },
 
     addToBasket(record, price) {
       let prices = this.prices[record['id']];

@@ -31,6 +31,17 @@
         </template>
       </a-table>
 
+      <template slot="measure" slot-scope="measure, record">
+        <a-spin v-if="record.isLoading"></a-spin>
+        <span v-if="record.section === 'Materials' && !record.isLoading">
+        <a-tag color="blue">{{ totalCo2e }}kg CO2e</a-tag>
+        <a-tag color="blue">{{ totalWater }}L Water</a-tag>
+        </span>
+        <span v-else>
+          {{ measure }}
+        </span>
+      </template>
+
       <template slot="tags" slot-scope="tags, record">
         <a-tag color="#000" v-if="hasBannedMaterials && record.section === 'Materials'">Has Banned Materials</a-tag>
       </template>
@@ -88,7 +99,8 @@ const columns = [
   },
   {
     title: 'Measure',
-    dataIndex: 'measure'
+    dataIndex: 'measure',
+    scopedSlots: {customRender: 'measure'}
   },
   {
     title: '',
@@ -144,6 +156,14 @@ export default {
       product: 'product',
       view: 'view'
     }),
+
+    totalCo2e() {
+      return _.sum(_.map(this.materials, 'co2e'));
+    },
+
+    totalWater() {
+      return _.sum(_.map(this.materials, 'water'));
+    },
 
     productId() {
       return this.product['_id'];

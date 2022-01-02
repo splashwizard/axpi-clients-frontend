@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{'carousel-margin-bottom': carouselImages.length < 2}">
     <div v-if="isLoading">
       <a-spin></a-spin>
     </div>
@@ -54,5 +54,9 @@ export default {
   object-fit: cover;
   margin-left: auto;
   margin-right: auto;
+}
+
+.carousel-margin-bottom {
+  margin-bottom: 30px;
 }
 </style>

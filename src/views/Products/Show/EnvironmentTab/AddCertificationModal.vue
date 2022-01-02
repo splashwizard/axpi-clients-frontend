@@ -7,8 +7,9 @@
     <a-form layout="vertical">
       <a-form-item label="Certification">
         <a-select v-model="form.name"
+                  :disabled="isLoadingCertificationOptions"
                   show-search size="large">
-          <a-select-option v-for="option in certificationOptions"
+          <a-select-option v-for="option in certificationDropdownOptions"
                            :key="option"
                            :value="option">
             {{ option }}
@@ -20,23 +21,29 @@
 </template>
 
 <script>
+const _ = require('lodash');
 import axios from 'axios';
 
 export default {
   name: "AddCertificationModal",
-  props: ['visible', 'productId'],
+  props: ['visible', 'productId', 'isLoadingCertificationOptions', 'certificationOptions'],
   data() {
     return {
       isSaving: false,
 
       form: {
         name: null
-      },
-
-      certificationOptions: ['Certification 1', 'Certification 2', 'Certification 3']
+      }
     }
   },
   computed: {
+    certificationDropdownOptions() {
+      if (this.certificationOptions) {
+        return _.map(this.certificationOptions, 'name');
+      }
+      return [];
+    },
+
     showModal: {
       get() {
         return this.visible;

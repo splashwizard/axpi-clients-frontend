@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.3de28c39aed4f154c15d5cec0f7463a2.js"
+  "/precache-manifest.cd8bd03d7057638b4c15645fd798e737.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "Axiom"});

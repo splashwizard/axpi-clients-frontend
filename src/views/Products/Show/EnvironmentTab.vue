@@ -62,6 +62,8 @@
 
     <add-certification-modal :product-id="productId"
                              :visible="addCertificationModalVisible"
+                             :is-loading-certification-options="isLoadingCertificationOptions"
+                             :certification-options="certificationOptions"
                              @certification-added="handleCertificationAdded"
                              @close-modal="closeAddCertificationModal"></add-certification-modal>
   </div>
@@ -123,12 +125,16 @@ export default {
       materialOptions: [],
 
       isLoadingAspectOptions: false,
-      aspectOptions: []
+      aspectOptions: [],
+
+      isLoadingCertificationOptions: false,
+      certificationOptions: []
     }
   },
   created() {
     this.loadAspectOptions();
     this.loadMaterialOptions();
+    this.loadCertificationOptions();
     this.loadMaterials();
     this.loadCertifications();
     this.loadTransportations();
@@ -268,7 +274,7 @@ export default {
             }
           ],
           innerTableData: this.certificationsTableData,
-          isLoading: this.isLoadingCertifications
+          isLoading: (this.isLoadingCertifications || this.isLoadingCertificationOptions)
         },
         // {
         //   section: 'Features',
@@ -313,6 +319,18 @@ export default {
       }).catch(e => {
         console.log(e);
         vm.$message.error('Error loading material dropdown options');
+      });
+    },
+
+    loadCertificationOptions() {
+      let vm = this;
+      vm.isLoadingCertificationOptions = true;
+      axios.get(window.API_COMMON_BASE + '/certifications').then(r => {
+        vm.isLoadingCertificationOptions = false;
+        vm.certificationOptions = r.data;
+      }).catch(e => {
+        console.log(e);
+        vm.$message.error('Error loading certification options');
       });
     },
 

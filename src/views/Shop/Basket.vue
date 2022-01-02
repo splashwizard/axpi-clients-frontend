@@ -78,17 +78,29 @@
             </div>
 
             <div slot="supplier" slot-scope="supplier, record">
-              <a-dropdown>
-                <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-                  {{ record.selectedPrice ? record.selectedPrice.supplier_name : 'Select supplier' }}
-                  <a-icon type="down"/>
-                </a>
-                <a-menu slot="overlay">
-                  <a-menu-item v-for="(price, i) in record.prices" :key="i">
-                    <a href="#" @click.prevent="() => selectPrice(record, price)">{{ price.supplier_name }}</a>
-                  </a-menu-item>
-                </a-menu>
-              </a-dropdown>
+              <a-select :value="record.selectedPrice.id"
+                        option-filter-prop="children"
+                        :filter-option="filterOption"
+                        show-search
+                        @change="(e) => selectPriceById(record, e)"
+                        style="width: 200px">
+                <a-select-option v-for="(price, i) in record.prices"
+                                 :value="price.id"
+                                 :key="i">
+                  {{ price.supplier_name }}
+                </a-select-option>
+              </a-select>
+<!--              <a-dropdown>-->
+<!--                <a class="ant-dropdown-link" @click="e => e.preventDefault()">-->
+<!--                  {{ record.selectedPrice ? record.selectedPrice.supplier_name : 'Select supplier' }}-->
+<!--                  <a-icon type="down"/>-->
+<!--                </a>-->
+<!--                <a-menu slot="overlay">-->
+<!--                  <a-menu-item v-for="(price, i) in record.prices" :key="i">-->
+<!--                    <a href="#" @click.prevent="() => selectPrice(record, price)">{{ price.supplier_name }}</a>-->
+<!--                  </a-menu-item>-->
+<!--                </a-menu>-->
+<!--              </a-dropdown>-->
             </div>
 
             <div slot="cost" slot-scope="cost, record">
@@ -146,6 +158,7 @@ import Orders from "../../mixins/Orders";
 import {mapGetters, mapActions} from 'vuex';
 import OptimiseBasket from "./Basket/OptimiseBasket";
 import RequestQuoteButton from "./Basket/RequestQuoteButton";
+const _ = require('lodash');
 
 const innerColumns = [
   {title: 'Supplier', dataIndex: 'supplier_name', key: 'supplier_name'},
@@ -220,6 +233,12 @@ export default {
       updateBasketSelectedPrice: 'updateBasketSelectedPrice'
     }),
 
+    filterOption(input, option) {
+      return (
+          option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
+
     getProductPageUrl(product) {
       return '/products/' + product['id'] + '?fromBasket=1';
     },
@@ -238,6 +257,13 @@ export default {
     selectPrice(record, price) {
       this.updateBasketSelectedPrice({
         selectedPrice: price,
+        basketItem: record
+      });
+    },
+
+    selectPriceById(record, priceId) {
+      this.updateBasketSelectedPrice({
+        selectedPrice: _.find(record.prices, {id: priceId}),
         basketItem: record
       });
     }

@@ -232,6 +232,7 @@ export default {
       if (item['product'] && item['product']['imageURLs'] && item['product']['imageURLs'].length) {
         return item['product']['imageURLs'][0];
       }
+      return '/img/icons/basket-order-icon.png';
     },
 
     selectPrice(record, price) {

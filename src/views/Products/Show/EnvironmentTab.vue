@@ -147,6 +147,8 @@ export default {
       return _.map(this.materials, material => {
         return {
           weight_formatted: (material.weight && material.weight_unit) ? (material.weight + ' ' + material.weight_unit) : '-',
+          co2e_formatted: (material.co2e) ? (material.co2e + ' kg') : '-',
+          water_formatted: (material.water) ? (material.water + ' kg') : '-',
           ...material
         };
       });
@@ -188,11 +190,11 @@ export default {
             },
             {
               title: 'CO2e',
-              dataIndex: 'CO2e'
+              dataIndex: 'co2e_formatted'
             },
             {
               title: 'Water',
-              dataIndex: 'water'
+              dataIndex: 'water_formatted'
             },
             {
               scopedSlots: {customRender: 'tags'},

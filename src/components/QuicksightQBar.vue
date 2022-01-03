@@ -67,7 +67,7 @@ export default {
   display: flex;
 
   #q-bar-embedding-container {
-    padding-top: 8px;
+    //padding-top: 8px;
     border: 0 !important;
     flex-grow: 1;
     width: 100%;
@@ -76,6 +76,7 @@ export default {
     .quicksight-embedding-iframe {
       width: 100% !important;
       height: 100% !important;
+      padding-top: 9px !important;
     }
   }
 }

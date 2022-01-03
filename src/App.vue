@@ -40,7 +40,9 @@
               <!--            </a-input>-->
               <!--              <a-input-search placeholder="Search products..." style="width: 200px" @search="onSearch"/>-->
 
-              <div class="search-bar-inner">
+
+              <!-- eCom search bar -->
+              <div class="search-bar-inner" v-if="$route.path !== '/analytics'">
                 <ais-search-box placeholder="">
                   <template v-slot="{ currentRefinement, isSearchStalled, refine }">
                     <a-input-search
@@ -55,8 +57,14 @@
                 </ais-search-box>
 
                 <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
-
               </div>
+              <!-- / eCom search bar -->
+
+              <!-- Amazon Q -->
+              <div class="search-bar-inner" v-if="$route.path === '/analytics'">
+                <quicksight-q-bar></quicksight-q-bar>
+              </div>
+              <!-- / Amazon Q -->
 
               <div class="searchResults"
                    v-if="shouldShowSearchResults">
@@ -298,6 +306,7 @@ import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
 import ClickOutside from 'vue-click-outside'
 import AddSpecToBasketButtonAndModal from "./views/Shop/AddSpecToBasketButtonAndModal";
 import ShopIcon from "./components/Icons/ShopIcon";
+import QuicksightQBar from "./components/QuicksightQBar";
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -330,6 +339,7 @@ const searchClient = typesenseInstantsearchAdapter.searchClient;
 
 export default {
   components: {
+    QuicksightQBar,
     ShopIcon,
     HomeIcon,
     OrdersIcon,

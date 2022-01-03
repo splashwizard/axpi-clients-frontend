@@ -220,7 +220,7 @@ export default {
           title: 'Cost',
           dataIndex: 'cost',
           scopedSlots: {customRender: "cost"},
-          width: 160
+          width: 180
         },
         {
           title: 'CO2e',

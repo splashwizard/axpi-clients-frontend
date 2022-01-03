@@ -67,6 +67,7 @@ export default {
   display: flex;
 
   #q-bar-embedding-container {
+    padding-top: 8px;
     border: 0 !important;
     flex-grow: 1;
     width: 100%;

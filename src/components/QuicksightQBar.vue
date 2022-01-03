@@ -1,6 +1,6 @@
 <template>
   <div class="quicksight-q-bar-wrapper">
-    <a-spin v-if="isLoading"></a-spin>
+<!--    <a-spin v-if="isLoading"></a-spin>-->
     <div id="q-bar-embedding-container"></div>
   </div>
 </template>

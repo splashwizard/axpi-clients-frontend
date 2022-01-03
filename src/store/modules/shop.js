@@ -405,7 +405,11 @@ export const actions = {
             });
         }).catch(e => {
             console.log(e);
-            this._vm.$message.error('Error loading prices for order');
+            commit('ADD_TRUEPRICES_TO_ORDER', {
+                order: order,
+                prices: []
+            });
+            // this._vm.$message.error('Error loading prices for order');
         });
     },
 

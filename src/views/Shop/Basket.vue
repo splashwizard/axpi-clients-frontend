@@ -137,7 +137,7 @@
               <a-spin v-if="record.isLoadingPrices" size="small"></a-spin>
               <span v-else>
                 <span v-if="getTotalCo2e(record)">{{ getTotalCo2e(record) }} kg</span>
-                <span v-else>Unknown</span>
+                <a-tag color="red" v-else>Unknown</a-tag>
               </span>
             </div>
 

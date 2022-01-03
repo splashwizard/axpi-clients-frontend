@@ -135,7 +135,8 @@
             <div slot="co2e" slot-scope="co2e, record">
               <a-spin v-if="record.isLoadingPrices" size="small"></a-spin>
               <span v-else>
-              {{ getTotalCo2e(record) }} kg
+                <span v-if="getTotalCo2e(record)">{{ getTotalCo2e(record) }} kg</span>
+                <span v-else>Unknown</span>
               </span>
             </div>
 
@@ -273,13 +274,14 @@ export default {
     },
 
     getTotalCo2e(item) {
+      let co2e = 0;
       if (item.itemType === 'product' && item.selectedPrice && item.selectedPrice.co2e) {
-        return Math.round((item.quantity * item.selectedPrice.co2e) * 100) / 100;
+        co2e = Math.round((item.quantity * item.selectedPrice.co2e) * 100) / 100;
       }
       if (item.selectedPrice && item.selectedPrice.co2e) {
-        return Math.round(item.selectedPrice.co2e * 100) / 100;
+        co2e = Math.round(item.selectedPrice.co2e * 100) / 100;
       }
-      return 0;
+      return co2e ? co2e : 0;
     },
 
     filterOption(input, option) {

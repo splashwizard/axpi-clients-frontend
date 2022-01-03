@@ -20,9 +20,11 @@
           >
             <div slot="name" slot-scope="name, record">
               <router-link v-if="record.itemType == 'product'"
-                  :to="getProductPageUrl(record)">{{ name }}</router-link>
+                           :to="getProductPageUrl(record)">{{ name }}
+              </router-link>
               <router-link v-if="record.itemType == 'order'"
-                           :to="getOrderUrl(record)">{{ name }}</router-link>
+                           :to="getOrderUrl(record)">{{ name }}
+              </router-link>
               <span v-if="record.itemType == 'specification'">
                 {{ name }}
               </span>
@@ -98,17 +100,17 @@
                 </a-select-option>
               </a-select>
               <span v-if="!record.prices">-</span>
-<!--              <a-dropdown>-->
-<!--                <a class="ant-dropdown-link" @click="e => e.preventDefault()">-->
-<!--                  {{ record.selectedPrice ? record.selectedPrice.supplier_name : 'Select supplier' }}-->
-<!--                  <a-icon type="down"/>-->
-<!--                </a>-->
-<!--                <a-menu slot="overlay">-->
-<!--                  <a-menu-item v-for="(price, i) in record.prices" :key="i">-->
-<!--                    <a href="#" @click.prevent="() => selectPrice(record, price)">{{ price.supplier_name }}</a>-->
-<!--                  </a-menu-item>-->
-<!--                </a-menu>-->
-<!--              </a-dropdown>-->
+              <!--              <a-dropdown>-->
+              <!--                <a class="ant-dropdown-link" @click="e => e.preventDefault()">-->
+              <!--                  {{ record.selectedPrice ? record.selectedPrice.supplier_name : 'Select supplier' }}-->
+              <!--                  <a-icon type="down"/>-->
+              <!--                </a>-->
+              <!--                <a-menu slot="overlay">-->
+              <!--                  <a-menu-item v-for="(price, i) in record.prices" :key="i">-->
+              <!--                    <a href="#" @click.prevent="() => selectPrice(record, price)">{{ price.supplier_name }}</a>-->
+              <!--                  </a-menu-item>-->
+              <!--                </a-menu>-->
+              <!--              </a-dropdown>-->
             </div>
 
             <div slot="cost" slot-scope="cost, record">
@@ -116,17 +118,24 @@
               <span v-else>
               {{
                   record.selectedPrice ? formatCostInPence2dp({
-                    cost: record.selectedPrice.price,
+                    cost: getPriceToShow(record.selectedPrice.price, record.quantity, record.itemType),
                     cost_currency: 'USD'
                   }) : '-'
                 }}
               </span>
               <a-tag v-if="!record.isLoadingPrices && record.prices && record.itemType !== 'product'"
-                  color="blue" style="margin-left: 5px;">Suggested</a-tag>
+                     color="blue" style="margin-left: 5px;">Suggested
+              </a-tag>
             </div>
 
-            <div slot="co2e">
-              -
+            <div slot="co2e" slot-scope="co2e, record">
+              <a-spin v-if="record.isLoadingCo2e" size="small"></a-spin>
+              <span v-if="getTotalCo2e(record) && !record.isLoadingCo2e">
+                {{ getTotalCo2e(record) }} kg
+              </span>
+              <span v-if="!getTotalCo2e(record) && !record.isLoadingCo2e">
+                -
+              </span>
             </div>
 
             <div slot="actions">
@@ -168,6 +177,7 @@ import Orders from "../../mixins/Orders";
 import {mapGetters, mapActions} from 'vuex';
 import OptimiseBasket from "./Basket/OptimiseBasket";
 import RequestQuoteButton from "./Basket/RequestQuoteButton";
+
 const _ = require('lodash');
 
 const innerColumns = [
@@ -242,6 +252,23 @@ export default {
 
       updateBasketSelectedPrice: 'updateBasketSelectedPrice'
     }),
+
+    getPriceToShow(price, quantity, itemType) {
+      if (itemType === 'product') {
+        return price * quantity;
+      }
+      return price;
+    },
+
+    getTotalCo2e(item) {
+      if (!item.co2e) {
+        return 0;
+      }
+      if (item.itemType === 'product') {
+        return item.quantity * item.co2e;
+      }
+      return item.co2e;
+    },
 
     filterOption(input, option) {
       return (

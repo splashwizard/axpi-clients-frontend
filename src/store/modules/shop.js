@@ -64,7 +64,8 @@ export const mutations = {
             quantity: quantity,
             prices: prices,
             selectedPrice: selectedPrice,
-            selectedPriceId: selectedPrice.id
+            selectedPriceId: selectedPrice.id,
+            isLoadingCo2e: true
         });
     },
 
@@ -280,6 +281,18 @@ export const mutations = {
         }
     },
 
+    ADD_CO2E_TO_PRODUCT(state, params) {
+        let {co2e, product} = params;
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'product'
+                && item.id === product['_id']
+            )
+        });
+        p.isLoadingCo2e = false;
+        p.co2e = co2e;
+    },
+
     SET_ENRICHED(state, enriched) {
         state.enriched = enriched;
     },
@@ -412,8 +425,24 @@ export const actions = {
         commit('UPDATE_SPECIFICATION_IN_BASKET', spec);
     },
 
-    addProductToBasket({commit}, params) {
+    addProductToBasket({commit, dispatch}, params) {
         commit('ADD_PRODUCT_TO_BASKET', params);
+        dispatch('loadCo2eForProduct', params['product']);
+    },
+
+    loadCo2eForProduct({commit}, product) {
+        let id = product['id'];
+        if (!id) {
+            id = product['_id'];
+        }
+        axios.get(window.API_BASE + '/products/' + id + '/esg/materials/co2e').then(r => {
+           commit('ADD_CO2E_TO_PRODUCT', {
+               product: product,
+               co2e: r.data
+           });
+        }).catch(e => {
+            console.log(e);
+        });
     },
 
     incrementProductQuantity({commit}, product) {

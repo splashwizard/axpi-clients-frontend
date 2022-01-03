@@ -13,7 +13,8 @@
           </div>
         </div>
         <div class="right">
-          £109
+          <a-spin size="small" v-if="isLoadingPrices"></a-spin>
+          <span v-else>{{ priceRange }}</span>
         </div>
       </div>
     </div>
@@ -21,14 +22,71 @@
 </template>
 
 <script>
+import axios from "axios";
+const _ = require('lodash');
+import Orders from "../../../mixins/Orders";
+
 export default {
   name: "SuggestedProductCard",
   props: ['product'],
+  mixins: [Orders],
+  data() {
+    return {
+      prices: [],
+      isLoadingPrices: true
+    }
+  },
+  computed: {
+    priceRange() {
+      let prices = this.prices;
+      if (prices && prices.length) {
+        let ordered = _.orderBy(prices, 'price');
+        let minPrice = _.first(ordered);
+        let maxPrice = _.last(ordered);
+
+        if (minPrice !== maxPrice) {
+          let minPriceFormatted = this.formatCostInPence2dp({
+            cost: minPrice.price,
+            cost_currency: 'USD'
+          });
+
+          let maxPriceFormatted = this.formatCostInPence2dp({
+            cost: maxPrice.price,
+            cost_currency: 'USD'
+          });
+
+          return minPriceFormatted + ' - ' + maxPriceFormatted;
+        } else {
+          return this.formatCostInPence2dp({
+            cost: minPrice.price,
+            cost_currency: 'USD'
+          });
+        }
+      }
+      return '-';
+    }
+  },
+  created() {
+    this.loadPrices();
+  },
   methods: {
     getImageSrc(product) {
       if (product["imageURLs"] && product["imageURLs"].length) {
         return product["imageURLs"][0];
       }
+    },
+
+    loadPrices() {
+      let vm = this;
+      vm.isLoadingPrices = true;
+      axios.get(window.API_BASE + '/products/' + this.product['_id'] + '/prices').then(r => {
+        vm.isLoadingPrices = false;
+        vm.prices = r.data;
+      }).catch(e => {
+        console.log(e);
+        vm.isLoadingPrices = false;
+        vm.$message.error('Error loading product prices');
+      });
     },
 
     truncate(str, maxLength) {
@@ -90,7 +148,8 @@ export default {
 
       .right {
         flex-shrink: 1;
-        min-width: 60px;
+        //min-width: 60px;
+        min-width: 150px;
         text-align: right;
         padding-right: 15px;
       }

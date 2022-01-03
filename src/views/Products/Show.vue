@@ -169,8 +169,9 @@
                 ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency: 'USD'}) }}/{{ unit }})
               </div>
               <div class="right">
-                <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">
-                32kg CO2e
+                <co2e-indicator :product="product"></co2e-indicator>
+<!--                <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">-->
+<!--                32kg CO2e-->
               </div>
             </div>
             <!-- / Top row -->
@@ -345,12 +346,14 @@ import EnvironmentTab from "./Show/EnvironmentTab";
 import PricingTab from "./Show/PricingTab";
 import SuggestedProducts from "../../components/Products/SuggestedProducts";
 import StockManagement from "../../mixins/StockManagement";
+import Co2eIndicator from "./Show/Co2eIndicator";
 
 const _ = require('lodash');
 
 export default {
   name: "Show",
   components: {
+    Co2eIndicator,
     AddressSelectorInline,
     ViewToggler,
     DocumentsTab,

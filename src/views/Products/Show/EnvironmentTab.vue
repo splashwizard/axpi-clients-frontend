@@ -34,8 +34,8 @@
       <template slot="measure" slot-scope="measure, record">
         <a-spin v-if="record.isLoading"></a-spin>
         <span v-if="record.section === 'Materials' && !record.isLoading">
-        <a-tag color="blue">{{ totalCo2e }}kg CO2e</a-tag>
-        <a-tag color="blue">{{ totalWater }}L Water</a-tag>
+        <a-tag v-if="totalCo2e" color="blue">{{ totalCo2e }}kg CO2e</a-tag>
+        <a-tag v-if="totalWater" color="blue">{{ totalWater }}L Water</a-tag>
         </span>
         <span v-else>
           {{ measure }}
@@ -88,6 +88,7 @@ import AddMaterialModal from "./EnvironmentTab/AddMaterialModal";
 import AddCertificationModal from "./EnvironmentTab/AddCertificationModal";
 import DeletePropertyButton from "./EnvironmentTab/DeletePropertyButton";
 import AddTransportationModal from "./EnvironmentTab/AddTransportationModal";
+import eventBus from "../../../event-bus";
 
 const _ = require('lodash');
 
@@ -376,10 +377,12 @@ export default {
 
     handleMaterialAdded() {
       this.addMaterialModalVisible = false;
+      eventBus.$emit('product-materials-updated');
       this.loadMaterials();
     },
 
     handleMaterialDeleted() {
+      eventBus.$emit('product-materials-updated');
       this.loadMaterials();
     },
 

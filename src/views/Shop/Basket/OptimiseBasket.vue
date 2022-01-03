@@ -83,22 +83,33 @@ export default {
     }),
 
     scenarios() {
-      const minPricesMultipliedByQuantities = _.map(this.basket, item => {
+      let minPricesMultipliedByQuantities = _.map(this.basket, item => {
         let prices = _.map(item.prices, 'price');
         let minPriceForProduct = _.min(prices);
         return minPriceForProduct * item.quantity;
       });
+      minPricesMultipliedByQuantities = _.filter(minPricesMultipliedByQuantities, p => p);
+
+      let co2es = _.map(this.basket, item => {
+        if (item.itemType == 'product') {
+          return item.co2e && item.quantity;
+        }
+        return item.co2e;
+      });
+      co2es = _.filter(co2es, c => c);
 
       return [
         {
           name: 'Best Price',
           minimise: 'cost',
-          expectedCost: _.sum(minPricesMultipliedByQuantities)
+          expectedCost: _.sum(minPricesMultipliedByQuantities),
+          co2e: _.sum(co2es)
         },
         {
           name: 'Environmentally Friendly',
           minimise: 'cost',
-          expectedCost: _.sum(minPricesMultipliedByQuantities)
+          expectedCost: _.sum(minPricesMultipliedByQuantities),
+          co2e: _.sum(co2es)
         }
       ];
     }

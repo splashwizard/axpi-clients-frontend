@@ -89,7 +89,7 @@
 
             <div slot="supplier" slot-scope="supplier, record">
               <a-select :value="record.selectedPrice.id"
-                        v-if="record.prices && record.selectedPrice"
+                        v-if="!record.isLoadingPrices && record.prices && record.selectedPrice"
                         option-filter-prop="children"
                         :filter-option="filterOption"
                         show-search
@@ -101,7 +101,9 @@
                   {{ price.supplier_name }}
                 </a-select-option>
               </a-select>
-              <span v-else>-</span>
+              <span v-else>
+                <a-spin size="small" v-if="record.isLoadingPrices"></a-spin>
+              </span>
               <!--              <a-dropdown>-->
               <!--                <a class="ant-dropdown-link" @click="e => e.preventDefault()">-->
               <!--                  {{ record.selectedPrice ? record.selectedPrice.supplier_name : 'Select supplier' }}-->

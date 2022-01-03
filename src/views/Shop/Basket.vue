@@ -128,8 +128,9 @@
                   }) : '-'
                 }}
               </span>
-              <a-tag v-if="!record.isLoadingPrices && record.prices && record.itemType !== 'product' && record.selectedPrice"
-                     color="blue" style="margin-left: 5px;">Suggested
+              <a-tag
+                  v-if="!record.isLoadingPrices && record.prices && record.itemType !== 'product' && record.selectedPrice"
+                  color="blue" style="margin-left: 5px;">Suggested
               </a-tag>
             </div>
 
@@ -181,6 +182,7 @@ import {mapGetters, mapActions} from 'vuex';
 import OptimiseBasket from "./Basket/OptimiseBasket";
 import RequestQuoteButton from "./Basket/RequestQuoteButton";
 import EditOrderModal from "../../components/Orders/EditOrderModal";
+import axios from "axios";
 
 const _ = require('lodash');
 
@@ -238,7 +240,12 @@ export default {
           width: 10
         },
       ],
+      suppliers: [],
+      isLoadingSuppliers: false
     }
+  },
+  created() {
+    this.loadSuppliers();
   },
   methods: {
     ...mapActions('shop', {
@@ -261,6 +268,23 @@ export default {
       setWizardStage: 'setWizardStage',
       loadOrder: 'loadOrder'
     }),
+
+
+    loadSuppliers() {
+      let vm = this;
+      vm.isLoadingSuppliers = true;
+      axios
+          .get(window.API_BASE + "/suppliers")
+          .then((r) => {
+            vm.suppliers = r.data;
+            vm.isLoadingSuppliers = false;
+          })
+          .catch((e) => {
+            console.log(e);
+            vm.isLoadingSuppliers = false;
+            vm.$message.error("Error loading suppliers");
+          });
+    },
 
     editOrder(order) {
       this.setWizardStage(0);

@@ -23,7 +23,7 @@
       <div slot="items_allocated" slot-scope="items_allocated">
         <div class="bullet-chart">
           <div class="left">
-            <a-progress :percent="100" :show-info="false"/>
+            <a-progress :percent="(items_allocated/optimisation.optimisation_specification_count)*100" :show-info="false"/>
           </div>
           <div class="right">
             {{ items_allocated }}/{{ optimisation.optimisation_specification_count }}

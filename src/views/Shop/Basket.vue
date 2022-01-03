@@ -11,6 +11,9 @@
           </a-page-header>
         </div>
 
+        <edit-order-modal :suppliers="suppliers" v-if="order && type === 'order'">
+        </edit-order-modal>
+
         <div class="table-wrapper">
           <a-table v-if="!isLoading" class="axpi-table"
                    :columns="columns"
@@ -22,9 +25,8 @@
               <router-link v-if="record.itemType == 'product'"
                            :to="getProductPageUrl(record)">{{ name }}
               </router-link>
-              <router-link v-if="record.itemType == 'order'"
-                           :to="getOrderUrl(record)">{{ name }}
-              </router-link>
+              <a v-if="record.itemType == 'order'" href="#" @click.prevent="editOrder(record.order)">{{ name }}
+              </a>
               <span v-if="record.itemType == 'specification'">
                 {{ name }}
               </span>
@@ -129,12 +131,9 @@
             </div>
 
             <div slot="co2e" slot-scope="co2e, record">
-              <a-spin v-if="record.isLoadingCo2e" size="small"></a-spin>
-              <span v-if="getTotalCo2e(record) && !record.isLoadingCo2e">
-                {{ getTotalCo2e(record) }} kg
-              </span>
-              <span v-if="!getTotalCo2e(record) && !record.isLoadingCo2e">
-                -
+              <a-spin v-if="record.isLoadingPrices" size="small"></a-spin>
+              <span v-else>
+              {{ getTotalCo2e(record) }} kg
               </span>
             </div>
 
@@ -177,6 +176,7 @@ import Orders from "../../mixins/Orders";
 import {mapGetters, mapActions} from 'vuex';
 import OptimiseBasket from "./Basket/OptimiseBasket";
 import RequestQuoteButton from "./Basket/RequestQuoteButton";
+import EditOrderModal from "../../components/Orders/EditOrderModal";
 
 const _ = require('lodash');
 
@@ -188,7 +188,7 @@ const innerColumns = [
 export default {
   name: "Basket",
   mixins: [Orders],
-  components: {RequestQuoteButton, OptimiseBasket},
+  components: {RequestQuoteButton, OptimiseBasket, EditOrderModal},
   data() {
     return {
       innerColumns,
@@ -208,7 +208,7 @@ export default {
           title: 'Quantity',
           dataIndex: 'quantity',
           scopedSlots: {customRender: "quantity"},
-          width: 120
+          width: 140
         },
         {
           title: 'Supplier',
@@ -253,6 +253,16 @@ export default {
       updateBasketSelectedPrice: 'updateBasketSelectedPrice'
     }),
 
+    ...mapActions('orderEditor', {
+      setWizardStage: 'setWizardStage',
+      loadOrder: 'loadOrder'
+    }),
+
+    editOrder(order) {
+      this.setWizardStage(0);
+      this.loadOrder(order.id);
+    },
+
     getPriceToShow(price, quantity, itemType) {
       if (itemType === 'product') {
         return price * quantity;
@@ -261,13 +271,13 @@ export default {
     },
 
     getTotalCo2e(item) {
-      if (!item.co2e) {
-        return 0;
+      if (item.itemType === 'product' && item.selectedPrice && item.selectedPrice.co2e) {
+        return Math.round((item.quantity * item.selectedPrice.co2e) * 100) / 100;
       }
-      if (item.itemType === 'product') {
-        return item.quantity * item.co2e;
+      if (item.selectedPrice && item.selectedPrice.co2e) {
+        return Math.round(item.selectedPrice.co2e * 100) / 100;
       }
-      return item.co2e;
+      return 0;
     },
 
     filterOption(input, option) {
@@ -313,7 +323,12 @@ export default {
     ...mapGetters('shop', {
       basket: 'basket',
       isLoading: 'isLoading'
-    })
+    }),
+
+    ...mapGetters('orderEditor', {
+      order: 'order',
+      type: 'type'
+    }),
   }
 }
 </script>

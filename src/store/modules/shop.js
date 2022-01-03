@@ -64,8 +64,7 @@ export const mutations = {
             quantity: quantity,
             prices: prices,
             selectedPrice: selectedPrice,
-            selectedPriceId: selectedPrice.id,
-            isLoadingCo2e: true
+            selectedPriceId: selectedPrice.id
         });
     },
 
@@ -80,7 +79,7 @@ export const mutations = {
             id: id,
             name: order['product_name'],
             order: order,
-            quantity: 1,
+            quantity: order.quantity ? order.quantity : 1,
             isLoadingPrices: true,
             prices: []
         });
@@ -183,6 +182,7 @@ export const mutations = {
             );
         });
         p.quantity++;
+        p.isLoadingPrices = true;
     },
 
     DECREMENT_PAST_ORDER_QUANTITY(state, order) {
@@ -193,6 +193,7 @@ export const mutations = {
             );
         });
         p.quantity--;
+        p.isLoadingPrices = true;
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
@@ -223,6 +224,7 @@ export const mutations = {
             );
         });
         p.quantity = quantity;
+        p.isLoadingPrices = true;
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
@@ -389,11 +391,14 @@ export const actions = {
 
     addPastOrderToBasket({commit, dispatch}, order) {
         commit('ADD_PAST_ORDER_TO_BASKET', order);
-        dispatch('loadTruepricesForOrder', order);
+        dispatch('loadTruepricesForOrder', {order: order, quantity: order.quantity});
     },
 
-    loadTruepricesForOrder({commit}, order) {
-        axios.get(window.API_BASE + '/orders/' + order.id + '/prices').then(r => {
+    loadTruepricesForOrder({commit}, params) {
+        let {order, quantity} = params;
+        axios.post(window.API_BASE + '/orders/' + order.id + '/get-prices', {
+            quantity: quantity
+        }).then(r => {
             commit('ADD_TRUEPRICES_TO_ORDER', {
                 order: order,
                 prices: r.data
@@ -425,25 +430,25 @@ export const actions = {
         commit('UPDATE_SPECIFICATION_IN_BASKET', spec);
     },
 
-    addProductToBasket({commit, dispatch}, params) {
+    addProductToBasket({commit}, params) {
         commit('ADD_PRODUCT_TO_BASKET', params);
-        dispatch('loadCo2eForProduct', params['product']);
+        // dispatch('loadCo2eForProduct', params['product']);
     },
 
-    loadCo2eForProduct({commit}, product) {
-        let id = product['id'];
-        if (!id) {
-            id = product['_id'];
-        }
-        axios.get(window.API_BASE + '/products/' + id + '/esg/materials/co2e').then(r => {
-           commit('ADD_CO2E_TO_PRODUCT', {
-               product: product,
-               co2e: r.data
-           });
-        }).catch(e => {
-            console.log(e);
-        });
-    },
+    // loadCo2eForProduct({commit}, product) {
+    //     let id = product['id'];
+    //     if (!id) {
+    //         id = product['_id'];
+    //     }
+    //     axios.get(window.API_BASE + '/products/' + id + '/esg/materials/co2e').then(r => {
+    //        commit('ADD_CO2E_TO_PRODUCT', {
+    //            product: product,
+    //            co2e: r.data
+    //        });
+    //     }).catch(e => {
+    //         console.log(e);
+    //     });
+    // },
 
     incrementProductQuantity({commit}, product) {
         commit('INCREMENT_PRODUCT_QUANTITY', product);
@@ -457,16 +462,44 @@ export const actions = {
         commit('SET_PRODUCT_QUANTITY', params);
     },
 
-    incrementPastOrderQuantity({commit}, product) {
+    incrementPastOrderQuantity({commit, getters, dispatch}, product) {
         commit('INCREMENT_PAST_ORDER_QUANTITY', product);
+
+        let p = _.find(getters.basket, item => {
+            return (
+                item.itemType === 'order'
+                && item.id === product.id
+            );
+        });
+        if (p) {
+            dispatch('loadTruepricesForOrder', {order: p.order, quantity: p.quantity});
+        }
     },
 
-    decrementPastOrderQuantity({commit}, product) {
+    decrementPastOrderQuantity({commit, getters, dispatch}, product) {
         commit('DECREMENT_PAST_ORDER_QUANTITY', product);
+        let p = _.find(getters.basket, item => {
+            return (
+                item.itemType === 'order'
+                && item.id === product.id
+            );
+        });
+        if (p) {
+            dispatch('loadTruepricesForOrder', {order: p.order, quantity: p.quantity});
+        }
     },
 
-    setPastOrderQuantity({commit}, params) {
+    setPastOrderQuantity({commit, getters, dispatch}, params) {
         commit('SET_PAST_ORDER_QUANTITY', params);
+        let p = _.find(getters.basket, item => {
+            return (
+                item.itemType === 'order'
+                && item.id === params.id
+            );
+        });
+        if (p) {
+            dispatch('loadTruepricesForOrder', {order: p.order, quantity: p.quantity});
+        }
     },
 
     incrementSpecificationQuantity({commit}, product) {

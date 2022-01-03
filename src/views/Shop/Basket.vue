@@ -103,6 +103,7 @@
               </a-select>
               <span v-else>
                 <a-spin size="small" v-if="record.isLoadingPrices"></a-spin>
+                <span v-else>No suppliers</span>
               </span>
               <!--              <a-dropdown>-->
               <!--                <a class="ant-dropdown-link" @click="e => e.preventDefault()">-->
@@ -127,7 +128,7 @@
                   }) : '-'
                 }}
               </span>
-              <a-tag v-if="!record.isLoadingPrices && record.prices && record.itemType !== 'product'"
+              <a-tag v-if="!record.isLoadingPrices && record.prices && record.itemType !== 'product' && record.selectedPrice"
                      color="blue" style="margin-left: 5px;">Suggested
               </a-tag>
             </div>

@@ -563,6 +563,7 @@ export default {
 }
 
 .logo {
+  height: 57px;
   //flex: 1;
   flex-shrink: 1;
   text-align: left;

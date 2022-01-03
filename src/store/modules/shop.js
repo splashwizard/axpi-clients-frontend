@@ -404,7 +404,7 @@ export const actions = {
             });
         }).catch(e => {
             console.log(e);
-            this._vm.$message.error('Error loading prices for specification');
+            // this._vm.$message.error('Error loading prices for specification');
         });
     },
 

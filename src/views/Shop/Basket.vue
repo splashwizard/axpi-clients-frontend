@@ -19,7 +19,13 @@
                    :loading="isLoading"
           >
             <div slot="name" slot-scope="name, record">
-              <router-link :to="getProductPageUrl(record)">{{ name }}</router-link>
+              <router-link v-if="record.itemType == 'product'"
+                  :to="getProductPageUrl(record)">{{ name }}</router-link>
+              <router-link v-if="record.itemType == 'order'"
+                           :to="getOrderUrl(record)">{{ name }}</router-link>
+              <span v-if="record.itemType == 'specification'">
+                {{ name }}
+              </span>
             </div>
 
             <div slot="image" slot-scope="image, row">
@@ -79,6 +85,7 @@
 
             <div slot="supplier" slot-scope="supplier, record">
               <a-select :value="record.selectedPrice.id"
+                        v-if="record.prices"
                         option-filter-prop="children"
                         :filter-option="filterOption"
                         show-search
@@ -90,6 +97,7 @@
                   {{ price.supplier_name }}
                 </a-select-option>
               </a-select>
+              <span v-if="!record.prices">-</span>
 <!--              <a-dropdown>-->
 <!--                <a class="ant-dropdown-link" @click="e => e.preventDefault()">-->
 <!--                  {{ record.selectedPrice ? record.selectedPrice.supplier_name : 'Select supplier' }}-->
@@ -113,6 +121,8 @@
                   }) : '-'
                 }}
               </span>
+              <a-tag v-if="!record.isLoadingPrices && record.prices && record.itemType !== 'product'"
+                  color="blue" style="margin-left: 5px;">Suggested</a-tag>
             </div>
 
             <div slot="co2e">
@@ -200,7 +210,7 @@ export default {
           title: 'Cost',
           dataIndex: 'cost',
           scopedSlots: {customRender: "cost"},
-          width: 100
+          width: 160
         },
         {
           title: 'CO2e',
@@ -241,6 +251,10 @@ export default {
 
     getProductPageUrl(product) {
       return '/products/' + product['id'] + '?fromBasket=1';
+    },
+
+    getOrderUrl(order) {
+      return '/orders/' + order.id;
     },
 
     goBackToShop() {

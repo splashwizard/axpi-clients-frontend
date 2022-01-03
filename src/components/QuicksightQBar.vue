@@ -72,11 +72,11 @@ export default {
     flex-grow: 1;
     width: 100%;
     height: 100%;
+    padding-top: 9px !important;
 
     .quicksight-embedding-iframe {
       width: 100% !important;
       height: 100% !important;
-      padding-top: 9px !important;
     }
   }
 }

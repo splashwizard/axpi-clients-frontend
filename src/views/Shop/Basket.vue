@@ -163,6 +163,12 @@
                   }) : '-'
                 }}
               </div>
+              <div slot="co2e" slot-scope="co2e">
+                <span v-if="getSupplierCo2e(co2e, record)">
+                  {{ getSupplierCo2e(co2e, record) }} kg
+                </span>
+                <a-tag color="red" v-else>Unknown</a-tag>
+              </div>
             </a-table>
           </a-table>
         </div>
@@ -189,6 +195,7 @@ const _ = require('lodash');
 const innerColumns = [
   {title: 'Supplier', dataIndex: 'supplier_name', key: 'supplier_name'},
   {title: 'Cost', dataIndex: 'cost', key: 'cost', scopedSlots: {customRender: 'cost'}},
+  {title: 'CO2e', dataIndex: 'co2e', key: 'co2e', scopedSlots: {customRender: 'co2e'}},
 ];
 
 export default {
@@ -302,11 +309,18 @@ export default {
       let co2e = 0;
       if (item.itemType === 'product' && item.selectedPrice && item.selectedPrice.co2e) {
         co2e = Math.round((item.quantity * item.selectedPrice.co2e) * 100) / 100;
-      }
-      if (item.selectedPrice && item.selectedPrice.co2e) {
+      } else if (item.selectedPrice && item.selectedPrice.co2e) {
         co2e = Math.round(item.selectedPrice.co2e * 100) / 100;
       }
       return co2e ? co2e : 0;
+    },
+
+    getSupplierCo2e(co2e, item) {
+      let co2eToReturn = co2e;
+      if (item.itemType === 'product') {
+        co2eToReturn = co2eToReturn * item.quantity;
+      }
+      return co2eToReturn ? co2eToReturn : 0;
     },
 
     filterOption(input, option) {

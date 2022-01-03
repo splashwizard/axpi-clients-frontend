@@ -61,12 +61,12 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.analytics-new {
-  height: 100%;
+.quicksight-q-bar-wrapper {
   width: 100%;
+  flex: 1;
   display: flex;
 
-  #embedding-container {
+  #q-bar-embedding-container {
     border: 0 !important;
     flex-grow: 1;
     width: 100%;

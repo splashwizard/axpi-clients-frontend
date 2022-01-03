@@ -47,7 +47,8 @@
 
       <div class="toolbar">
         <div class="left">
-          <a-input-search placeholder="Search" style="width: 250px"/>
+          <a-input-search v-model="specificationQuery"
+              placeholder="Search" style="width: 250px"/>
         </div>
         <div class="right">
           <!--          <a-button icon="filter">Filter</a-button>-->
@@ -65,6 +66,7 @@
                :row-key="record => record.id"
                :data-source="specifications"
                :pagination="specificationPagination"
+               @change="handleSpecificationTableChanged"
                :loading="isLoadingSpecifications">
         <div slot="type" slot-scope="type">
           {{ formatType(type) }}
@@ -99,7 +101,8 @@
 
       <div class="toolbar">
         <div class="left">
-          <a-input-search placeholder="Search" style="width: 250px"/>
+          <a-input-search v-model="orderQuery"
+              placeholder="Search" style="width: 250px"/>
         </div>
         <div class="right">
           <a-button icon="filter">Filter</a-button>
@@ -117,6 +120,7 @@
                :row-key="record => record.id"
                :data-source="pastOrders"
                :pagination="pastOrdersPagination"
+               @change="handleOrderTableChanged"
                :loading="isLoadingPastOrders">
         <div slot="type" slot-scope="type">
           {{ formatType(type) }}
@@ -242,12 +246,14 @@ export default {
       isLoadingSpecifications: false,
       specificationColumns: SPECIFICATION_COLUMNS,
       selectedSpecificationIds: [],
+      specificationQuery: '',
 
       pastOrders: [],
       pastOrdersPagination: {},
       isLoadingPastOrders: false,
       pastOrdersColumns: PAST_ORDERS_COLUMNS,
       selectedPastOrdersIds: [],
+      orderQuery: '',
 
       isExpectingSpecificationToBeAdded: false,
       idOfSpecificationAdded: null,
@@ -309,6 +315,14 @@ export default {
           this.isExpectingSpecificationToBeAdded = false;
         }
       }
+    },
+
+    specificationQuery: function () {
+      this.loadSpecifications();
+    },
+
+    orderQuery: function () {
+      this.loadPastOrders();
     }
   },
   methods: {
@@ -321,6 +335,32 @@ export default {
     ...mapActions('orderEditor', {
       createSpecification: 'createSpecification'
     }),
+
+    handleSpecificationTableChanged(pagination, filters, sorter) {
+      const pager = {...this.specificationPagination};
+      pager.current = pagination.current;
+      this.specificationPagination = pager;
+      this.loadSpecifications({
+        results_per_page: pagination.pageSize,
+        page: pagination.current,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
+        ...filters,
+      });
+    },
+
+    handleOrderTableChanged(pagination, filters, sorter) {
+      const pager = {...this.specificationPagination};
+      pager.current = pagination.current;
+      this.specificationPagination = pager;
+      this.loadPastOrders({
+        results_per_page: pagination.pageSize,
+        page: pagination.current,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
+        ...filters,
+      });
+    },
 
     selectMethod(method) {
       this.methodSelectorModalVisible = false;
@@ -364,6 +404,7 @@ export default {
       vm.isLoadingSpecifications = true;
       axios.post(window.API_BASE + '/specifications/search', {
         results_per_page: 10,
+        q: this.specificationQuery,
         ...params
       }).then(r => {
         const pagination = {...this.specificationPagination};
@@ -417,6 +458,7 @@ export default {
       vm.isLoadingPastOrders = true;
       axios.post(window.API_BASE + '/orders/search', {
         results_per_page: 10,
+        q: this.orderQuery,
         ...params
       }).then(r => {
         const pagination = {...this.pastOrdersPagination};

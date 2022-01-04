@@ -592,13 +592,13 @@ export const actions = {
         }
     },
 
-    setSpecificationQuantity({commit}, params) {
+    setSpecificationQuantity({commit, getters, dispatch}, params) {
         commit('SET_SPECIFICATION_QUANTITY', params);
 
         let p = _.find(getters.basket, item => {
             return (
                 item.itemType === 'specification'
-                && item.id === product.id
+                && item.id === params.id
             );
         });
         if (p) {

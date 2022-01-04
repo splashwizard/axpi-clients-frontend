@@ -29,9 +29,9 @@
           {{ to_address ? formatAddress(to_address) : '-' }}
         </template>
         <template slot="recyclable" slot-scope="recyclable">
-          <a-tag color="blue" v-if="recyclable === null">Unknown</a-tag>
-          <a-tag color="green" v-if="recyclable === true">Yes</a-tag>
-          <a-tag color="red" v-if="recyclable === false">No</a-tag>
+          <a-tag color="blue" v-if="recyclable == null">Unknown</a-tag>
+          <a-tag color="green" v-if="recyclable == true">Yes</a-tag>
+          <a-tag color="red" v-if="recyclable == false">No</a-tag>
         </template>
         <template slot="tags" slot-scope="tags, innerRow">
           <a-tag color="#000" v-if="isMaterialBanned(innerRow.material)">Banned</a-tag>

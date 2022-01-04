@@ -56,7 +56,7 @@ export default {
 .slick-dots img {
   border: 1px solid #e8e8e8;
 }
-.slick-slide-img {
+.slick-slide img {
   max-width: 400px;
 }
 </style>

@@ -469,10 +469,11 @@ export const actions = {
     },
 
     loadTruepricesForSpecification({commit}, params) {
-        // let {spec, quantity} = params;
-        let {spec} = params;
+        let {spec, quantity} = params;
         commit('SET_SPECIFICATION_AS_LOADING_PRICES', spec.id);
-        axios.get(window.API_BASE + '/specifications/' + spec.id + '/prices').then(r => {
+        axios.post(window.API_BASE + '/specifications/' + spec.id + '/get-prices', {
+            quantity: quantity
+        }).then(r => {
             commit('ADD_TRUEPRICES_TO_SPECIFICATION', {
                 specification: spec,
                 prices: r.data
@@ -563,16 +564,46 @@ export const actions = {
         }
     },
 
-    incrementSpecificationQuantity({commit}, product) {
+    incrementSpecificationQuantity({commit, getters, dispatch}, product) {
         commit('INCREMENT_SPECIFICATION_QUANTITY', product);
+
+        let p = _.find(getters.basket, item => {
+            return (
+                item.itemType === 'specification'
+                && item.id === product.id
+            );
+        });
+        if (p) {
+            dispatch('loadTruepricesForSpecification', {spec: p.specification, quantity: p.quantity});
+        }
     },
 
-    decrementSpecificationQuantity({commit}, product) {
+    decrementSpecificationQuantity({commit, getters, dispatch}, product) {
         commit('DECREMENT_SPECIFICATION_QUANTITY', product);
+
+        let p = _.find(getters.basket, item => {
+            return (
+                item.itemType === 'specification'
+                && item.id === product.id
+            );
+        });
+        if (p) {
+            dispatch('loadTruepricesForSpecification', {spec: p.specification, quantity: p.quantity});
+        }
     },
 
     setSpecificationQuantity({commit}, params) {
         commit('SET_SPECIFICATION_QUANTITY', params);
+
+        let p = _.find(getters.basket, item => {
+            return (
+                item.itemType === 'specification'
+                && item.id === product.id
+            );
+        });
+        if (p) {
+            dispatch('loadTruepricesForSpecification', {spec: p.specification, quantity: p.quantity});
+        }
     },
 
     enrich({commit, getters}) {

@@ -49,11 +49,16 @@
       <template slot="measure" slot-scope="measure, record">
         <a-spin v-if="record.isLoading"></a-spin>
         <span v-if="record.section === 'Materials' && !record.isLoading">
-        <a-tag v-if="totalCo2e" color="blue">{{ totalCo2e }}kg CO2e</a-tag>
-        <a-tag v-if="totalWater" color="blue">{{ totalWater }}L Water</a-tag>
+        <a-tag v-if="totalMaterialCo2e" color="blue">{{ totalMaterialCo2e }}kg CO2e</a-tag>
+        <a-tag v-if="totalMaterialWater" color="blue">{{ totalMaterialWater }}L Water</a-tag>
         </span>
-        <span v-else>
-          {{ measure }}
+        <span v-if="record.section === 'Transport' && !record.isLoading">
+        <a-tag v-if="totalTransportCo2e" color="blue">{{ totalTransportCo2e }}kg CO2e</a-tag>
+        </span>
+        <span v-if="record.section === 'Certifications' && !record.isLoading">
+         <a-tag v-for="(certification, i) in record.innerTableData" :key="i" color="blue">
+           {{certification.name}}
+         </a-tag>
         </span>
       </template>
 
@@ -174,12 +179,16 @@ export default {
       view: 'view'
     }),
 
-    totalCo2e() {
-      return _.sum(_.map(this.materials, 'co2e'));
+    totalMaterialCo2e() {
+      return Math.round(_.sum(_.map(this.materials, 'co2e')) * 100) / 100;
     },
 
-    totalWater() {
-      return _.sum(_.map(this.materials, 'water'));
+    totalMaterialWater() {
+      return Math.round(_.sum(_.map(this.materials, 'water')) * 100) / 100;
+    },
+
+    totalTransportCo2e() {
+      return Math.round(_.sum(_.map(this.transportations, 'co2e')) * 100) / 100;
     },
 
     productId() {
@@ -191,8 +200,8 @@ export default {
         let materialOption = _.find(this.materialOptions, {name: material.material});
         return {
           weight_formatted: (material.weight && material.weight_unit) ? (material.weight + ' ' + material.weight_unit) : '-',
-          co2e_formatted: (material.co2e) ? (material.co2e + ' kg') : '-',
-          water_formatted: (material.water) ? (material.water + ' kg') : '-',
+          co2e_formatted: (material.co2e) ? (Math.round(material.co2e * 100) / 100 + ' kg') : '-',
+          water_formatted: (material.water) ? (Math.round(material.water * 100) / 100 + ' kg') : '-',
           recyclable: materialOption ? materialOption.recyclable : null,
           recycled_content_percentage: materialOption ? materialOption.recycled_content_percentage : (0 + ' %'),
           ...material
@@ -208,7 +217,10 @@ export default {
 
     transportationsTableData() {
       return _.map(this.transportations, transportation => {
-        return transportation;
+        return {
+          co2e_formatted: (transportation.co2e) ? (Math.round(transportation.co2e * 100) / 100 + ' kg') : '-',
+          ...transportation
+        };
       });
     },
 
@@ -299,6 +311,10 @@ export default {
               title: 'To',
               dataIndex: 'to_address',
               scopedSlots: {customRender: 'to_address'}
+            },
+            {
+              title: 'CO2e',
+              dataIndex: 'co2e_formatted'
             },
             {
               scopedSlots: {customRender: 'actions'}

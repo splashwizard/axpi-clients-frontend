@@ -2,7 +2,7 @@
   <div class="co2e-indicator">
     <a-spin size="small" v-if="isLoading"></a-spin>
     <img v-if="!isLoading && co2e" src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">
-    <span v-if="!isLoading && co2e">{{ co2e }}kg CO2e</span>
+    <span v-if="!isLoading && co2e">{{ formatCo2e(co2e) }}kg CO2e</span>
   </div>
 </template>
 
@@ -38,7 +38,7 @@ export default {
     getCo2e() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/products/' + this.productId + '/esg/materials/co2e').then(r => {
+      axios.get(window.API_BASE + '/products/' + this.productId + '/esg/co2e').then(r => {
         vm.co2e = r.data;
         vm.isLoading = false;
       }).catch(e => {
@@ -46,6 +46,10 @@ export default {
         vm.isLoading = false;
         vm.co2e = null;
       });
+    },
+
+    formatCo2e(val) {
+      return Math.round(val * 100) / 100;
     }
   }
 }

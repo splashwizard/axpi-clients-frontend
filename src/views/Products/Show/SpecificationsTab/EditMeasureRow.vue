@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr :class="{'hidden': (view !== 'edit' && !rawValue)}">
     <td>
       <loading-screen :is-loading="isSaving"></loading-screen>
       Measure
@@ -122,5 +122,9 @@ export default {
 <style scoped>
 .text-right {
   text-align: right;
+}
+
+.hidden {
+  display: none;
 }
 </style>

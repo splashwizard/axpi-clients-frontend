@@ -293,23 +293,42 @@
       </div>
       <!-- / Navbar -->
 
-      <div class="page-section" ref="properties-tab">
-        <h2>PROPERTIES</h2>
+      <!-- Not editing -->
+      <a-row :gutter="20" v-if="view !== 'edit'" type="flex" class="page-sections-cols">
+        <a-col :span="12">
+          <div class="page-section page-section-col" ref="properties-tab">
+            <h2>Properties</h2>
+            <specifications-tab></specifications-tab>
+          </div>
+        </a-col>
+        <a-col :span="12">
+          <div class="page-section page-section-col" ref="pricing-tab">
+            <h2>Pricing</h2>
+            <pricing-tab :prices="prices" :stocks="stocks"></pricing-tab>
+          </div>
+        </a-col>
+      </a-row>
+      <!-- / Not editing -->
+
+      <!--  Editing -->
+      <div class="page-section" ref="properties-tab" v-if="view === 'edit'">
+        <h2>Properties</h2>
         <specifications-tab></specifications-tab>
       </div>
 
-      <div class="page-section" ref="pricing-tab">
-        <h2>PRICING</h2>
+      <div class="page-section" ref="pricing-tab" v-if="view === 'edit'">
+        <h2>Pricing</h2>
         <pricing-tab :prices="prices" :stocks="stocks"></pricing-tab>
       </div>
+      <!-- / Editing -->
 
       <div class="page-section" ref="environment-tab">
-        <h2>ENVIRONMENT</h2>
+        <h2>Environment</h2>
         <environment-tab></environment-tab>
       </div>
 
       <div class="page-section" ref="documents-tab">
-        <h2>DOCUMENTS</h2>
+        <h2>Documents</h2>
         <documents-tab></documents-tab>
       </div>
 
@@ -631,7 +650,9 @@ export default {
 
 .suggested-products-wrapper {
   //margin-top: 100px;
-  margin-top: 70px;
+  margin-top: 80px;
+  border-top: 1px solid #d9d9d9;
+  padding-top: 35px;
   //margin-bottom: 30px;
 }
 
@@ -652,11 +673,20 @@ export default {
     margin-bottom: 20px;
   }
 
+  .page-sections-cols {
+    margin-bottom: 40px;
+  }
+
   .page-section {
     padding: 30px;
     background: #f9f9f9;
     margin-bottom: 40px;
     border-radius: 10px;
+
+    &.page-section-col {
+      height: 100%;
+      margin-bottom: 0 !important;
+    }
   }
 }
 

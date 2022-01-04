@@ -3,7 +3,7 @@
     <a-table
         :expandIconAsCell="false"
         :expand-icon="getExpandIcon"
-        :expand-icon-column-index="3"
+        :expand-icon-column-index="4"
         class="axpi-table" :columns="columns" :data-source="tableData" :pagination="false">
       <template slot="icon" slot-scope="icon, row">
         <a-icon class="section-icon" v-if="row.section == 'Materials'" type="copy"></a-icon>

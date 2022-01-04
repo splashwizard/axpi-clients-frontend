@@ -11,7 +11,7 @@
           </a-page-header>
         </div>
 
-        <edit-order-modal :suppliers="suppliers" v-if="order && type === 'order'">
+        <edit-order-modal :suppliers="suppliers" v-if="order && (type === 'order' || type === 'specification')">
         </edit-order-modal>
 
         <div class="table-wrapper">
@@ -27,9 +27,8 @@
               </router-link>
               <a v-if="record.itemType == 'order'" href="#" @click.prevent="editOrder(record.order)">{{ name }}
               </a>
-              <span v-if="record.itemType == 'specification'">
-                {{ name }}
-              </span>
+              <a v-if="record.itemType == 'specification'" href="#" @click.prevent="editSpecification(record.specification)">{{ name }}
+              </a>
             </div>
 
             <div slot="image" slot-scope="image, row">
@@ -298,13 +297,14 @@ export default {
       setSpecificationQuantity: 'setSpecificationQuantity',
 
       updateBasketSelectedPrice: 'updateBasketSelectedPrice',
-      loadTruepricesForSpecification: 'loadTruepriceForSpecification',
+      loadTruepricesForSpecification: 'loadTruepricesForSpecification',
       loadTruepricesForOrder: 'loadTruepricesForOrder'
     }),
 
     ...mapActions('orderEditor', {
       setWizardStage: 'setWizardStage',
-      loadOrder: 'loadOrder'
+      loadOrder: 'loadOrder',
+      loadSpecification: 'loadSpecification'
     }),
 
 
@@ -327,6 +327,13 @@ export default {
     editOrder(order) {
       this.setWizardStage(0);
       this.loadOrder(order.id);
+    },
+
+    editSpecification(specification) {
+      this.setWizardStage(0);
+      this.loadSpecification(
+          specification.id
+      );
     },
 
     getPriceToShow(price, quantity, itemType) {

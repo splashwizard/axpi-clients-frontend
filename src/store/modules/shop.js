@@ -66,6 +66,7 @@ export const mutations = {
             selectedPrice: selectedPrice,
             selectedPriceId: selectedPrice.id
         });
+        this._vm.$forceUpdate();
     },
 
     ADD_PAST_ORDER_TO_BASKET(state, order) {
@@ -83,6 +84,7 @@ export const mutations = {
             isLoadingPrices: true,
             prices: []
         });
+        this._vm.$forceUpdate();
     },
 
     ADD_SPECIFICATION_TO_BASKET(state, spec) {
@@ -98,6 +100,7 @@ export const mutations = {
             specification: spec,
             quantity: 1
         });
+        this._vm.$forceUpdate();
     },
 
     UPDATE_SPECIFICATION_IN_BASKET(state, spec) {
@@ -117,6 +120,7 @@ export const mutations = {
             }
             return item;
         });
+        this._vm.$forceUpdate();
     },
 
     INCREMENT_PRODUCT_QUANTITY(state, params) {
@@ -135,6 +139,7 @@ export const mutations = {
             );
         });
         p.quantity++;
+        this._vm.$forceUpdate();
     },
 
     DECREMENT_PRODUCT_QUANTITY(state, params) {
@@ -156,6 +161,7 @@ export const mutations = {
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
+        this._vm.$forceUpdate();
     },
 
     SET_PRODUCT_QUANTITY(state, params) {
@@ -172,6 +178,7 @@ export const mutations = {
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
+        this._vm.$forceUpdate();
     },
 
     INCREMENT_PAST_ORDER_QUANTITY(state, order) {
@@ -183,6 +190,7 @@ export const mutations = {
         });
         p.quantity++;
         p.isLoadingPrices = true;
+        this._vm.$forceUpdate();
     },
 
     DECREMENT_PAST_ORDER_QUANTITY(state, order) {
@@ -197,6 +205,7 @@ export const mutations = {
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
+        this._vm.$forceUpdate();
     },
 
     ADD_TRUEPRICES_TO_ORDER(state, params) {
@@ -217,6 +226,7 @@ export const mutations = {
                 p.selectedPriceId = p.selectedPrice.id;
             }
         }
+        this._vm.$forceUpdate();
     },
 
     SET_PAST_ORDER_QUANTITY(state, params) {
@@ -232,6 +242,7 @@ export const mutations = {
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
+        this._vm.$forceUpdate();
     },
 
     SET_ORDER_AS_LOADING_PRICES(state, orderId) {
@@ -242,16 +253,18 @@ export const mutations = {
             );
         });
         p.isLoadingPrices = true;
+        this._vm.$forceUpdate();
     },
 
-    SET_SPECIFICATION_AS_LOADING_PRICES(state, orderId) {
+    SET_SPECIFICATION_AS_LOADING_PRICES(state, specId) {
         let p = _.find(state.basket, item => {
             return (
                 item.itemType === 'specification'
-                && item.id === orderId
+                && item.id === specId
             );
         });
         p.isLoadingPrices = true;
+        this._vm.$forceUpdate();
     },
 
     INCREMENT_SPECIFICATION_QUANTITY(state, spec) {
@@ -262,6 +275,7 @@ export const mutations = {
             );
         });
         p.quantity++;
+        this._vm.$forceUpdate();
     },
 
     DECREMENT_SPECIFICATION_QUANTITY(state, spec) {
@@ -275,6 +289,7 @@ export const mutations = {
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
+        this._vm.$forceUpdate();
     },
 
     SET_SPECIFICATION_QUANTITY(state, params) {
@@ -289,6 +304,7 @@ export const mutations = {
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
+        this._vm.$forceUpdate();
     },
 
     ADD_TRUEPRICES_TO_SPECIFICATION(state, params) {
@@ -309,6 +325,7 @@ export const mutations = {
                 p.selectedPriceId = p.selectedPrice.id;
             }
         }
+        this._vm.$forceUpdate();
     },
 
     ADD_CO2E_TO_PRODUCT(state, params) {
@@ -321,6 +338,7 @@ export const mutations = {
         });
         p.isLoadingCo2e = false;
         p.co2e = co2e;
+        this._vm.$forceUpdate();
     },
 
     SET_ENRICHED(state, enriched) {
@@ -351,7 +369,7 @@ export const mutations = {
             }
             return item;
         });
-
+        this._vm.$forceUpdate();
         // TODO: Merge similar matching prices
     }
 };
@@ -444,10 +462,15 @@ export const actions = {
 
     addSpecificationToBasket({commit, dispatch}, spec) {
         commit('ADD_SPECIFICATION_TO_BASKET', spec);
-        dispatch('loadTruepricesForSpecification', spec);
+        dispatch('loadTruepricesForSpecification', {
+            spec: spec,
+            quantity: 1
+        });
     },
 
-    loadTruepricesForSpecification({commit}, spec) {
+    loadTruepricesForSpecification({commit}, params) {
+        // let {spec, quantity} = params;
+        let {spec} = params;
         commit('SET_SPECIFICATION_AS_LOADING_PRICES', spec.id);
         axios.get(window.API_BASE + '/specifications/' + spec.id + '/prices').then(r => {
             commit('ADD_TRUEPRICES_TO_SPECIFICATION', {
@@ -456,6 +479,10 @@ export const actions = {
             });
         }).catch(e => {
             console.log(e);
+            commit('ADD_TRUEPRICES_TO_SPECIFICATION', {
+                specification: spec,
+                prices: []
+            });
             // this._vm.$message.error('Error loading prices for specification');
         });
     },

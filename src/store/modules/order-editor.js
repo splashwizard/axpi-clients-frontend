@@ -275,6 +275,12 @@ export const actions = {
                   product_name: order.product_name
               });
            }
+            if (getters.type === 'order') {
+                eventBus.$emit('order-updated', {
+                    id: order.id,
+                    product_name: order.product_name
+                });
+            }
 
             commit('STOP_SAVING');
             if (quitAfterSave === true) {

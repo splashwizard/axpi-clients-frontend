@@ -189,6 +189,7 @@ import OptimiseBasket from "./Basket/OptimiseBasket";
 import RequestQuoteButton from "./Basket/RequestQuoteButton";
 import EditOrderModal from "../../components/Orders/EditOrderModal";
 import axios from "axios";
+import eventBus from "../../event-bus";
 
 const _ = require('lodash');
 
@@ -253,6 +254,34 @@ export default {
   },
   created() {
     this.loadSuppliers();
+
+    let vm = this;
+
+    eventBus.$on('specification-updated', function (params) {
+      let p = _.find(vm.basket, item => {
+        return (
+            item.itemType === 'specification'
+            && item.id === params.id
+        );
+      });
+      vm.loadTruepricesForSpecification({
+        spec: {id: params.id},
+        quantity: p.quantity
+      });
+    });
+
+    eventBus.$on('order-updated', function (params) {
+      let p = _.find(vm.basket, item => {
+        return (
+            item.itemType === 'order'
+            && item.id === params.id
+        );
+      });
+      vm.loadTruepricesForOrder({
+        order: {id: params.id},
+        quantity: p.quantity
+      });
+    });
   },
   methods: {
     ...mapActions('shop', {
@@ -268,7 +297,9 @@ export default {
       decrementSpecificationQuantity: 'decrementSpecificationQuantity',
       setSpecificationQuantity: 'setSpecificationQuantity',
 
-      updateBasketSelectedPrice: 'updateBasketSelectedPrice'
+      updateBasketSelectedPrice: 'updateBasketSelectedPrice',
+      loadTruepricesForSpecification: 'loadTruepriceForSpecification',
+      loadTruepricesForOrder: 'loadTruepricesForOrder'
     }),
 
     ...mapActions('orderEditor', {

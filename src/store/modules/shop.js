@@ -210,8 +210,12 @@ export const mutations = {
         p.isLoadingPrices = false;
         p.prices = prices;
         if (prices.length) {
-            p.selectedPrice = _.first(prices);
-            p.selectedPriceId = p.selectedPrice.id;
+            if (p.selectedPriceId && _.find(prices, {id: p.selectedPriceId})) {
+                p.selectedPrice = _.find(prices, {id: p.selectedPriceId});
+            } else {
+                p.selectedPrice = _.first(prices);
+                p.selectedPriceId = p.selectedPrice.id;
+            }
         }
     },
 
@@ -228,6 +232,26 @@ export const mutations = {
         if (p.quantity < 1) {
             state.basket = _.without(state.basket, p);
         }
+    },
+
+    SET_ORDER_AS_LOADING_PRICES(state, orderId) {
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'order'
+                && item.id === orderId
+            );
+        });
+        p.isLoadingPrices = true;
+    },
+
+    SET_SPECIFICATION_AS_LOADING_PRICES(state, orderId) {
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'specification'
+                && item.id === orderId
+            );
+        });
+        p.isLoadingPrices = true;
     },
 
     INCREMENT_SPECIFICATION_QUANTITY(state, spec) {
@@ -278,8 +302,12 @@ export const mutations = {
         p.isLoadingPrices = false;
         p.prices = prices;
         if (prices.length) {
-            p.selectedPrice = _.first(prices);
-            p.selectedPriceId = p.selectedPrice.id;
+            if (p.selectedPriceId && _.find(prices, {id: p.selectedPriceId})) {
+                p.selectedPrice = _.find(prices, {id: p.selectedPriceId});
+            } else {
+                p.selectedPrice = _.first(prices);
+                p.selectedPriceId = p.selectedPrice.id;
+            }
         }
     },
 
@@ -396,6 +424,7 @@ export const actions = {
 
     loadTruepricesForOrder({commit}, params) {
         let {order, quantity} = params;
+        commit('SET_ORDER_AS_LOADING_PRICES', order.id);
         axios.post(window.API_BASE + '/orders/' + order.id + '/get-prices', {
             quantity: quantity
         }).then(r => {
@@ -419,6 +448,7 @@ export const actions = {
     },
 
     loadTruepricesForSpecification({commit}, spec) {
+        commit('SET_SPECIFICATION_AS_LOADING_PRICES', spec.id);
         axios.get(window.API_BASE + '/specifications/' + spec.id + '/prices').then(r => {
             commit('ADD_TRUEPRICES_TO_SPECIFICATION', {
                 specification: spec,

@@ -57,6 +57,6 @@ export default {
   border: 1px solid #e8e8e8;
 }
 .slick-slide img {
-  max-width: 400px;
+  max-height: 400px;
 }
 </style>

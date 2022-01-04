@@ -1,6 +1,16 @@
 <template>
   <div class="environment-tab">
-    <a-table class="axpi-table" :columns="columns" :data-source="tableData" :pagination="false">
+    <a-table
+        :expandIconAsCell="false"
+        :expand-icon="getExpandIcon"
+        :expand-icon-column-index="3"
+        class="axpi-table" :columns="columns" :data-source="tableData" :pagination="false">
+      <template slot="section" slot-scope="section">
+        <a-icon class="section-icon" v-if="section == 'Materials'" type="copy"></a-icon>
+        <a-icon class="section-icon" v-if="section == 'Transport'" type="car"></a-icon>
+        <a-icon class="section-icon" v-if="section == 'Certifications'" type="safety-certificate"></a-icon>
+        <span class="section-title">{{ section }}</span>
+      </template>
       <a-table
           slot="expandedRowRender"
           slot-scope="row"
@@ -15,6 +25,11 @@
         </template>
         <template slot="to_address" slot-scope="to_address">
           {{ to_address ? formatAddress(to_address) : '-' }}
+        </template>
+        <template slot="recyclable" slot-scope="recyclable">
+          <a-tag color="blue" v-if="recyclable === null">Unknown</a-tag>
+          <a-tag color="green" v-if="recyclable === true">Yes</a-tag>
+          <a-tag color="red" v-if="recyclable === false">No</a-tag>
         </template>
         <template slot="tags" slot-scope="tags, innerRow">
           <a-tag color="#000" v-if="isMaterialBanned(innerRow.material)">Banned</a-tag>
@@ -96,7 +111,8 @@ const columns = [
   {
     title: 'Section',
     dataIndex: 'section',
-    width: 245
+    width: 245,
+    scopedSlots: {customRender: 'section'}
   },
   {
     title: 'Measure',
@@ -172,10 +188,13 @@ export default {
 
     materialsTableData() {
       return _.map(this.materials, material => {
+        let materialOption = _.find(this.materialOptions, {name: material.material});
         return {
           weight_formatted: (material.weight && material.weight_unit) ? (material.weight + ' ' + material.weight_unit) : '-',
           co2e_formatted: (material.co2e) ? (material.co2e + ' kg') : '-',
           water_formatted: (material.water) ? (material.water + ' kg') : '-',
+          recyclable: materialOption ? materialOption.recyclable : null,
+          recycled_content_percentage: materialOption ? materialOption.recycled_content_percentage : (0 + ' %'),
           ...material
         };
       });
@@ -222,6 +241,15 @@ export default {
             {
               title: 'Water',
               dataIndex: 'water_formatted'
+            },
+            {
+              title: 'Recyclable',
+              dataIndex: 'recyclable',
+              scopedSlots: {customRender: 'recyclable'}
+            },
+            {
+              title: 'Recycled Content (%)',
+              dataIndex: 'recycled_content_percentage'
             },
             {
               scopedSlots: {customRender: 'tags'},
@@ -450,24 +478,55 @@ export default {
         return m ? m.banned : false;
       }
       return false;
+    },
+
+    getExpandIcon({expanded, record, onExpand}) {
+      return (
+          <a-button style="font-weight: 500; padding-left: 0; padding-right; 0;"
+                    type="link"
+                    {...{
+                      on: {
+                        click: onExpand.bind(this, [expanded, record])
+                      }
+                    }}
+          >
+            <span>{expanded ? 'Hide' : 'Expand'}</span>
+            <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? 'up' : 'down'}></a-icon>
+          </a-button>
+      );
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .environment-tab {
   tr.ant-table-expanded-row td > .ant-table-wrapper {
     margin: -5px 0 10px 0 !important;
   }
-}
 
-.actions {
-  text-align: right;
+  .section-icon {
+    margin-right: 10px;
+    //color: #1890ff;
+  }
 
-  .action-button {
-    width: 100%;
-    max-width: 170px;
+  .section-title {
+    font-weight: 500;
+  }
+
+  .ant-table-row.ant-table-row-level-0 td:last-child {
+    text-align: right;
+  }
+
+  .actions {
+    text-align: right;
+    display: inline-block;
+
+    .action-button {
+      max-width: 170px;
+      min-width: 170px;
+      width: 170px;
+    }
   }
 }
 </style>

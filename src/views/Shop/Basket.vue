@@ -143,7 +143,7 @@
 
             <div slot="actions" slot-scope="actions, row">
               <div class="actions">
-                <request-quote-button v-if="row.itemType === 'product'"></request-quote-button>
+                <request-quote-button v-if="row.itemType !== 'product'"></request-quote-button>
               </div>
             </div>
 
@@ -358,7 +358,7 @@ export default {
       if (item.itemType === 'product') {
         co2eToReturn = co2eToReturn * item.quantity;
       }
-      return co2eToReturn ? co2eToReturn : 0;
+      return co2eToReturn ? Math.round(co2eToReturn*100)/100 : 0;
     },
 
     filterOption(input, option) {

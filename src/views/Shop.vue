@@ -104,6 +104,10 @@
                 <h4>Certifications</h4>
                 <ais-refinement-list attribute="certifications"/>
               </ais-panel>
+              <ais-panel>
+                <h4>Materials</h4>
+                <ais-refinement-list attribute="materials"/>
+              </ais-panel>
             </a-col>
             <a-col :span="19" style="padding-right: 17px;">
               <!--              <ais-panel>-->

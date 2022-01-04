@@ -1,6 +1,10 @@
 <template>
   <div class="suggested-product-card-wrapper">
     <div class="suggested-product-card" @click.prevent="navigateToProduct(product)">
+
+<!--      <a-avatar v-if="product.comparison && product.comparison === 'cheaper'"-->
+<!--          icon="dollar" class="comparison-icon" style="background-color:#87d068" />-->
+
       <div class="top" :style="{backgroundImage: 'url(' + getImageSrc(product) + ')'}">
       </div>
       <div class="bottom">
@@ -11,6 +15,9 @@
           <div class="category">
             {{ getCategory(product) }}
           </div>
+          <a-tag color="blue"
+          v-if="product.comparison && product.comparison == 'cheaper'">Cheaper</a-tag>
+          <a-tag v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" color="green">More Environmentally Friendly</a-tag>
         </div>
         <div class="right">
           <a-spin size="small" v-if="isLoadingPrices"></a-spin>
@@ -121,6 +128,13 @@ export default {
   cursor: pointer;
 
   .suggested-product-card {
+    position: relative;
+    
+    .comparison-icon {
+      position: absolute;
+      right: 30px;
+      top: 20px;
+    }
 
     .top {
       width: 100%;
@@ -132,6 +146,7 @@ export default {
 
     .bottom {
       display: flex;
+      padding-top: 15px;
 
       .left {
         flex-grow: 1;
@@ -144,6 +159,7 @@ export default {
         .category {
           font-size: 15px;
           color: #757575;
+          margin-bottom: 4px;
         }
       }
 

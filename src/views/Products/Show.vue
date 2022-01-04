@@ -8,6 +8,9 @@
     >
       <template slot="title">
         {{ product.name }}
+        <approved-badge v-if="product.certified" style="margin-left: 20px"></approved-badge>
+        <has-banned-materials-badge :product-id="product['_id']"
+                                    style="margin-left: 20px;"></has-banned-materials-badge>
       </template>
       <template slot="extra">
         <view-toggler></view-toggler>
@@ -173,8 +176,8 @@
               </div>
               <div class="right">
                 <co2e-indicator :product="product"></co2e-indicator>
-<!--                <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">-->
-<!--                32kg CO2e-->
+                <!--                <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">-->
+                <!--                32kg CO2e-->
               </div>
             </div>
             <!-- / Top row -->
@@ -191,6 +194,14 @@
                 }}</span>
             </div>
             <!-- / Stock -->
+
+            <!-- Effectiveness Wrapper -->
+            <div class="effectiveness-wrapper" v-if="product.effectiveness">
+              <a-tag color="blue">
+              <a-icon type="bulb"></a-icon> {{ formatEffectiveness(product.effectiveness) }} Effectiveness
+              </a-tag>
+            </div>
+            <!-- / Effectiveness Wrapper -->
 
             <!-- Delivery by -->
             <!--            <div class="delivery-by">-->
@@ -369,12 +380,16 @@ import PricingTab from "./Show/PricingTab";
 import SuggestedProducts from "../../components/Products/SuggestedProducts";
 import StockManagement from "../../mixins/StockManagement";
 import Co2eIndicator from "./Show/Co2eIndicator";
+import ApprovedBadge from "./Show/ApprovedBadge";
+import HasBannedMaterialsBadge from "./Show/HasBannedMaterialsBadge";
 
 const _ = require('lodash');
 
 export default {
   name: "Show",
   components: {
+    HasBannedMaterialsBadge,
+    ApprovedBadge,
     Co2eIndicator,
     AddressSelectorInline,
     ViewToggler,
@@ -524,6 +539,10 @@ export default {
       decrementProductQuantity: 'decrementProductQuantity',
       setProductQuantity: 'setProductQuantity'
     }),
+
+    formatEffectiveness(effectiveness) {
+      return effectiveness.charAt(0).toUpperCase() + effectiveness.slice(1).toLowerCase();
+    },
 
     getCategory(product) {
       if (product.taxonomyCategory) {
@@ -870,6 +889,11 @@ export default {
         flex: 1;
       }
     }
+  }
+
+  .effectiveness-wrapper {
+    margin-top: 15px;
+    margin-bottom: 20px;
   }
 
   .stock-wrapper {

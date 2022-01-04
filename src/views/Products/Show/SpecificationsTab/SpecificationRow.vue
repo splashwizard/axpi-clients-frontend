@@ -109,6 +109,9 @@ export default {
       if (detail['propertyValues'] && detail['propertyValues'].length) {
         return detail['propertyValues'][0];
       }
+      if (detail['normalisedUnitMagnitude'] && detail['normalisedUnitBase']) {
+        return detail['normalisedUnitMagnitude'] + ' ' + this.formatUnit(detail['normalisedUnitBase']);
+      }
       return '-';
     },
 

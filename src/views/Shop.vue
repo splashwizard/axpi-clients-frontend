@@ -100,6 +100,10 @@
                 <h4>Manufacturer</h4>
                 <ais-refinement-list attribute="manufacturer"/>
               </ais-panel>
+              <ais-panel>
+                <h4>Certifications</h4>
+                <ais-refinement-list attribute="certifications"/>
+              </ais-panel>
             </a-col>
             <a-col :span="19" style="padding-right: 17px;">
               <!--              <ais-panel>-->

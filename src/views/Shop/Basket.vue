@@ -142,9 +142,9 @@
               </span>
             </div>
 
-            <div slot="actions">
+            <div slot="actions" slot-scope="actions, row">
               <div class="actions">
-                <request-quote-button></request-quote-button>
+                <request-quote-button v-if="row.itemType === 'product'"></request-quote-button>
               </div>
             </div>
 

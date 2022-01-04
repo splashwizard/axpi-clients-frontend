@@ -3,9 +3,12 @@
     <loading-screen
         :is-loading="isLoading||isLoadingDocuments||isLoadingDetails||isSavingDescription||isLoadingPrices"></loading-screen>
 
-    <a-page-header v-if="product && (fromShop||fromBasket)" :title="product.name"
+    <a-page-header v-if="product && (fromShop||fromBasket)"
                    @back="handleBackButton"
     >
+      <template slot="title">
+        {{ product.name }}
+      </template>
       <template slot="extra">
         <view-toggler></view-toggler>
       </template>

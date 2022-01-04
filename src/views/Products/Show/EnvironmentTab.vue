@@ -210,7 +210,7 @@ export default {
           co2e_formatted: (material.co2e) ? (Math.round(material.co2e * 100) / 100 + ' kg') : '-',
           water_formatted: (material.water) ? (Math.round(material.water * 100) / 100 + ' kg') : '-',
           recyclable: materialOption ? materialOption.recyclable : null,
-          recycled_content_percentage: materialOption ? materialOption.recycled_content_percentage : (0 + ' %'),
+          recycled_content_percentage: materialOption ? materialOption.recycled_content_percentage + '%' : (0 + '%'),
           ...material
         };
       });
@@ -267,7 +267,7 @@ export default {
               scopedSlots: {customRender: 'recyclable'}
             },
             {
-              title: 'Recycled Content (%)',
+              title: 'Recycled Content',
               dataIndex: 'recycled_content_percentage'
             },
             {

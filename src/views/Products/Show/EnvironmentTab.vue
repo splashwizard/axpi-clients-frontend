@@ -5,10 +5,12 @@
         :expand-icon="getExpandIcon"
         :expand-icon-column-index="3"
         class="axpi-table" :columns="columns" :data-source="tableData" :pagination="false">
+      <template slot="icon" slot-scope="icon, row">
+        <a-icon class="section-icon" v-if="row.section == 'Materials'" type="copy"></a-icon>
+        <a-icon class="section-icon" v-if="row.section == 'Transport'" type="car"></a-icon>
+        <a-icon class="section-icon" v-if="row.section == 'Certifications'" type="safety-certificate"></a-icon>
+      </template>
       <template slot="section" slot-scope="section">
-        <a-icon class="section-icon" v-if="section == 'Materials'" type="copy"></a-icon>
-        <a-icon class="section-icon" v-if="section == 'Transport'" type="car"></a-icon>
-        <a-icon class="section-icon" v-if="section == 'Certifications'" type="safety-certificate"></a-icon>
         <span class="section-title">{{ section }}</span>
       </template>
       <a-table
@@ -57,7 +59,7 @@
         </span>
         <span v-if="record.section === 'Certifications' && !record.isLoading">
          <a-tag v-for="(certification, i) in record.innerTableData" :key="i" color="blue">
-           {{certification.name}}
+           {{ certification.name }}
          </a-tag>
         </span>
       </template>
@@ -113,6 +115,11 @@ import eventBus from "../../../event-bus";
 const _ = require('lodash');
 
 const columns = [
+  {
+    title: '',
+    width: 20,
+    scopedSlots: {customRender: 'icon'}
+  },
   {
     title: 'Section',
     dataIndex: 'section',
@@ -522,7 +529,7 @@ export default {
   }
 
   .section-icon {
-    margin-right: 10px;
+    //margin-right: 10px;
     //color: #1890ff;
   }
 

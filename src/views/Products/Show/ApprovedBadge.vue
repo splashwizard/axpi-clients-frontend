@@ -1,7 +1,7 @@
 <template>
   <div class="approved-badge">
     <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">
-    <span>Approved</span>
+    <span><a-tag>Approved</a-tag></span>
   </div>
 </template>
 

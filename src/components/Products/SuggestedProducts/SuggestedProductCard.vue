@@ -25,7 +25,7 @@
         <div class="right">
           <a-spin size="small" v-if="isLoadingPrices"></a-spin>
           <span v-else>{{ priceRange }}</span>
-          <a-tag v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" color="green">
+          <a-tag v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" color="green" style="margin-right: 0 !important">
             Environmentally Friendly
           </a-tag>
         </div>

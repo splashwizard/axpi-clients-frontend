@@ -113,8 +113,8 @@
                 <ais-range-input attribute="quantity"/>
               </ais-panel>
               <ais-panel>
-                <h4>Capacity</h4>
-                <ais-refinement-list attribute="capacity"/>
+                <h4>Capacity (L)</h4>
+                <ais-range-input attribute="capacity"/>
               </ais-panel>
             </a-col>
             <a-col :span="19" style="padding-right: 17px;">

@@ -17,9 +17,7 @@
 <!--            <a-tag color="blue"-->
 <!--                   v-if="product.comparison && product.comparison == 'cheaper'">Cost Effective-->
 <!--            </a-tag>-->
-            <a-tag v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" color="green">
-              Environmentally Friendly
-            </a-tag>
+
 <!--            <img src="/img/leaf.jpg" v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" class="leaf" width="15" style="margin-left: 5px;" alt="Leaf">-->
 
           </div>
@@ -27,6 +25,9 @@
         <div class="right">
           <a-spin size="small" v-if="isLoadingPrices"></a-spin>
           <span v-else>{{ priceRange }}</span>
+          <a-tag v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" color="green">
+            Environmentally Friendly
+          </a-tag>
         </div>
       </div>
     </div>

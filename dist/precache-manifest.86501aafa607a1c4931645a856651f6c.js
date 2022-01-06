@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/analytics.607c716e.css"
   },
   {
-    "revision": "764b989743a38463121c",
+    "revision": "961e54f45c171f6dc05b",
     "url": "/css/app.74311ddd.css"
   },
   {
@@ -64,7 +64,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/shop-landing.6568b814.css"
   },
   {
-    "revision": "1a6cb57ddb90fe5becdf",
+    "revision": "4930c015f5a071c71dc3",
     "url": "/css/shop.0cfd3888.css"
   },
   {
@@ -76,8 +76,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/view-cluster.887a5d43.css"
   },
   {
-    "revision": "4ecdbd4f5eab28009953",
-    "url": "/css/view-product.e741c841.css"
+    "revision": "c8dfb19907a90b60f5c5",
+    "url": "/css/view-product.a1db5933.css"
   },
   {
     "revision": "4c462fb1275d02752fa4",
@@ -320,7 +320,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/reports/usa.pxd/metadata.info"
   },
   {
-    "revision": "d85eaedd772862db2f9dc3018404f9d5",
+    "revision": "e6bc067f70f6c0fb00561444e8afeacb",
     "url": "/index.html"
   },
   {
@@ -336,8 +336,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/analytics.23a74b8a.js"
   },
   {
-    "revision": "764b989743a38463121c",
-    "url": "/js/app.d6a5e8d0.js"
+    "revision": "961e54f45c171f6dc05b",
+    "url": "/js/app.358ee44c.js"
   },
   {
     "revision": "3a2fc1c0e05d79d69af5",
@@ -396,8 +396,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/shop-landing.69f7d66e.js"
   },
   {
-    "revision": "1a6cb57ddb90fe5becdf",
-    "url": "/js/shop.7bff6e8a.js"
+    "revision": "4930c015f5a071c71dc3",
+    "url": "/js/shop.97bca649.js"
   },
   {
     "revision": "34e5bb77ed2beb2acb3a",
@@ -412,8 +412,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/view-cluster.7008c3f6.js"
   },
   {
-    "revision": "4ecdbd4f5eab28009953",
-    "url": "/js/view-product.3e4a17d2.js"
+    "revision": "c8dfb19907a90b60f5c5",
+    "url": "/js/view-product.2576125c.js"
   },
   {
     "revision": "4c462fb1275d02752fa4",

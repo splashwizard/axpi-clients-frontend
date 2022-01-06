@@ -113,6 +113,18 @@
                 <ais-range-input attribute="quantity"/>
               </ais-panel>
               <ais-panel>
+                <h4>Width (mm)</h4>
+                <ais-range-input attribute="width"/>
+              </ais-panel>
+              <ais-panel>
+                <h4>Height (mm)</h4>
+                <ais-range-input attribute="height"/>
+              </ais-panel>
+              <ais-panel>
+                <h4>Depth (mm)</h4>
+                <ais-range-input attribute="depth"/>
+              </ais-panel>
+              <ais-panel>
                 <h4>Capacity (L)</h4>
                 <ais-range-input attribute="capacity"/>
               </ais-panel>

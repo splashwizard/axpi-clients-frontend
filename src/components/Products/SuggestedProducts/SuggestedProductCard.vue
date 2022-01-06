@@ -2,8 +2,8 @@
   <div class="suggested-product-card-wrapper">
     <div class="suggested-product-card" @click.prevent="navigateToProduct(product)">
 
-<!--      <a-avatar v-if="product.comparison && product.comparison === 'cheaper'"-->
-<!--          icon="dollar" class="comparison-icon" style="background-color:#87d068" />-->
+      <!--      <a-avatar v-if="product.comparison && product.comparison === 'cheaper'"-->
+      <!--          icon="dollar" class="comparison-icon" style="background-color:#87d068" />-->
 
       <div class="top" :style="{backgroundImage: 'url(' + getImageSrc(product) + ')'}">
       </div>
@@ -14,10 +14,15 @@
           </div>
           <div class="category">
             {{ getCategory(product) }}
+<!--            <a-tag color="blue"-->
+<!--                   v-if="product.comparison && product.comparison == 'cheaper'">Cost Effective-->
+<!--            </a-tag>-->
+<!--            <a-tag v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" color="green">-->
+<!--              Environmentally Friendly-->
+<!--            </a-tag>-->
+            <img src="/img/leaf.jpg" v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" class="leaf" width="15" style="margin-left: 5px;" alt="Leaf">
+
           </div>
-          <a-tag color="blue"
-          v-if="product.comparison && product.comparison == 'cheaper'">Cheaper</a-tag>
-          <a-tag v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" color="green">More Environmentally Friendly</a-tag>
         </div>
         <div class="right">
           <a-spin size="small" v-if="isLoadingPrices"></a-spin>
@@ -30,6 +35,7 @@
 
 <script>
 import axios from "axios";
+
 const _ = require('lodash');
 import Orders from "../../../mixins/Orders";
 
@@ -129,7 +135,7 @@ export default {
 
   .suggested-product-card {
     position: relative;
-    
+
     .comparison-icon {
       position: absolute;
       right: 30px;

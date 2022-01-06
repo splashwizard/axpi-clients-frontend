@@ -110,7 +110,7 @@
               </ais-panel>
               <ais-panel>
                 <h4>Quantity</h4>
-                <ais-range-slider attribute="quantity"/>
+                <ais-range-input attribute="quantity"/>
               </ais-panel>
               <ais-panel>
                 <h4>Capacity</h4>

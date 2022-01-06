@@ -34,6 +34,11 @@ export default {
       return id;
     }
   },
+  watch: {
+    product() {
+      this.getCo2e();
+    }
+  },
   methods: {
     getCo2e() {
       let vm = this;

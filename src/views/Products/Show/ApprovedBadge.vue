@@ -1,7 +1,7 @@
 <template>
   <div class="approved-badge">
     <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">
-    <span><a-tag>Approved</a-tag></span>
+    <span><a-tag color="green">Approved</a-tag></span>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
 
   span {
     font-weight: normal;
-    font-size: 16px;
+    //font-size: 16px;
   }
 }
 </style>

@@ -228,6 +228,7 @@ export const mutations = {
             }
         }
         this._vm.$forceUpdate();
+        state.tableUpdateKey += 1;
     },
 
     SET_PAST_ORDER_QUANTITY(state, params) {

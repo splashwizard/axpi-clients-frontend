@@ -14,7 +14,7 @@
         <edit-order-modal :suppliers="suppliers" v-if="order && (type === 'order' || type === 'specification')">
         </edit-order-modal>
 
-        <div class="table-wrapper">
+        <div class="table-wrapper" :key="tableUpdateKey">
           <a-table v-if="!isLoading" class="axpi-table"
                    :columns="columns"
                    :pagination="false"
@@ -403,7 +403,8 @@ export default {
   computed: {
     ...mapGetters('shop', {
       basket: 'basket',
-      isLoading: 'isLoading'
+      isLoading: 'isLoading',
+      tableUpdateKey: 'tableUpdateKey'
     }),
 
     ...mapGetters('orderEditor', {

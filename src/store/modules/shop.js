@@ -12,7 +12,8 @@ export const state = {
     enriched: [],
     displayMode: 'prices',
 
-    selectedAddress: null
+    selectedAddress: null,
+    tableUpdateKey: 1
 };
 
 export const mutations = {
@@ -326,6 +327,7 @@ export const mutations = {
             }
         }
         this._vm.$forceUpdate();
+        state.tableUpdateKey += 1;
     },
 
     ADD_CO2E_TO_PRODUCT(state, params) {
@@ -401,6 +403,9 @@ export const getters = {
     },
     selectedAddress: (state) => {
         return state.selectedAddress;
+    },
+    tableUpdateKey: (state) => {
+        return state.tableUpdateKey;
     }
 };
 

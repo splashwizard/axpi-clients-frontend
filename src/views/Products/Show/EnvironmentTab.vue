@@ -6,6 +6,7 @@
         :expand-icon-column-index="4"
         class="axpi-table" :columns="columns" :data-source="tableData" :pagination="false">
       <template slot="icon" slot-scope="icon, row">
+        <a-icon class="section-icon" v-if="row.section == 'Lifespan'" type="clock-circle"></a-icon>
         <a-icon class="section-icon" v-if="row.section == 'Materials'" type="copy"></a-icon>
         <a-icon class="section-icon" v-if="row.section == 'Transport'" type="car"></a-icon>
         <a-icon class="section-icon" v-if="row.section == 'Certifications'" type="safety-certificate"></a-icon>
@@ -60,6 +61,19 @@
         <span v-if="record.section === 'Certifications' && !record.isLoading">
          <a-tag v-for="(certification, i) in record.innerTableData" :key="i" color="blue">
            {{ certification.name }}
+         </a-tag>
+        </span>
+        <span v-if="record.section === 'Lifespan' && !record.isLoading && record.innerTableData && record.innerTableData[0]">
+         <a-tag color="blue">
+           {{ record.innerTableData[0].lifespan_formatted }}
+         </a-tag>
+          <a-tag color="blue">
+           {{ record.innerTableData[0].usage }}
+          </a-tag>
+        </span>
+        <span v-if="record.section === 'Lifespan' && !record.isLoading && !record.innerTableData.length">
+         <a-tag color="red">
+           Unknown
          </a-tag>
         </span>
       </template>
@@ -165,6 +179,9 @@ export default {
       isLoadingMaterialOptions: false,
       materialOptions: [],
 
+      isLoadingProductLifespans: false,
+      productLifespans: [],
+
       isLoadingAspectOptions: false,
       aspectOptions: [],
 
@@ -179,6 +196,7 @@ export default {
     this.loadMaterials();
     this.loadCertifications();
     this.loadTransportations();
+    this.loadProductLifespans();
   },
   computed: {
     ...mapGetters('productViewer', {
@@ -227,6 +245,15 @@ export default {
         return {
           co2e_formatted: (transportation.co2e) ? (Math.round(transportation.co2e * 100) / 100 + ' kg') : '-',
           ...transportation
+        };
+      });
+    },
+
+    lifespansTableData() {
+      return _.map(this.productLifespans, lifespan => {
+        return {
+          lifespan_formatted: lifespan.lifespan + ' ' + lifespan.lifespan_unit,
+          ...lifespan
         };
       });
     },
@@ -347,6 +374,28 @@ export default {
           ],
           innerTableData: this.certificationsTableData,
           isLoading: (this.isLoadingCertifications || this.isLoadingCertificationOptions)
+        },
+        {
+          section: 'Lifespan',
+          measure: '',
+          actionButton: '',
+          actionButtonClicked: () => {
+          },
+          innerTableColumns: [
+            {
+              title: 'Lifespan',
+              dataIndex: 'lifespan_formatted'
+            },
+            {
+              title: 'Usage',
+              dataIndex: 'usage'
+            },
+            {
+              scopedSlots: {customRender: 'actions'}
+            }
+          ],
+          innerTableData: this.lifespansTableData,
+          isLoading: (this.isLoadingProductLifespans)
         },
         // {
         //   section: 'Features',
@@ -478,6 +527,18 @@ export default {
       });
     },
 
+    loadProductLifespans() {
+      let vm = this;
+      vm.isLoadingProductLifespans = true;
+      axios.get(window.API_BASE + '/products/' + this.productId + '/esg/lifespans').then(r => {
+        vm.isLoadingProductLifespans = false;
+        vm.productLifespans = r.data;
+      }).catch(e => {
+        console.log(e);
+        vm.$message.error('Error loading product lifespan');
+      });
+    },
+
     openAddTransportationModal() {
       this.addTransportationModalVisible = true;
     },
@@ -504,7 +565,7 @@ export default {
     },
 
     getExpandIcon({expanded, record, onExpand}) {
-      return (
+      return record.section !== 'Lifespan' ? (
           <a-button style="font-weight: 500; padding-left: 0; padding-right; 0;"
                     type="link"
                     {...{
@@ -516,7 +577,7 @@ export default {
             <span>{expanded ? 'Hide' : 'Expand'}</span>
             <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? 'up' : 'down'}></a-icon>
           </a-button>
-      );
+      ) : <a-button style="opacity: 0; cursor: default;"></a-button>;
     }
   }
 }

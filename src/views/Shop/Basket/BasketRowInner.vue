@@ -6,6 +6,10 @@
         <a-icon class="rowIcon" :type="icon" theme="twoTone"/>
       </div>
 
+      <div slot="name" slot-scope="name">
+        <span class="name">{{ name }}</span>
+      </div>
+
       <div slot="expandedRowRender" slot-scope="innerRow">
         <suggested-prices v-if="innerRow.title == 'Suggested Prices'"
                           :row="row"></suggested-prices>
@@ -38,7 +42,8 @@ export default {
           width: 50
         },
         {
-          dataIndex: 'title'
+          dataIndex: 'title',
+          scopedSlots: {customRender: 'name'}
         }
       ]
     }
@@ -73,6 +78,10 @@ export default {
     font-size: 28px;
     padding-top: 5px;
     padding-bottom: 5px;
+  }
+
+  .name {
+    font-weight: 500;
   }
 
   tr:hover {

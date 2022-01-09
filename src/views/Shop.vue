@@ -165,7 +165,7 @@
                               </router-link>
                             </div>
                             <div class="right">
-                              <approved-badge v-if="item.certified"></approved-badge>
+<!--                              <approved-badge v-if="item.certified"></approved-badge>-->
 <!--                              <span v-if="!isLoadingPrices">-->
 <!--                              {{ getPriceRange(item.id) }}-->
 <!--                              </span>-->

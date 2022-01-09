@@ -21,62 +21,136 @@
           </div>
         </template>
 
-        <a-table slot="expandedRowRender"
-                 slot-scope="item"
-                 :columns="innerColumns"
-                 :data-source="getPricesAndStockWithProductDetails(item)"
-                 :pagination="false">
-          <template slot="price" slot-scope="price, record">
-            {{ formatCostInPence2dp({cost: price, cost_currency: record.price_currency}) }}
-          </template>
-          <template slot="actions" slot-scope="actions, row">
-            <div class="actions-wrapper">
+        <table slot="expandedRowRender" slot-scope="item" class="axpi-table axpi-inner-table">
+          <thead>
+          <tr>
+            <th>Supplier</th>
+            <th>Price</th>
+            <th>Catalog Code</th>
+            <th>Availability</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody v-for="(row, i) in getPricesAndStockWithProductDetails(item)" :key="i">
+          <tr>
+            <td>{{ row.supplier_name }}</td>
+            <td>
+              {{ formatCostInPence2dp({cost: row.price, cost_currency: row.price_currency}) }}
+            </td>
+            <td>
+              {{ row.catalogCode }}
+            </td>
+            <td>
+              <a-icon v-if="isInStock(row.price.stock)" type="check-circle" theme="twoTone"
+                      two-tone-color="#52c41a"></a-icon>
+              <a-icon v-if="isOutOfStock(row.price.stock)" type="close-circle" theme="twoTone"
+                      two-tone-color="#FF0000"></a-icon>
+              <span class="availability-text">{{ getStockText(row.price.stock, true, row.price.lead_time) }}</span>
+            </td>
+            <td>
+              <div class="actions-wrapper">
 
-              <a-input-group v-if="!isProductInBasket(item, row)"
-                             class="quantity-input-group" compact>
-                <a-button icon="minus" @click.prevent="() => decrementPreBasketQuantity(row.id)"></a-button>
-                <a-input class="quantity-input" placeholder="1"
-                         v-model="quantities[row.id]" type="number"></a-input>
-                <a-button icon="plus" @click.prevent="() => incrementPreBasketQuantity(row.id)"></a-button>
-              </a-input-group>
-
-              <a-button v-if="!isProductInBasket(item, row)"
-                        type="primary" @click.prevent="() => addToBasket(item, row)">Add to basket
-              </a-button>
-
-              <div v-else class="quantity-changer">
-                <a-input-group compact>
-                  <a-button @click.prevent="() => decrementProductQuantity({product:item, selectedPriceId: row.id})"
-                            icon="minus">
-                  </a-button>
-                  <a-input type="number"
-                           @change="e => setProductQuantity({quantity: e.target.value, selectedPriceId: row.id, id: item['id']})"
-                           :value="getQuantityOfProductInBasket(item, row)"></a-input>
-                  <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-                  <a-button @click.prevent="() => incrementProductQuantity({product: item, selectedPriceId: row.id})"
-                            icon="plus"></a-button>
+                <a-input-group v-if="!isProductInBasket(item, row)"
+                               class="quantity-input-group" compact>
+                  <a-button icon="minus" @click.prevent="() => decrementPreBasketQuantity(row.id)"></a-button>
+                  <a-input class="quantity-input" placeholder="1"
+                           v-model="quantities[row.id]" type="number"></a-input>
+                  <a-button icon="plus" @click.prevent="() => incrementPreBasketQuantity(row.id)"></a-button>
                 </a-input-group>
+
+                <a-button v-if="!isProductInBasket(item, row)"
+                          type="primary" @click.prevent="() => addToBasket(item, row)">Add to basket
+                </a-button>
+
+                <div v-else class="quantity-changer">
+                  <a-input-group compact>
+                    <a-button @click.prevent="() => decrementProductQuantity({product:item, selectedPriceId: row.id})"
+                              icon="minus">
+                    </a-button>
+                    <a-input type="number"
+                             @change="e => setProductQuantity({quantity: e.target.value, selectedPriceId: row.id, id: item['id']})"
+                             :value="getQuantityOfProductInBasket(item, row)"></a-input>
+                    <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
+                    <a-button @click.prevent="() => incrementProductQuantity({product: item, selectedPriceId: row.id})"
+                              icon="plus"></a-button>
+                  </a-input-group>
+                </div>
               </div>
-            </div>
-          </template>
-          <template slot="availability" slot-scope="availability, price">
-            <a-icon v-if="isInStock(price.stock)" type="check-circle" theme="twoTone"
-                    two-tone-color="#52c41a"></a-icon>
-            <a-icon v-if="isOutOfStock(price.stock)" type="close-circle" theme="twoTone"
-                    two-tone-color="#FF0000"></a-icon>
-            <span class="availability-text">{{ getStockText(price.stock) }}</span>
-          </template>
-        </a-table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="5" class="no-padding-top">
+              <a-tag color="red" v-if="row.supplier_certifications && row.supplier_certifications.length == 0">No
+                certifications
+              </a-tag>
+              <div v-if="row.supplier_certifications && row.supplier_certifications.length">
+                <a-tag color="blue" v-for="(certification, i) in row.supplier_certifications"
+                       :key="getCertificationKey(i)">{{ certification.name }}
+                </a-tag>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <!--        <a-table slot="expandedRowRender"-->
+        <!--                 slot-scope="item"-->
+        <!--                 :columns="innerColumns"-->
+        <!--                 :data-source="getPricesAndStockWithProductDetails(item)"-->
+        <!--                 :pagination="false">-->
+        <!--          <template slot="price" slot-scope="price, record">-->
+        <!--            {{ formatCostInPence2dp({cost: price, cost_currency: record.price_currency}) }}-->
+        <!--          </template>-->
+        <!--          <template slot="actions" slot-scope="actions, row">-->
+        <!--            <div class="actions-wrapper">-->
+
+        <!--              <a-input-group v-if="!isProductInBasket(item, row)"-->
+        <!--                             class="quantity-input-group" compact>-->
+        <!--                <a-button icon="minus" @click.prevent="() => decrementPreBasketQuantity(row.id)"></a-button>-->
+        <!--                <a-input class="quantity-input" placeholder="1"-->
+        <!--                         v-model="quantities[row.id]" type="number"></a-input>-->
+        <!--                <a-button icon="plus" @click.prevent="() => incrementPreBasketQuantity(row.id)"></a-button>-->
+        <!--              </a-input-group>-->
+
+        <!--              <a-button v-if="!isProductInBasket(item, row)"-->
+        <!--                        type="primary" @click.prevent="() => addToBasket(item, row)">Add to basket-->
+        <!--              </a-button>-->
+
+        <!--              <div v-else class="quantity-changer">-->
+        <!--                <a-input-group compact>-->
+        <!--                  <a-button @click.prevent="() => decrementProductQuantity({product:item, selectedPriceId: row.id})"-->
+        <!--                            icon="minus">-->
+        <!--                  </a-button>-->
+        <!--                  <a-input type="number"-->
+        <!--                           @change="e => setProductQuantity({quantity: e.target.value, selectedPriceId: row.id, id: item['id']})"-->
+        <!--                           :value="getQuantityOfProductInBasket(item, row)"></a-input>-->
+        <!--                  &lt;!&ndash;                        <div>{{ getQuantityOfProductInBasket(item) }}</div>&ndash;&gt;-->
+        <!--                  <a-button @click.prevent="() => incrementProductQuantity({product: item, selectedPriceId: row.id})"-->
+        <!--                            icon="plus"></a-button>-->
+        <!--                </a-input-group>-->
+        <!--              </div>-->
+        <!--            </div>-->
+        <!--          </template>-->
+        <!--          <template slot="availability" slot-scope="availability, price">-->
+        <!--            <a-icon v-if="isInStock(price.stock)" type="check-circle" theme="twoTone"-->
+        <!--                    two-tone-color="#52c41a"></a-icon>-->
+        <!--            <a-icon v-if="isOutOfStock(price.stock)" type="close-circle" theme="twoTone"-->
+        <!--                    two-tone-color="#FF0000"></a-icon>-->
+        <!--            <span class="availability-text">{{ getStockText(price.stock, true, price.lead_time) }}</span>-->
+        <!--          </template>-->
+        <!--        </a-table>-->
 
         <template slot="productCode" slot-scope="productCode, row">
           <router-link style="font-weight: 500;" :to="getProductPageUrl(row)">
             {{ productCode }}
           </router-link>
+          <approved-badge v-if="product.certified"
+                          style="margin-left: 30px;"></approved-badge>
         </template>
 
-<!--        <template slot="price" slot-scope="price, row">-->
-<!--          {{ getPriceRange(row.id) }}-->
-<!--        </template>-->
+        <!--        <template slot="price" slot-scope="price, row">-->
+        <!--          {{ getPriceRange(row.id) }}-->
+        <!--        </template>-->
       </a-table>
 
       <div class="show-more-toggle" v-if="canShowMore">
@@ -100,6 +174,7 @@ const _ = require('lodash');
 import Orders from "../../mixins/Orders";
 import StockManagement from "../../mixins/StockManagement";
 import {mapActions, mapGetters} from "vuex";
+import ApprovedBadge from "../Products/Show/ApprovedBadge";
 
 const columns = [
   {
@@ -160,6 +235,7 @@ const innerColumns = [
 
 export default {
   name: "NameGroup",
+  components: {ApprovedBadge},
   props: ['name', 'product', 'quantities'],
   mixins: [Orders, StockManagement],
   created() {
@@ -215,6 +291,10 @@ export default {
       decrementProductQuantity: 'decrementProductQuantity',
       setProductQuantity: 'setProductQuantity'
     }),
+
+    getCertificationKey(i) {
+      return 'certification-' + Math.random() + '-' + i;
+    },
 
     showMore() {
       this.isShowingMore = true;
@@ -272,7 +352,9 @@ export default {
       return _.map(this.group.prices[product.id], price => ({
         ...price,
         catalogCode: product.catalogCode,
-        stock: this.getStockForProduct(product.id, price.supplier_id)
+        stock: this.getStockForProduct(product.id, price.supplier_id),
+        lead_time: this.getLeadTimeForProduct(product.id, price.supplier_id),
+        supplier_certifications: price.supplier_certifications
       }))
     },
 
@@ -280,6 +362,12 @@ export default {
       let stocks = this.group.stocks[productId];
       let stock = _.find(stocks, {supplier_id: supplierId});
       return stock !== undefined ? stock.stock : null;
+    },
+
+    getLeadTimeForProduct(productId, supplierId) {
+      let stocks = this.group.stocks[productId];
+      let stock = _.find(stocks, {supplier_id: supplierId});
+      return stock !== undefined ? stock.lead_time : null;
     },
 
     // getPriceRange(productId) {

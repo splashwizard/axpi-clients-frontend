@@ -11,7 +11,8 @@
               <!--                        <img src="/img/axiom.png" alt="">-->
               <!--                    </router-link>-->
               <div class="logo-circle">
-                <img src="/img/axiom-tab-icon.svg" alt="">
+                <img v-if="user.client.logo" :src="getImageSrc(user.client.logo)" alt="">
+                <img v-else src="/img/axiom-tab-icon.svg" alt="">
               </div>
 
               <div class="organisation-unit-selector">
@@ -74,7 +75,7 @@
                       <div class="ant-list-item-meta">
                         <div class="ant-list-item-meta-avatar"><span
                             class="ant-avatar ant-avatar-circle ant-avatar-image"><img
-                            :src="getImageSrc(item)"></span></div>
+                            :src="getOrderImageSrc(item)"></span></div>
                         <div class="ant-list-item-meta-content"><h4 class="ant-list-item-meta-title">
                           {{ item.name }}
                         </h4>
@@ -307,6 +308,7 @@ import ClickOutside from 'vue-click-outside'
 import AddSpecToBasketButtonAndModal from "./views/Shop/AddSpecToBasketButtonAndModal";
 import ShopIcon from "./components/Icons/ShopIcon";
 import QuicksightQBar from "./components/QuicksightQBar";
+import Images from "./mixins/Images";
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -353,6 +355,7 @@ export default {
     FeedbackPopup,
     AddSpecToBasketButtonAndModal
   },
+  mixins: [Images],
   data() {
     return {
       selectedMenuKey: this.$router.currentRoute.path.split("/")[1],
@@ -415,7 +418,7 @@ export default {
       this.$router.push('/specifications');
       this.settingsPopoverVisible = false;
     },
-    getImageSrc(order) {
+    getOrderImageSrc(order) {
       if (order['imageURLs'] && order['imageURLs'].length) {
         return order['imageURLs'][0];
       }

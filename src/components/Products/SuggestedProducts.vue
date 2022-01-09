@@ -23,7 +23,8 @@
 
       <div class="carousel-container" ref="carousel">
         <div class="carousel-card" v-for="(suggestedProduct, i) in suggestedProducts" :key="i">
-          <suggested-product-card :product="suggestedProduct"></suggested-product-card>
+          <suggested-product-card
+              :suggestion="suggestedProduct"></suggested-product-card>
         </div>
       </div>
     </div>

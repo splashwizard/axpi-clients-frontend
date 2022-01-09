@@ -6,6 +6,10 @@
     <carousel
         v-if="!isLoading" :autoplay="true" :autoplay-timeout="5000" :per-page="1">
       <slide v-for="(image, i) in carouselImages" :key="i">
+        <div class="carousel-text">
+          <h1>{{ image.title }}</h1>
+          <h2>{{ image.subtitle }}</h2>
+        </div>
         <img class="carousel-image" :src="getImageSrc(image.image)" :alt="image.alt">
       </slide>
     </carousel>
@@ -45,7 +49,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .carousel-image {
   width: 100%;
   max-height: 600px;
@@ -54,6 +58,23 @@ export default {
   object-fit: cover;
   margin-left: auto;
   margin-right: auto;
+}
+
+.carousel-text {
+  position: absolute;
+  left: 50px;
+  top: 30px;
+
+  h1 {
+    font-size: 70px;
+    color: #fff;
+    margin-bottom: 0.25em;
+  }
+
+  h2 {
+    color: #fff;
+    font-size: 25px;
+  }
 }
 
 .carousel-margin-bottom {

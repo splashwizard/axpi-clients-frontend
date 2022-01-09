@@ -11,6 +11,23 @@
   }
 }
 
+.axpi-inner-table {
+  //padding: 10px 10px 5px;
+
+  th {
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  th, td {
+    padding: 16px 16px;
+    overflow-wrap: break-word;
+  }
+
+  .no-padding-top {
+    padding-top: 0 !important;
+  }
+}
+
 .axpi-table {
   th {
     background: none !important;
@@ -29,10 +46,10 @@
   }
 
   &.column-dividers {
-   table {
-     border-left: 1px solid #e8e8e8 !important;
-     border-top: 1px solid #e8e8e8 !important;
-   }
+    table {
+      border-left: 1px solid #e8e8e8 !important;
+      border-top: 1px solid #e8e8e8 !important;
+    }
 
     td, th {
       border-right: 1px solid #e8e8e8 !important;

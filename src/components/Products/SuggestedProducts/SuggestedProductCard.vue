@@ -14,19 +14,23 @@
           </div>
           <div class="category">
             {{ getCategory(product) }}
-<!--            <a-tag color="blue"-->
-<!--                   v-if="product.comparison && product.comparison == 'cheaper'">Cost Effective-->
-<!--            </a-tag>-->
+            <!--            <a-tag color="blue"-->
+            <!--                   v-if="product.comparison && product.comparison == 'cheaper'">Cost Effective-->
+            <!--            </a-tag>-->
 
-<!--            <img src="/img/leaf.jpg" v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" class="leaf" width="15" style="margin-left: 5px;" alt="Leaf">-->
+            <!--            <img src="/img/leaf.jpg" v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" class="leaf" width="15" style="margin-left: 5px;" alt="Leaf">-->
 
           </div>
         </div>
         <div class="right">
           <a-spin size="small" v-if="isLoadingPrices"></a-spin>
-          <span v-else>{{ priceRange }}</span>
+          <div v-else>{{ priceRange }}</div>
+          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block;"
+                 v-if="suggestion.cheaper">Cost Effective
+          </a-tag>
           <a-tag
-              v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" color="green" style="margin-right: 0 !important; display: block;">
+              v-if="suggestion.more_environmentally_friendly" color="green"
+              style="margin-right: 0 !important; display: inline-block;">
             Environmentally Friendly
           </a-tag>
         </div>
@@ -43,7 +47,7 @@ import Orders from "../../../mixins/Orders";
 
 export default {
   name: "SuggestedProductCard",
-  props: ['product'],
+  props: ['suggestion'],
   mixins: [Orders],
   data() {
     return {
@@ -52,6 +56,10 @@ export default {
     }
   },
   computed: {
+    product() {
+      return this.suggestion.product;
+    },
+
     priceRange() {
       let prices = this.prices;
       if (prices && prices.length) {

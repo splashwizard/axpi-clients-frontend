@@ -147,28 +147,36 @@
               </div>
             </div>
 
-            <a-table
-                slot="expandedRowRender"
-                slot-scope="record"
-                :columns="innerColumns"
-                :data-source="record.prices"
-                :pagination="false"
-            >
-              <div slot="cost" slot-scope="cost, record">
-                {{
-                  record.price ? formatCostInPence2dp({
-                    cost: record.price,
-                    cost_currency: 'USD'
-                  }) : '-'
-                }}
-              </div>
-              <div slot="co2e" slot-scope="co2e">
-                <span v-if="getSupplierCo2e(co2e, record)">
-                  {{ getSupplierCo2e(co2e, record) }} kg
-                </span>
-                <a-tag color="red" v-else>Unknown</a-tag>
-              </div>
-            </a-table>
+            <div slot="expandedRowRender" slot-scope="record">
+              <basket-row-inner :row="record"></basket-row-inner>
+            </div>
+
+<!--            <a-table slot="expandedRowRender" slot-scope="record" :columns="record.innerColumns" :data-source="record.innerRows" :pagination="false">-->
+
+<!--            </a-table>-->
+
+<!--            <a-table-->
+<!--                slot="expandedRowRender"-->
+<!--                slot-scope="record"-->
+<!--                :columns="innerColumns"-->
+<!--                :data-source="record.prices"-->
+<!--                :pagination="false"-->
+<!--            >-->
+<!--              <div slot="cost" slot-scope="cost, record">-->
+<!--                {{-->
+<!--                  record.price ? formatCostInPence2dp({-->
+<!--                    cost: record.price,-->
+<!--                    cost_currency: 'USD'-->
+<!--                  }) : '-'-->
+<!--                }}-->
+<!--              </div>-->
+<!--              <div slot="co2e" slot-scope="co2e">-->
+<!--                <span v-if="getSupplierCo2e(co2e, record)">-->
+<!--                  {{ getSupplierCo2e(co2e, record) }} kg-->
+<!--                </span>-->
+<!--                <a-tag color="red" v-else>Unknown</a-tag>-->
+<!--              </div>-->
+<!--            </a-table>-->
           </a-table>
         </div>
 
@@ -189,6 +197,7 @@ import RequestQuoteButton from "./Basket/RequestQuoteButton";
 import EditOrderModal from "../../components/Orders/EditOrderModal";
 import axios from "axios";
 import eventBus from "../../event-bus";
+import BasketRowInner from "./Basket/BasketRowInner";
 
 const _ = require('lodash');
 
@@ -201,7 +210,7 @@ const innerColumns = [
 export default {
   name: "Basket",
   mixins: [Orders],
-  components: {RequestQuoteButton, OptimiseBasket, EditOrderModal},
+  components: {BasketRowInner, RequestQuoteButton, OptimiseBasket, EditOrderModal},
   data() {
     return {
       innerColumns,
@@ -410,7 +419,7 @@ export default {
     ...mapGetters('orderEditor', {
       order: 'order',
       type: 'type'
-    }),
+    })
   }
 }
 </script>

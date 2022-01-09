@@ -27,7 +27,8 @@
               </router-link>
               <a v-if="record.itemType == 'order'" href="#" @click.prevent="editOrder(record.order)">{{ name }}
               </a>
-              <a v-if="record.itemType == 'specification'" href="#" @click.prevent="editSpecification(record.specification)">{{ name }}
+              <a v-if="record.itemType == 'specification'" href="#"
+                 @click.prevent="editSpecification(record.specification)">{{ name }}
               </a>
             </div>
 
@@ -119,7 +120,11 @@
 
             <div slot="cost" slot-scope="cost, record">
               <a-spin v-if="record.isLoadingPrices" size="small"></a-spin>
-              <span v-else>
+              <div v-if="!record.isLoadingPrices">
+
+                <!-- Suggested -->
+                <div>
+              <span>
               {{
                   record.selectedPrice ? formatCostInPence2dp({
                     cost: getPriceToShow(record.selectedPrice.price, record.quantity, record.itemType),
@@ -127,10 +132,28 @@
                   }) : '-'
                 }}
               </span>
-              <a-tag
-                  v-if="!record.isLoadingPrices && record.prices && record.itemType !== 'product' && record.selectedPrice"
-                  color="blue" style="margin-left: 5px;">Suggested
-              </a-tag>
+                  <a-tag
+                      v-if="record.prices && record.itemType !== 'product' && record.selectedPrice"
+                      color="blue" style="margin-left: 5px;">Suggested
+                  </a-tag>
+                </div>
+                <!-- / Suggested -->
+
+                <!-- Savings -->
+                <div style="margin-top: 10px;"  v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
+                  {{
+                    getSavings(record) ? formatCostInPence2dp({
+                      cost: getSavings(record),
+                      cost_currency: 'USD'
+                    }) : '-'
+                  }}
+                  <a-tag
+                      color="blue" style="margin-left: 5px;">Savings
+                  </a-tag>
+                </div>
+                <!-- / Savings -->
+
+              </div>
             </div>
 
             <div slot="co2e" slot-scope="co2e, record">
@@ -151,32 +174,32 @@
               <basket-row-inner :row="record"></basket-row-inner>
             </div>
 
-<!--            <a-table slot="expandedRowRender" slot-scope="record" :columns="record.innerColumns" :data-source="record.innerRows" :pagination="false">-->
+            <!--            <a-table slot="expandedRowRender" slot-scope="record" :columns="record.innerColumns" :data-source="record.innerRows" :pagination="false">-->
 
-<!--            </a-table>-->
+            <!--            </a-table>-->
 
-<!--            <a-table-->
-<!--                slot="expandedRowRender"-->
-<!--                slot-scope="record"-->
-<!--                :columns="innerColumns"-->
-<!--                :data-source="record.prices"-->
-<!--                :pagination="false"-->
-<!--            >-->
-<!--              <div slot="cost" slot-scope="cost, record">-->
-<!--                {{-->
-<!--                  record.price ? formatCostInPence2dp({-->
-<!--                    cost: record.price,-->
-<!--                    cost_currency: 'USD'-->
-<!--                  }) : '-'-->
-<!--                }}-->
-<!--              </div>-->
-<!--              <div slot="co2e" slot-scope="co2e">-->
-<!--                <span v-if="getSupplierCo2e(co2e, record)">-->
-<!--                  {{ getSupplierCo2e(co2e, record) }} kg-->
-<!--                </span>-->
-<!--                <a-tag color="red" v-else>Unknown</a-tag>-->
-<!--              </div>-->
-<!--            </a-table>-->
+            <!--            <a-table-->
+            <!--                slot="expandedRowRender"-->
+            <!--                slot-scope="record"-->
+            <!--                :columns="innerColumns"-->
+            <!--                :data-source="record.prices"-->
+            <!--                :pagination="false"-->
+            <!--            >-->
+            <!--              <div slot="cost" slot-scope="cost, record">-->
+            <!--                {{-->
+            <!--                  record.price ? formatCostInPence2dp({-->
+            <!--                    cost: record.price,-->
+            <!--                    cost_currency: 'USD'-->
+            <!--                  }) : '-'-->
+            <!--                }}-->
+            <!--              </div>-->
+            <!--              <div slot="co2e" slot-scope="co2e">-->
+            <!--                <span v-if="getSupplierCo2e(co2e, record)">-->
+            <!--                  {{ getSupplierCo2e(co2e, record) }} kg-->
+            <!--                </span>-->
+            <!--                <a-tag color="red" v-else>Unknown</a-tag>-->
+            <!--              </div>-->
+            <!--            </a-table>-->
           </a-table>
         </div>
 
@@ -316,6 +339,11 @@ export default {
       loadSpecification: 'loadSpecification'
     }),
 
+    getSavings(row) {
+      let prices = _.map(row.prices, 'price');
+      let benchmarkPrice = _.mean(prices) * 1.3;
+      return (benchmarkPrice - row.selectedPrice.price);
+    },
 
     loadSuppliers() {
       let vm = this;
@@ -367,7 +395,7 @@ export default {
       if (item.itemType === 'product') {
         co2eToReturn = co2eToReturn * item.quantity;
       }
-      return co2eToReturn ? Math.round(co2eToReturn*100)/100 : 0;
+      return co2eToReturn ? Math.round(co2eToReturn * 100) / 100 : 0;
     },
 
     filterOption(input, option) {

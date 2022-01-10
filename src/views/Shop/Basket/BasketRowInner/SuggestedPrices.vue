@@ -122,5 +122,9 @@ export default {
   th {
     padding-top: 5px !important;
   }
+
+  td {
+    //border-bottom: 1px solid #e8e8e8 !important;
+  }
 }
 </style>

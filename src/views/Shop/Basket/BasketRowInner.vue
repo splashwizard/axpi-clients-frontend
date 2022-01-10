@@ -285,8 +285,28 @@ export default {
     }
   }
 
-  td {
-    border-bottom: none !important;
+  tr:last-child {
+    td {
+      border-bottom: none !important;
+    }
+  }
+
+  .ant-table-tbody > tr > td {
+    //border-bottom: none !important;
+    border-bottom: 2px solid #e8e8e8 !important;
+  }
+
+  .ant-table-expanded-row {
+    tr {
+      td {
+        border-bottom: 1px solid #e8e8e8 !important;
+      }
+      &:last-child {
+        td {
+          border-bottom: 0 !important;
+        }
+      }
+    }
   }
 }
 

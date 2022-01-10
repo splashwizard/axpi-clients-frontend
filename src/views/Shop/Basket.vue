@@ -141,14 +141,14 @@
 
                 <!-- Savings -->
                 <div style="margin-top: 10px;" v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
-                  <span :class="{'text-success': (getSavings(record) && getSavings(record) > 0)}">{{
+                  <span>{{
                     getSavings(record) ? formatCostInPence2dp({
                       cost: getSavings(record),
                       cost_currency: 'USD'
                     }) : '-'
                     }}</span>
                   <a-tag
-                      color="blue" style="margin-left: 5px;">Savings
+                      :color="(getSavings(record) && getSavings(record) > 0) ? 'green' : 'red'" style="margin-left: 5px;">Savings
                   </a-tag>
                 </div>
                 <!-- / Savings -->

@@ -293,7 +293,7 @@ export default {
           title: "",
           scopedSlots: {customRender: "actions"},
           width: 10
-        },
+        }
       ],
       suppliers: [],
       isLoadingSuppliers: false
@@ -482,6 +482,22 @@ export default {
         selectedPrice: _.find(record.prices, {id: priceId}),
         basketItem: record
       });
+    },
+
+    getExpandIcon({expanded, record, onExpand}) {
+      return (
+          <a-button style="font-weight: 500; padding-left: 0; padding-right; 0; float: right;"
+                    type="link"
+                    {...{
+                      on: {
+                        click: onExpand.bind(this, [expanded, record])
+                      }
+                    }}
+          >
+            <span>{expanded ? 'Hide' : 'Expand'}</span>
+            <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? 'up' : 'down'}></a-icon>
+          </a-button>
+      );
     }
   },
   computed: {

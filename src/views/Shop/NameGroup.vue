@@ -40,12 +40,19 @@
             <td>
               {{ row.catalogCode }}
             </td>
+<!--            <td>-->
+<!--              <a-icon v-if="isInStock(row.price.stock)" type="check-circle" theme="twoTone"-->
+<!--                      two-tone-color="#52c41a"></a-icon>-->
+<!--              <a-icon v-if="isOutOfStock(row.price.stock)" type="close-circle" theme="twoTone"-->
+<!--                      two-tone-color="#FF0000"></a-icon>-->
+<!--              <span class="availability-text">{{ getStockText(row.price.stock, true, row.price.lead_time) }}</span>-->
+<!--            </td>-->
             <td>
-              <a-icon v-if="isInStock(row.price.stock)" type="check-circle" theme="twoTone"
+              <a-icon v-if="isInStock(row.stock)" type="check-circle" theme="twoTone"
                       two-tone-color="#52c41a"></a-icon>
-              <a-icon v-if="isOutOfStock(row.price.stock)" type="close-circle" theme="twoTone"
+              <a-icon v-if="isOutOfStock(row.stock)" type="close-circle" theme="twoTone"
                       two-tone-color="#FF0000"></a-icon>
-              <span class="availability-text">{{ getStockText(row.price.stock, true, row.price.lead_time) }}</span>
+              <span class="availability-text">{{ getStockText(row.stock, true, row.lead_time) }}</span>
             </td>
             <td>
               <div class="actions-wrapper">

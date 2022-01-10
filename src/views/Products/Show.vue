@@ -190,7 +190,7 @@
               <!--                      two-tone-color="#FF0000"></a-icon>-->
               <span class="stock-text"
                     :class="{'in-stock': isInStock(stockForSelectedPrice ? stockForSelectedPrice.stock : null), 'out-of-stock': isOutOfStock(stockForSelectedPrice ? stockForSelectedPrice.stock : null)}">{{
-                  getStockText(stockForSelectedPrice ? stockForSelectedPrice.stock : null, false)
+                  getStockText(stockForSelectedPrice ? stockForSelectedPrice.stock : null, false, stockForSelectedPrice ? stockForSelectedPrice.lead_time : null)
                 }}</span>
             </div>
             <!-- / Stock -->

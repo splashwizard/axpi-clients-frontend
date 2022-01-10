@@ -13,13 +13,14 @@
       }}
     </div>
     <div slot="savings" slot-scope="savings, record">
-      <span :class="{'text-danger': record.savings < 0, 'text-success': record.savings > 0}">{{
+      <span>{{
           record.cost ? formatCostInPence2dp({
             cost: record.savings,
             cost_currency: 'USD'
           }) : '-'
         }}</span>
-      <a-tag style="margin-left: 15px;" color="blue">P&L</a-tag>
+      <a-tag style="margin-left: 15px;"
+             :color="(record.savings && record.savings > 0) ? 'green' : 'red'">P&L</a-tag>
     </div>
   </a-table>
 </template>

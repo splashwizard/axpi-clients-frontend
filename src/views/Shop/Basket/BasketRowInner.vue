@@ -46,7 +46,7 @@
 
       <div slot="summary-tags" slot-scope="summary, record">
         <div v-if="record.title == 'Suggested Prices'">
-          <a-tag color="blue" style="margin-right: 0;">Suggested</a-tag>
+          <a-tag v-if="row.itemType !== 'product'" color="blue" style="margin-right: 0;">Suggested</a-tag>
         </div>
         <div v-if="record.title == 'Similar Products'">
           <a-progress type="circle"

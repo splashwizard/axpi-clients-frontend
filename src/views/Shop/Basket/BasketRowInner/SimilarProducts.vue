@@ -4,6 +4,9 @@
            :columns="columns"
            :data-source="similarProducts"
            :pagination="false">
+    <div slot="productName" slot-scope="productName">
+      {{ productName }} <a-tag style="margin-left: 5px;" color="blue">Past Order</a-tag>
+    </div>
     <div slot="orderDate" slot-scope="orderDate">
       {{ orderDate ? formatDate(orderDate) : '-' }}
     </div>
@@ -12,10 +15,9 @@
     </div>
     <div slot="similarity" slot-scope="similarity">
       <a-progress type="circle"
-                  :width="30"
+                  :width="38"
+                  style="float: right;"
                   :percent="similarity"/>
-
-      <span style="margin-left: 10px;">{{ similarity }}% match</span>
     </div>
   </a-table>
 </template>
@@ -27,7 +29,8 @@ import Orders from "../../../../mixins/Orders";
 const columns = [
   {
     title: 'Name',
-    dataIndex: 'product_name'
+    dataIndex: 'product_name',
+    scopedSlots: {customRender: 'productName'}
   },
   {
     title: 'Quantity',

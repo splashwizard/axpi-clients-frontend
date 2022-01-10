@@ -123,7 +123,7 @@
               <div v-if="!record.isLoadingPrices">
 
                 <!-- Suggested -->
-                <div>
+                <div v-if="getSavingType(record) === 'Suggested'">
               <span>
               {{
                   record.selectedPrice ? formatCostInPence2dp({
@@ -138,6 +138,22 @@
                   </a-tag>
                 </div>
                 <!-- / Suggested -->
+
+                <!-- Exact -->
+                <div v-if="getSavingType(record) === 'Exact'">
+              <span>
+              {{
+                  record.selectedPrice ? formatCostInPence2dp({
+                    cost: record.order.cost,
+                    cost_currency: 'USD'
+                  }) : '-'
+                }}
+              </span>
+                  <a-tag
+                      color="blue" style="margin-left: 5px;">Exact
+                  </a-tag>
+                </div>
+                <!-- / Exact -->
 
                 <!-- Savings -->
                 <div style="margin-top: 10px;" v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
@@ -339,10 +355,41 @@ export default {
       loadSpecification: 'loadSpecification'
     }),
 
+    getSavingType(row) {
+      let prices = _.map(row.prices, 'price');
+      let benchmarkPrice = _.mean(prices) * 1.3;
+
+      // let savingFromBenchmark = (benchmarkPrice - row.selectedPrice.price);
+
+      if (row.order && row.order.cost) {
+        // let savingComparedToBefore = (row.order.cost - row.selectedPrice.price);
+        let isSupplierSame = row.order.supplier_id == row.selectedPrice.supplier_id;
+        if (row.order.cost < benchmarkPrice && isSupplierSame) {
+          return 'Exact';
+        }
+      }
+
+      return 'Suggested';
+    },
+
     getSavings(row) {
       let prices = _.map(row.prices, 'price');
       let benchmarkPrice = _.mean(prices) * 1.3;
-      return (benchmarkPrice - row.selectedPrice.price);
+
+      let savingFromBenchmark = (benchmarkPrice - row.selectedPrice.price);
+
+      if (row.order && row.order.cost) {
+        let savingComparedToBefore = (row.order.cost - row.selectedPrice.price);
+
+        let isSupplierSame = row.order.supplier_id == row.selectedPrice.supplier_id;
+        if (row.order.cost < benchmarkPrice && isSupplierSame) {
+          return savingComparedToBefore;
+        }
+      }
+
+      return savingFromBenchmark;
+
+      // return (benchmarkPrice - row.selectedPrice.price);
     },
 
     loadSuppliers() {

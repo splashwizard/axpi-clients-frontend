@@ -11,30 +11,32 @@
       </div>
 
       <div slot="summary" slot-scope="summary, record">
-        <div v-if="record.title == 'Suggested Prices'">
+        <div class="summary-column">
+          <div v-if="record.title == 'Suggested Prices'">
           <span style="margin-right: 5px;">
             {{ suggestedPriceRange }}
           </span>
-          <a-tag color="blue">Suggested</a-tag>
-        </div>
+            <a-tag color="blue" style="margin-right: 0;">Suggested</a-tag>
+          </div>
 
-        <div v-if="record.title == 'Similar Products'">
-          <span>{{ formatCostInPence2dp(row.order) }}</span>
+          <div v-if="record.title == 'Similar Products'">
+            <span>{{ formatCostInPence2dp(row.order) }}</span>
 
-          <a-progress type="circle"
-                      :width="30"
-                      style="margin-left: 15px"
-                      :percent="100"/>
+            <a-progress type="circle"
+                        :width="30"
+                        style="margin-left: 15px"
+                        :percent="100"/>
 
-          <span style="margin-left: 10px;">100% match</span>
-<!--          <span></span>-->
-        </div>
+            <!--          <span style="margin-left: 10px;">100% match</span>-->
+            <!--          <span></span>-->
+          </div>
 
-        <div v-if="record.title == 'Savings Summary'">
+          <div v-if="record.title == 'Savings Summary'">
           <span style="margin-right: 5px;">
             {{ savingsRange }}
           </span>
-<!--          <a-tag color="blue">Suggested</a-tag>-->
+            <!--          <a-tag color="blue">Suggested</a-tag>-->
+          </div>
         </div>
       </div>
 
@@ -167,7 +169,7 @@ export default {
           cost_currency: 'USD'
         });
 
-        return minPriceFormatted + ' - ' + maxPriceFormatted;
+        return minPriceFormatted + ' → ' + maxPriceFormatted;
       } else {
         return this.formatCostInPence2dp({
           cost: minSaving.savings,
@@ -194,7 +196,7 @@ export default {
             cost_currency: 'USD'
           });
 
-          return minPriceFormatted + ' - ' + maxPriceFormatted;
+          return minPriceFormatted + ' → ' + maxPriceFormatted;
         } else {
           return this.formatCostInPence2dp({
             cost: minPrice.price,
@@ -216,7 +218,7 @@ export default {
           let minCo2eFormatted = Math.floor(minCo2e * 100) / 100
           let maxCo2eFormatted = Math.floor(maxCo2e * 100) / 100
 
-          return minCo2eFormatted + ' - ' + maxCo2eFormatted + ' kg';
+          return minCo2eFormatted + ' → ' + maxCo2eFormatted + ' kg';
         } else {
          return Math.floor(minCo2e * 100) / 100
         }
@@ -248,5 +250,10 @@ export default {
   td {
     border-bottom: none !important;
   }
+}
+
+.summary-column {
+  text-align: right;
+  padding-right: 30px;
 }
 </style>

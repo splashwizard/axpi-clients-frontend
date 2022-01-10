@@ -381,8 +381,8 @@ export default {
       if (row.order && row.order.cost) {
         let savingComparedToBefore = (row.order.cost - row.selectedPrice.price);
 
-        let isSupplierSame = row.order.supplier_id == row.selectedPrice.supplier_id;
-        if (row.order.cost < benchmarkPrice && isSupplierSame) {
+        // let isSupplierSame = row.order.supplier_id == row.selectedPrice.supplier_id;
+        if (row.order.cost < benchmarkPrice) {
           return savingComparedToBefore;
         }
       }

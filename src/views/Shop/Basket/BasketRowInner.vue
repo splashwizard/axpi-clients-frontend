@@ -1,7 +1,11 @@
 <template>
   <div>
     <a-table :columns="columns" :data-source="innerRows" :pagination="false" :show-header="false"
-             class="basketRowInnerTable">
+             class="basketRowInnerTable"
+             :expandIconAsCell="false"
+             :expand-icon="getExpandIcon"
+             :expand-icon-column-index="4"
+    >
       <div slot="icon" slot-scope="icon">
         <a-icon class="rowIcon" :type="icon" theme="twoTone"/>
       </div>
@@ -101,8 +105,26 @@ export default {
         {
           dataIndex: 'additional_summary',
           scopedSlots: {customRender: 'additional_summary'}
-        }
+        },
+        {}
       ]
+    }
+  },
+  methods: {
+    getExpandIcon({expanded, record, onExpand}) {
+      return record.section !== 'Lifespan' ? (
+          <a-button style="font-weight: 500; padding-left: 0; padding-right; 0; float: right;"
+                    type="link"
+                    {...{
+                      on: {
+                        click: onExpand.bind(this, [expanded, record])
+                      }
+                    }}
+          >
+            <span>{expanded ? 'Hide' : 'Expand'}</span>
+            <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? 'up' : 'down'}></a-icon>
+          </a-button>
+      ) : <a-button style="opacity: 0; cursor: default;"></a-button>;
     }
   },
   computed: {

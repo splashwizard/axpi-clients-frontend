@@ -13,7 +13,7 @@
       }}
     </div>
     <div slot="savings" slot-scope="savings, record">
-      <span :class="{'text-danger': record.savings < 0}">{{
+      <span :class="{'text-danger': record.savings < 0, 'text-success': record.savings > 0}">{{
           record.cost ? formatCostInPence2dp({
             cost: record.savings,
             cost_currency: 'USD'
@@ -75,7 +75,8 @@ export default {
         comparisons.push({
           comparison: 'Exact Match',
           cost: this.row.order.cost,
-          savings: (this.benchmarkPrice - this.row.order.cost)
+          // savings: (this.benchmarkPrice - this.row.order.cost)
+          savings: this.row.selectedPrice ? (this.row.order.cost - this.row.selectedPrice.price) : 0
         });
       }
 
@@ -93,6 +94,10 @@ export default {
 
   .text-danger {
     color: #f5222d;
+  }
+
+  .text-success {
+    color: #52c41a;
   }
 }
 </style>

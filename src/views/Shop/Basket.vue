@@ -140,13 +140,13 @@
                 <!-- / Suggested -->
 
                 <!-- Savings -->
-                <div style="margin-top: 10px;"  v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
-                  {{
+                <div style="margin-top: 10px;" v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
+                  <span :class="{'text-success': (getSavings(record) && getSavings(record) > 0)}">{{
                     getSavings(record) ? formatCostInPence2dp({
                       cost: getSavings(record),
                       cost_currency: 'USD'
                     }) : '-'
-                  }}
+                    }}</span>
                   <a-tag
                       color="blue" style="margin-left: 5px;">Savings
                   </a-tag>
@@ -495,5 +495,9 @@ export default {
 .optimise-wrapper {
   margin-top: 60px;
   margin-bottom: 40px;
+}
+
+.text-success {
+  color: #52c41a;
 }
 </style>

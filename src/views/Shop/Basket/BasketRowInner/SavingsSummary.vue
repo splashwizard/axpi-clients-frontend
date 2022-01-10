@@ -27,6 +27,7 @@
 <script>
 import Dates from "../../../../mixins/Dates";
 import Orders from "../../../../mixins/Orders";
+const _ = require('lodash');
 
 const columns = [
   {

@@ -215,7 +215,10 @@
                 <div class="left">
                   Dispatches from
                 </div>
-                <div class="right">Chicago, Illinois</div>
+                <div class="right">
+                  <dispatches-from v-if="product"
+                      :product="product"></dispatches-from>
+                </div>
               </div>
               <div class="general-details-row">
                 <div class="left">
@@ -382,12 +385,14 @@ import StockManagement from "../../mixins/StockManagement";
 import Co2eIndicator from "./Show/Co2eIndicator";
 import ApprovedBadge from "./Show/ApprovedBadge";
 import HasBannedMaterialsBadge from "./Show/HasBannedMaterialsBadge";
+import DispatchesFrom from "./Show/DispatchesFrom";
 
 const _ = require('lodash');
 
 export default {
   name: "Show",
   components: {
+    DispatchesFrom,
     HasBannedMaterialsBadge,
     ApprovedBadge,
     Co2eIndicator,

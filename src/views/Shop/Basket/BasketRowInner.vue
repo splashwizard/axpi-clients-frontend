@@ -20,16 +20,16 @@
           <span style="margin-right: 5px;">
             {{ suggestedPriceRange }}
           </span>
-            <a-tag color="blue" style="margin-right: 0;">Suggested</a-tag>
+<!--            <a-tag color="blue" style="margin-right: 0;">Suggested</a-tag>-->
           </div>
 
           <div v-if="record.title == 'Similar Products'">
             <span>{{ formatCostInPence2dp(row.order) }}</span>
 
-            <a-progress type="circle"
-                        :width="30"
-                        style="margin-left: 15px"
-                        :percent="100"/>
+            <!--            <a-progress type="circle"-->
+            <!--                        :width="30"-->
+            <!--                        style="margin-left: 15px"-->
+            <!--                        :percent="100"/>-->
 
             <!--          <span style="margin-left: 10px;">100% match</span>-->
             <!--          <span></span>-->
@@ -41,6 +41,17 @@
           </span>
             <!--          <a-tag color="blue">Suggested</a-tag>-->
           </div>
+        </div>
+      </div>
+
+      <div slot="summary-tags" slot-scope="summary, record">
+        <div v-if="record.title == 'Suggested Prices'">
+          <a-tag color="blue" style="margin-right: 0;">Suggested</a-tag>
+        </div>
+        <div v-if="record.title == 'Similar Products'">
+          <a-progress type="circle"
+                      :width="30"
+                      :percent="100"/>
         </div>
       </div>
 
@@ -101,6 +112,11 @@ export default {
         {
           dataIndex: 'summary',
           scopedSlots: {customRender: 'summary'}
+        },
+        {
+          dataIndex: 'summary',
+          // width: 50,
+          scopedSlots: {customRender: 'summary-tags'}
         },
         {
           dataIndex: 'additional_summary',
@@ -182,7 +198,7 @@ export default {
 
       if (minSaving !== maxSaving) {
         let minPriceFormatted = this.formatCostInPence2dp({
-          cost:minSaving.savings,
+          cost: minSaving.savings,
           cost_currency: 'USD'
         });
 
@@ -242,7 +258,7 @@ export default {
 
           return minCo2eFormatted + ' → ' + maxCo2eFormatted + ' kg';
         } else {
-         return Math.floor(minCo2e * 100) / 100
+          return Math.floor(minCo2e * 100) / 100
         }
       }
       return '-';
@@ -276,6 +292,6 @@ export default {
 
 .summary-column {
   text-align: right;
-  padding-right: 30px;
+  //padding-right: 30px;
 }
 </style>

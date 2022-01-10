@@ -132,10 +132,10 @@
                   }) : '-'
                 }}
               </span>
-                  <a-tag
-                      v-if="record.prices && record.itemType !== 'product' && record.selectedPrice"
-                      color="blue" style="margin-left: 5px;">Suggested
-                  </a-tag>
+<!--                  <a-tag-->
+<!--                      v-if="record.prices && record.itemType !== 'product' && record.selectedPrice"-->
+<!--                      color="blue" style="margin-left: 5px;">Suggested-->
+<!--                  </a-tag>-->
                 </div>
                 <!-- / Suggested -->
 
@@ -149,26 +149,52 @@
                   }) : '-'
                 }}
               </span>
-                  <a-tag
-                      color="blue" style="margin-left: 5px;">Exact
-                  </a-tag>
+<!--                  <a-tag-->
+<!--                      color="blue" style="margin-left: 5px;">Exact-->
+<!--                  </a-tag>-->
                 </div>
                 <!-- / Exact -->
 
                 <!-- Savings -->
-                <div style="margin-top: 10px;" v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
+                <div style="margin-top: 10px;"
+                     v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
                   <span>{{
-                    getSavings(record) ? formatCostInPence2dp({
-                      cost: getSavings(record),
-                      cost_currency: 'USD'
-                    }) : '-'
+                      getSavings(record) ? formatCostInPence2dp({
+                        cost: getSavings(record),
+                        cost_currency: 'USD'
+                      }) : '-'
                     }}</span>
-                  <a-tag
-                      :color="(getSavings(record) && getSavings(record) > 0) ? 'green' : 'red'" style="margin-left: 5px;">Savings
-                  </a-tag>
+<!--                  <a-tag-->
+<!--                      :color="(getSavings(record) && getSavings(record) > 0) ? 'green' : 'red'"-->
+<!--                      style="margin-left: 5px;">Savings-->
+<!--                  </a-tag>-->
                 </div>
                 <!-- / Savings -->
 
+              </div>
+            </div>
+
+            <div slot="cost-tags" slot-scope="cost, record">
+              <a-spin v-if="record.isLoadingPrices" size="small"></a-spin>
+              <div v-if="!record.isLoadingPrices">
+                <div v-if="getSavingType(record) === 'Suggested'">
+                  <a-tag
+                      v-if="record.prices && record.itemType !== 'product' && record.selectedPrice"
+                      color="blue" style="margin-left: 5px;">Suggested
+                  </a-tag>
+                </div>
+                <div v-if="getSavingType(record) === 'Exact'">
+                  <a-tag
+                      color="blue" style="margin-left: 5px;">Exact
+                  </a-tag>
+                </div>
+                <div style="margin-top: 10px;"
+                     v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
+                  <a-tag
+                      :color="(getSavings(record) && getSavings(record) > 0) ? 'green' : 'red'"
+                      style="margin-left: 5px;">Savings
+                  </a-tag>
+                </div>
               </div>
             </div>
 
@@ -281,6 +307,12 @@ export default {
           title: 'Cost',
           dataIndex: 'cost',
           scopedSlots: {customRender: "cost"},
+          width: 100
+        },
+        {
+          title: '',
+          dataIndex: 'cost',
+          scopedSlots: {customRender: "cost-tags"},
           width: 180
         },
         {

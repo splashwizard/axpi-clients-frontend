@@ -19,6 +19,9 @@
                   style="float: right;"
                   :percent="similarity"/>
     </div>
+    <div slot="compare">
+      <a-button icon="eye" style="float: right;">Compare</a-button>
+    </div>
   </a-table>
 </template>
 
@@ -54,6 +57,10 @@ const columns = [
     title: '',
     dataIndex: 'similarity',
     scopedSlots: {customRender: 'similarity'}
+  },
+  {
+    title: '',
+    scopedSlots: {customRender: 'compare'}
   }
 ];
 export default {

@@ -28,6 +28,12 @@
           <a-tag color="blue" style="margin-right: 0 !important; display: inline-block;"
                  v-if="suggestion.cheaper">Cost Effective
           </a-tag>
+          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block;"
+                 v-if="suggestion.more_effective">More Effective
+          </a-tag>
+          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block;"
+                 v-if="suggestion.in_stock">In Stock
+          </a-tag>
           <a-tag
               v-if="suggestion.more_environmentally_friendly" color="green"
               style="margin-right: 0 !important; display: inline-block;">

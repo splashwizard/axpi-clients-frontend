@@ -14,6 +14,8 @@
       <a-progress type="circle"
                   :width="30"
                   :percent="similarity"/>
+
+      <span style="margin-left: 10px;">{{ similarity }}% match</span>
     </div>
   </a-table>
 </template>
@@ -46,7 +48,7 @@ const columns = [
     scopedSlots: {customRender: 'cost'}
   },
   {
-    title: 'Similarity',
+    title: '',
     dataIndex: 'similarity',
     scopedSlots: {customRender: 'similarity'}
   }

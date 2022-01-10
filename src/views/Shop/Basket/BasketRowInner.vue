@@ -293,13 +293,16 @@ export default {
 
   .ant-table-tbody > tr > td {
     //border-bottom: none !important;
-    border-bottom: 2px solid #e8e8e8 !important;
+    border-bottom: 1px solid #e8e8e8 !important;
   }
 
   .ant-table-expanded-row {
     tr {
+      th {
+        //border-bottom: 0;
+      }
       td {
-        border-bottom: 1px solid #e8e8e8 !important;
+        border-bottom: 0 solid #e8e8e8 !important;
       }
       &:last-child {
         td {

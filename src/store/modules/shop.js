@@ -233,7 +233,7 @@ export const mutations = {
     },
 
     ADD_SUGGESTED_PRODUCTS_TO_PRODUCT(state, params) {
-       let {product, suggestedProducts} = params;
+        let {product, suggestedProducts} = params;
         let p = _.find(state.basket, item => {
             return (
                 item.itemType === 'product'
@@ -535,7 +535,22 @@ export const actions = {
         axios.get(window.API_BASE + '/products/' + product['_id'] + '/suggestions').then(r => {
             commit('ADD_SUGGESTED_PRODUCTS_TO_PRODUCT', {
                 product: product,
-                suggestedProducts: _.map(r.data, 'product')
+                suggestedProducts: _.map(r.data, d => {
+                    let tr = {
+                        ...d.product
+                    };
+
+                    if (d.prices && d.prices.length) {
+                        let firstPrice = _.first(d.prices);
+                        tr.supplier = {
+                            name: firstPrice.supplier_name,
+                        };
+                        tr.cost = firstPrice.price;
+                        tr.cost_currency = firstPrice.price_currency;
+                    }
+
+                    return tr;
+                })
             });
         }).catch(e => {
             console.log(e);

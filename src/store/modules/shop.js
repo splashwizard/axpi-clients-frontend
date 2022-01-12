@@ -542,9 +542,7 @@ export const actions = {
 
                     if (d.prices && d.prices.length) {
                         let firstPrice = _.first(d.prices);
-                        tr.supplier = {
-                            name: firstPrice.supplier_name,
-                        };
+                        tr.supplier_name = firstPrice.supplier_name;
                         tr.cost = firstPrice.price;
                         tr.cost_currency = firstPrice.price_currency;
                     }

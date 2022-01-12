@@ -30,6 +30,7 @@
 <script>
 import Dates from "../../../../mixins/Dates";
 import Orders from "../../../../mixins/Orders";
+
 const _ = require('lodash');
 
 const columns = [
@@ -88,7 +89,7 @@ export default {
             quantity: 1215983,
             supplier: {name: 'ASL Supplier 2'},
             order_date: '2020-01-13',
-            similarity: 60 + (Math.random() * 40),
+            similarity: 80 + (Math.random() * 15),
             cost: 56500,
             cost_currency: 'USD'
           }
@@ -99,15 +100,18 @@ export default {
           return [];
         }
         return _.map(this.row.suggestedProducts, product => {
-          return {
+          let p = {
             product_name: product.name,
             quantity: 5,
-            supplier: {name: 'TODO'},
-            order_date: '2020-01-13',
-            similarity: 93,
-            cost: 56500,
-            cost_currency: 'USD'
+            supplier: {name: product.supplier_name},
+            similarity: 80 + (Math.random() * 15),
+            cost: product.cost,
+            cost_currency: product.cost_currency
           }
+          if (product.order_date) {
+            p.order_date = product.order_date;
+          }
+          return p;
         });
       }
       return [];

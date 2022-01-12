@@ -67,7 +67,8 @@
           </span>
         </div>
         <div v-if="record.title == 'Similar Products'">
-          <a-tag color="red">Unknown</a-tag>
+          <a-tag color="red" v-if="!similarProductCo2e">Unknown</a-tag>
+          <span v-if="similarProductCo2e">{{ similarProductCo2e }}</span>
         </div>
         <div v-if="record.title == 'Savings Summary'">
           <a-tag color="red">Unknown</a-tag>
@@ -167,6 +168,13 @@ export default {
         title: 'Savings Summary'
       });
       return rows;
+    },
+
+    similarProductCo2e() {
+      if (this.row.suggestedPrices) {
+        return _.sum(this.row.suggestedPrices, 'co2e') + ' kg';
+      }
+      return null;
     },
 
     benchmarkPrice() {

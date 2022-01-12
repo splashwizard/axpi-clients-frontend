@@ -171,13 +171,13 @@ export default {
     },
 
     similarProductCo2e() {
-      if (this.row.suggestedProducts) {
-        let co2es = _.map(this.row.suggestedProducts, 'co2e');
-        if (co2es) {
-         let totals = _.map(co2es, 'co2e');
-         return _.sum(totals, 'co2e.total') + ' kg';
-        }
-      }
+      // if (this.row.suggestedProducts) {
+      //   let co2es = _.map(this.row.suggestedProducts, 'co2e');
+      //   if (co2es) {
+      //    let totals = _.map(co2es, 'co2e');
+      //    return _.sum(totals, 'co2e.total') + ' kg';
+      //   }
+      // }
       return null;
     },
 

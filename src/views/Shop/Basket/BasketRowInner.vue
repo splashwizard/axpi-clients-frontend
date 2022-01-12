@@ -258,7 +258,7 @@ export default {
 
           return minCo2eFormatted + ' → ' + maxCo2eFormatted + ' kg';
         } else {
-          return Math.floor(minCo2e * 100) / 100
+          return Math.floor(minCo2e * 100) / 100 + ' kg';
         }
       }
       return '-';

@@ -151,7 +151,7 @@
           <router-link style="font-weight: 500;" :to="getProductPageUrl(row)">
             {{ productCode }}
           </router-link>
-          <approved-badge v-if="product.certified"
+          <approved-badge v-if="row.certified"
                           style="margin-left: 30px;"></approved-badge>
         </template>
 

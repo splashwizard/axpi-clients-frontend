@@ -78,6 +78,15 @@ export default {
         {
           ...this.row.order,
           similarity: 100
+        },
+        {
+          product_name: 'AGL - Insert Q3 Bills',
+          quantity: 1215983,
+          supplier: {name: 'ASL Supplier 2'},
+          order_date: '2020-01-13',
+          similarity: 93,
+          cost: 56500,
+          cost_currency: 'USD'
         }
       ]
     }

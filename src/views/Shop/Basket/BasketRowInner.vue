@@ -171,8 +171,8 @@ export default {
     },
 
     similarProductCo2e() {
-      if (this.row.suggestedPrices) {
-        return _.sum(this.row.suggestedPrices, 'co2e') + ' kg';
+      if (this.row.suggestedProducts) {
+        return _.sum(this.row.suggestedProducts, 'co2e') + ' kg';
       }
       return null;
     },

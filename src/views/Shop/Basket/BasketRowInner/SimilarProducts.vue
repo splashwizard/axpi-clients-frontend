@@ -89,7 +89,7 @@ export default {
             quantity: 1215983,
             supplier: {name: 'ASL Supplier 2'},
             order_date: '2020-01-13',
-            similarity: 80 + (Math.random() * 15),
+            similarity: Math.round(80 + (Math.random() * 15)),
             cost: 56500,
             cost_currency: 'USD'
           }
@@ -104,7 +104,7 @@ export default {
             product_name: product.name,
             quantity: 5,
             supplier: {name: product.supplier_name},
-            similarity: 80 + (Math.random() * 15),
+            similarity: Math.round(80 + (Math.random() * 15)),
             cost: product.cost,
             cost_currency: product.cost_currency
           }

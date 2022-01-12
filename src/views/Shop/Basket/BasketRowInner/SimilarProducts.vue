@@ -95,6 +95,9 @@ export default {
         ]
       }
       if (this.row.itemType == 'product') {
+        if (!this.row.suggestedProducts) {
+          return [];
+        }
         return _.map(this.row.suggestedProducts, product => {
           return {
             product_name: product.name,

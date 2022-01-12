@@ -535,7 +535,7 @@ export const actions = {
         axios.get(window.API_BASE + '/products/' + product['_id'] + '/suggestions').then(r => {
             commit('ADD_SUGGESTED_PRODUCTS_TO_PRODUCT', {
                 product: product,
-                suggestedProducts: _.map(r.data, product)
+                suggestedProducts: _.map(r.data, 'product')
             });
         }).catch(e => {
             console.log(e);

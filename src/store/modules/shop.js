@@ -232,6 +232,20 @@ export const mutations = {
         state.tableUpdateKey += 1;
     },
 
+    ADD_SUGGESTED_PRODUCTS_TO_PRODUCT(state, params) {
+       let {product, suggestedProducts} = params;
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'product'
+                && item.id === product['_id']
+            );
+        });
+        p.isLoadingSuggestedProducts = false;
+        p.suggestedProducts = suggestedProducts;
+        this._vm.$forceUpdate();
+        state.tableUpdateKey += 1;
+    },
+
     SET_PAST_ORDER_QUANTITY(state, params) {
         let {id, quantity} = params;
         let p = _.find(state.basket, item => {

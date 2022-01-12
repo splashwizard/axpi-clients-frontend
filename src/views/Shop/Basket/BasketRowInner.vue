@@ -24,7 +24,12 @@
           </div>
 
           <div v-if="record.title == 'Similar Products'">
-            <span>{{ row.order? formatCostInPence2dp(row.order) : '' }}</span>
+            <span v-if="row.itemType == 'order'">
+              {{ row.order? formatCostInPence2dp(row.order) : '' }}
+            </span>
+            <span v-if="row.itemType == 'product'">
+              {{ suggestedPriceRange }}
+            </span>
 
             <!--            <a-progress type="circle"-->
             <!--                        :width="30"-->
@@ -211,6 +216,31 @@ export default {
       } else {
         return this.formatCostInPence2dp({
           cost: minSaving.savings,
+          cost_currency: 'USD'
+        });
+      }
+    },
+
+    suggestedPriceRange() {
+      let ordered = _.orderBy(this.row.suggestedProducts, 'cost');
+      let minPrice = _.first(ordered);
+      let maxPrice = _.last(ordered);
+
+      if (minPrice !== maxPrice) {
+        let minPriceFormatted = this.formatCostInPence2dp({
+          cost: minPrice.cost,
+          cost_currency: 'USD'
+        });
+
+        let maxPriceFormatted = this.formatCostInPence2dp({
+          cost: maxPrice.cost,
+          cost_currency: 'USD'
+        });
+
+        return minPriceFormatted + ' → ' + maxPriceFormatted;
+      } else {
+        return this.formatCostInPence2dp({
+          cost: minPrice.cost,
           cost_currency: 'USD'
         });
       }

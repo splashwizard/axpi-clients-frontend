@@ -179,7 +179,11 @@ export default {
       if (co2es.length) {
         // let totals = _.map(co2es, 'co2e');
         // return _.sum(totals, 'co2e.total') + ' kg';
-        return _.sum(co2es) ? (_.sum(co2es) * this.row.quantity) + ' kg' : null;
+        let summed = _.sum(co2es);
+        if (summed) {
+          return (Math.floor(_.sum(co2es) * this.row.quantity * 100)/100) + ' kg';
+        }
+        return null;
       }
       return null;
     },

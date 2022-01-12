@@ -88,7 +88,7 @@ export default {
             quantity: 1215983,
             supplier: {name: 'ASL Supplier 2'},
             order_date: '2020-01-13',
-            similarity: 93,
+            similarity: 60 + (Math.random() * 40),
             cost: 56500,
             cost_currency: 'USD'
           }

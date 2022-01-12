@@ -8,7 +8,7 @@
       {{ comparison }}
       <a-progress type="circle"
                   v-if="record.similarity"
-                  :width="34"
+                  :width="37"
                   style="margin-left: 10px"
                   :percent="record.similarity"/>
     </div>
@@ -27,10 +27,10 @@
             cost_currency: 'USD'
           }) : '-'
         }}</span>
-      <a-tag style="margin-left: 15px;" v-if="row.itemType !== 'product' && row.comparison !== 'Similar Match'"
+      <a-tag style="margin-left: 15px;" v-if="row.itemType !== 'product' && record.comparison !== 'Similar Match'"
              :color="(record.savings && record.savings > 0) ? 'green' : 'red'">P&L
       </a-tag>
-      <a-tag style="margin-left: 15px;" v-if="row.itemType !== 'product' && row.comparison == 'Similar Match'"
+      <a-tag style="margin-left: 15px;" v-if="row.itemType !== 'product' && record.comparison == 'Similar Match'"
              :color="(record.savings && record.savings > 0) ? 'green' : 'red'">P&L
       </a-tag>
       <a-tag style="margin-left: 15px;" v-if="row.itemType == 'product'"

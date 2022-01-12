@@ -231,19 +231,19 @@ export default {
 
       if (minPrice !== maxPrice) {
         let minPriceFormatted = this.formatCostInPence2dp({
-          cost: minPrice.cost,
+          cost: minPrice.cost * this.row.quantity,
           cost_currency: 'USD'
         });
 
         let maxPriceFormatted = this.formatCostInPence2dp({
-          cost: maxPrice.cost,
+          cost: maxPrice.cost * this.row.quantity,
           cost_currency: 'USD'
         });
 
         return minPriceFormatted + ' → ' + maxPriceFormatted;
       } else {
         return this.formatCostInPence2dp({
-          cost: minPrice.cost,
+          cost: minPrice.cost * this.row.quantity,
           cost_currency: 'USD'
         });
       }

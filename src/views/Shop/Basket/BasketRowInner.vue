@@ -28,7 +28,7 @@
               {{ row.order? formatCostInPence2dp(row.order) : '' }}
             </span>
             <span v-if="row.itemType == 'product'">
-              {{ suggestedPriceRange }}
+              {{ suggestedPriceRangeForSimilarProducts }}
             </span>
 
             <!--            <a-progress type="circle"-->
@@ -221,7 +221,7 @@ export default {
       }
     },
 
-    suggestedPriceRange() {
+    suggestedPriceRangeForSimilarProducts() {
       let ordered = _.orderBy(this.row.suggestedProducts, 'cost');
       let minPrice = _.first(ordered);
       let maxPrice = _.last(ordered);

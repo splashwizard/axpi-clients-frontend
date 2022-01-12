@@ -4,6 +4,14 @@
            :columns="columns"
            :data-source="comparisons"
            :pagination="false">
+    <div slot="comparison" slot-scope="comparison, record">
+      {{ comparison }}
+      <a-progress type="circle"
+                  v-if="record.similarity"
+                  :width="38"
+                  style="margin-left: 10px"
+                  :percent="record.similarity"/>
+    </div>
     <div slot="cost" slot-scope="cost, record">
       {{
         record.cost ? formatCostInPence2dp({
@@ -39,7 +47,8 @@ const _ = require('lodash');
 const columns = [
   {
     title: 'Comparison',
-    dataIndex: 'comparison'
+    dataIndex: 'comparison',
+    scopedSlots: {customRender: 'comparison'}
   },
   {
     title: 'Cost',
@@ -100,6 +109,12 @@ export default {
           cost: this.row.order.cost,
           // savings: (this.benchmarkPrice - this.row.order.cost)
           savings: this.row.selectedPrice ? (this.row.order.cost - this.row.selectedPrice.price) : 0
+        });
+        comparisons.push({
+          comparison: 'Similar Match',
+          cost: 15622 * 100,
+          savings: this.row.selectedPrice ? (15622*100 - this.row.selectedPrice.price) : 0,
+          similarity: 87
         });
       }
 

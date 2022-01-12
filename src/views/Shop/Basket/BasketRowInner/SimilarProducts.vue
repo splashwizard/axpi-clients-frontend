@@ -2,10 +2,12 @@
   <a-table class="similar-products-row"
            slot="expandedRowRender"
            :columns="columns"
+           :loading="row.isLoadingSuggestedProducts"
            :data-source="similarProducts"
            :pagination="false">
     <div slot="productName" slot-scope="productName">
-      {{ productName }} <a-tag style="margin-left: 5px;" color="blue">Past Order</a-tag>
+      {{ productName }}
+      <a-tag style="margin-left: 5px;" color="blue">Past Order</a-tag>
     </div>
     <div slot="orderDate" slot-scope="orderDate">
       {{ orderDate ? formatDate(orderDate) : '-' }}
@@ -28,6 +30,7 @@
 <script>
 import Dates from "../../../../mixins/Dates";
 import Orders from "../../../../mixins/Orders";
+const _ = require('lodash');
 
 const columns = [
   {
@@ -74,21 +77,37 @@ export default {
   },
   computed: {
     similarProducts() {
-      return [
-        {
-          ...this.row.order,
-          similarity: 100
-        },
-        {
-          product_name: 'AGL - Insert Q3 Bills',
-          quantity: 1215983,
-          supplier: {name: 'ASL Supplier 2'},
-          order_date: '2020-01-13',
-          similarity: 93,
-          cost: 56500,
-          cost_currency: 'USD'
-        }
-      ]
+      if (this.row.itemType == 'order') {
+        return [
+          {
+            ...this.row.order,
+            similarity: 100
+          },
+          {
+            product_name: 'AGL - Insert Q3 Bills',
+            quantity: 1215983,
+            supplier: {name: 'ASL Supplier 2'},
+            order_date: '2020-01-13',
+            similarity: 93,
+            cost: 56500,
+            cost_currency: 'USD'
+          }
+        ]
+      }
+      if (this.row.itemType == 'product') {
+        return _.map(this.row.suggestedProducts, product => {
+          return {
+            product_name: product.name,
+            quantity: 5,
+            supplier: {name: 'TODO'},
+            order_date: '2020-01-13',
+            similarity: 93,
+            cost: 56500,
+            cost_currency: 'USD'
+          }
+        });
+      }
+      return [];
     }
   }
 }

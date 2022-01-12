@@ -24,7 +24,7 @@
           </div>
 
           <div v-if="record.title == 'Similar Products'">
-            <span>{{ formatCostInPence2dp(row.order) }}</span>
+            <span>{{ row.order? formatCostInPence2dp(row.order) : '' }}</span>
 
             <!--            <a-progress type="circle"-->
             <!--                        :width="30"-->
@@ -49,7 +49,7 @@
           <a-tag v-if="row.itemType !== 'product'" color="blue" style="margin-right: 0;">Suggested</a-tag>
         </div>
         <div v-if="record.title == 'Similar Products'">
-          <a-progress type="circle"
+          <a-progress type="circle" v-if="row.itemType !== 'product'"
                       :width="30"
                       :percent="100"/>
         </div>
@@ -151,7 +151,7 @@ export default {
           title: 'Suggested Prices'
         }
       ];
-      if (this.row.itemType === 'order') {
+      if (this.row.itemType === 'order' || this.row.itemType === 'product') {
         rows.push({
           icon: 'gold',
           title: 'Similar Products'

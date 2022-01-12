@@ -65,7 +65,8 @@ export const mutations = {
             quantity: quantity,
             prices: prices,
             selectedPrice: selectedPrice,
-            selectedPriceId: selectedPrice.id
+            selectedPriceId: selectedPrice.id,
+            isLoadingSuggestedProducts: true
         });
         this._vm.$forceUpdate();
     },
@@ -266,6 +267,17 @@ export const mutations = {
             );
         });
         p.isLoadingPrices = true;
+        this._vm.$forceUpdate();
+    },
+
+    SET_PRODUCT_AS_LOADING_SUGGESTED_PRICES(state, product) {
+        let p = _.find(state.basket, item => {
+            return (
+                item.itemType === 'product'
+                && item.id === product['_id']
+            );
+        });
+        p.isLoadingSuggestedProducts = true;
         this._vm.$forceUpdate();
     },
 
@@ -498,9 +510,26 @@ export const actions = {
         commit('UPDATE_SPECIFICATION_IN_BASKET', spec);
     },
 
-    addProductToBasket({commit}, params) {
+    addProductToBasket({commit, dispatch}, params) {
         commit('ADD_PRODUCT_TO_BASKET', params);
+        dispatch('loadSuggestedProductsForProduct', params['product']);
         // dispatch('loadCo2eForProduct', params['product']);
+    },
+
+    loadSuggestedProductsForProduct({commit}, product) {
+        commit('SET_PRODUCT_AS_LOADING_SUGGESTED_PRICES', product['_id']);
+        axios.post(window.API_BASE + '/products/' + product['_id'] + '/suggestions').then(r => {
+            commit('ADD_SUGGESTED_PRODUCTS_TO_PRODUCT', {
+                product: product,
+                suggestedProducts: r.data
+            });
+        }).catch(e => {
+            console.log(e);
+            commit('ADD_SUGGESTED_PRODUCTS_TO_PRODUCT', {
+                product: product,
+                suggestedProducts: []
+            });
+        });
     },
 
     // loadCo2eForProduct({commit}, product) {

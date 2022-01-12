@@ -20,12 +20,12 @@
           <span style="margin-right: 5px;">
             {{ suggestedPriceRange }}
           </span>
-<!--            <a-tag color="blue" style="margin-right: 0;">Suggested</a-tag>-->
+            <!--            <a-tag color="blue" style="margin-right: 0;">Suggested</a-tag>-->
           </div>
 
           <div v-if="record.title == 'Similar Products'">
             <span v-if="row.itemType == 'order'">
-              {{ row.order? formatCostInPence2dp(row.order) : '' }}
+              {{ row.order ? formatCostInPence2dp(row.order) : '' }}
             </span>
             <span v-if="row.itemType == 'product'">
               {{ suggestedPriceRangeForSimilarProducts }}
@@ -172,12 +172,13 @@ export default {
 
     similarProductCo2e() {
       // if (this.row.suggestedProducts) {
-      //   let co2es = _.map(this.row.suggestedProducts, 'co2e');
-      //   if (co2es) {
-      //    let totals = _.map(co2es, 'co2e');
-      //    return _.sum(totals, 'co2e.total') + ' kg';
-      //   }
-      // }
+      let co2es = _.map(this.row.suggestedProducts, 'co2e');
+      co2es = _.filter(co2es => co2es);
+      if (co2es.length) {
+        // let totals = _.map(co2es, 'co2e');
+        // return _.sum(totals, 'co2e.total') + ' kg';
+        return _.sum(co2es) ? _.sum(co2es) + ' kg' : null;
+      }
       return null;
     },
 
@@ -346,9 +347,11 @@ export default {
       th {
         //border-bottom: 0;
       }
+
       td {
         border-bottom: 0 solid #e8e8e8 !important;
       }
+
       &:last-child {
         td {
           border-bottom: 0 !important;

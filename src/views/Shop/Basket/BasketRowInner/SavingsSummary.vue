@@ -82,7 +82,7 @@ export default {
         comparisons.push({
           comparison: 'Similar',
           cost: this.benchmarkPrice,
-          savings: this.row.selectedPrice ? (this.benchmarkPrice - this.row.selectedPrice.price) : 0
+          savings: this.row.selectedPrice ? (this.benchmarkPrice - (this.row.selectedPrice.price * this.row.quantity)) : 0
         });
       }
 

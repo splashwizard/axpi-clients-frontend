@@ -173,9 +173,9 @@ export default {
     similarProductCo2e() {
       // if (this.row.suggestedProducts) {
       let co2es = _.map(this.row.suggestedProducts, 'co2e');
-      // co2es = _.filter(co2es => co2es);
-      console.log('suggested products:');
-      console.log(this.row.suggestedProducts);
+      co2es = _.filter(co2es => co2es);
+      console.log('co2es');
+      console.log(co2es);
       if (co2es.length) {
         // let totals = _.map(co2es, 'co2e');
         // return _.sum(totals, 'co2e.total') + ' kg';

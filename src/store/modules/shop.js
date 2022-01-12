@@ -545,6 +545,7 @@ export const actions = {
                         tr.supplier_name = firstPrice.supplier_name;
                         tr.cost = firstPrice.price;
                         tr.cost_currency = firstPrice.price_currency;
+                        tr.co2e = firstPrice.co2e;
                     }
 
                     return tr;

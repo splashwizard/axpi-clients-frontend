@@ -19,10 +19,10 @@
             cost_currency: 'USD'
           }) : '-'
         }}</span>
-      <a-tag style="margin-left: 15px;" v-if="record.itemType !== 'product'"
+      <a-tag style="margin-left: 15px;" v-if="row.itemType !== 'product'"
              :color="(record.savings && record.savings > 0) ? 'green' : 'red'">P&L
       </a-tag>
-      <a-tag style="margin-left: 15px;" v-if="record.itemType == 'product'"
+      <a-tag style="margin-left: 15px;" v-if="row.itemType == 'product'"
              :color="(record.savings && record.savings > 0) ? 'green' : 'red'">
         Cost Avoidance
       </a-tag>

@@ -172,7 +172,11 @@ export default {
 
     similarProductCo2e() {
       if (this.row.suggestedProducts) {
-        return _.sum(this.row.suggestedProducts, 'co2e.total') + ' kg';
+        let co2es = _.map(this.row.suggestedProducts, 'co2e');
+        if (co2es) {
+         let totals = _.map(co2es, 'co2e');
+         return _.sum(totals, 'co2e.total') + ' kg';
+        }
       }
       return null;
     },

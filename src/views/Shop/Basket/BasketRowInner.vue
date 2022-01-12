@@ -222,7 +222,7 @@ export default {
     },
 
     suggestedPriceRangeForSimilarProducts() {
-      if (!this.row.suggestedProducts) {
+      if (!this.row.suggestedProducts || this.row.suggestedProducts.length === 0) {
         return '';
       }
       let ordered = _.orderBy(this.row.suggestedProducts, 'cost');

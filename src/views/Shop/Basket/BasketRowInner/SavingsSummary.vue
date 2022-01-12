@@ -31,7 +31,7 @@
              :color="(record.savings && record.savings > 0) ? 'green' : 'red'">P&L
       </a-tag>
       <a-tag style="margin-left: 15px;" v-if="row.itemType !== 'product' && record.comparison == 'Similar Match'"
-             :color="(record.savings && record.savings > 0) ? 'green' : 'red'">P&L
+             :color="(record.savings && record.savings > 0) ? 'green' : 'red'">Cost Avoidance
       </a-tag>
       <a-tag style="margin-left: 15px;" v-if="row.itemType == 'product'"
              :color="(record.savings && record.savings > 0) ? 'green' : 'red'">

@@ -65,6 +65,11 @@ export default {
   },
   computed: {
     benchmarkPrice() {
+      if (this.row.itemType == 'product' && this.row.suggestedProducts.length) {
+        let costs = _.map(this.row.suggestedProducts, 'cost');
+        return _.min(costs);
+      }
+
       let prices = _.map(this.row.prices, 'price');
       let average = _.mean(prices) * 1.3;
       return average;
@@ -73,13 +78,13 @@ export default {
     comparisons() {
       let comparisons = [];
 
-     if (this.row.itemType == 'product') {
-       comparisons.push({
-         comparison: 'Similar',
-         cost: this.benchmarkPrice,
-         savings: this.row.selectedPrice ? (this.benchmarkPrice - this.row.selectedPrice.price) : 0
-       });
-     }
+      if (this.row.itemType == 'product') {
+        comparisons.push({
+          comparison: 'Similar',
+          cost: this.benchmarkPrice,
+          savings: this.row.selectedPrice ? (this.benchmarkPrice - this.row.selectedPrice.price) : 0
+        });
+      }
 
       if (this.row.itemType !== 'product') {
         comparisons.push({

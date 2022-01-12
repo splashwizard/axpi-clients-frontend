@@ -222,6 +222,9 @@ export default {
     },
 
     suggestedPriceRangeForSimilarProducts() {
+      if (!this.row.suggestedProducts) {
+        return '';
+      }
       let ordered = _.orderBy(this.row.suggestedProducts, 'cost');
       let minPrice = _.first(ordered);
       let maxPrice = _.last(ordered);

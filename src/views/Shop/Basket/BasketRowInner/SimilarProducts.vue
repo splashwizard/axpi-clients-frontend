@@ -13,7 +13,7 @@
       {{ orderDate ? formatDate(orderDate) : '-' }}
     </div>
     <div slot="cost" slot-scope="cost, order">
-      {{ formatCostInPence(order) }}
+      {{ formatCostInPence2dp(order) }}
     </div>
     <div slot="similarity" slot-scope="similarity">
       <a-progress type="circle"
@@ -102,10 +102,10 @@ export default {
         return _.map(this.row.suggestedProducts, product => {
           let p = {
             product_name: product.name,
-            quantity: 5,
+            quantity: this.row.quantity,
             supplier: {name: product.supplier_name},
             similarity: Math.round(80 + (Math.random() * 15)),
-            cost: product.cost,
+            cost: product.cost * this.row.quantity,
             cost_currency: product.cost_currency
           }
           if (product.order_date) {

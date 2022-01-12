@@ -33,50 +33,55 @@ import Orders from "../../../../mixins/Orders";
 
 const _ = require('lodash');
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'product_name',
-    scopedSlots: {customRender: 'productName'}
-  },
-  {
-    title: 'Quantity',
-    dataIndex: 'quantity'
-  },
-  {
-    title: 'Supplier',
-    dataIndex: 'supplier.name'
-  },
-  {
-    title: 'Order Date',
-    dataIndex: 'order_date',
-    scopedSlots: {customRender: 'orderDate'}
-  },
-  {
-    title: 'Cost',
-    dataIndex: 'cost',
-    scopedSlots: {customRender: 'cost'}
-  },
-  {
-    title: '',
-    dataIndex: 'similarity',
-    scopedSlots: {customRender: 'similarity'}
-  },
-  {
-    title: '',
-    scopedSlots: {customRender: 'compare'}
-  }
-];
 export default {
   name: "SimilarProducts",
   props: ['row'],
   mixins: [Dates, Orders],
   data() {
-    return {
-      columns
-    }
+    return {}
   },
   computed: {
+    columns() {
+      let columns = [
+        {
+          title: 'Name',
+          dataIndex: 'product_name',
+          scopedSlots: {customRender: 'productName'}
+        },
+        {
+          title: 'Quantity',
+          dataIndex: 'quantity'
+        },
+        {
+          title: 'Supplier',
+          dataIndex: 'supplier.name'
+        }
+      ];
+      if (this.row.itemType == 'order') {
+        columns.push({
+          title: 'Order Date',
+          dataIndex: 'order_date',
+          scopedSlots: {customRender: 'orderDate'}
+        });
+      }
+      columns.push({
+        title: 'Cost',
+        dataIndex: 'cost',
+        scopedSlots: {customRender: 'cost'}
+      });
+      columns.push({
+        title: '',
+        dataIndex: 'similarity',
+        scopedSlots: {customRender: 'similarity'}
+      });
+      columns.push({
+        title: '',
+        scopedSlots: {customRender: 'compare'}
+      });
+
+      return columns;
+    },
+
     similarProducts() {
       if (this.row.itemType == 'order') {
         return [

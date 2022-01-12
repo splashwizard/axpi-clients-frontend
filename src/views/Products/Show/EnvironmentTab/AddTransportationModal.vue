@@ -17,8 +17,10 @@
     <div v-if="!isLoadingAddresses">
       <a-form layout="vertical" v-if="screen === 'main'">
         <a-form-item label="Method">
-          <a-select v-model="form.method" show-search size="large">
-            <a-select-option v-for="method in methodOptions" :value="method" :key="method">
+          <a-select v-model="form.method"
+                    :disabled="isLoadingTransportationOptions"
+                    show-search size="large">
+            <a-select-option v-for="method in transportationDropdownOptions" :value="method" :key="method">
               {{ method }}
             </a-select-option>
           </a-select>
@@ -92,12 +94,12 @@
 <script>
 import axios from "axios";
 import Addresses from "../../../../mixins/Addresses";
-
+const _ = require('lodash');
 const METHOD_OPTIONS = ['Air Freight', 'Truck'];
 
 export default {
   name: "AddTransportationModal",
-  props: ['visible', 'productId'],
+  props: ['visible', 'productId', 'isLoadingTransportationOptions', 'transportationOptions'],
   mixins: [Addresses],
   data() {
     return {
@@ -129,6 +131,13 @@ export default {
           this.closeModal();
         }
       }
+    },
+
+    transportationDropdownOptions() {
+      if (this.transportationOptions) {
+        return _.map(this.transportationOptions, 'name');
+      }
+      return [];
     }
   },
 

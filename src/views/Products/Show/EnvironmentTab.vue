@@ -103,6 +103,8 @@
 
     <add-transportation-modal :product-id="productId"
                               :visible="addTransportationModalVisible"
+                              :transportation-options="transportOptions"
+                              :is-loading-transportation-options="isLoadingTransportOptions"
                               @transportation-added="handleTransportationAdded"
                               @close-modal="closeAddTransportationModal"></add-transportation-modal>
 
@@ -186,13 +188,17 @@ export default {
       aspectOptions: [],
 
       isLoadingCertificationOptions: false,
-      certificationOptions: []
+      certificationOptions: [],
+
+      isLoadingTransportOptions: false,
+      transportOptions: []
     }
   },
   created() {
     this.loadAspectOptions();
     this.loadMaterialOptions();
     this.loadCertificationOptions();
+    this.loadTransportOptions();
     this.loadMaterials();
     this.loadCertifications();
     this.loadTransportations();
@@ -449,6 +455,18 @@ export default {
       axios.get(window.API_COMMON_BASE + '/certifications').then(r => {
         vm.isLoadingCertificationOptions = false;
         vm.certificationOptions = r.data;
+      }).catch(e => {
+        console.log(e);
+        vm.$message.error('Error loading certification options');
+      });
+    },
+
+    loadTransportOptions() {
+      let vm = this;
+      vm.isLoadingTransportOptions = true;
+      axios.get(window.API_COMMON_BASE + '/transportation-methods').then(r => {
+        vm.isLoadingTransportOptions = false;
+        vm.transportOptions = r.data;
       }).catch(e => {
         console.log(e);
         vm.$message.error('Error loading certification options');

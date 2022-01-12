@@ -517,7 +517,7 @@ export const actions = {
     },
 
     loadSuggestedProductsForProduct({commit}, product) {
-        commit('SET_PRODUCT_AS_LOADING_SUGGESTED_PRICES', product['_id']);
+        commit('SET_PRODUCT_AS_LOADING_SUGGESTED_PRICES', product);
         axios.post(window.API_BASE + '/products/' + product['_id'] + '/suggestions').then(r => {
             commit('ADD_SUGGESTED_PRODUCTS_TO_PRODUCT', {
                 product: product,

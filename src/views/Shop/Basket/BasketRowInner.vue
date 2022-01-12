@@ -75,7 +75,7 @@
         </div>
       </div>
 
-      <div slot="expandedRowRender" slot-scope="innerRow">
+      <div slot="expandedRowRender" slot-scope="innerRow" class="basket-row-inner-expanded-row-render">
         <suggested-prices v-if="innerRow.title == 'Suggested Prices'"
                           :row="row"></suggested-prices>
         <similar-products v-if="innerRow.title == 'Similar Products'"
@@ -327,6 +327,14 @@ export default {
     padding-bottom: 5px;
   }
 
+  .ant-table-expanded-row, .ant-table-expanded-row:hover {
+    background: #eee;
+
+    .ant-table-placeholder {
+        background: #eee;
+    }
+  }
+
   .name {
     font-weight: 500;
   }
@@ -366,6 +374,7 @@ export default {
     }
   }
 }
+
 
 .summary-column {
   text-align: right;

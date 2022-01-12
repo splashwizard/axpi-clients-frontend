@@ -80,7 +80,7 @@ export default {
 
       if (this.row.itemType == 'product') {
         comparisons.push({
-          comparison: 'Similar',
+          comparison: this.row.suggestedProducts.length ? 'Similar' : 'Benchmark',
           cost: this.benchmarkPrice,
           savings: this.row.selectedPrice ? (this.benchmarkPrice - (this.row.selectedPrice.price * this.row.quantity)) : 0
         });

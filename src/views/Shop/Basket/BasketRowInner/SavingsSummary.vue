@@ -20,7 +20,8 @@
           }) : '-'
         }}</span>
       <a-tag style="margin-left: 15px;"
-             :color="(record.savings && record.savings > 0) ? 'green' : 'red'">P&L</a-tag>
+             :color="(record.savings && record.savings > 0) ? 'green' : 'red'">P&L
+      </a-tag>
     </div>
   </a-table>
 </template>
@@ -28,6 +29,7 @@
 <script>
 import Dates from "../../../../mixins/Dates";
 import Orders from "../../../../mixins/Orders";
+
 const _ = require('lodash');
 
 const columns = [
@@ -65,13 +67,23 @@ export default {
     },
 
     comparisons() {
-      let comparisons = [
-        {
+      let comparisons = [];
+
+     if (this.row.itemType == 'product') {
+       comparisons.push({
+         comparison: 'Similar',
+         cost: this.benchmarkPrice,
+         savings: this.row.selectedPrice ? (this.benchmarkPrice - this.row.selectedPrice.price) : 0
+       });
+     }
+
+      if (this.row.itemType !== 'product') {
+        comparisons.push({
           comparison: 'Benchmark',
           cost: this.benchmarkPrice,
           savings: this.row.selectedPrice ? (this.benchmarkPrice - this.row.selectedPrice.price) : 0
-        }
-      ];
+        });
+      }
 
       if (this.row.order) {
         comparisons.push({

@@ -7,7 +7,7 @@
            :pagination="false">
     <div slot="productName" slot-scope="productName">
       {{ productName }}
-      <a-tag style="margin-left: 5px;" color="blue">Past Order</a-tag>
+      <a-tag v-if="row.itemType == 'order'" style="margin-left: 5px;" color="blue">Past Order</a-tag>
     </div>
     <div slot="orderDate" slot-scope="orderDate">
       {{ orderDate ? formatDate(orderDate) : '-' }}

@@ -67,7 +67,7 @@ export default {
     benchmarkPrice() {
       if (this.row.itemType == 'product' && this.row.suggestedProducts.length) {
         let costs = _.map(this.row.suggestedProducts, 'cost');
-        return _.min(costs);
+        return _.min(costs) * this.row.quantity;
       }
 
       let prices = _.map(this.row.prices, 'price');

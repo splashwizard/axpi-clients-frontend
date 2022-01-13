@@ -112,7 +112,8 @@ export default {
             product_name: product.name,
             quantity: this.row.quantity,
             supplier: {name: suppliers.formatSupplierName(product.supplier_name)},
-            similarity: Math.round(80 + (Math.random() * 15)),
+            // similarity: Math.round(80 + (Math.random() * 15)),
+            similarity: 79,
             cost: product.cost * this.row.quantity,
             cost_currency: product.cost_currency
           }

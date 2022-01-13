@@ -4,7 +4,7 @@
       <a-spin></a-spin>
     </div>
     <carousel
-        v-if="!isLoading" :autoplay="true" :autoplay-timeout="5000" :per-page="1">
+        v-if="!isLoading" :autoplay="true" :autoplay-timeout="3000" :per-page="1">
       <slide v-for="(image, i) in carouselImages" :key="i">
         <div class="carousel-text">
           <h1>{{ image.title }}</h1>

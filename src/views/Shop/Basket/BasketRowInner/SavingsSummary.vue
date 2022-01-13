@@ -92,7 +92,7 @@ export default {
 
       if (this.row.itemType == 'product') {
         comparisons.push({
-          comparison: this.row.suggestedProducts.length ? 'Similar' : 'Benchmark',
+          comparison: this.row.suggestedProducts.length ? 'Similar Match' : 'Benchmark',
           cost: this.benchmarkPrice,
           savings: this.row.selectedPrice ? (this.benchmarkPrice - (this.row.selectedPrice.price * this.row.quantity)) : 0
         });
@@ -100,7 +100,7 @@ export default {
 
       if (this.row.itemType !== 'product') {
         comparisons.push({
-          comparison: 'Benchmark',
+          comparison: 'Historic TruePrice',
           cost: this.benchmarkPrice,
           savings: this.row.selectedPrice ? (this.benchmarkPrice - this.row.selectedPrice.price) : 0
         });

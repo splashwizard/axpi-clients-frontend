@@ -30,6 +30,7 @@
 <script>
 import Dates from "../../../../mixins/Dates";
 import Orders from "../../../../mixins/Orders";
+import suppliers from "../../../../helpers/suppliers";
 
 const _ = require('lodash');
 
@@ -109,7 +110,7 @@ export default {
           let p = {
             product_name: product.name,
             quantity: this.row.quantity,
-            supplier: {name: product.supplier_name},
+            supplier: {name: suppliers.formatSupplierName(product.supplier_name)},
             similarity: Math.round(80 + (Math.random() * 15)),
             cost: product.cost * this.row.quantity,
             cost_currency: product.cost_currency

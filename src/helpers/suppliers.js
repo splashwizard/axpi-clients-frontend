@@ -12,6 +12,6 @@ export default {
         if (supplierName === 'FG Print') {
             return 'ASL Supplier 4';
         }
-        return supplierName + '!';
+        return supplierName;
     }
 }

@@ -88,6 +88,7 @@ export default {
         return [
           {
             ...this.row.order,
+            supplier: {name: suppliers.formatSupplierName(this.row.order.supplier.name)},
             similarity: 100
           },
           {

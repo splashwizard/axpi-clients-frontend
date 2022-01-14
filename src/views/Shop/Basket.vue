@@ -307,7 +307,7 @@ export default {
           title: 'Cost',
           dataIndex: 'cost',
           scopedSlots: {customRender: "cost"},
-          width: 100
+          width: 110
         },
         {
           title: '',

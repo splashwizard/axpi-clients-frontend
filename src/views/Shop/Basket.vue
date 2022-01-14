@@ -157,7 +157,7 @@
 
                 <!-- Savings -->
                 <div style="margin-top: 10px;"
-                     v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
+                     v-if="record.prices && record.selectedPrice">
                   <span>{{
                       getSavings(record) ? formatCostInPence2dp({
                         cost: getSavings(record),
@@ -415,6 +415,15 @@ export default {
 
         // let isSupplierSame = row.order.supplier_id == row.selectedPrice.supplier_id;
         if (row.order.cost < benchmarkPrice) {
+          return savingComparedToBefore;
+        }
+      }
+
+      if (row.suggestedProducts) {
+        let orderedByCost = _.orderBy(this.row.suggestedProducts, 'cost');
+        let lowestPrice = _.first(orderedByCost).cost;
+        let savingComparedToBefore = (lowestPrice - row.selectedPrice.price);
+        if (lowestPrice < benchmarkPrice) {
           return savingComparedToBefore;
         }
       }

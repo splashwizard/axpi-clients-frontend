@@ -424,7 +424,7 @@ export default {
         let lowestPrice = _.first(orderedByCost).cost;
         let savingComparedToBefore = (lowestPrice - row.selectedPrice.price);
         if (lowestPrice < benchmarkPrice) {
-          return savingComparedToBefore;
+          return savingComparedToBefore * row.quantity;
         }
       }
 

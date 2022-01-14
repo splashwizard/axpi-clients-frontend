@@ -107,13 +107,14 @@ export default {
         if (!this.row.suggestedProducts) {
           return [];
         }
-        return _.map(this.row.suggestedProducts, product => {
+        let orderedByCost = _.orderBy(this.row.suggestedProducts, 'cost');
+        return _.map(orderedByCost, (product, i) => {
           let p = {
             product_name: product.name,
             quantity: this.row.quantity,
             supplier: {name: suppliers.formatSupplierName(product.supplier_name)},
             // similarity: Math.round(80 + (Math.random() * 15)),
-            similarity: 79,
+            similarity: (i === 0 ? 93 : Math.round((70 + (Math.random()*15)))),
             cost: product.cost * this.row.quantity,
             cost_currency: product.cost_currency
           }

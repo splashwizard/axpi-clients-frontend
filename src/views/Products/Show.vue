@@ -94,11 +94,11 @@
              {{
                 selectedPrice ? formatCostInPence2dp({
                   cost: selectedPrice.price,
-                  cost_currency: 'USD'
+                  cost_currency: (selectedPrice.price_currency ? selectedPrice.price_currency : 'USD')
                 }) : '-'
               }}
            </span>
-            ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency: 'USD'}) }}/{{ unit }})
+            ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency: ((selectedPrice && selectedPrice.price_currency) ? selectedPrice.price_currency : 'USD')}) }}/{{ unit }})
 
             <a href="#" @click.prevent="scrollToPrices">View more</a>
           </div>
@@ -169,10 +169,10 @@
                 <span class="price">{{
                     selectedPrice ? formatCostInPence2dp({
                       cost: selectedPrice.price,
-                      cost_currency: 'USD'
+                      cost_currency:  (selectedPrice.price_currency ? selectedPrice.price_currency : 'USD')
                     }) : '-'
                   }}</span>
-                ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency: 'USD'}) }}/{{ unit }})
+                ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency:  ((selectedPrice && selectedPrice.price_currency) ? selectedPrice.price_currency : 'USD')}) }}/{{ unit }})
               </div>
               <div class="right">
                 <co2e-indicator :product="product"></co2e-indicator>

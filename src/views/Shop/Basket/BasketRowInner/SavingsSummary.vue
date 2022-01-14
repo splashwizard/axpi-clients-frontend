@@ -82,7 +82,7 @@ export default {
         return _.min(costs) * this.row.quantity;
       }
 
-      if (this.row.order.id == 3) {
+      if (this.row.order && this.row.order.id == 3) {
         return 16183.59;
       }
 

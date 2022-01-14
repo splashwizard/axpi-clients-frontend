@@ -25,7 +25,7 @@
 
           <div v-if="record.title == 'Similar Products'">
             <span v-if="row.itemType == 'order'">
-              {{ row.order ? formatCostInPence2dp(row.order) : '' }}
+              {{ suggestedPriceRangeForOrder }}
             </span>
             <span v-if="row.itemType == 'product'">
               {{ suggestedPriceRangeForSimilarProducts }}
@@ -181,7 +181,7 @@ export default {
         // return _.sum(totals, 'co2e.total') + ' kg';
         let summed = _.sum(co2es);
         if (summed) {
-          return (Math.floor(_.sum(co2es) * this.row.quantity * 100)/100) + ' kg';
+          return (Math.floor(_.sum(co2es) * this.row.quantity * 100) / 100) + ' kg';
         }
         return null;
       }
@@ -250,6 +250,41 @@ export default {
           cost_currency: 'USD'
         });
       }
+    },
+
+    suggestedPriceRangeForOrder() {
+      if (this.row.order) {
+        let costs = [
+          this.row.order.cost
+        ];
+        if (this.row.order.id == 3) {
+          costs.push(
+              15622 * 100
+          );
+        }
+        let minPrice = _.min(costs);
+        let maxPrice = _.max(costs);
+
+        if (minPrice !== maxPrice) {
+          let minPriceFormatted = this.formatCostInPence2dp({
+            cost: minPrice,
+            cost_currency: 'USD'
+          });
+
+          let maxPriceFormatted = this.formatCostInPence2dp({
+            cost: maxPrice,
+            cost_currency: 'USD'
+          });
+
+          return minPriceFormatted + ' → ' + maxPriceFormatted;
+        } else {
+          return this.formatCostInPence2dp({
+            cost: minPrice,
+            cost_currency: 'USD'
+          });
+        }
+      }
+      return '';
     },
 
     suggestedPriceRangeForSimilarProducts() {
@@ -343,7 +378,7 @@ export default {
     background: #eee;
 
     .ant-table-placeholder {
-        background: #eee;
+      background: #eee;
     }
   }
 

@@ -17,7 +17,7 @@
       </a>
       <a href="#" @click.prevent="() => toggleShowMoreCertificationsForPrice(record)"
          v-if="showMoreCertificationsForPriceIds.includes(record.id)">
-       Show less
+        Show less
       </a>
     </div>
     <div slot="cost" slot-scope="cost, record">
@@ -71,6 +71,11 @@ export default {
     benchmarkPrice() {
       let prices = _.map(this.row.prices, 'price');
       let average = _.mean(prices) * 1.3;
+
+      if (this.row.order && this.row.order.id == 3) {
+        return 16183.59 * 100;
+      }
+
       return average;
     },
 
@@ -92,7 +97,7 @@ export default {
       return co2eToReturn ? Math.round(co2eToReturn * 100) / 100 : 0;
     },
 
-    limitCertifications(certs, priceId=null) {
+    limitCertifications(certs, priceId = null) {
       if (this.showMoreCertificationsForPriceIds.includes(priceId)) {
         return certs;
       }
@@ -111,7 +116,7 @@ export default {
     },
 
     toggleShowMoreCertificationsForPrice(price) {
-     this.showMoreCertificationsForPriceIds = _.xor(this.showMoreCertificationsForPriceIds, [price.id]);
+      this.showMoreCertificationsForPriceIds = _.xor(this.showMoreCertificationsForPriceIds, [price.id]);
     }
   }
 }

@@ -92,7 +92,7 @@ export default {
             similarity: 100
           },
           {
-            product_name: 'AGL - Insert Q3 Bills',
+            product_name: 'Smirnoff Poster',
             quantity: 1215983,
             supplier: {name: 'ASL Supplier 2'},
             order_date: '2020-01-13',

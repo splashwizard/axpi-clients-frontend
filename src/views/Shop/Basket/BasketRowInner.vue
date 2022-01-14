@@ -222,6 +222,12 @@ export default {
           // savings: (this.benchmarkPrice - this.row.order.cost)
           savings: this.row.selectedPrice ? (this.row.order.cost - this.row.selectedPrice.price) : 0
         });
+        comparisons.push({
+          comparison: 'Similar Match',
+          cost: 15622 * 100,
+          savings: this.row.selectedPrice ? (15622*100 - this.row.selectedPrice.price) : 0,
+          similarity: 87
+        });
       }
 
       return comparisons;

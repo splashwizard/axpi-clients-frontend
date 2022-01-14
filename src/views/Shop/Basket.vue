@@ -179,7 +179,7 @@
               <div v-if="!record.isLoadingPrices">
                 <div v-if="getSavingType(record) === 'Suggested'">
                   <a-tag
-                      v-if="record.prices && record.itemType !== 'product' && record.selectedPrice"
+                      v-if="record.prices && record.selectedPrice"
                       color="blue" style="margin-left: 5px;">Suggested
                   </a-tag>
                 </div>
@@ -189,7 +189,7 @@
                   </a-tag>
                 </div>
                 <div style="margin-top: 10px;"
-                     v-if="record.prices && record.itemType !== 'product' && record.selectedPrice">
+                     v-if="record.prices && record.selectedPrice">
                   <a-tag
                       :color="(getSavings(record) && getSavings(record) > 0) ? 'green' : 'red'"
                       style="margin-left: 5px;">Savings

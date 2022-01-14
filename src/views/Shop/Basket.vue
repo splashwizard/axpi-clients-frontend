@@ -420,7 +420,7 @@ export default {
       }
 
       if (row.suggestedProducts) {
-        let orderedByCost = _.orderBy(this.row.suggestedProducts, 'cost');
+        let orderedByCost = _.orderBy(row.suggestedProducts, 'cost');
         let lowestPrice = _.first(orderedByCost).cost;
         let savingComparedToBefore = (lowestPrice - row.selectedPrice.price);
         if (lowestPrice < benchmarkPrice) {

@@ -419,7 +419,7 @@ export default {
         }
       }
 
-      if (row.suggestedProducts) {
+      if (row.suggestedProducts && row.suggestedProducts.length) {
         let orderedByCost = _.orderBy(row.suggestedProducts, 'cost');
         let lowestPrice = _.first(orderedByCost).cost;
         let savingComparedToBefore = (lowestPrice - row.selectedPrice.price);

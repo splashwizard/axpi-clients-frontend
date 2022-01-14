@@ -83,7 +83,7 @@ export default {
       }
 
       if (this.row.order && this.row.order.id == 3) {
-        return 16183.59;
+        return 16183.59 * 100;
       }
 
       let prices = _.map(this.row.prices, 'price');

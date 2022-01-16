@@ -101,10 +101,12 @@
                     <a-col :span="12">
                         <a-form-item label="Country">
                             <a-select size="large"
+                                      show-search
                                       v-decorator="['country', { rules: [{required: true, message: 'Country is required'}] }]">
-                                <a-select-option value="UK">
-                                    United Kingdom
-                                </a-select-option>
+                              <a-select-option :key="i"
+                                               v-for="(country, i) in countries" :value="country">
+                                {{ country }}
+                              </a-select-option>
                             </a-select>
                         </a-form-item>
                     </a-col>
@@ -120,6 +122,7 @@
 
 <script>
     import Addresses from "../../../../../mixins/Addresses";
+    import Countries from "../../../../../mixins/Countries";
     import axios from "axios";
 
     const SHIP_USING_OPTIONS = [
@@ -143,7 +146,7 @@
     export default {
         name: "LocationEditor",
         props: ['location', 'addresses'],
-        mixins: [Addresses],
+        mixins: [Addresses, Countries],
         components: {
             VNodes: {
                 functional: true,

@@ -72,9 +72,11 @@
               v-decorator="['postal_code', { rules: [{ required: true, message: 'Postcode is required' }] }]" />
         </a-form-item>
         <a-form-item label="Country">
-          <a-select v-decorator="['country', { rules: [{required: true, message: 'Country is required'}] }]">
-            <a-select-option value="UK">
-              United Kingdom
+          <a-select show-search
+              v-decorator="['country', { rules: [{required: true, message: 'Country is required'}] }]">
+            <a-select-option :key="i"
+                v-for="(country, i) in countries" :value="country">
+              {{ country }}
             </a-select-option>
           </a-select>
         </a-form-item>
@@ -96,11 +98,12 @@ import axios from "axios";
 import Addresses from "../../../../mixins/Addresses";
 const _ = require('lodash');
 const METHOD_OPTIONS = ['Air Freight', 'Truck'];
+import Countries from "../../../../mixins/Countries";
 
 export default {
   name: "AddTransportationModal",
   props: ['visible', 'productId', 'isLoadingTransportationOptions', 'transportationOptions'],
-  mixins: [Addresses],
+  mixins: [Addresses, Countries],
   data() {
     return {
       form: {

@@ -65,9 +65,11 @@
           </a-row>
 
           <a-form-item label="Country">
-            <a-select v-decorator="['country', { rules: [{required: true, message: 'Country is required'}] }]">
-              <a-select-option value="UK">
-                United Kingdom
+            <a-select show-search
+                v-decorator="['country', { rules: [{required: true, message: 'Country is required'}] }]">
+              <a-select-option :key="i"
+                               v-for="(country, i) in countries" :value="country">
+                {{ country }}
               </a-select-option>
             </a-select>
           </a-form-item>
@@ -89,10 +91,11 @@
 import axios from 'axios';
 import {mapGetters, mapActions} from 'vuex';
 import Addresses from "../../../mixins/Addresses";
+import Countries from "../../../mixins/Countries";
 
 export default {
   name: "AddressSelectorInline",
-  mixins: [Addresses],
+  mixins: [Addresses, Countries],
   data() {
     return {
       isLoading: false,

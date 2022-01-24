@@ -262,10 +262,12 @@
               <!--                        </a-menu-item>-->
               <!--                    </a-sub-menu>-->
               <a-menu-item key="shop/landing" title="Shop">
-<!--                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping"-->
-<!--                        theme="filled"></a-icon>-->
-                <shop-icon></shop-icon>
+               <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
                 <span v-if="!menuCollapsed">Shop</span>
+              </a-menu-item>
+              <a-menu-item title="Search" key="search/analytics">
+                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="search"></a-icon>
+                <span v-if="!menuCollapsed">Search</span>
               </a-menu-item>
               <!--            <a-menu-item key="developers" title="Developers">-->
               <!--              <developers-icon class="nav-icon"></developers-icon>-->
@@ -306,7 +308,6 @@ import FeedbackPopup from "./components/FeedbackPopup";
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
 import ClickOutside from 'vue-click-outside'
 import AddSpecToBasketButtonAndModal from "./views/Shop/AddSpecToBasketButtonAndModal";
-import ShopIcon from "./components/Icons/ShopIcon";
 import QuicksightQBar from "./components/QuicksightQBar";
 import Images from "./mixins/Images";
 
@@ -342,7 +343,6 @@ const searchClient = typesenseInstantsearchAdapter.searchClient;
 export default {
   components: {
     QuicksightQBar,
-    ShopIcon,
     HomeIcon,
     OrdersIcon,
     SuppliersIcon,
@@ -445,7 +445,8 @@ export default {
     },
 
     noPadding() {
-      return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Analytics', 'Shop Landing'].includes(this.$route.name);
+      return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details',
+      'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules'].includes(this.$route.name);
     },
 
     menuCollapsed() {
@@ -455,6 +456,10 @@ export default {
 
     basketCount() {
       return this.basket.length;
+    },
+
+    selectedSuppliers() {
+      return false;
     }
   }
 }

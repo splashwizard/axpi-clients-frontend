@@ -295,6 +295,28 @@ const routes = [
         }
     },
     {
+        path: '/search/analytics',
+        name: 'Search Analytics',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "view-project" */ '../views/Search/Analytics.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/search/rules',
+        name: 'Search Rules',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "view-project" */ '../views/Search/Rules.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
         path: '/shop/basket',
         name: 'Basket',
         // route level code-splitting

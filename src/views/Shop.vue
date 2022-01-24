@@ -271,12 +271,12 @@ const _ = require('lodash');
 
 import {connectHitsWithInsights} from 'instantsearch.js/es/connectors';
 import {createWidgetMixin} from 'vue-instantsearch/src/mixins/widget';
-import ApprovedBadge from "./Products/Show/ApprovedBadge";
+// import ApprovedBadge from "./Products/Show/ApprovedBadge";
 
 export default {
   name: "Shop",
   components: {
-    ApprovedBadge,
+    // ApprovedBadge,
     SpecsDisplay,
     // ProductGroup,
     NameGroup

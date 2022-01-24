@@ -22,6 +22,13 @@ window.API_COMMON_BASE = 'https://api.axiomdata.io/api/common';
 window.IMAGE_STORAGE_BASE = 'https://api.axiomdata.io/storage';
 window.API_TOKEN_URL = 'https://api.axiomdata.io/api/token';
 
+const BASE_URL = 'http://localhost:8000';
+window.API_BASE = `${BASE_URL}/api/clients`;
+window.API_COMMON_BASE = `${BASE_URL}/api/common`;
+window.IMAGE_STORAGE_BASE = `${BASE_URL}/storage`;
+window.API_TOKEN_URL = `${BASE_URL}/api/token`;
+
+
 // Html 2 canvas (screenshoting analytics)
 import VueHtml2Canvas from 'vue-html2canvas';
 Vue.use(VueHtml2Canvas);

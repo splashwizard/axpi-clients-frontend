@@ -4,7 +4,7 @@
       <ais-configure :hits-per-page.camel="8"/>
 
       <a-layout v-if="loggedIn">
-        <a-layout-header :style="{ background: '#fff', padding: '0 20px', borderBottom: '1px solid #e3e8ee' }">
+        <a-layout-header :style="{ background: '#fff', padding: '0 20px', borderBottom: '1px solid #e3e8ee' }" v-if="hasHeader">
           <div class="top-nav">
             <div class="logo">
               <!--                    <router-link to="/">-->
@@ -173,6 +173,7 @@
               collapsible
               v-model="menuCollapsed"
               :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
+              v-if="hasSider"
           >
             <a-menu
                 @click="handleMenuItemClicked"
@@ -444,9 +445,17 @@ export default {
       );
     },
 
+    hasHeader() {
+      return 'Visual Editor' !== this.$route.name;
+    },
+
+    hasSider() {
+      return 'Visual Editor' !== this.$route.name;
+    },
+
     noPadding() {
       return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details',
-      'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules'].includes(this.$route.name);
+      'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules', 'Visual Editor'].includes(this.$route.name);
     },
 
     menuCollapsed() {

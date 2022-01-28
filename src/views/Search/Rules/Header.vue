@@ -3,7 +3,7 @@
     <a-row type="flex" justify="space-between" class="rule-row">
       <h4>Rules</h4>
       <a-dropdown>
-        <a-menu slot="overlay">
+        <a-menu slot="overlay" @click="onMenuClick">
           <a-menu-item key="visual">
             <b>Visual Editor</b> <br>
             Promote and hide items, boost and filter categories
@@ -138,6 +138,10 @@ export default {
     }
   },
   methods: {
+    onMenuClick({key}) {
+      if (key === 'visual')
+        this.$router.push('/search/rules/visual-editor/new');
+    },
     onChangeStartDate(date) {
       this.filters.date.from = date;
       this.filters.dateCount = 1;

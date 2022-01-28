@@ -317,6 +317,17 @@ const routes = [
         }
     },
     {
+        path: '/search/rules/visual-editor/new',
+        name: 'Visual Editor',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "view-project" */ '../views/Search/VisualEditor.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
         path: '/shop/basket',
         name: 'Basket',
         // route level code-splitting

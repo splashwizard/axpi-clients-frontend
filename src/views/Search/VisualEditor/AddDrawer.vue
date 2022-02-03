@@ -13,101 +13,211 @@
     <div class="drawer-close">
       <a-button class="btn-close" @click="drawerClose"><a-icon type="close" /></a-button>
     </div>
-    <h3 class="drawer-title">Define the condition that triggers the rule</h3> 
-    <section class="drawer-section">
-      <div class="condition-wrapper" @click="triggerQuery">
-        <div>
-          <a-switch default-checked :checked="queryExpanded">
-            <a-icon slot="checkedChildren" type="check" />
-            <a-icon slot="unCheckedChildren" type="close" />
-          </a-switch>
-          <span>Query</span>
-        </div>
-        <a-icon :type="queryExpanded ? 'up' : 'down'" />
-      </div>
-      <div class="condition-content" v-if="queryExpanded">
-        <label>Your search</label>
-        <div class="content-container">
-          <a-select default-value="contains" style="width: 120px" @change="handleChangeOption">
-            <a-select-option value="is">
-              is
-            </a-select-option>
-            <a-select-option value="starts_with">
-              starts with
-            </a-select-option>
-            <a-select-option value="ends_with">
-              ends with
-            </a-select-option>
-            <a-select-option value="contains">
-              contains
-            </a-select-option>
-          </a-select>
-          <a-input v-model="keyword" placeholder="e.g. iPhone"/>
-        </div>
-      </div>
-    </section>
-    <section class="drawer-section">
-      <div class="condition-wrapper" @click="triggerFilters">
-        <div>
-          <a-switch default-checked :checked="filtersExpanded">
-            <a-icon slot="checkedChildren" type="check" />
-            <a-icon slot="unCheckedChildren" type="close" />
-          </a-switch>
-          <span>Filters</span>
-        </div>
-        <a-icon :type="filtersExpanded ? 'up' : 'down'" />
-      </div>
-      <div class="condition-content" v-if="filtersExpanded">
-        <div v-for="(filter, fi) in filters" :key="fi" class="filter-wrapper">
-          <div class="labels">
-            <label class="name">Filter Name</label>
-            <label>Value</label>
+    <div v-if="drawerType === 'condition'">
+      <h3 class="drawer-title">Define the condition that triggers the rule</h3> 
+      <section class="drawer-section">
+        <div class="condition-wrapper" @click="triggerQuery">
+          <div>
+            <a-switch default-checked :checked="queryExpanded">
+              <a-icon slot="checkedChildren" type="check" />
+              <a-icon slot="unCheckedChildren" type="close" />
+            </a-switch>
+            <span>Query</span>
           </div>
-          <div class="inputs">
-            <div class="name">
-              <a-input v-model="filter.name" placeholder="e.g. Size"/>
-            </div>
-            <div class="is">
-              is
-            </div>
-            <div class="keyword">
-              <a-input v-model="filter.keyword" placeholder="e.g. 42"/>
-            </div>
-            <div>
-              <a-button class="btn-delete" @click="removeFilter(fi)"><a-icon type="delete" /></a-button>
-            </div>
+          <a-icon :type="queryExpanded ? 'up' : 'down'" />
+        </div>
+        <div class="condition-content" v-if="queryExpanded">
+          <label>Your search</label>
+          <div class="content-container">
+            <a-select default-value="contains" style="width: 120px" @change="handleChangeOption">
+              <a-select-option value="is">
+                is
+              </a-select-option>
+              <a-select-option value="starts_with">
+                starts with
+              </a-select-option>
+              <a-select-option value="ends_with">
+                ends with
+              </a-select-option>
+              <a-select-option value="contains">
+                contains
+              </a-select-option>
+            </a-select>
+            <a-input v-model="keyword" placeholder="e.g. iPhone"/>
           </div>
         </div>
+      </section>
+      <section class="drawer-section">
+        <div class="condition-wrapper" @click="triggerFilters">
+          <div>
+            <a-switch default-checked :checked="filtersExpanded">
+              <a-icon slot="checkedChildren" type="check" />
+              <a-icon slot="unCheckedChildren" type="close" />
+            </a-switch>
+            <span>Filters</span>
+          </div>
+          <a-icon :type="filtersExpanded ? 'up' : 'down'" />
+        </div>
+        <div class="condition-content" v-if="filtersExpanded">
+          <div v-for="(filter, fi) in filters" :key="fi" class="filter-wrapper">
+            <div class="labels">
+              <label class="name">Filter Name</label>
+              <label>Value</label>
+            </div>
+            <div class="inputs">
+              <div class="name">
+                <a-auto-complete
+                  :data-source="filterNames"
+                  placeholder="e.g. Size"
+                  :filter-option="filterOption"
+                  v-model="filter.name"
+                />
+              </div>
+              <div class="is">
+                is
+              </div>
+              <div class="keyword">
+                <a-input v-model="filter.keyword" placeholder="e.g. 42"/>
+              </div>
+              <div>
+                <a-button v-if="fi !== 0" class="btn-delete" @click="removeFilter(fi)"><a-icon type="delete" /></a-button>
+              </div>
+            </div>
+          </div>
 
-        <a-button class="btn-close" @click="addFilter"><a-icon type="plus" />Add another filter value</a-button>
+          <a-button class="btn-close" @click="addFilter"><a-icon type="plus" />Add another filter value</a-button>
+        </div>
+      </section>
+      <div class="drawer-close">
+        <a-button type="primary" @click="onApply" :disabled="conditionDisabled">Apply</a-button>
       </div>
-    </section>
-    <div class="drawer-close">
-      <a-button type="primary" @click="onApply" :disabled="!this.keyword">Apply</a-button>
     </div>
+
+    <div v-else-if="drawerType === 'daterange'">
+      <h3 class="drawer-title">Choose a date range</h3>
+      <section class="drawer-section">
+        <a-range-picker @change="onChangeDate" :value="dateperiod"/>
+      </section>
+      <div class="drawer-close">
+        <a-button type="primary" @click="onApply" :disabled="this.dateperiod.length === 0">Apply</a-button>
+      </div>
+    </div>
+
+    <div v-else-if="drawerType === 'boost_category'">
+      <h3 class="drawer-title">Choose categories to boost</h3>
+      <section class="drawer-section">
+        <div class="condition-content">
+          <div v-for="(category, fi) in boostCategories" :key="fi" class="filter-wrapper">
+            <div class="labels">
+              <label class="name">Category</label>
+            </div>
+            <div class="inputs">
+              <div class="name">
+                <a-auto-complete
+                  :data-source="filterNames"
+                  placeholder="e.g. Size"
+                  :filter-option="filterOption"
+                  v-model="category.name"
+                />
+              </div>
+              <div class="is">
+                is
+              </div>
+              <div class="keyword">
+                <a-input v-model="category.keyword" placeholder="e.g. 42"/>
+              </div>
+              <div>
+                <a-button v-if="fi !== 0" class="btn-delete" @click="removeBoostCategory(fi)"><a-icon type="delete" /></a-button>
+              </div>
+            </div>
+          </div>
+
+          <a-button class="btn-close" @click="addBoostCategory"><a-icon type="plus" />Boost another category</a-button>
+        </div>
+      </section>
+      <div class="drawer-close">
+        <a-button type="primary" @click="onApply" :disabled="boostDisabled">Apply</a-button>
+      </div>
+    </div>
+
+    <div v-else-if="drawerType === 'bury_category'">
+      <h3 class="drawer-title">Choose categories to bury</h3>
+      <section class="drawer-section">
+        <div class="condition-content">
+          <div v-for="(category, fi) in buryCategories" :key="fi" class="filter-wrapper">
+            <div class="labels">
+              <label class="name">Category</label>
+            </div>
+            <div class="inputs">
+              <div class="name">
+                <a-auto-complete
+                  :data-source="filterNames"
+                  placeholder="e.g. Size"
+                  :filter-option="filterOption"
+                  v-model="category.name"
+                />
+              </div>
+              <div class="is">
+                is
+              </div>
+              <div class="keyword">
+                <a-input v-model="category.keyword" placeholder="e.g. 42"/>
+              </div>
+              <div>
+                <a-button v-if="fi !== 0" class="btn-delete" @click="removeBuryCategory(fi)"><a-icon type="delete" /></a-button>
+              </div>
+            </div>
+          </div>
+
+          <a-button class="btn-close" @click="addBuryCategory"><a-icon type="plus" />Bury another category</a-button>
+        </div>
+      </section>
+      <div class="drawer-close">
+        <a-button type="primary" @click="onApply" :disabled="buryDisabled">Apply</a-button>
+      </div>
+    </div>
+
   </a-drawer>
 </template>
 
 <script>
 export default {
   name: "Drawer",
-  props: ['drawerVisible', 'drawerClose', 'addDrawer'],
+  props: ['drawerVisible', 'drawerType', 'drawerClose', 'addDrawer'],
   data() {
     return {
       queryExpanded: true,
       filtersExpanded: true,
       option: 'contains',
       keyword: '',
-      filters: [
-        // { name: 'Bottom Style', keyword: 'abc' },
-        // { name: 'Capacity', keyword: 'big' }
-      ]
+      filters: [],
+      boostCategories: [{ name: '', keyword: '' }],
+      buryCategories: [{ name: '', keyword: '' }],
+      filterResults: [],
+      filterNames: ['Bottom style', 'Capacity', 'Color', 'Model', 'Needle gauge', 'Needle length', 'Needle tip'],
+      dateperiod: []
+    }
+  },
+  computed: {
+    conditionDisabled() {
+      return !this.keyword || this.filters.filter(item => item.name === '' || item.keyword === '').length > 0;
+    },
+    boostDisabled() {
+      return this.boostCategories.filter(item => item.name === '' || item.keyword === '').length > 0;
+    },
+    buryDisabled() {
+      return this.buryCategories.filter(item => item.name === '' || item.keyword === '').length > 0;
     }
   },
   methods: {
-    // isValid(){
-    //   return this.filters.filter(item=> item.name === '' || item.keyword === '').length === 0 && this.keyword;
-    // },
+    onChangeDate(date) {
+      this.dateperiod = date;
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
+      );
+    },
     handleChangeOption(option) {
       this.option = option;
     },
@@ -122,15 +232,41 @@ export default {
     },
     removeFilter(fi) {
       this.filters.splice(fi, 1);
-    },  
+    },
+    addBoostCategory() {
+      this.boostCategories.push({ name: '', keyword: '' });
+    },
+    removeBoostCategory(fi) {
+      this.boostCategories.splice(fi, 1);
+    },
+    addBuryCategory() {
+      this.buryCategories.push({ name: '', keyword: '' });
+    },
+    removeBuryCategory(fi) {
+      this.buryCategories.splice(fi, 1);
+    },
     onApply() {
-      this.addDrawer({
-        query: { option: this.option, keyword: this.keyword },
-        filters: [...this.filters]
-      });
-      this.keyword = "";
-      this.option = 'contains';
-      this.filters = [];
+      if(this.drawerType === 'condition') {
+        this.addDrawer('condition', {
+          query: { option: this.option, keyword: this.keyword },
+          filters: [...this.filters]
+        });
+        this.keyword = "";
+        this.option = 'contains';
+        this.filters = [];
+      }
+      else if(this.drawerType === 'daterange') {
+        this.addDrawer('daterange', this.dateperiod);
+        this.dateperiod = [];
+      }
+      else if(this.drawerType === 'boost_category') {
+        this.addDrawer('boost_category', this.boostCategories);
+        this.boostCategories = [];
+      }
+      else if(this.drawerType === 'bury_category') {
+        this.addDrawer('bury_category', this.buryCategories);
+        this.buryCategories = [];
+      }
     }
   }
 }

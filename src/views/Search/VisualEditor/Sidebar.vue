@@ -1,70 +1,157 @@
   <template>
   <a-layout-sider width="448" theme="light" :style="{borderRight: '1px solid #e3e8ee', overflowY: 'scroll' }"
                   :collapsed-width="0" :trigger="null">
-    <div class="wrapper" v-if="!triggerData.between && triggerData.query_conditions.length === 0">
-      <h1 class="page-title">It all starts here</h1>
-      <div class="rule-buttons">
-        <div class="Picker" @click="toggleAddDrawer('condition')">
-          <div class="Picker-icon">
-            <a-icon type="search" />
+    <div class="wrapper">
+      <div class="trigger-wrapper" v-if="!triggerData.period.length && triggerData.query_conditions.length === 0">
+        <h1 class="page-title">It all starts here</h1>
+        <div class="rule-buttons">
+          <div class="Picker" @click="toggleAddDrawer('condition')">
+            <div class="Picker-icon">
+              <a-icon type="search" />
+            </div>
+            <h4>Set Query Conditions</h4>
           </div>
-          <h4>Set Query Conditions</h4>
-        </div>
-        <div class="Picker" @click="toggleAddDrawer('category')">
-          <div class="Picker-icon">
-            <a-icon type="shopping" />
+          <!-- <div class="Picker" @click="toggleAddDrawer('category')">
+            <div class="Picker-icon">
+              <a-icon type="shopping" />
+            </div>
+            <h4>Choose Category page</h4>
+          </div> -->
+          <div class="Picker" @click="toggleAddDrawer('daterange')">
+            <div class="Picker-icon">
+              <a-icon type="calendar" />
+            </div>
+            <h4>Add a date range</h4>
           </div>
-          <h4>Choose Category page</h4>
-        </div>
-        <div class="Picker" @click="toggleAddDrawer('daterange')">
-          <div class="Picker-icon">
-            <a-icon type="calendar" />
-          </div>
-          <h4>Add a date range</h4>
         </div>
       </div>
-    </div>
+      
+      <div class="trigger-wrapper" v-else>
+        <div class="title-wrapper">
+          <h1 class="page-title">Trigger</h1>
+          <a-dropdown :trigger="['click']">
+            <a-menu slot="overlay" style="padding: 0">
+              <a-menu-item key="query" class="dropdown-item" @click="addQueryCondition">
+                <a-icon type="search"  />
+                <span>
+                  Add query condition
+                </span>
+              </a-menu-item>
+              <a-menu-item key="daterange" class="dropdown-item" @click="addPeriod" v-if="triggerData.period.length === 0">
+                <a-icon type="calendar"  />
+                <span>
+                  Add a date range
+                </span>
+              </a-menu-item>
+            </a-menu>
+            <a-button icon="plus"/>
+          </a-dropdown>
+        </div>
+        <div>
+          <date-period :period="triggerData.period" :editPeriod="editPeriod" :deletePeriod="deletePeriod" v-if="triggerData.period.length > 0"/>
+          <query-condition v-for="(condition, ci) in triggerData.query_conditions" :condition="condition" :editCondition="editCondition" :deleteCondition="deleteCondition" :index="ci" :key="ci" />
+        </div>
+      </div>
 
-    
-    <div class="wrapper" v-else>
-      <div class="title-wrapper">
-        <h1 class="page-title">Trigger</h1>
-        <a-dropdown :trigger="['click']">
-          <a-menu slot="overlay" style="padding: 0">
-            <a-menu-item key="status" class="dropdown-item" @click="addQueryCondition">
-              <a-icon type="search"  />
-              <span>
-                Add query condition
-              </span>
-            </a-menu-item>
-          </a-menu>
-          <a-button icon="plus"/>
-        </a-dropdown>
+      <div v-if="strategyData.boostCategories.length === 0 && strategyData.buryCategories.length === 0 && strategyData.filterResults.length === 0">
+        <h1 class="page-title">What do you want to do?</h1>
+        <div class="rule-buttons">
+          <div class="Picker" @click="toggleAddDrawer('boost_category')">
+            <div class="Picker-icon">
+              <a-icon type="arrow-up" />
+            </div>
+            <h4>Boost categories</h4>
+          </div>
+          <div class="Picker" @click="toggleAddDrawer('bury_category')">
+            <div class="Picker-icon">
+              <a-icon type="arrow-down" />
+            </div>
+            <h4>Bury categories</h4>
+          </div>
+          <div class="Picker" @click="toggleAddDrawer('filter_results')">
+            <div class="Picker-icon">
+              <a-icon type="filter" />
+            </div>
+            <h4>Filter results</h4>
+          </div>
+        </div>
       </div>
-      <div>
-        <query-condition v-for="(condition, ci) in triggerData.query_conditions" :condition="condition" :editCondition="editCondition" :deleteCondition="deleteCondition" :index="ci" :key="ci"/>
+
+      <div v-else>
+        <div class="title-wrapper">
+          <h1 class="page-title">Strategy</h1>
+          <a-dropdown :trigger="['click']" v-if="strategyData.boostCategories.length === 0 || strategyData.buryCategories.length === 0">
+            <a-menu slot="overlay" style="padding: 0">
+              <a-menu-item key="boost_category" class="dropdown-item" @click="addBoostCategory" v-if="strategyData.boostCategories.length === 0">
+                <a-icon type="arrow-up"  />
+                <span>
+                  Boost categories
+                </span>
+              </a-menu-item>
+              <a-menu-item key="bury_category" class="dropdown-item" @click="addBuryCategory" v-if="strategyData.buryCategories.length === 0">
+                <a-icon type="arrow-down"  />
+                <span>
+                  Bury categories
+                </span>
+              </a-menu-item>
+            </a-menu>
+            <a-button icon="plus"/>
+          </a-dropdown>
+        </div>
+        <div>
+          <boost-category :category="strategyData.boostCategories" :editCategory="editBoostCategory" :deleteCategory="deleteBoostCategory" />
+          <bury-category :category="strategyData.buryCategories" :editCategory="editBuryCategory" :deleteCategory="deleteBuryCategory" />
+        </div>
       </div>
+
     </div>
   </a-layout-sider>
 </template>
 
 <script>
 import QueryCondition from "./QueryCondition.vue"
+import DatePeriod from "./DatePeriod.vue"
+import BoostCategory from "./BoostCategory.vue"
+import BuryCategory from "./BuryCategory.vue"
 
 export default {
   name: "LeftSidebar",
-  components: { QueryCondition, },
-  props: ['toggleAddDrawer', 'toggleEditDrawer', 'triggerData'],
+  components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory },
+  props: ['toggleAddDrawer', 'toggleEditDrawer', 'triggerData', 'strategyData', 'editPeriod'],
   methods: {
     addQueryCondition() {
       this.toggleAddDrawer('condition');
     },
+    addPeriod() {
+      this.toggleAddDrawer('daterange');
+    },
+    addBoostCategory() {
+      this.toggleAddDrawer('boost_category');
+    },
+    addBuryCategory() {
+      this.toggleAddDrawer('bury_category');
+    },
     editCondition(index) {
-      this.toggleEditDrawer(index);
+      this.toggleEditDrawer('condition', index);
+    },
+    editBoostCategory() {
+      this.toggleEditDrawer('boost_category');
+    },
+    editBuryCategory() {
+      this.toggleEditDrawer('bury_category');
     },
     deleteCondition(index) {
       this.triggerData.query_conditions.splice(index, 1);
-    }
+    },
+    deleteBoostCategory() {
+      this.strategyData.boostCategories = [];
+    },
+    deleteBuryCategory() {
+      this.strategyData.buryCategories = [];
+    },
+    deletePeriod() {
+      this.triggerData.period = [];
+    },
   },
   computed: {
     isAnalytics() {
@@ -130,6 +217,10 @@ export default {
   background-image: linear-gradient(to top, rgb(202, 207, 255), rgb(242, 243, 255));
   border-radius: 99999px;
   margin-bottom: 4px;
+}
+
+.trigger-wrapper {
+  margin-bottom: 64px;
 }
 
 </style>

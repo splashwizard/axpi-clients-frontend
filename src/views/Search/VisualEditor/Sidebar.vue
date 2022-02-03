@@ -94,13 +94,20 @@
                   Bury categories
                 </span>
               </a-menu-item>
+              <a-menu-item key="filter_results" class="dropdown-item" @click="addFilterResults" v-if="strategyData.filterResults.length === 0">
+                <a-icon type="filter"  />
+                <span>
+                  Filter Results
+                </span>
+              </a-menu-item>
             </a-menu>
             <a-button icon="plus"/>
           </a-dropdown>
         </div>
         <div>
-          <boost-category :category="strategyData.boostCategories" :editCategory="editBoostCategory" :deleteCategory="deleteBoostCategory" />
-          <bury-category :category="strategyData.buryCategories" :editCategory="editBuryCategory" :deleteCategory="deleteBuryCategory" />
+          <filter-result v-if="strategyData.filterResults.length > 0" :filters="strategyData.filterResults" :editFilters="editFilters" :deleteFilters="deleteFilters" />
+          <boost-category v-if="strategyData.boostCategories.length > 0" :category="strategyData.boostCategories" :editCategory="editBoostCategory" :deleteCategory="deleteBoostCategory" />
+          <bury-category v-if="strategyData.buryCategories.length > 0" :category="strategyData.buryCategories" :editCategory="editBuryCategory" :deleteCategory="deleteBuryCategory" />
         </div>
       </div>
 
@@ -113,10 +120,11 @@ import QueryCondition from "./QueryCondition.vue"
 import DatePeriod from "./DatePeriod.vue"
 import BoostCategory from "./BoostCategory.vue"
 import BuryCategory from "./BuryCategory.vue"
+import FilterResult from "./FilterResult.vue"
 
 export default {
   name: "LeftSidebar",
-  components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory },
+  components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult },
   props: ['toggleAddDrawer', 'toggleEditDrawer', 'triggerData', 'strategyData', 'editPeriod'],
   methods: {
     addQueryCondition() {
@@ -131,6 +139,9 @@ export default {
     addBuryCategory() {
       this.toggleAddDrawer('bury_category');
     },
+    addFilterResults() {
+      this.toggleAddDrawer('filter_results');
+    },
     editCondition(index) {
       this.toggleEditDrawer('condition', index);
     },
@@ -140,6 +151,9 @@ export default {
     editBuryCategory() {
       this.toggleEditDrawer('bury_category');
     },
+    editFilters() {
+      this.toggleEditDrawer('filter_results');
+    },
     deleteCondition(index) {
       this.triggerData.query_conditions.splice(index, 1);
     },
@@ -148,6 +162,9 @@ export default {
     },
     deleteBuryCategory() {
       this.strategyData.buryCategories = [];
+    },
+    deleteFilters() {
+      this.strategyData.filterResults = [];
     },
     deletePeriod() {
       this.triggerData.period = [];

@@ -70,14 +70,15 @@
                   :data-source="filterNames"
                   placeholder="e.g. Size"
                   :filter-option="filterOption"
-                  v-model="filter.name"
+                  :value="filter.name"
+                  @change="value => changeFilterName(fi, value)"
                 />
               </div>
               <div class="is">
                 is
               </div>
               <div class="keyword">
-                <a-input v-model="filter.keyword" placeholder="e.g. 42"/>
+                <a-input :value="filter.keyword" @change="e => changeFilterKeyword(fi, e.target.value)" placeholder="e.g. 42"/>
               </div>
               <div>
                 <a-button v-if="fi !== 0" class="btn-delete" @click="removeFilter(fi)"><a-icon type="delete" /></a-button>
@@ -117,14 +118,15 @@
                   :data-source="filterNames"
                   placeholder="e.g. Size"
                   :filter-option="filterOption"
-                  v-model="category.name"
+                  :value="category.name"
+                  @change="value => changeBoostName(fi, value)"
                 />
               </div>
               <div class="is">
                 is
               </div>
               <div class="keyword">
-                <a-input v-model="category.keyword" placeholder="e.g. 42"/>
+                <a-input :value="category.keyword" @change="e => changeBoostKeyword(fi, e.target.value)" placeholder="e.g. 42"/>
               </div>
               <div>
                 <a-button v-if="fi !== 0" class="btn-delete" @click="removeBoostCategory(fi)"><a-icon type="delete" /></a-button>
@@ -154,14 +156,15 @@
                   :data-source="filterNames"
                   placeholder="e.g. Size"
                   :filter-option="filterOption"
-                  v-model="category.name"
+                  :value="category.name"
+                  @change="value => changeBuryName(fi, value)"
                 />
               </div>
               <div class="is">
                 is
               </div>
               <div class="keyword">
-                <a-input v-model="category.keyword" placeholder="e.g. 42"/>
+                <a-input :value="category.keyword" @change="e => changeBuryKeyword(fi, e.target.value)" placeholder="e.g. 42"/>
               </div>
               <div>
                 <a-button v-if="fi !== 0" class="btn-delete" @click="removeBuryCategory(fi)"><a-icon type="delete" /></a-button>
@@ -174,6 +177,45 @@
       </section>
       <div class="drawer-close">
         <a-button type="primary" @click="onApply" :disabled="buryDisabled">Apply</a-button>
+      </div>
+    </div>
+
+    <div v-else-if="drawerType === 'filter_results'">
+      <h3 class="drawer-title">Choose categories to filter on</h3>
+      <section class="drawer-section">
+        <div class="condition-content filter-result-wrapper" v-for="(subFilter, si) in filterResults" :key="si">
+          <div class="filter-labels">
+            <label class="name">Only display items that match this group</label>
+            <a-button v-if="filterResults.length > 1" class="btn-delete" @click="removeSubFilter(si)"><a-icon type="minus-circle" /></a-button>
+          </div>
+          <div v-for="(category, fi) in subFilter" :key="fi" class="filter-wrapper">
+            <div class="inputs">
+              <div class="name">
+                <a-auto-complete
+                  :data-source="filterNames"
+                  placeholder="e.g. Size"
+                  :filter-option="filterOption"
+                  :value="category.name"
+                  @change="value => changeResultName(si, fi, value)"
+                />
+              </div>
+              <div class="is">
+                is
+              </div>
+              <div class="keyword">
+                <a-input :value="category.keyword" @change="e => changeResultKeyword(si, fi, e.target.value)" placeholder="e.g. 42"/>
+              </div>
+              <div>
+                <a-button v-if="subFilter.length > 1" class="btn-delete" @click="removeResultFilter(si, fi)"><a-icon type="delete" /></a-button>
+              </div>
+            </div>
+          </div>
+          <a-button class="btn-non-border btn-filter-margin" @click="addResultFilter(si)"><a-icon type="plus" />Or</a-button>
+        </div>
+        <a-button class="btn-non-border btn-filter-margin" @click="addSubFilter"><a-icon type="plus" />And</a-button>
+      </section>
+      <div class="drawer-close">
+        <a-button type="primary" @click="onApply" :disabled="resultFilterDisabled">Apply</a-button>
       </div>
     </div>
   </a-drawer>
@@ -199,6 +241,11 @@ export default {
     },
     buryDisabled() {
       return this.editDrawerItem.filter(item => item.name === '' || item.keyword === '').length > 0;
+    },
+    resultFilterDisabled() {
+      return !!this.editDrawerItem.reduce((prev, cur) => {
+        return prev + cur.filter(item => item.name === '' || item.keyword === '').length > 0;
+      }, 0);
     },
     period: {
       get: function () {
@@ -231,9 +278,67 @@ export default {
       set: function (newValue) {
         this.setItem('bury_category', newValue);
       }
+    },
+    filterResults: {
+      get: function () {
+        return this.editDrawerItem.slice()
+      },
+      set: function (newValue) {
+        this.setItem('filter_results', newValue);
+      }
     }
   },
   methods: {
+    changeFilterName(fi, value) {
+      const filters = this.filters.map((item, index) => index === fi ?
+        { name: value, keyword: item.keyword } : item
+      );
+        this.setItem('filters', filters);
+    },
+    changeFilterKeyword(fi, value) {
+      const filters = this.filters.map((item, index) => index === fi ?
+        { name: item.name, keyword: value } : item
+      );
+        this.setItem('filters', filters);
+    },
+    changeBoostName(fi, value) {
+      const boostCategories = this.boostCategories.map((item, index) => index === fi ?
+        { name: value, keyword: item.keyword } : item
+      );
+      this.setItem('boost_category', boostCategories);
+    },
+    changeBoostKeyword(fi, value) {
+      const boostCategories = this.boostCategories.map((item, index) => index === fi ?
+        { name: item.name, keyword: value } : item
+      );
+      this.setItem('boost_category', boostCategories);
+    },
+    changeBuryName(fi, value) {
+      const buryCategories = this.boostCategories.map((item, index) => index === fi ?
+        { name: value, keyword: item.keyword } : item
+      );
+      this.setItem('bury_category', buryCategories);
+    },
+    changeBuryKeyword(fi, value) {
+      const buryCategories = this.boostCategories.map((item, index) => index === fi ?
+        { name: item.name, keyword: value } : item
+      );
+      this.setItem('bury_category', buryCategories);
+    },
+    changeResultName(si, fi, value) {
+      const filterResults = this.filterResults.map((subFilter, index) => index === si ?
+        subFilter.map((item, index) => index === fi ?
+        { name: value, keyword: item.keyword } : item
+      ) : subFilter);
+      this.setItem('filter_results', filterResults);
+    },
+    changeResultKeyword(si, fi, value) {
+      const filterResults = this.filterResults.map((subFilter, index) => index === si ?
+        subFilter.map((item, index) => index === fi ?
+        { name: item.name, keyword: value } : item
+      ) : subFilter);
+      this.setItem('filter_results', filterResults);
+    },
     onChangeDate(date) {
       this.period = date;
     },
@@ -268,6 +373,20 @@ export default {
     },
     removeBuryCategory(fi) {
       this.buryCategories = this.buryCategories.filter((item, index) => index !== fi);
+    },
+    addSubFilter() {
+      this.filterResults = [...this.filterResults, [{ name: '', op: '', keyword: '' }]];
+    },
+    removeSubFilter(si) {
+      this.filterResults = this.filterResults.filter((item, index) => index !== si);
+    },
+    addResultFilter(si) {
+      this.filterResults = this.filterResults.map((item, index) => index === si ?
+        [...item, { name: '', op: '', keyword: '' }] : item);
+    },
+    removeResultFilter(si, fi) {
+      this.filterResults = this.filterResults.map((item, index) => index === si ?
+        item.filter((i, index) => index !== fi) : item);
     },
     onApply() {
       this.updateDrawerItem(this.period);
@@ -312,13 +431,19 @@ export default {
     margin-bottom: 16px;
   }
 
-  .btn-close {
+  .btn-non-border {
     border-width: 0;
     box-shadow: none;
   }
 
+  .btn-filter-margin {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
   .filter-wrapper {
-    
+    margin-bottom: 8px;
+
     .labels {
       display: flex;
 
@@ -332,6 +457,7 @@ export default {
       align-items: center;
       margin-top: 4px;
       margin-bottom: 4px;
+      position: relative;
 
       .name {
         width: 33.33%;
@@ -341,11 +467,34 @@ export default {
         width: 8.33%;
         text-align: center;
       }
-    }
 
-    .btn-delete {
-      border-width: 0;
-      box-shadow: none;
+      .keyword {
+        flex: 1;
+        margin-right: 44px;
+      }
+
+      .btn-delete {
+        border-width: 0;
+        box-shadow: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
     }
+  }
+
+  .filter-labels {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .filter-result-wrapper {
+    border-bottom: 1px solid rgb(214, 214, 231);
+    margin-bottom: 16px;
+  }
+  
+  .btn-delete {
+    border-width: 0;
+    box-shadow: none;
   }
 </style>

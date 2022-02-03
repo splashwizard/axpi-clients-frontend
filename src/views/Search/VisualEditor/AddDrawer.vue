@@ -11,7 +11,7 @@
     @close="drawerClose"
   >
     <div class="drawer-close">
-      <a-button class="btn-close" @click="drawerClose"><a-icon type="close" /></a-button>
+      <a-button class="btn-non-border" @click="drawerClose"><a-icon type="close" /></a-button>
     </div>
     <div v-if="drawerType === 'condition'">
       <h3 class="drawer-title">Define the condition that triggers the rule</h3> 
@@ -80,12 +80,12 @@
                 <a-input v-model="filter.keyword" placeholder="e.g. 42"/>
               </div>
               <div>
-                <a-button v-if="fi !== 0" class="btn-delete" @click="removeFilter(fi)"><a-icon type="delete" /></a-button>
+                <a-button v-if="filter.length > 1" class="btn-delete" @click="removeFilter(fi)"><a-icon type="delete" /></a-button>
               </div>
             </div>
           </div>
 
-          <a-button class="btn-close" @click="addFilter"><a-icon type="plus" />Add another filter value</a-button>
+          <a-button class="btn-non-border" @click="addFilter"><a-icon type="plus" />Add another filter value</a-button>
         </div>
       </section>
       <div class="drawer-close">
@@ -127,12 +127,12 @@
                 <a-input v-model="category.keyword" placeholder="e.g. 42"/>
               </div>
               <div>
-                <a-button v-if="fi !== 0" class="btn-delete" @click="removeBoostCategory(fi)"><a-icon type="delete" /></a-button>
+                <a-button v-if="boostCategories.length > 1" class="btn-delete" @click="removeBoostCategory(fi)"><a-icon type="delete" /></a-button>
               </div>
             </div>
           </div>
 
-          <a-button class="btn-close" @click="addBoostCategory"><a-icon type="plus" />Boost another category</a-button>
+          <a-button class="btn-non-border" @click="addBoostCategory"><a-icon type="plus" />Boost another category</a-button>
         </div>
       </section>
       <div class="drawer-close">
@@ -164,12 +164,12 @@
                 <a-input v-model="category.keyword" placeholder="e.g. 42"/>
               </div>
               <div>
-                <a-button v-if="fi !== 0" class="btn-delete" @click="removeBuryCategory(fi)"><a-icon type="delete" /></a-button>
+                <a-button v-if="buryCategories.length > 1" class="btn-delete" @click="removeBuryCategory(fi)"><a-icon type="delete" /></a-button>
               </div>
             </div>
           </div>
 
-          <a-button class="btn-close" @click="addBuryCategory"><a-icon type="plus" />Bury another category</a-button>
+          <a-button class="btn-non-border" @click="addBuryCategory"><a-icon type="plus" />Bury another category</a-button>
         </div>
       </section>
       <div class="drawer-close">
@@ -177,6 +177,43 @@
       </div>
     </div>
 
+    <div v-else-if="drawerType === 'filter_results'">
+      <h3 class="drawer-title">Choose categories to filter on</h3>
+      <section class="drawer-section">
+        <div class="condition-content filter-result-wrapper" v-for="(subFilter, si) in filterResults" :key="si">
+          <div class="filter-labels">
+            <label class="name">Only display items that match this group</label>
+            <a-button v-if="filterResults.length > 1" class="btn-delete" @click="removeSubFilter(si)"><a-icon type="minus-circle" /></a-button>
+          </div>
+          <div v-for="(category, fi) in subFilter" :key="fi" class="filter-wrapper">
+            <div class="inputs">
+              <div class="name">
+                <a-auto-complete
+                  :data-source="filterNames"
+                  placeholder="e.g. Size"
+                  :filter-option="filterOption"
+                  v-model="category.name"
+                />
+              </div>
+              <div class="is">
+                is
+              </div>
+              <div class="keyword">
+                <a-input v-model="category.keyword" placeholder="e.g. 42"/>
+              </div>
+              <div>
+                <a-button v-if="subFilter.length > 1" class="btn-delete" @click="removeResultFilter(si, fi)"><a-icon type="delete" /></a-button>
+              </div>
+            </div>
+          </div>
+          <a-button class="btn-non-border btn-filter-margin" @click="addResultFilter(si)"><a-icon type="plus" />Or</a-button>
+        </div>
+        <a-button class="btn-non-border btn-filter-margin" @click="addSubFilter"><a-icon type="plus" />And</a-button>
+      </section>
+      <div class="drawer-close">
+        <a-button type="primary" @click="onApply" :disabled="resultFilterDisabled">Apply</a-button>
+      </div>
+    </div>
   </a-drawer>
 </template>
 
@@ -193,7 +230,9 @@ export default {
       filters: [],
       boostCategories: [{ name: '', keyword: '' }],
       buryCategories: [{ name: '', keyword: '' }],
-      filterResults: [],
+      filterResults: [
+        [{ name: '', op: 'is', keyword: '' }]
+      ],
       filterNames: ['Bottom style', 'Capacity', 'Color', 'Model', 'Needle gauge', 'Needle length', 'Needle tip'],
       dateperiod: []
     }
@@ -207,6 +246,11 @@ export default {
     },
     buryDisabled() {
       return this.buryCategories.filter(item => item.name === '' || item.keyword === '').length > 0;
+    },
+    resultFilterDisabled() {
+      return !!this.filterResults.reduce((prev, cur) => {
+        return prev + cur.filter(item => item.name === '' || item.keyword === '').length > 0;
+      }, 0);
     }
   },
   methods: {
@@ -245,6 +289,18 @@ export default {
     removeBuryCategory(fi) {
       this.buryCategories.splice(fi, 1);
     },
+    addSubFilter() {
+      this.filterResults.push([{ name: '', op: '', keyword: '' }]);
+    },
+    removeSubFilter(si) {
+      this.filterResults.splice(si, 1);
+    },
+    addResultFilter(si) {
+      this.filterResults[si].push({ name: '', op: '', keyword: '' });
+    },
+    removeResultFilter(si, fi) {
+      this.filterResults[si].splice(fi, 1);
+    },
     onApply() {
       if(this.drawerType === 'condition') {
         this.addDrawer('condition', {
@@ -266,6 +322,10 @@ export default {
       else if(this.drawerType === 'bury_category') {
         this.addDrawer('bury_category', this.buryCategories);
         this.buryCategories = [];
+      }
+      else if(this.drawerType === 'filter_results') {
+        this.addDrawer('filter_results', this.filterResults);
+        this.filterResults = [];
       }
     }
   }
@@ -308,13 +368,19 @@ export default {
     margin-bottom: 16px;
   }
 
-  .btn-close {
+  .btn-non-border {
     border-width: 0;
     box-shadow: none;
   }
 
+  .btn-filter-margin {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
   .filter-wrapper {
-    
+    margin-bottom: 8px;
+
     .labels {
       display: flex;
 
@@ -328,6 +394,7 @@ export default {
       align-items: center;
       margin-top: 4px;
       margin-bottom: 4px;
+      position: relative;
 
       .name {
         width: 33.33%;
@@ -337,11 +404,34 @@ export default {
         width: 8.33%;
         text-align: center;
       }
-    }
 
-    .btn-delete {
-      border-width: 0;
-      box-shadow: none;
+      .keyword {
+        flex: 1;
+        margin-right: 44px;
+      }
+
+      .btn-delete {
+        border-width: 0;
+        box-shadow: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
     }
+  }
+
+  .filter-labels {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .filter-result-wrapper {
+    border-bottom: 1px solid rgb(214, 214, 231);
+    margin-bottom: 16px;
+  }
+  
+  .btn-delete {
+    border-width: 0;
+    box-shadow: none;
   }
 </style>

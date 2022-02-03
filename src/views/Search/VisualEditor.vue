@@ -103,7 +103,7 @@ export default {
         ]
       },
       strategyData: {
-        boostCategories: [{ name: 'Bottom Style', keyword: '' }],
+        boostCategories: [],
         buryCategories: [],
         filterResults: []
       },
@@ -180,14 +180,18 @@ export default {
         const editingItem = this.triggerData.query_conditions[index];
         this.editDrawerItem = {
           query: { option: editingItem.query.option, keyword: editingItem.query.keyword },
-          filters: editingItem.filters
+          filters: [...editingItem.filters]
+          // filters: []
         };
       }
       else if(type === 'boost_category') {
-        this.editDrawerItem = this.strategyData.boostCategories;
+        this.editDrawerItem = this.strategyData.boostCategories.map(item => item);
       }
       else if(type === 'bury_category') {
         this.editDrawerItem = this.strategyData.buryCategories;
+      }
+      else if(type === 'filter_results') {
+        this.editDrawerItem = this.strategyData.filterResults;
       }
       this.addDrawerVisible = false;
       this.editDrawerType = type;
@@ -212,6 +216,8 @@ export default {
         this.strategyData.boostCategories = drawerData;
       else if(drawerType === 'bury_category')
         this.strategyData.buryCategories = drawerData;
+      else if(drawerType === 'filter_results')
+        this.strategyData.filterResults = drawerData;
       this.addDrawerVisible = false;
     },
 
@@ -238,6 +244,10 @@ export default {
         this.strategyData.buryCategories = this.editDrawerItem.slice();
         this.editDrawerItem = [];
       }
+      else if(this.editDrawerType === 'filter_results') {
+        this.strategyData.filterResults = this.editDrawerItem.slice();
+        this.editDrawerItem = [];
+      }
       this.editDrawerVisible = false;
     },
     editDrawerClose() {
@@ -247,11 +257,14 @@ export default {
     setItem(type, item) {
       if(type === 'period')
         this.editDrawerItem = item;
-      else if(type === 'filters')
+      else if(type === 'filters'){
         this.editDrawerItem.filters = item;
+        }
       else if(type === 'boost_category')
         this.editDrawerItem = item;
       else if(type === 'bury_category')
+        this.editDrawerItem = item;
+      else if(type === 'filter_results')
         this.editDrawerItem = item;
     }
   }

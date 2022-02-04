@@ -1,6 +1,6 @@
 <template>
-  <div class="cond-wrapper" @mouseover="hovered = true" @mouseleave="hovered = false">
-    <div class="query-wrapper" v-for="(subFilter, si) in filters" :key="si" :style="{marginTop: '8px'}">
+  <div :class="hoverable ? 'cond-wrapper' : ''" @mouseover="onMouseOver" @mouseleave="hovered = false">
+    <div class="query-wrapper" v-for="(subFilter, si) in filters" :key="si" :style="{marginTop: '6px'}">
       <div class="label-wrapper">
         <fragment v-for="(filter, fi) in subFilter" :key="fi">
           <h4 class="label" v-if="fi === 0">
@@ -29,13 +29,17 @@ import { Fragment } from 'vue-fragment'
 export default {
   name: "FilterResult",
   components: { Fragment },
-  props: ['filters', 'editFilters', 'deleteFilters'],
+  props: ['hoverable', 'filters', 'editFilters', 'deleteFilters'],
   data() {
     return {
       hovered: false
     }
   },
   methods: {
+    onMouseOver() {
+      if(this.hoverable)
+        this.hovered = true;
+    },
     onEdit() {
       this.editFilters();
     },
@@ -64,6 +68,11 @@ export default {
 
   .label-wrapper {
     display: flex;
+    flex-wrap: wrap;
+
+    .badge {
+      margin-bottom: 6px;
+    }
   }
 
   .tooltip-wrapper {

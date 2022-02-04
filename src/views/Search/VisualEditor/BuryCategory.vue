@@ -1,6 +1,6 @@
 <template>
-  <div class="cond-wrapper" @mouseover="hovered = true" @mouseleave="hovered = false">
-    <div class="query-wrapper" v-for="(filter, fi) in category" :key="fi" :style="{marginTop: '8px'}">
+  <div :class="hoverable ? 'cond-wrapper' : ''" @mouseover="onMouseOver" @mouseleave="hovered = false">
+    <div class="query-wrapper" v-for="(filter, fi) in category" :key="fi" :style="{marginTop: '6px'}">
       <div class="label-wrapper">
         <h4 class="label">
           {{fi === 0 ? 'Bury' : 'then deeper Bury'}}
@@ -22,13 +22,17 @@
 <script>
 export default {
   name: "BuryCategory",
-  props: ['category', 'editCategory', 'deleteCategory'],
+  props: ['hoverable', 'category', 'editCategory', 'deleteCategory'],
   data() {
     return {
       hovered: false
     }
   },
   methods: {
+    onMouseOver() {
+      if(this.hoverable)
+        this.hovered = true;
+    },
     onEdit() {
       this.editCategory();
     },
@@ -57,6 +61,11 @@ export default {
 
   .label-wrapper {
     display: flex;
+    flex-wrap: wrap;
+
+    .badge {
+      margin-bottom: 6px;
+    }
   }
 
   .tooltip-wrapper {

@@ -1,5 +1,5 @@
 <template>
-  <div class="cond-wrapper" @mouseover="hovered = true" @mouseleave="hovered = false">
+  <div :class="hoverable ? 'cond-wrapper' : ''" @mouseover="onMouseOver" @mouseleave="hovered = false">
     <div class="query-wrapper">
       <div class="label-wrapper">
         <h4 class="label">
@@ -22,13 +22,17 @@
 <script>
 export default {
   name: "DatePeriod",
-  props: ['period', 'editPeriod', 'deletePeriod'],
+  props: ['hoverable', 'period', 'editPeriod', 'deletePeriod'],
   data() {
     return {
       hovered: false
     }
   },
   methods: {
+    onMouseOver() {
+      if(this.hoverable)
+        this.hovered = true;
+    },
     onEdit() {
       this.editPeriod();
     },
@@ -57,6 +61,11 @@ export default {
 
   .label-wrapper {
     display: flex;
+    flex-wrap: wrap;
+
+    .badge {
+      margin-bottom: 6px;
+    }
   }
 
   .tooltip-wrapper {

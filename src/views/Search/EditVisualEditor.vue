@@ -26,58 +26,8 @@ import EditDrawer from "./VisualEditor/EditDrawer";
 import SearchItem from './VisualEditor/SearchItem';
 const moment = require('moment');
 
-// let schema = {
-//   name: 'companies',
-//   num_documents: 0,
-//   fields: [
-//     {
-//       name: 'company_name',
-//       type: 'string',
-//       facet: false
-//     },
-//     {
-//       name: 'num_employees',
-//       type: 'int32',
-//       facet: false
-//     },
-//     {
-//       name: 'country',
-//       type: 'string',
-//       facet: true
-//     }
-//   ],
-//   default_sorting_field: 'num_employees'
-// }
-
-// let documents = [
-//   {
-//     id: '124',
-//     company_name: 'Stark Industries',
-//     num_employees: 5215,
-//     country: 'USA'
-//   },
-//   {
-//     id: '125',
-//     company_name: 'Acme Corp',
-//     num_employees: 1002,
-//     country: 'France'
-//   },
-//   {
-//     id: '127',
-//     company_name: 'Stark Corp',
-//     num_employees: 1031,
-//     country: 'USA'
-//   },
-//   {
-//     id: '126',
-//     company_name: 'Doofenshmirtz Inc',
-//     num_employees: 2,
-//     country: 'Tri-State Area'
-//   }
-// ]
-
 export default {
-  name: "Landing",
+  name: "EditVisual Editor",
   components: { Sidebar, AddDrawer, EditDrawer, SearchItem },
   data() {
     return {
@@ -123,6 +73,12 @@ export default {
     }
   },
   async created() {
+    const ruleId = this.$route.params.id;
+    const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
+    const rule = rules.find(item => item.key === parseInt(ruleId));
+    this.triggerData = rule.conditions;
+    this.strategyData = rule.consequences;
+
     const typesense = new Typesense.Client({
       nodes: [
         {
@@ -170,7 +126,13 @@ export default {
   methods: {
     onPublish() {
       const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-      rules.push({key: rules.length + 1, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
+      const ruleId = this.$route.params.id;
+      rules[ruleId] = {
+        key: ruleId,
+        conditions: this.triggerData,
+        consequences: this.strategyData,
+        timestamp: moment().toISOString(),
+      };
       localStorage.setItem('rules', JSON.stringify(rules));
       this.$router.push('/search/rules');
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="cond-wrapper" @mouseover="hovered = true" @mouseleave="hovered = false">
+  <div :class="hoverable ? 'cond-wrapper' : ''" @mouseover="onMouseOver" @mouseleave="hovered = false">
     <div class="query-wrapper">
       <div class="label-wrapper">
         <h4 class="label">
@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div class="query-wrapper" v-for="(filter, fi) in condition.filters" :key="fi" :style="{marginTop: '8px'}">
+    <div class="query-wrapper" v-for="(filter, fi) in condition.filters" :key="fi" :style="{marginTop: '6px'}">
       <div class="label-wrapper">
         <h4 class="label">
           {{fi === 0 ? 'with filter' : 'and filter'}}
@@ -32,13 +32,17 @@
 <script>
 export default {
   name: "QueryCondition",
-  props: ['condition', 'editCondition', 'deleteCondition', 'index'],
+  props: ['hoverable', 'condition', 'editCondition', 'deleteCondition', 'index'],
   data() {
     return {
       hovered: false
     }
   },
   methods: {
+    onMouseOver() {
+      if(this.hoverable)
+        this.hovered = true;
+    },
     onEdit() {
       this.editCondition(this.index);
     },
@@ -67,6 +71,11 @@ export default {
 
   .label-wrapper {
     display: flex;
+    flex-wrap: wrap;
+
+    .badge {
+      margin-bottom: 6px;
+    }
   }
 
   .tooltip-wrapper {

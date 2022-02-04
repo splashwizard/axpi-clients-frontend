@@ -2,6 +2,9 @@
   <a-layout-sider width="448" theme="light" :style="{borderRight: '1px solid #e3e8ee', overflowY: 'scroll' }"
                   :collapsed-width="0" :trigger="null">
     <div class="wrapper">
+      <div class="navWrapper">
+        <a-button class="btn-delete" @click="onBack"><a-icon type="arrow-left" :style="{fontSize: '12px' }" /> Back</a-button>
+      </div>
       <div class="trigger-wrapper" v-if="!triggerData.period.length && triggerData.query_conditions.length === 0">
         <h1 class="page-title">It all starts here</h1>
         <div class="rule-buttons">
@@ -48,8 +51,8 @@
           </a-dropdown>
         </div>
         <div>
-          <date-period :period="triggerData.period" :editPeriod="editPeriod" :deletePeriod="deletePeriod" v-if="triggerData.period.length > 0"/>
-          <query-condition v-for="(condition, ci) in triggerData.query_conditions" :condition="condition" :editCondition="editCondition" :deleteCondition="deleteCondition" :index="ci" :key="ci" />
+          <date-period :hoverable="true" :period="triggerData.period" :editPeriod="editPeriod" :deletePeriod="deletePeriod" v-if="triggerData.period.length > 0"/>
+          <query-condition :hoverable="true" v-for="(condition, ci) in triggerData.query_conditions" :condition="condition" :editCondition="editCondition" :deleteCondition="deleteCondition" :index="ci" :key="ci" />
         </div>
       </div>
 
@@ -80,7 +83,7 @@
       <div v-else>
         <div class="title-wrapper">
           <h1 class="page-title">Strategy</h1>
-          <a-dropdown :trigger="['click']" v-if="strategyData.boostCategories.length === 0 || strategyData.buryCategories.length === 0">
+          <a-dropdown :trigger="['click']" v-if="strategyData.boostCategories.length === 0 || strategyData.buryCategories.length === 0 || strategyData.filterResults.length === 0">
             <a-menu slot="overlay" style="padding: 0">
               <a-menu-item key="boost_category" class="dropdown-item" @click="addBoostCategory" v-if="strategyData.boostCategories.length === 0">
                 <a-icon type="arrow-up"  />
@@ -105,9 +108,9 @@
           </a-dropdown>
         </div>
         <div>
-          <filter-result v-if="strategyData.filterResults.length > 0" :filters="strategyData.filterResults" :editFilters="editFilters" :deleteFilters="deleteFilters" />
-          <boost-category v-if="strategyData.boostCategories.length > 0" :category="strategyData.boostCategories" :editCategory="editBoostCategory" :deleteCategory="deleteBoostCategory" />
-          <bury-category v-if="strategyData.buryCategories.length > 0" :category="strategyData.buryCategories" :editCategory="editBuryCategory" :deleteCategory="deleteBuryCategory" />
+          <filter-result v-if="strategyData.filterResults.length > 0" :hoverable="true" :filters="strategyData.filterResults" :editFilters="editFilters" :deleteFilters="deleteFilters" />
+          <boost-category v-if="strategyData.boostCategories.length > 0" :hoverable="true" :category="strategyData.boostCategories" :editCategory="editBoostCategory" :deleteCategory="deleteBoostCategory" />
+          <bury-category v-if="strategyData.buryCategories.length > 0" :hoverable="true" :category="strategyData.buryCategories" :editCategory="editBuryCategory" :deleteCategory="deleteBuryCategory" />
         </div>
       </div>
 
@@ -127,6 +130,9 @@ export default {
   components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult },
   props: ['toggleAddDrawer', 'toggleEditDrawer', 'triggerData', 'strategyData', 'editPeriod'],
   methods: {
+    onBack() {
+      this.$router.push('/search/rules');
+    },
     addQueryCondition() {
       this.toggleAddDrawer('condition');
     },
@@ -238,6 +244,15 @@ export default {
 
 .trigger-wrapper {
   margin-bottom: 64px;
+}
+
+.navWrapper {
+  margin-bottom: 16px;
+}
+
+.btn-delete {
+  border-width: 0;
+  box-shadow: none;
 }
 
 </style>

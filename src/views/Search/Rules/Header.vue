@@ -96,7 +96,7 @@
         <a-button @click="e => e.preventDefault()"><a-icon type="filter" /> Filters</a-button>
       </a-dropdown>
       <a-col flex="1" class="search-wrapper">
-        <a-input v-model="searchTerm" placeholder="Search rules by query, context, ID ..." suffix="2 rules">
+        <a-input v-model="searchTerm" placeholder="Search rules by query, context, ID ..." :suffix="` ${rulesCount} rules`">
           <a-icon slot="prefix" type="search" />
         </a-input>
       </a-col>
@@ -108,6 +108,7 @@
 
 export default {
   name: "RulesHeader",
+  props: ['rulesCount'],
   data() {
     return {
       visible: false,

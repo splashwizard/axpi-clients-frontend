@@ -1,5 +1,5 @@
   <template>
-  <a-layout-sider width="448" theme="light" :style="{borderRight: '1px solid #e3e8ee', overflowY: 'scroll' }"
+  <a-layout-sider width="448" theme="light" :style="{borderRight: '1px solid #e3e8ee', overflowY: 'auto' }"
                   :collapsed-width="0" :trigger="null">
     <div class="wrapper">
       <div class="navWrapper">
@@ -56,22 +56,34 @@
         </div>
       </div>
 
-      <div v-if="strategyData.boostCategories.length === 0 && strategyData.buryCategories.length === 0 && strategyData.filterResults.length === 0">
+      <div v-if="strategyEmpty">
         <h1 class="page-title">What do you want to do?</h1>
         <div class="rule-buttons">
-          <div class="Picker" @click="toggleAddDrawer('boost_category')">
+          <div class="Picker" @click="addPinItems">
+            <div class="Picker-icon">
+              <a-icon type="arrow-up" />
+            </div>
+            <h4>Pin items</h4>
+          </div>
+          <div class="Picker" @click="addHideItems">
+            <div class="Picker-icon">
+              <a-icon type="close" />
+            </div>
+            <h4>Hide items</h4>
+          </div>
+          <div class="Picker" @click="addBoostCategory">
             <div class="Picker-icon">
               <a-icon type="arrow-up" />
             </div>
             <h4>Boost categories</h4>
           </div>
-          <div class="Picker" @click="toggleAddDrawer('bury_category')">
+          <div class="Picker" @click="addBuryCategory">
             <div class="Picker-icon">
               <a-icon type="arrow-down" />
             </div>
             <h4>Bury categories</h4>
           </div>
-          <div class="Picker" @click="toggleAddDrawer('filter_results')">
+          <div class="Picker" @click="addFilterResults">
             <div class="Picker-icon">
               <a-icon type="filter" />
             </div>
@@ -83,16 +95,28 @@
       <div v-else>
         <div class="title-wrapper">
           <h1 class="page-title">Strategy</h1>
-          <a-dropdown :trigger="['click']" v-if="strategyData.boostCategories.length === 0 || strategyData.buryCategories.length === 0 || strategyData.filterResults.length === 0">
+          <a-dropdown :trigger="['click']" v-if="strategyAddable">
             <a-menu slot="overlay" style="padding: 0">
+              <a-menu-item key="pin_items" class="dropdown-item" @click="addPinItems" v-if="pinnedList.length === 0">
+                <a-icon type="arrow-up" />
+                <span>
+                  Pin items
+                </span>
+              </a-menu-item>
+              <a-menu-item key="pin_items" class="dropdown-item" @click="addHideItems" v-if="hiddenList.length === 0">
+                <a-icon type="arrow-up" />
+                <span>
+                  Hide items
+                </span>
+              </a-menu-item>
               <a-menu-item key="boost_category" class="dropdown-item" @click="addBoostCategory" v-if="strategyData.boostCategories.length === 0">
-                <a-icon type="arrow-up"  />
+                <a-icon type="arrow-up" />
                 <span>
                   Boost categories
                 </span>
               </a-menu-item>
               <a-menu-item key="bury_category" class="dropdown-item" @click="addBuryCategory" v-if="strategyData.buryCategories.length === 0">
-                <a-icon type="arrow-down"  />
+                <a-icon type="arrow-down" />
                 <span>
                   Bury categories
                 </span>
@@ -111,6 +135,8 @@
           <filter-result v-if="strategyData.filterResults.length > 0" :hoverable="true" :filters="strategyData.filterResults" :editFilters="editFilters" :deleteFilters="deleteFilters" />
           <boost-category v-if="strategyData.boostCategories.length > 0" :hoverable="true" :category="strategyData.boostCategories" :editCategory="editBoostCategory" :deleteCategory="deleteBoostCategory" />
           <bury-category v-if="strategyData.buryCategories.length > 0" :hoverable="true" :category="strategyData.buryCategories" :editCategory="editBuryCategory" :deleteCategory="deleteBuryCategory" />
+          <pinned-item v-for="(pinnedItem, pi) in pinnedList" :key="'p' + pi" :hoverable="true" :item="pinnedItem" :editItems="editPinnedItems" :deleteItems="() => deletePinnedItems(pi)" />
+          <hidden-item v-for="(hiddenItem, hi) in hiddenList" :key="'h' + hi" :hoverable="true" :item="hiddenItem" :editItems="editHiddenItems" :deleteItems="() => deleteHiddenItems(hi)" />
         </div>
       </div>
 
@@ -124,11 +150,13 @@ import DatePeriod from "./DatePeriod.vue"
 import BoostCategory from "./BoostCategory.vue"
 import BuryCategory from "./BuryCategory.vue"
 import FilterResult from "./FilterResult.vue"
+import PinnedItem from "./PinnedItem.vue"
+import HiddenItem from "./HiddenItem.vue"
 
 export default {
   name: "LeftSidebar",
-  components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult },
-  props: ['toggleAddDrawer', 'toggleEditDrawer', 'triggerData', 'strategyData', 'editPeriod'],
+  components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult, PinnedItem, HiddenItem },
+  props: ['toggleAddDrawer', 'toggleEditDrawer', 'pinnedList', 'hiddenList', 'list', 'triggerData', 'strategyData', 'editPeriod'],
   methods: {
     onBack() {
       this.$router.push('/search/rules');
@@ -138,6 +166,12 @@ export default {
     },
     addPeriod() {
       this.toggleAddDrawer('daterange');
+    },
+    addPinItems() {
+      this.toggleAddDrawer('pin_items');
+    },
+    addHideItems() {
+      this.toggleAddDrawer('hide_items');
     },
     addBoostCategory() {
       this.toggleAddDrawer('boost_category');
@@ -160,6 +194,21 @@ export default {
     editFilters() {
       this.toggleEditDrawer('filter_results');
     },
+    editPinnedItems() {
+      this.toggleEditDrawer('pin_items');
+    },
+    deletePinnedItems(pi) {
+      const index = this.list.findIndex(listitem => listitem.id === this.pinnedList[pi].id);
+      this.list[index].pinned = false;
+      this.list[index].pinnedposition = 0;
+    },
+    editHiddenItems() {
+      this.toggleEditDrawer('hide_items');
+    },
+    deleteHiddenItems(pi) {
+      const index = this.list.findIndex(listitem => listitem.id === this.hiddenList[pi].id);
+      this.list[index].hidden = false;
+    },
     deleteCondition(index) {
       this.triggerData.query_conditions.splice(index, 1);
     },
@@ -177,6 +226,14 @@ export default {
     },
   },
   computed: {
+    strategyEmpty() {
+      return this.strategyData.boostCategories.length === 0 && this.strategyData.buryCategories.length === 0 && this.strategyData.filterResults.length === 0
+        && this.pinnedList.length === 0 && this.hiddenList.length === 0;
+    },
+    strategyAddable() {
+      return this.strategyData.boostCategories.length === 0 || this.strategyData.buryCategories.length === 0 || this.strategyData.filterResults.length === 0
+        || this.pinnedList.length === 0 || this.hiddenList.length === 0;
+    },
     isAnalytics() {
       return this.$route.name === 'Search Analytics';
     },

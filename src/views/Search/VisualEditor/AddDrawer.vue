@@ -104,6 +104,76 @@
         </div>
       </div>
 
+      <div v-else-if="drawerType === 'pin_items'">
+        <h3 class="drawer-title">Choose items to pin</h3>
+        <section class="drawer-section">
+          <div class="condition-content">
+            <div v-for="(item, pi) in pinnedItems" :key="pi" class="filter-wrapper">
+              <div class="labels">
+                <label class="pin-name">Pinned items</label>
+                <label>Position</label>
+              </div>
+              <div class="inputs">
+                <div class="pin-input">
+                  <a-auto-complete
+                    :data-source="availablePinItems"
+                    placeholder="Search items to pin"
+                    :filter-option="filterOption"
+                    :value="item.text"
+                    @select="(value) => selectPinItem(pi, value)"
+                    @blur="blurPinItem(pi)"
+                  />
+                </div>
+                <div class="keyword">
+                  <a-input :value="item.position" @change="e => changePinnedPosition(pi, e.target.value)" />
+                </div>
+                <div>
+                  <a-button v-if="pinnedItems.length > 1" class="btn-delete" @click="removePinnedItem(pi)"><a-icon type="delete" /></a-button>
+                </div>
+              </div>
+            </div>
+
+            <a-button class="btn-non-border" @click="addPinnedItem"><a-icon type="plus" />Pin another item</a-button>
+          </div>
+        </section>
+        <div class="drawer-close">
+          <a-button type="primary" @click="onApply" :disabled="pinDisabled">Apply</a-button>
+        </div>
+      </div>
+
+      <div v-else-if="drawerType === 'hide_items'">
+        <h3 class="drawer-title">Choose items to hide</h3>
+        <section class="drawer-section">
+          <div class="condition-content">
+            <div>
+              <label>Hidden items</label>
+            </div>
+            <div v-for="(item, hi) in hiddenItems" :key="hi" class="filter-wrapper">
+              <div class="inputs">
+                <div class="hide-input">
+                  <a-auto-complete
+                    :data-source="availablePinItems"
+                    placeholder="Search items to hide"
+                    :filter-option="filterOption"
+                    :value="item.text"
+                    @select="(value) => selectHiddenItem(hi, value)"
+                    @blur="blurHiddenItem(hi)"
+                  />
+                </div>
+                <div>
+                  <a-button v-if="hiddenItems.length > 1" class="btn-delete" @click="removeHiddenItem(hi)"><a-icon type="delete" /></a-button>
+                </div>
+              </div>
+            </div>
+
+            <a-button class="btn-non-border" @click="addHiddenItem"><a-icon type="plus" />Hide another item</a-button>
+          </div>
+        </section>
+        <div class="drawer-close">
+          <a-button type="primary" @click="onApply" :disabled="hideDisabled">Apply</a-button>
+        </div>
+      </div>
+
       <div v-else-if="drawerType === 'boost_category'">
         <h3 class="drawer-title">Choose categories to boost</h3>
         <section class="drawer-section">
@@ -222,7 +292,7 @@
 <script>
 export default {
   name: "Drawer",
-  props: ['drawerVisible', 'drawerType', 'drawerClose', 'addDrawer'],
+  props: ['drawerVisible', 'drawerType', 'drawerClose', 'addDrawer', 'list'],
   data() {
     return {
       queryExpanded: true,
@@ -230,6 +300,8 @@ export default {
       option: 'contains',
       keyword: '',
       filters: [],
+      pinnedItems: [{ id: 0, text: '', position: 0 }],
+      hiddenItems: [{ id: 0, text: '' }],
       boostCategories: [{ name: '', keyword: '' }],
       buryCategories: [{ name: '', keyword: '' }],
       filterResults: [
@@ -240,8 +312,17 @@ export default {
     }
   },
   computed: {
+    availablePinItems() {
+      return this.list.map(item => item.title);
+    },
     conditionDisabled() {
       return !this.keyword || this.filters.filter(item => item.name === '' || item.keyword === '').length > 0;
+    },
+    pinDisabled() {
+      return this.pinnedItems.filter(item => item.title === '' || item.position === 0).length > 0;
+    },
+    hideDisabled() {
+      return this.hiddenItems.filter(item => item.id === 0).length > 0;
     },
     boostDisabled() {
       return this.boostCategories.filter(item => item.name === '' || item.keyword === '').length > 0;
@@ -253,9 +334,32 @@ export default {
       return !!this.filterResults.reduce((prev, cur) => {
         return prev + cur.filter(item => item.name === '' || item.keyword === '').length > 0;
       }, 0);
-    }
+    },
   },
   methods: {
+    selectPinItem(pi, value) {
+      this.pinnedItems[pi].id = this.list.find(item => item.title === value)?.id;
+      this.pinnedItems[pi].text = value;
+    },
+    blurPinItem(pi) {
+      const pIndex = this.list.findIndex(item => item.id === this.pinnedItems[pi].id);
+      this.pinnedItems = this.pinnedItems.map((item, index) => (index === pi ? {
+        ...item, text: this.list[pIndex].title
+      } : item))
+    },
+    changePinnedPosition(pi, value) {
+      this.pinnedItems[pi].position = isNaN(value) ? value : parseInt(value);
+    },
+    selectHiddenItem(pi, value) {
+      this.hiddenItems[pi].id = this.list.find(item => item.title === value)?.id;
+      this.hiddenItems[pi].text = value;
+    },
+    blurHiddenItem(pi) {
+      const pIndex = this.list.findIndex(item => item.id === this.hiddenItems[pi].id);
+      this.hiddenItems = this.hiddenItems.map((item, index) => (index === pi ? {
+        ...item, text: this.list[pIndex].title
+      } : item))
+    },
     onChangeDate(date) {
       this.dateperiod = date;
     },
@@ -278,6 +382,18 @@ export default {
     },
     removeFilter(fi) {
       this.filters.splice(fi, 1);
+    },
+    addPinnedItem() {
+      this.pinnedItems.push({ id: 0, text: '', position: 0 });
+    },
+    removePinnedItem(pi) {
+      this.pinnedItems.splice(pi, 1);
+    },
+    addHiddenItem() {
+      this.hiddenItems.push({ id: 0 });
+    },
+    removeHiddenItem(hi) {
+      this.hiddenItems.splice(hi, 1);
     },
     addBoostCategory() {
       this.boostCategories.push({ name: '', keyword: '' });
@@ -316,6 +432,19 @@ export default {
       else if(this.drawerType === 'daterange') {
         this.addDrawer('daterange', this.dateperiod);
         this.dateperiod = [];
+      }
+      else if(this.drawerType === 'pin_items') {
+        const payload = this.pinnedItems.filter(item => item.id !== 0)
+        .map(item => ({
+          id: item.id,
+          position: isNaN(item.position) || item.position < 1 ? 1 : item.position
+        }))
+        this.addDrawer('pin_items', payload);
+        this.pinnedItems = [];
+      }
+      else if(this.drawerType === 'hide_items') {
+        this.addDrawer('hide_items', this.hiddenItems);
+        this.hiddenItems = [];
       }
       else if(this.drawerType === 'boost_category') {
         this.addDrawer('boost_category', this.boostCategories);
@@ -389,6 +518,10 @@ export default {
       .name {
         width: 41.66%;
       }
+
+      .pin-name {
+        width: calc(100% - 100px);
+      }
     }
 
     .inputs {
@@ -405,6 +538,23 @@ export default {
       .is {
         width: 8.33%;
         text-align: center;
+      }
+
+      .pin-input {
+        width: calc(100% - 100px);
+        > div {
+          width: calc(100% - 5px);
+          margin-right: 3px;
+        }
+      }
+
+      .hide-input {
+        width: 100%;
+        margin-right: 44px;
+        > div {
+          width: calc(100% - 5px);
+          margin-right: 3px;
+        }
       }
 
       .keyword {

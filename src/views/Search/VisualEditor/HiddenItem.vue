@@ -1,22 +1,17 @@
 <template>
   <div :class="hoverable ? 'cond-wrapper' : ''" @mouseover="onMouseOver" @mouseleave="hovered = false">
-    <div class="query-wrapper">
+    <div class="query-wrapper" :style="{marginTop: '6px'}">
       <div class="label-wrapper">
         <h4 class="label">
-          {{index === 0 ? 'Query' : 'or query'}} {{condition.query.option}}
+          Hide
         </h4>
-        <div class="badge">
-          {{condition.query.keyword}}
-        </div>
-      </div>
-    </div>
-    <div class="query-wrapper" v-for="(filter, fi) in condition.filters" :key="fi" :style="{marginTop: '6px'}">
-      <div class="label-wrapper">
-        <h4 class="label">
-          {{fi === 0 ? 'with filter' : 'and filter'}}
-        </h4>
-        <div class="badge">
-          {{filter.name}} is {{filter.keyword}}
+        <div class="badge max-w-64 pinned-wrapper">
+          <div class="previewImage">
+            <img :src="item.imgsrc">
+          </div>
+          <h4 class="pin-title stl-truncate">
+            {{item.title}}
+          </h4>
         </div>
       </div>
     </div>
@@ -30,9 +25,10 @@
 </template>
 
 <script>
+
 export default {
-  name: "QueryCondition",
-  props: ['hoverable', 'condition', 'editCondition', 'deleteCondition', 'index'],
+  name: "HiddenItem",
+  props: ['hoverable', 'item', 'editItems', 'deleteItems'],
   data() {
     return {
       hovered: false
@@ -44,10 +40,10 @@ export default {
         this.hovered = true;
     },
     onEdit() {
-      this.editCondition(this.index);
+      this.editItems();
     },
     onDelete() {
-      this.deleteCondition(this.index);
+      this.deleteItems();
     }
   }
 }
@@ -67,6 +63,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: 100%;
   }
 
   .label-wrapper {
@@ -103,4 +100,49 @@ export default {
     margin: 0;
   }
 
+  .badge {
+    padding: 0 8px;
+    display: inline-block;
+    border-radius: 100px;
+    background-color: rgb(245,245,250);
+    color: rgb(72,76,122);
+    border: 1px solid rgb(214,214,231);
+    margin-left: 8px;
+  }
+
+  .stl-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pinned-wrapper {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+
+    .previewImage {
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgb(182,183,213);
+      border-radius: 9999px;
+      position: absolute;
+      left: 6px;
+      top: 2px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .pin-title {
+      margin-left: 16px;
+    }
+  }
+
+  .max-w-64 {
+    max-width: 280px;
+  }
 </style>

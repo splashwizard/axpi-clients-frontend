@@ -2,13 +2,20 @@
   <div class="search-card">
     <div class="item-container">
       <a-badge
-        :count="item.id"
+        :count="index"
         :number-style="badgeStyle"
       />
       <div class="imgWrapper">
         <img :src="item.imgsrc">
       </div>
       <h4>{{item.title}}</h4>
+      <div class="action-wrapper">
+        <div class="badge" v-if="item.pinned">
+          <a-icon type="pushpin" :style="{fontSize: '12px' }" /> Pinned
+        </div>
+        <a-button class="btn-non-border" @click="handlePin"><a-icon :type="item.pinned ? 'shopping' : 'pushpin'" :style="{fontSize: '12px' }" /></a-button>
+        <a-button class="btn-non-border" @click="handleHide"><a-icon type="eye-invisible" :style="{fontSize: '12px' }" /></a-button>
+      </div>
     </div>
   </div>
 </template>
@@ -16,7 +23,7 @@
 <script>
 export default {
   name: "QueryCondition",
-  props: ['item'],
+  props: ['item', 'index', 'handlePin', 'handleHide'],
   data() {
     return {
       badgeStyle: {
@@ -34,6 +41,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .btn-non-border {
+    border-width: 0;
+    box-shadow: none;
+  }
+
   .search-card {
     box-shadow: 0 0 0 1px rgb(35 38 59 / 5%), 0 1px 3px 0 rgb(35 38 59 / 15%);
     margin-bottom: 16px;
@@ -43,6 +55,13 @@ export default {
   .item-container {
     display: flex;
     align-items: center;
+    position: relative;
+
+    .action-wrapper {
+      position: absolute;
+      top: 5px;
+      right: 0;
+    }
   }
 
   .imgWrapper {

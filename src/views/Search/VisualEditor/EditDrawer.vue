@@ -120,7 +120,7 @@
                     :data-source="availablePinItems"
                     placeholder="Search items to pin"
                     :filter-option="filterOption"
-                    :value="item.text"
+                    :value="item.title"
                     @select="(value) => selectPinItem(pi, value)"
                     @blur="blurPinItem(pi)"
                   />
@@ -156,7 +156,7 @@
                     :data-source="availablePinItems"
                     placeholder="Search items to hide"
                     :filter-option="filterOption"
-                    :value="item.text"
+                    :value="item.title"
                     @select="(value) => selectHiddenItem(hi, value)"
                     @blur="blurHiddenItem(hi)"
                   />
@@ -388,32 +388,35 @@ export default {
   methods: {
     selectPinItem(pi, value) {
       this.pinnedItems[pi].id = this.list.find(item => item.title === value)?.id;
-      this.pinnedItems[pi].text = value;
+      this.pinnedItems[pi].title = value;
     },
     blurPinItem(pi) {
       const pIndex = this.list.findIndex(item => item.id === this.pinnedItems[pi].id);
       this.pinnedItems = this.pinnedItems.map((item, index) => (index === pi ? {
-        ...item, text: this.list[pIndex].title
+        ...item, title: this.list[pIndex].title
       } : item))
     },
     changePinnedPosition(pi, value) {
-      this.pinnedItems[pi].position = isNaN(value) ? value : parseInt(value);
+      const pinnedItems = this.pinnedItems.map((item, index) => index === pi ?
+        { ...item, position: isNaN(value) ? value : parseInt(value) } : item
+      );
+      this.setItem('pin_items', pinnedItems);
     },
     selectHiddenItem(pi, value) {
       this.hiddenItems[pi].id = this.list.find(item => item.title === value)?.id;
-      this.hiddenItems[pi].text = value;
+      this.hiddenItems[pi].title = value;
     },
     blurHiddenItem(pi) {
       const pIndex = this.list.findIndex(item => item.id === this.hiddenItems[pi].id);
       this.hiddenItems = this.hiddenItems.map((item, index) => (index === pi ? {
-        ...item, text: this.list[pIndex].title
+        ...item, title: this.list[pIndex].title
       } : item))
     },
     changeFilterName(fi, value) {
       const filters = this.filters.map((item, index) => index === fi ?
         { name: value, keyword: item.keyword } : item
       );
-        this.setItem('filters', filters);
+      this.setItem('filters', filters);
     },
     changeFilterKeyword(fi, value) {
       const filters = this.filters.map((item, index) => index === fi ?
@@ -483,7 +486,7 @@ export default {
       this.filters = this.filters.filter((item, index) => index !== fi);
     },
     addPinnedItem() {
-      this.pinnedItems = [...this.pinnedItems, { id: 0, text: '', position: 0 }];
+      this.pinnedItems = [...this.pinnedItems, { id: 0, title: '', position: 0 }];
     },
     removePinnedItem(pi) {
       this.pinnedItems = this.pinnedItems.filter((item, index) => index !== pi);

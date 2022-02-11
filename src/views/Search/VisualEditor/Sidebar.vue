@@ -97,13 +97,13 @@
           <h1 class="page-title">Strategy</h1>
           <a-dropdown :trigger="['click']" v-if="strategyAddable">
             <a-menu slot="overlay" style="padding: 0">
-              <a-menu-item key="pin_items" class="dropdown-item" @click="addPinItems" v-if="pinnedList.length === 0">
+              <a-menu-item key="pin_items" class="dropdown-item" @click="addPinItems" v-if="strategyData.pinnedItems.length === 0">
                 <a-icon type="arrow-up" />
                 <span>
                   Pin items
                 </span>
               </a-menu-item>
-              <a-menu-item key="pin_items" class="dropdown-item" @click="addHideItems" v-if="hiddenList.length === 0">
+              <a-menu-item key="hide_items" class="dropdown-item" @click="addHideItems" v-if="strategyData.hiddenItems.length === 0">
                 <a-icon type="arrow-up" />
                 <span>
                   Hide items
@@ -135,8 +135,8 @@
           <filter-result v-if="strategyData.filterResults.length > 0" :hoverable="true" :filters="strategyData.filterResults" :editFilters="editFilters" :deleteFilters="deleteFilters" />
           <boost-category v-if="strategyData.boostCategories.length > 0" :hoverable="true" :category="strategyData.boostCategories" :editCategory="editBoostCategory" :deleteCategory="deleteBoostCategory" />
           <bury-category v-if="strategyData.buryCategories.length > 0" :hoverable="true" :category="strategyData.buryCategories" :editCategory="editBuryCategory" :deleteCategory="deleteBuryCategory" />
-          <pinned-item v-for="(pinnedItem, pi) in pinnedList" :key="'p' + pi" :hoverable="true" :item="pinnedItem" :editItems="editPinnedItems" :deleteItems="() => deletePinnedItems(pi)" />
-          <hidden-item v-for="(hiddenItem, hi) in hiddenList" :key="'h' + hi" :hoverable="true" :item="hiddenItem" :editItems="editHiddenItems" :deleteItems="() => deleteHiddenItems(hi)" />
+          <pinned-item v-for="(pinnedItem, pi) in strategyData.pinnedItems" :key="'p' + pi" :hoverable="true" :item="pinnedItem" :editItems="editPinnedItems" :deleteItems="() => deletePinnedItems(pi)" />
+          <hidden-item v-for="(hiddenItem, hi) in strategyData.hiddenItems" :key="'h' + hi" :hoverable="true" :item="hiddenItem" :editItems="editHiddenItems" :deleteItems="() => deleteHiddenItems(hi)" />
         </div>
       </div>
 
@@ -156,7 +156,24 @@ import HiddenItem from "./HiddenItem.vue"
 export default {
   name: "LeftSidebar",
   components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult, PinnedItem, HiddenItem },
-  props: ['toggleAddDrawer', 'toggleEditDrawer', 'pinnedList', 'hiddenList', 'list', 'triggerData', 'strategyData', 'editPeriod'],
+  props: ['toggleAddDrawer', 'toggleEditDrawer', 'list', 'triggerData', 'strategyData', 'editPeriod'],
+  computed: {
+    strategyEmpty() {
+      return this.strategyData.boostCategories.length === 0 && this.strategyData.buryCategories.length === 0 && this.strategyData.filterResults.length === 0
+        && this.strategyData.pinnedItems.length === 0 && this.strategyData.hiddenItems.length === 0;
+    },
+    strategyAddable() {
+      return this.strategyData.boostCategories.length === 0 || this.strategyData.buryCategories.length === 0 || this.strategyData.filterResults.length === 0
+        || this.strategyData.pinnedItems.length === 0 || this.strategyData.hiddenItems.length === 0;
+    },
+    isAnalytics() {
+      return this.$route.name === 'Search Analytics';
+    },
+
+    isRules() {
+      return this.$route.name === 'Search Rules';
+    },
+  },
   methods: {
     onBack() {
       this.$router.push('/search/rules');
@@ -198,16 +215,13 @@ export default {
       this.toggleEditDrawer('pin_items');
     },
     deletePinnedItems(pi) {
-      const index = this.list.findIndex(listitem => listitem.id === this.pinnedList[pi].id);
-      this.list[index].pinned = false;
-      this.list[index].pinnedposition = 0;
+      this.strategyData.pinnedItems.splice(pi, 1);
     },
     editHiddenItems() {
       this.toggleEditDrawer('hide_items');
     },
     deleteHiddenItems(pi) {
-      const index = this.list.findIndex(listitem => listitem.id === this.hiddenList[pi].id);
-      this.list[index].hidden = false;
+      this.strategyData.hiddenItems.splice(pi, 1);
     },
     deleteCondition(index) {
       this.triggerData.query_conditions.splice(index, 1);
@@ -225,23 +239,6 @@ export default {
       this.triggerData.period = [];
     },
   },
-  computed: {
-    strategyEmpty() {
-      return this.strategyData.boostCategories.length === 0 && this.strategyData.buryCategories.length === 0 && this.strategyData.filterResults.length === 0
-        && this.pinnedList.length === 0 && this.hiddenList.length === 0;
-    },
-    strategyAddable() {
-      return this.strategyData.boostCategories.length === 0 || this.strategyData.buryCategories.length === 0 || this.strategyData.filterResults.length === 0
-        || this.pinnedList.length === 0 || this.hiddenList.length === 0;
-    },
-    isAnalytics() {
-      return this.$route.name === 'Search Analytics';
-    },
-
-    isRules() {
-      return this.$route.name === 'Search Rules';
-    },
-  }
 }
 </script>
 

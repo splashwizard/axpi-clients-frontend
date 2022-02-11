@@ -10,7 +10,7 @@
       </div>
       <h4>{{item.title}}</h4>
       <div class="action-wrapper">
-        <div class="badge" v-if="item.pinned">
+        <div class="badge" v-if="pinnedItems.find(pinnedItem => pinnedItem.id === item.id)">
           <a-icon type="pushpin" :style="{fontSize: '12px' }" /> Pinned
         </div>
         <a-button class="btn-non-border" @click="handlePin"><a-icon :type="item.pinned ? 'shopping' : 'pushpin'" :style="{fontSize: '12px' }" /></a-button>
@@ -23,7 +23,7 @@
 <script>
 export default {
   name: "QueryCondition",
-  props: ['item', 'index', 'handlePin', 'handleHide'],
+  props: ['pinnedItems', 'item', 'index', 'handlePin', 'handleHide'],
   data() {
     return {
       badgeStyle: {

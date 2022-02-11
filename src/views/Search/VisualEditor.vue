@@ -1,20 +1,20 @@
 <template>
   <a-layout>
-    <sidebar :toggleAddDrawer="toggleAddDrawer" :toggleEditDrawer="toggleEditDrawer" :pinnedList="pinnedList" :hiddenList="hiddenList" :list="list" :editPeriod="editPeriod" :triggerData="triggerData" :strategyData="strategyData"></sidebar>
+    <sidebar :toggleAddDrawer="toggleAddDrawer" :toggleEditDrawer="toggleEditDrawer" :list="list" :editPeriod="editPeriod" :triggerData="triggerData" :strategyData="strategyData"></sidebar>
     <div class="wrapper">
       <div class="content">
         <p class="description">Here are the results as they would appear with no query.</p>
         <div class="cards">
           <draggable v-model="availableList" group="people" @start="drag=true" @end="drag=false">
-            <search-item v-for="(item, index) in availableList" :key="index" :index="index + 1" :item="item" :handlePin="() => handlePin(index)" :handleHide="() => handleHide(index)"/>
+            <search-item v-for="(item, index) in availableList" :key="index" :index="index + 1" :pinnedItems="strategyData.pinnedItems" :item="item" :handlePin="() => handlePin(index)" :handleHide="() => handleHide(index)"/>
           </draggable>
         </div>
         <add-drawer :list="list" :drawerVisible="addDrawerVisible" :drawerType="addDrawerType" :drawerClose="addDrawerClose" :addDrawer="addDrawer" />
         <edit-drawer :list="list" :drawerVisible="editDrawerVisible" :drawerType="editDrawerType" :drawerClose="editDrawerClose" :updateDrawerItem="updateDrawerItem" 
           :editDrawerItem="editDrawerItem" :setItem="setItem"/>
-        <!-- <div class="actionContainer" v-if="ruleValid"> -->
+        <div class="actionContainer" v-if="ruleValid">
           <a-button type="primary" @click="onPublish"> Publish </a-button>
-        <!-- </div>         -->
+        </div>        
       </div>
     </div>
   </a-layout>
@@ -28,7 +28,8 @@ import Sidebar from "./VisualEditor/Sidebar";
 import AddDrawer from "./VisualEditor/AddDrawer";
 import EditDrawer from "./VisualEditor/EditDrawer";
 import SearchItem from './VisualEditor/SearchItem';
-import { arrayMoveImmutable } from 'array-move';
+// import { arrayMoveImmutable } from 'array-move';
+// import { result } from 'lodash';
 const moment = require('moment');
 
 
@@ -143,7 +144,9 @@ export default {
       strategyData: {
         boostCategories: [],
         buryCategories: [],
-        filterResults: []
+        filterResults: [],
+        pinnedItems: [],
+        hiddenItems: []
       },
       list: searchItems.map((item, index) => {
         return {
@@ -199,11 +202,20 @@ export default {
   computed: {
     availableList: {
       get: function () {
-        const showedList = this.list.filter(item => !item.hidden);
-        let resultList = [].concat(showedList);
-        for(let i = 0; i < showedList.length; i ++) {
-          if(showedList[i]?.pinned && showedList[i]?.pinnedposition)
-            resultList = arrayMoveImmutable(resultList, i, showedList[i].pinnedposition - 1);
+        const showedList = this.list.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
+        let resultList = [];
+        const unpinnedList = showedList.filter(item => this.strategyData.pinnedItems.findIndex(pinnedItem => pinnedItem.id === item.id) === -1);
+        for(let pinnedItem of this.strategyData.pinnedItems) {
+          const pinnedIndex = showedList.findIndex(item => item.id === pinnedItem.id);
+          if(pinnedItem.position <= showedList.length)
+            resultList[pinnedItem.position - 1] = showedList[pinnedIndex];
+        }
+        let insertionIndex = 0;
+        for(let unpinnedItem of unpinnedList) {
+          while(Object.keys(resultList).indexOf(insertionIndex.toString()) !== -1) {
+            insertionIndex++;
+          }
+          resultList[insertionIndex++] = unpinnedItem;
         }
         return resultList;
       },
@@ -211,31 +223,45 @@ export default {
         this.list = this.list.map((item) => item.hidden ? item : newValue[this.availableList.indexOf(item)])
       }
     },
-    pinnedList() {
-      return this.list.map((item, index) => ({...item, index: index + 1})).filter(item => item.pinned);
-    },
-    hiddenList() {
-      return this.list.map((item, index) => ({...item, index: index + 1})).filter(item => item.hidden);
-    },
     ruleValid() {
-      return this.triggerData.query_conditions.length > 0 && (this.strategyData.boostCategories.length > 0 ||
-        this.strategyData.buryCategories.length > 0 || this.strategyData.filterResults.length > 0 );
+      return this.triggerData.query_conditions.length > 0 && ( this.strategyData.pinnedItems.length > 0 || this.strategyData.hiddenItems.length > 0 ||
+        this.strategyData.boostCategories.length > 0 || this.strategyData.buryCategories.length > 0 || this.strategyData.filterResults.length > 0 );
     },
   },
   methods: {
     handlePin(index) {
-      this.availableList[index].pinned = !this.availableList[index].pinned;
-      if(this.availableList[index].pinned === false)
-        this.availableList[index].pinnedposition = 0;
+      const pinningItem = this.availableList[index];
+      const pinnedIndex = this.strategyData.pinnedItems.findIndex(item => item.id === pinningItem.id);
+      if(pinnedIndex !== -1) {
+        this.strategyData.pinnedItems.splice(pinnedIndex, 1);
+      }
+      else {
+        this.strategyData.pinnedItems = [...this.strategyData.pinnedItems, {
+          id: pinningItem.id,
+          title: pinningItem.title,
+          position: index + 1
+        }].sort((a,b) => a.position > b.position ? 1 : -1)
+      }
     },
     handleHide(index) {
-      this.availableList[index].hidden = true;
+      const hidingItem = this.availableList[index];
+      const hidingIndex = this.strategyData.hiddenItems.findIndex(item => item.id === hidingItem.id);
+      if(hidingIndex !== -1) {
+        this.strategyData.hiddenItems.splice(hidingIndex, 1);
+      }
+      else {
+        this.strategyData.hiddenItems = [...this.strategyData.hiddenItems, {
+          id: hidingItem.id,
+          title: hidingItem.title,
+        }];
+        this.strategyData.pinnedItems = this.strategyData.pinnedItems.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
+      }
     },
     onPublish() {
       const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
       rules.push({key: rules.length + 1, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
-      // localStorage.setItem('rules', JSON.stringify(rules));
-      // this.$router.push('/search/rules');
+      localStorage.setItem('rules', JSON.stringify(rules));
+      this.$router.push('/search/rules');
     },
     toggleAddDrawer(type) {
       this.editDrawerVisible = false;
@@ -262,19 +288,10 @@ export default {
         };
       }
       else if(type === 'pin_items') {
-        const pinneditems = this.list.filter(item => item.pinned).map(item => ({
-          id: item.id,
-          text: item.title,
-          position: item.pinnedposition
-        }));
-        this.editDrawerItem = pinneditems;
+        this.editDrawerItem = this.strategyData.pinnedItems;
       }
       else if(type === 'hide_items') {
-        const hiddenitems = this.list.filter(item => item.hidden).map(item => ({
-          id: item.id,
-          text: item.title,
-        }));
-        this.editDrawerItem = hiddenitems;
+        this.editDrawerItem = this.strategyData.hiddenItems;
       }
       else if(type === 'boost_category') {
         this.editDrawerItem = this.strategyData.boostCategories.map(item => item);
@@ -311,26 +328,11 @@ export default {
       else if(drawerType === 'filter_results')
         this.strategyData.filterResults = drawerData;
       else if(drawerType === 'pin_items') {
-        for(let item of drawerData) {
-          const index = this.list.findIndex(listitem => listitem.id === item.id);
-          this.list = this.list.map((listitem, li) => (li === index ? {
-            ...listitem,
-            pinned: true,
-            pinnedposition: item.position,
-            hidden: false
-          }: listitem));
-        }
+        this.strategyData.pinnedItems = drawerData;
       }
       else if(drawerType === 'hide_items') {
-        for(let item of drawerData) {
-          const index = this.list.findIndex(listitem => listitem.id === item.id);
-          this.list = this.list.map((listitem, li) => (li === index ? {
-            ...listitem,
-            pinned: false,
-            pinnedposition: 0,
-            hidden: true
-          }: listitem));
-        }
+        this.strategyData.hiddenItems = drawerData;
+        this.strategyData.pinnedItems = this.strategyData.pinnedItems.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
       }
       this.addDrawerVisible = false;
     },
@@ -351,27 +353,12 @@ export default {
         this.editDrawerItem = [];
       }
       else if(this.editDrawerType === 'pin_items') {
-        for(let item of this.editDrawerItem) {
-          const index = this.list.findIndex(listitem => listitem.id === item.id);
-          this.list = this.list.map((listitem, li) => (li === index ? {
-            ...listitem,
-            pinned: true,
-            pinnedposition: item.position,
-            hidden: false
-          }: listitem));
-        }
+        this.strategyData.pinnedItems = this.editDrawerItem;
         this.editDrawerItem = [];
       }
       else if(this.editDrawerType === 'hide_items') {
-        for(let item of this.editDrawerItem) {
-          const index = this.list.findIndex(listitem => listitem.id === item.id);
-          this.list = this.list.map((listitem, li) => (li === index ? {
-            ...listitem,
-            pinned: false,
-            pinnedposition: 0,
-            hidden: true
-          }: listitem));
-        }
+        this.strategyData.hiddenItems = this.editDrawerItem;
+        this.strategyData.pinnedItems = this.strategyData.pinnedItems.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
         this.editDrawerItem = [];
       }
       else if(this.editDrawerType === 'boost_category') {

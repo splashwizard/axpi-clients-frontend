@@ -1,14 +1,16 @@
 <template>
   <a-layout>
-    <sidebar :toggleAddDrawer="toggleAddDrawer" :toggleEditDrawer="toggleEditDrawer" :editPeriod="editPeriod" :triggerData="triggerData" :strategyData="strategyData"></sidebar>
+    <sidebar :toggleAddDrawer="toggleAddDrawer" :toggleEditDrawer="toggleEditDrawer" :list="list" :editPeriod="editPeriod" :triggerData="triggerData" :strategyData="strategyData"></sidebar>
     <div class="wrapper">
       <div class="content">
         <p class="description">Here are the results as they would appear with no query.</p>
         <div class="cards">
-          <search-item v-for="(item, index) in searchResults" :key="index" :item="item" />
+          <draggable v-model="availableList" group="people" @start="drag=true" @end="drag=false">
+            <search-item v-for="(item, index) in availableList" :key="index" :index="index + 1" :pinnedItems="strategyData.pinnedItems" :item="item" :handlePin="() => handlePin(index)" :handleHide="() => handleHide(index)"/>
+          </draggable>
         </div>
-        <add-drawer :drawerVisible="addDrawerVisible" :drawerType="addDrawerType" :drawerClose="addDrawerClose" :addDrawer="addDrawer" />
-        <edit-drawer :drawerVisible="editDrawerVisible" :drawerType="editDrawerType" :drawerClose="editDrawerClose" :updateDrawerItem="updateDrawerItem" 
+        <add-drawer :list="list" :drawerVisible="addDrawerVisible" :drawerType="addDrawerType" :drawerClose="addDrawerClose" :addDrawer="addDrawer" />
+        <edit-drawer :list="list" :drawerVisible="editDrawerVisible" :drawerType="editDrawerType" :drawerClose="editDrawerClose" :updateDrawerItem="updateDrawerItem" 
           :editDrawerItem="editDrawerItem" :setItem="setItem"/>
         <div class="actionContainer" v-if="ruleValid">
           <a-button type="primary" @click="onPublish"> Publish </a-button>
@@ -20,15 +22,98 @@
 
 <script>
 import Typesense from 'typesense';
+import draggable from 'vuedraggable'
+
 import Sidebar from "./VisualEditor/Sidebar";
 import AddDrawer from "./VisualEditor/AddDrawer";
 import EditDrawer from "./VisualEditor/EditDrawer";
 import SearchItem from './VisualEditor/SearchItem';
+// import { arrayMoveImmutable } from 'array-move';
+// import { result } from 'lodash';
 const moment = require('moment');
 
+
+// let schema = {
+//   name: 'companies',
+//   num_documents: 0,
+//   fields: [
+//     {
+//       name: 'company_name',
+//       type: 'string',
+//       facet: false
+//     },
+//     {
+//       name: 'num_employees',
+//       type: 'int32',
+//       facet: false
+//     },
+//     {
+//       name: 'country',
+//       type: 'string',
+//       facet: true
+//     }
+//   ],
+//   default_sorting_field: 'num_employees'
+// }
+
+// let documents = [
+//   {
+//     id: '124',
+//     company_name: 'Stark Industries',
+//     num_employees: 5215,
+//     country: 'USA'
+//   },
+//   {
+//     id: '125',
+//     company_name: 'Acme Corp',
+//     num_employees: 1002,
+//     country: 'France'
+//   },
+//   {
+//     id: '127',
+//     company_name: 'Stark Corp',
+//     num_employees: 1031,
+//     country: 'USA'
+//   },
+//   {
+//     id: '126',
+//     company_name: 'Doofenshmirtz Inc',
+//     num_employees: 2,
+//     country: 'Tri-State Area'
+//   }
+// ]
+
+const searchItems = [
+  {
+    id: 'a',
+    title: 'AGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical',
+    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
+  },
+  {
+    id: 'b',
+    title: 'Vacuum Traps, Dewar Type with Ace-Thred Inlet/Outlet, Ace Glass',
+    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
+  },
+  {
+    id: 'c',
+    title: 'BGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical',
+    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
+  },
+  {
+    id: 'd',
+    title: 'Wacuum Traps, Dewar Type with Ace-Thred Inlet/Outlet, Ace Glass',
+    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
+  },
+  {
+    id: 'e',
+    title: 'CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical',
+    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
+  },
+]
+
 export default {
-  name: "EditVisual Editor",
-  components: { Sidebar, AddDrawer, EditDrawer, SearchItem },
+  name: "Landing",
+  components: { Sidebar, AddDrawer, EditDrawer, SearchItem, draggable },
   data() {
     return {
       addDrawerType: 'condition',
@@ -59,17 +144,20 @@ export default {
       strategyData: {
         boostCategories: [],
         buryCategories: [],
-        filterResults: []
+        filterResults: [],
+        pinnedItems: [],
+        hiddenItems: []
       },
-      searchResults: [
-        {id: 1, title: 'SGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical', imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'},
-        {id: 2, title: 'SGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical', imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'},
-        {id: 3, title: 'Vacuum Traps, Dewar Type with Ace-Thred Inlet/Outlet, Ace Glass', imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'},
-        {id: 4, title: 'SGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical', imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'},
-        {id: 5, title: 'SGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical', imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'},
-        {id: 6, title: 'SGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical', imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'},
-        {id: 7, title: 'SGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical', imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'},
-      ]
+      list: searchItems.map((item, index) => {
+        return {
+          ...item,
+          key: index + 1,
+          fixed: false,
+          pinned: false,
+          pinnedposition: 0,
+          hidden: false,
+        };
+      }),
     }
   },
   async created() {
@@ -78,7 +166,6 @@ export default {
     const rule = rules.find(item => item.key === parseInt(ruleId));
     this.triggerData = rule.conditions;
     this.strategyData = rule.consequences;
-
     const typesense = new Typesense.Client({
       nodes: [
         {
@@ -118,12 +205,63 @@ export default {
     }
   },
   computed: {
+    availableList: {
+      get: function () {
+        const showedList = this.list.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
+        let resultList = [];
+        const unpinnedList = showedList.filter(item => this.strategyData.pinnedItems.findIndex(pinnedItem => pinnedItem.id === item.id) === -1);
+        for(let pinnedItem of this.strategyData.pinnedItems) {
+          const pinnedIndex = showedList.findIndex(item => item.id === pinnedItem.id);
+          if(pinnedItem.position <= showedList.length)
+            resultList[pinnedItem.position - 1] = showedList[pinnedIndex];
+        }
+        let insertionIndex = 0;
+        for(let unpinnedItem of unpinnedList) {
+          while(Object.keys(resultList).indexOf(insertionIndex.toString()) !== -1) {
+            insertionIndex++;
+          }
+          resultList[insertionIndex++] = unpinnedItem;
+        }
+        return resultList;
+      },
+      set: function (newValue) {
+        this.list = this.list.map((item) => item.hidden ? item : newValue[this.availableList.indexOf(item)])
+      }
+    },
     ruleValid() {
-      return this.triggerData.query_conditions.length > 0 && (this.strategyData.boostCategories.length > 0 ||
-        this.strategyData.buryCategories.length > 0 || this.strategyData.filterResults.length > 0 );
+      return this.triggerData.query_conditions.length > 0 && ( this.strategyData.pinnedItems.length > 0 || this.strategyData.hiddenItems.length > 0 ||
+        this.strategyData.boostCategories.length > 0 || this.strategyData.buryCategories.length > 0 || this.strategyData.filterResults.length > 0 );
     },
   },
   methods: {
+    handlePin(index) {
+      const pinningItem = this.availableList[index];
+      const pinnedIndex = this.strategyData.pinnedItems.findIndex(item => item.id === pinningItem.id);
+      if(pinnedIndex !== -1) {
+        this.strategyData.pinnedItems.splice(pinnedIndex, 1);
+      }
+      else {
+        this.strategyData.pinnedItems = [...this.strategyData.pinnedItems, {
+          id: pinningItem.id,
+          title: pinningItem.title,
+          position: index + 1
+        }].sort((a,b) => a.position > b.position ? 1 : -1)
+      }
+    },
+    handleHide(index) {
+      const hidingItem = this.availableList[index];
+      const hidingIndex = this.strategyData.hiddenItems.findIndex(item => item.id === hidingItem.id);
+      if(hidingIndex !== -1) {
+        this.strategyData.hiddenItems.splice(hidingIndex, 1);
+      }
+      else {
+        this.strategyData.hiddenItems = [...this.strategyData.hiddenItems, {
+          id: hidingItem.id,
+          title: hidingItem.title,
+        }];
+        this.strategyData.pinnedItems = this.strategyData.pinnedItems.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
+      }
+    },
     onPublish() {
       const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
       const ruleId = this.$route.params.id;
@@ -160,6 +298,12 @@ export default {
           // filters: []
         };
       }
+      else if(type === 'pin_items') {
+        this.editDrawerItem = this.strategyData.pinnedItems;
+      }
+      else if(type === 'hide_items') {
+        this.editDrawerItem = this.strategyData.hiddenItems;
+      }
       else if(type === 'boost_category') {
         this.editDrawerItem = this.strategyData.boostCategories.map(item => item);
       }
@@ -194,6 +338,13 @@ export default {
         this.strategyData.buryCategories = drawerData;
       else if(drawerType === 'filter_results')
         this.strategyData.filterResults = drawerData;
+      else if(drawerType === 'pin_items') {
+        this.strategyData.pinnedItems = drawerData;
+      }
+      else if(drawerType === 'hide_items') {
+        this.strategyData.hiddenItems = drawerData;
+        this.strategyData.pinnedItems = this.strategyData.pinnedItems.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
+      }
       this.addDrawerVisible = false;
     },
 
@@ -210,6 +361,15 @@ export default {
       }
       else if(this.editDrawerType === 'daterange') {
         this.triggerData.period = editItem.slice();
+        this.editDrawerItem = [];
+      }
+      else if(this.editDrawerType === 'pin_items') {
+        this.strategyData.pinnedItems = this.editDrawerItem;
+        this.editDrawerItem = [];
+      }
+      else if(this.editDrawerType === 'hide_items') {
+        this.strategyData.hiddenItems = this.editDrawerItem;
+        this.strategyData.pinnedItems = this.strategyData.pinnedItems.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
         this.editDrawerItem = [];
       }
       else if(this.editDrawerType === 'boost_category') {
@@ -235,7 +395,11 @@ export default {
         this.editDrawerItem = item;
       else if(type === 'filters'){
         this.editDrawerItem.filters = item;
-        }
+      }
+      else if(type === 'pin_items')
+        this.editDrawerItem = item;
+      else if(type === 'hide_items')
+        this.editDrawerItem = item;
       else if(type === 'boost_category')
         this.editDrawerItem = item;
       else if(type === 'bury_category')
@@ -271,7 +435,7 @@ export default {
   }
 
   .description {
-    margin: 0 172px;
+    margin: 0 32px;
     padding: 80px 0 24px 0;
   }
 

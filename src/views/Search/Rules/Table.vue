@@ -16,6 +16,8 @@
         <filter-result v-if="consequences.filterResults.length > 0" :filters="consequences.filterResults"/>
         <boost-category v-if="consequences.boostCategories.length > 0" :category="consequences.boostCategories"/>
         <bury-category v-if="consequences.buryCategories.length > 0" :category="consequences.buryCategories"/>
+        <pinned-item v-for="(pinnedItem, pi) in consequences.pinnedItems" :key="'p' + pi" :item="pinnedItem" />
+        <hidden-item v-for="(hiddenItem, hi) in consequences.hiddenItems" :key="'p' + hi" :item="hiddenItem" />
       </div>
     </template>
 
@@ -48,6 +50,8 @@
 <script>
 import QueryCondition from "../VisualEditor/QueryCondition.vue"
 import DatePeriod from "../VisualEditor/DatePeriod.vue"
+import PinnedItem from "../VisualEditor/PinnedItem.vue"
+import HiddenItem from "../VisualEditor/HiddenItem.vue"
 import BoostCategory from "../VisualEditor/BoostCategory.vue"
 import BuryCategory from "../VisualEditor/BuryCategory.vue"
 import FilterResult from "../VisualEditor/FilterResult.vue"
@@ -88,7 +92,7 @@ const columns = [
 export default {
   name: "RulesTable",
   props: ['rules'],
-  components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult },
+  components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult, PinnedItem, HiddenItem },
   data() {
     return {
       columns,

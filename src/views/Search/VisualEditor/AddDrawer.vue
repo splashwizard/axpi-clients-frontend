@@ -119,7 +119,7 @@
                     :data-source="availablePinItems"
                     placeholder="Search items to pin"
                     :filter-option="filterOption"
-                    :value="item.text"
+                    :value="item.title"
                     @select="(value) => selectPinItem(pi, value)"
                     @blur="blurPinItem(pi)"
                   />
@@ -155,7 +155,7 @@
                     :data-source="availablePinItems"
                     placeholder="Search items to hide"
                     :filter-option="filterOption"
-                    :value="item.text"
+                    :value="item.title"
                     @select="(value) => selectHiddenItem(hi, value)"
                     @blur="blurHiddenItem(hi)"
                   />
@@ -300,8 +300,8 @@ export default {
       option: 'contains',
       keyword: '',
       filters: [],
-      pinnedItems: [{ id: 0, text: '', position: 0 }],
-      hiddenItems: [{ id: 0, text: '' }],
+      pinnedItems: [{ id: 0, title: '', position: 0 }],
+      hiddenItems: [{ id: 0, title: '' }],
       boostCategories: [{ name: '', keyword: '' }],
       buryCategories: [{ name: '', keyword: '' }],
       filterResults: [
@@ -339,12 +339,12 @@ export default {
   methods: {
     selectPinItem(pi, value) {
       this.pinnedItems[pi].id = this.list.find(item => item.title === value)?.id;
-      this.pinnedItems[pi].text = value;
+      this.pinnedItems[pi].title = value;
     },
     blurPinItem(pi) {
       const pIndex = this.list.findIndex(item => item.id === this.pinnedItems[pi].id);
       this.pinnedItems = this.pinnedItems.map((item, index) => (index === pi ? {
-        ...item, text: this.list[pIndex].title
+        ...item, title: this.list[pIndex].title
       } : item))
     },
     changePinnedPosition(pi, value) {
@@ -352,12 +352,12 @@ export default {
     },
     selectHiddenItem(pi, value) {
       this.hiddenItems[pi].id = this.list.find(item => item.title === value)?.id;
-      this.hiddenItems[pi].text = value;
+      this.hiddenItems[pi].title = value;
     },
     blurHiddenItem(pi) {
       const pIndex = this.list.findIndex(item => item.id === this.hiddenItems[pi].id);
       this.hiddenItems = this.hiddenItems.map((item, index) => (index === pi ? {
-        ...item, text: this.list[pIndex].title
+        ...item, title: this.list[pIndex].title
       } : item))
     },
     onChangeDate(date) {
@@ -384,7 +384,7 @@ export default {
       this.filters.splice(fi, 1);
     },
     addPinnedItem() {
-      this.pinnedItems.push({ id: 0, text: '', position: 0 });
+      this.pinnedItems.push({ id: 0, title: '', position: 0 });
     },
     removePinnedItem(pi) {
       this.pinnedItems.splice(pi, 1);
@@ -437,6 +437,7 @@ export default {
         const payload = this.pinnedItems.filter(item => item.id !== 0)
         .map(item => ({
           id: item.id,
+          title: item.title,
           position: isNaN(item.position) || item.position < 1 ? 1 : item.position
         }))
         this.addDrawer('pin_items', payload);

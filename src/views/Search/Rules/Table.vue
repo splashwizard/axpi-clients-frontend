@@ -1,11 +1,5 @@
 <template>
-  <a-table :row-selection="rowSelection" :columns="columns" :data-source="rules" :bordered="bordered" :pagination="pagination" class="rules-table">
-    <!-- <template slot="editor-column" slot-scope="editor">
-      <div class="colored-badge">
-        <a-icon type="layout" />
-        &nbsp;{{editor}}
-      </div>
-    </template> -->
+  <a-table :row-selection="rowSelection" :row-class-name="rowClassName" :columns="columns" :data-source="tableData" :bordered="bordered" :pagination="pagination" class="rules-table">
     <template slot="conditions-column" slot-scope="conditions">
       <date-period :period="conditions.period" :editPeriod="editPeriod" :deletePeriod="deletePeriod" v-if="conditions.period.length > 0"/>
       <query-condition v-for="(condition, ci) in conditions.query_conditions" :condition="condition" :index="ci" :key="ci" />
@@ -25,16 +19,25 @@
       <div>{{getTime(timestamp)}}</div>
     </template>
 
-    <template slot="action-column" slot-scope="key">
-      <a-dropdown :trigger="['click']">
+    <template slot="action-column" slot-scope="index, record">
+      <a-dropdown :trigger="['click']" v-model="record.visibleDropdown">
         <a-menu slot="overlay" style="padding: 0">
-          <a-menu-item key="edit" class="dropdown-item" @click="editRule(key)">
+          <a-menu-item key="edit" class="dropdown-item" @click="editRule(index)">
             <a-icon type="edit"  />
             <span>
               Edit Rule
             </span>
           </a-menu-item>
-          <a-menu-item key="edit" class="dropdown-item" @click="deleteRule(key)">
+          <a-menu-item key="disable" class="dropdown-item">
+            <span>
+              Rule disabled
+            </span>
+            <a-switch :default-checked="record.disabled" :checked="record.disabled" @click="(checked) => disableRule(index, checked)">
+              <a-icon type="check" />
+              <a-icon type="close" />
+            </a-switch>
+          </a-menu-item>
+          <a-menu-item key="delete" class="dropdown-item" @click="deleteRule(index)">
             <a-icon type="delete"  />
             <span>
               Delete Rule
@@ -57,6 +60,9 @@ import BuryCategory from "../VisualEditor/BuryCategory.vue"
 import FilterResult from "../VisualEditor/FilterResult.vue"
 const moment = require('moment');
 
+function strContains(str, keyword) {
+  return str.toUpperCase().indexOf(keyword.toUpperCase()) !== -1
+}
 const columns = [
   // {
   //   title: 'Editor',
@@ -85,13 +91,13 @@ const columns = [
   {
     title: '',
     align: 'right',
-    dataIndex: 'key',
+    dataIndex: 'index',
     scopedSlots: { customRender: "action-column" },
   }
 ];
 export default {
   name: "RulesTable",
-  props: ['rules'],
+  props: ['rules', 'searchTerm'],
   components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult, PinnedItem, HiddenItem },
   data() {
     return {
@@ -102,15 +108,22 @@ export default {
         backgroundColor: 'rgb(232,250,255)',
         color: 'rgb(0,118,155)',
         borderColor: 'rgb(185,239,255)'
-      }
+      },
     };
   },
   methods: {
-    editRule(index) {
-      this.$router.push(`/search/rules/visual-editor/edit/${index}`);
+    ruleDisabled(key) {
+      return this.rules.find(item => item.key !== key).disabled;
     },
-    deleteRule(key) {
-      this.rules = this.rules.filter(item => item.key !== key);
+    editRule(index) {
+      const key = this.rules[index].key;
+      this.$router.push(`/search/rules/visual-editor/edit/${key}`);
+    },
+    disableRule(index, checked) {
+      this.rules[index].disabled = checked;
+    },
+    deleteRule(index) {
+      this.rules.splice(index, 1);
       localStorage.setItem('rules', JSON.stringify(this.rules));
     },
     getTime(timestamp) {
@@ -143,10 +156,16 @@ export default {
       }
       return `${item.category} ${operator} ${item.value}`;
     },
+    rowClassName(record) {
+      return record.disabled ? 'row-disabled' : '';
+    },
   },
   computed: {
-    rowClass() {
-      return 'rules-row';
+    tableData() {
+      if(this.searchTerm === '') return this.rules;
+      return this.rules.filter((rule) => {
+        return rule.conditions.query_conditions.filter((item) => strContains(item.query.keyword, this.searchTerm)).length > 0
+      });
     },
     rowSelection() {
       return {

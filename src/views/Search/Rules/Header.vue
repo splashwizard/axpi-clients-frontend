@@ -92,7 +92,7 @@
         <a-button @click="e => e.preventDefault()"><a-icon type="filter" /> Filters</a-button>
       </a-dropdown>
       <a-col flex="1" class="search-wrapper">
-        <a-input v-model="searchTerm" placeholder="Search rules by query, context, ID ..." :suffix="` ${rulesCount} rules`">
+        <a-input :value="searchTerm" @change="(e) => changeSearchTerm(e.target.value)" placeholder="Search rules by query, context, ID ..." :suffix="` ${rulesCount} rules`">
           <a-icon slot="prefix" type="search" />
         </a-input>
       </a-col>
@@ -104,7 +104,7 @@
 
 export default {
   name: "RulesHeader",
-  props: ['rulesCount'],
+  props: ['rulesCount', 'searchTerm', 'changeSearchTerm'],
   data() {
     return {
       visible: false,
@@ -120,7 +120,6 @@ export default {
         editorCount: 0,
         dateCount: 0
       },
-      searchTerm: '',
       dateMode: 'between',
       statusExpanded: false,
       editorExpanded: false,

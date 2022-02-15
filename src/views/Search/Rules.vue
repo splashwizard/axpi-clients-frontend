@@ -4,8 +4,8 @@
     <a-layout style="padding: 7px 30px">
       <h1 class="page-title">Rules</h1>
       <a-card bodyStyle="padding: 0">
-        <rules-header :rulesCount="rules.length"/>
-        <rules-table :rules="rules"/>
+        <rules-header :searchTerm="searchTerm" :changeSearchTerm="changeSearchTerm" :rulesCount="rules.length"/>
+        <rules-table :searchTerm="searchTerm" :rules="rules"/>
       </a-card>
     </a-layout>
   </a-layout>
@@ -21,8 +21,23 @@ export default {
   components: {RulesHeader, RulesTable,  LeftSidebar},
   data() {
     return {
-      rules: localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : []
+      rules: [],
+      searchTerm: 'iP',
     }
+  },
+  methods: {
+    changeSearchTerm(value) {
+      this.searchTerm = value;
+    }
+  },
+  created() {
+    const ruleData = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
+    this.rules = ruleData.map((rule, ruleIdx) => ({
+      ...rule,
+      index: ruleIdx,
+      disabled: false,
+      visibleActions: false
+    }));
   }
 }
 </script>

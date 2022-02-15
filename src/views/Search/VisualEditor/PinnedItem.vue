@@ -6,9 +6,9 @@
           Pin
         </h4>
         <div class="badge max-w-64 pinned-wrapper">
-          <!-- <div class="previewImage">
+          <div class="previewImage">
             <img :src="item.imgsrc">
-          </div> -->
+          </div>
           <h4 class="pin-title stl-truncate">
             {{item.title}}
           </h4>

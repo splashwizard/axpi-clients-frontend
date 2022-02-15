@@ -228,7 +228,8 @@ export default {
           }
           resultList[insertionIndex++] = unpinnedItem;
         }
-        return resultList;
+        const finalList = resultList.filter(item => !!item);
+        return finalList;
       },
       set: function (newValue) {
         // this.list = this.list.map((item) => item.hidden ? item : newValue[this.availableList.indexOf(item)])
@@ -280,7 +281,7 @@ export default {
     },
     onPublish() {
       const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-      rules.push({key: rules.length + 1, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
+      rules.push({key: `qr-${rules.length + 1}`, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
       localStorage.setItem('rules', JSON.stringify(rules));
       this.$router.push('/search/rules');
     },

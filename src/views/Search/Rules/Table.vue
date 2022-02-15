@@ -11,7 +11,7 @@
         <boost-category v-if="consequences.boostCategories.length > 0" :category="consequences.boostCategories"/>
         <bury-category v-if="consequences.buryCategories.length > 0" :category="consequences.buryCategories"/>
         <pinned-item v-for="(pinnedItem, pi) in consequences.pinnedItems" :key="'p' + pi" :item="pinnedItem" />
-        <hidden-item v-for="(hiddenItem, hi) in consequences.hiddenItems" :key="'p' + hi" :item="hiddenItem" />
+        <hidden-item v-for="(hiddenItem, hi) in consequences.hiddenItems" :key="'h' + hi" :item="hiddenItem" />
       </div>
     </template>
 
@@ -19,25 +19,25 @@
       <div>{{getTime(timestamp)}}</div>
     </template>
 
-    <template slot="action-column" slot-scope="index, record">
+    <template slot="action-column" slot-scope="key, record">
       <a-dropdown :trigger="['click']" v-model="record.visibleDropdown">
         <a-menu slot="overlay" style="padding: 0">
-          <a-menu-item key="edit" class="dropdown-item" @click="editRule(index)">
+          <a-menu-item key="edit" class="dropdown-item" @click="editRule(key)">
             <a-icon type="edit"  />
             <span>
               Edit Rule
             </span>
           </a-menu-item>
-          <a-menu-item key="disable" class="dropdown-item">
-            <span>
+          <a-menu-item key="disable" class="dropdown-item-between">
+            <span style="margin-right: 80px">
               Rule disabled
             </span>
-            <a-switch :default-checked="record.disabled" :checked="record.disabled" @click="(checked) => disableRule(index, checked)">
+            <a-switch :default-checked="record.disabled" :checked="record.disabled" @click="(checked) => disableRule(key, checked)">
               <a-icon type="check" />
               <a-icon type="close" />
             </a-switch>
           </a-menu-item>
-          <a-menu-item key="delete" class="dropdown-item" @click="deleteRule(index)">
+          <a-menu-item key="delete" class="dropdown-item" @click="deleteRule(key)">
             <a-icon type="delete"  />
             <span>
               Delete Rule
@@ -91,13 +91,13 @@ const columns = [
   {
     title: '',
     align: 'right',
-    dataIndex: 'index',
+    dataIndex: 'key',
     scopedSlots: { customRender: "action-column" },
   }
 ];
 export default {
   name: "RulesTable",
-  props: ['rules', 'searchTerm'],
+  props: ['rules', 'searchTerm', 'editRule', 'disableRule', 'deleteRule'],
   components: { QueryCondition, DatePeriod, BoostCategory, BuryCategory, FilterResult, PinnedItem, HiddenItem },
   data() {
     return {
@@ -112,20 +112,6 @@ export default {
     };
   },
   methods: {
-    ruleDisabled(key) {
-      return this.rules.find(item => item.key !== key).disabled;
-    },
-    editRule(index) {
-      const key = this.rules[index].key;
-      this.$router.push(`/search/rules/visual-editor/edit/${key}`);
-    },
-    disableRule(index, checked) {
-      this.rules[index].disabled = checked;
-    },
-    deleteRule(index) {
-      this.rules.splice(index, 1);
-      localStorage.setItem('rules', JSON.stringify(this.rules));
-    },
     getTime(timestamp) {
       return moment(timestamp).format('MMM Do, hh:mm a');
     },
@@ -164,7 +150,14 @@ export default {
     tableData() {
       if(this.searchTerm === '') return this.rules;
       return this.rules.filter((rule) => {
-        return rule.conditions.query_conditions.filter((item) => strContains(item.query.keyword, this.searchTerm)).length > 0
+        return rule.conditions.query_conditions.filter((item) => strContains(item.query.keyword, this.searchTerm)).length > 0 ||
+          rule.consequences.hiddenItems.filter((item) => strContains(item.title, this.searchTerm)).length > 0 ||
+          rule.consequences.pinnedItems.filter((item) => strContains(item.title, this.searchTerm)).length > 0 ||
+          rule.consequences.boostCategories.filter((item) => strContains(item.name, this.searchTerm) || strContains(item.keyword, this.searchTerm)).length > 0 ||
+          rule.consequences.buryCategories.filter((item) => strContains(item.name, this.searchTerm) || strContains(item.keyword, this.searchTerm)).length > 0 ||
+          rule.consequences.filterResults.filter((filters) => {
+            return filters.filter(item => strContains(item.name, this.searchTerm) || strContains(item.keyword, this.searchTerm))
+          }).length > 0
       });
     },
     rowSelection() {
@@ -228,5 +221,20 @@ export default {
     border: 1px solid rgb(182,183,213);
     border-radius: 3px;
     margin-top: -1px;
+  }
+
+  .dropdown-item {
+    width: 250px;
+    padding: 8px 12px;
+    align-items: center;
+  }
+
+  .dropdown-item-between {
+    width: 250px;
+    padding: 8px 12px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 </style>

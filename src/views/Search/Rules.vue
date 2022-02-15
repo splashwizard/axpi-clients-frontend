@@ -3,9 +3,9 @@
     <left-sidebar></left-sidebar>
     <a-layout style="padding: 7px 30px">
       <h1 class="page-title">Rules</h1>
-      <a-card bodyStyle="padding: 0">
+      <a-card :bodyStyle="{padding: 0}">
         <rules-header :searchTerm="searchTerm" :changeSearchTerm="changeSearchTerm" :rulesCount="rules.length"/>
-        <rules-table :searchTerm="searchTerm" :rules="rules"/>
+        <rules-table :searchTerm="searchTerm" :rules="rules" :editRule="editRule" :disableRule="disableRule" :deleteRule="deleteRule" />
       </a-card>
     </a-layout>
   </a-layout>
@@ -22,19 +22,28 @@ export default {
   data() {
     return {
       rules: [],
-      searchTerm: 'iP',
+      searchTerm: '',
     }
   },
   methods: {
     changeSearchTerm(value) {
       this.searchTerm = value;
-    }
+    },
+    editRule(key) {
+      this.$router.push(`/search/rules/visual-editor/edit/${key}`);
+    },
+    disableRule(key, checked) {
+      this.rules[this.rules.findIndex(item => item.key === key)].disabled = checked;
+    },
+    deleteRule(key) {
+      this.rules = this.rules.filter(item => item.key !== key);
+      localStorage.setItem('rules', JSON.stringify(this.rules));
+    },
   },
   created() {
     const ruleData = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-    this.rules = ruleData.map((rule, ruleIdx) => ({
+    this.rules = ruleData.map((rule) => ({
       ...rule,
-      index: ruleIdx,
       disabled: false,
       visibleActions: false
     }));

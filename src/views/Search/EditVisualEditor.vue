@@ -174,7 +174,7 @@ export default {
   async created() {
     const ruleId = this.$route.params.id;
     const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-    const rule = rules.find(item => item.key === parseInt(ruleId));
+    const rule = rules.find(item => item.key === ruleId);
     this.triggerData = rule.conditions;
     this.strategyData = rule.consequences;
     const typesense = new Typesense.Client({
@@ -226,6 +226,7 @@ export default {
           if(pinnedItem.position <= showedList.length)
             resultList[pinnedItem.position - 1] = showedList[pinnedIndex];
         }
+        console.log('resultList', resultList);
         let insertionIndex = 0;
         for(let unpinnedItem of unpinnedList) {
           while(Object.keys(resultList).indexOf(insertionIndex.toString()) !== -1) {
@@ -233,7 +234,9 @@ export default {
           }
           resultList[insertionIndex++] = unpinnedItem;
         }
-        return resultList;
+        const finalList = resultList.filter(item => item);
+        console.log('finalList', finalList);
+        return finalList;
       },
       set: function (newValue) {
         // this.list = this.list.map((item) => item.hidden ? item : newValue[this.availableList.indexOf(item)])
@@ -286,7 +289,8 @@ export default {
     onPublish() {
       const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
       const ruleId = this.$route.params.id;
-      rules[ruleId] = {
+
+      rules[rules.findIndex(rule => rule.key === ruleId)] = {
         key: ruleId,
         conditions: this.triggerData,
         consequences: this.strategyData,

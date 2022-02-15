@@ -8,10 +8,6 @@
             <b>Visual Editor</b> <br>
             Promote and hide items, boost and filter categories
           </a-menu-item>
-          <a-menu-item key="manual">
-            <b>Manual Editor</b> <br>
-            Modify query, create banners, redirect with JSON...
-          </a-menu-item>
         </a-menu>
         <a-button type="primary"> New rule <a-icon type="down" /> </a-button>
       </a-dropdown>

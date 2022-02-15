@@ -3,7 +3,16 @@
     <sidebar :toggleAddDrawer="toggleAddDrawer" :toggleEditDrawer="toggleEditDrawer" :list="list" :editPeriod="editPeriod" :triggerData="triggerData" :strategyData="strategyData"></sidebar>
     <div class="wrapper">
       <div class="content">
-        <p class="description">Here are the results as they would appear with no query.</p>
+        <div class="searchbar" v-if="triggerData.query_conditions.length > 0">
+          <a-input v-model="searchTerm" placeholder="Enter search query" >
+            <a-icon slot="prefix" type="search" />
+          </a-input>
+          <p>Your query may not match the text and other conditions defined in your trigger.</p>
+          <query-filter v-for="(item, fIdx) in searchFilters" :key="fIdx" :item="item" :closeTag="() => deleteTag(fIdx)"/>
+        </div>
+        <div class="searchbar" v-else>
+          <p>Here are the results as they would appear with no query.</p>
+        </div>
         <div class="cards">
           <draggable v-model="availableList" group="people" @start="drag=true" @end="drag=false">
             <search-item v-for="(item, index) in availableList" :key="index" :index="index + 1" :pinnedItems="strategyData.pinnedItems" :item="item" :handlePin="() => handlePin(index)" :handleHide="() => handleHide(index)"/>
@@ -28,8 +37,8 @@ import Sidebar from "./VisualEditor/Sidebar";
 import AddDrawer from "./VisualEditor/AddDrawer";
 import EditDrawer from "./VisualEditor/EditDrawer";
 import SearchItem from './VisualEditor/SearchItem';
-// import { arrayMoveImmutable } from 'array-move';
-// import { result } from 'lodash';
+import QueryFilter from './VisualEditor/Filter';
+
 const moment = require('moment');
 
 
@@ -113,7 +122,7 @@ const searchItems = [
 
 export default {
   name: "Landing",
-  components: { Sidebar, AddDrawer, EditDrawer, SearchItem, draggable },
+  components: { Sidebar, AddDrawer, EditDrawer, SearchItem, QueryFilter, draggable },
   data() {
     return {
       addDrawerType: 'condition',
@@ -125,6 +134,8 @@ export default {
         query: { option: 'starts_with', keyword: '' },
         filters: []
       },
+      searchTerm: '',
+      searchFilters: [],
       triggerData: {
         period: [],
         query_conditions: [
@@ -220,7 +231,13 @@ export default {
         return resultList;
       },
       set: function (newValue) {
-        this.list = this.list.map((item) => item.hidden ? item : newValue[this.availableList.indexOf(item)])
+        // this.list = this.list.map((item) => item.hidden ? item : newValue[this.availableList.indexOf(item)])
+        this.list = this.list.map((item) => {
+          if(this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1){ // not hidden item
+            return newValue[this.availableList.indexOf(item)];
+          }
+          return item;
+        })
       }
     },
     ruleValid() {
@@ -229,6 +246,10 @@ export default {
     },
   },
   methods: {
+    deleteTag(fIdx) {
+      console.log(fIdx);
+      this.searchFilters.splice(fIdx, 1);
+    },
     handlePin(index) {
       const pinningItem = this.availableList[index];
       const pinnedIndex = this.strategyData.pinnedItems.findIndex(item => item.id === pinningItem.id);
@@ -317,8 +338,12 @@ export default {
       this.addDrawerVisible = false;
     },
     addDrawer(drawerType, drawerData) {
-      if(drawerType === 'condition')
-        this.triggerData.query_conditions = [...this.triggerData.query_conditions, drawerData];
+      if(drawerType === 'condition') {
+        const new_conditions = [...this.triggerData.query_conditions, drawerData];
+        this.searchTerm = new_conditions[0].query.keyword;
+        this.searchFilters = [...new_conditions[0].filters];
+        this.triggerData.query_conditions = new_conditions;
+      }
       else if(drawerType === 'daterange')
         this.triggerData.period = drawerData;
       else if(drawerType === 'boost_category')
@@ -339,10 +364,13 @@ export default {
 
     updateDrawerItem(editItem) {
       if(this.editDrawerType === 'condition') {
-        this.triggerData.query_conditions = this.triggerData.query_conditions.map((item, index) => index === this.editDrawerIndex ? {
+        const new_conditions = this.triggerData.query_conditions.map((item, index) => index === this.editDrawerIndex ? {
           query: { option: this.editDrawerItem.query.option, keyword: this.editDrawerItem.query.keyword },
           filters: this.editDrawerItem.filters
         }: item);
+        this.searchTerm = new_conditions[0].query.keyword;
+        this.searchFilters = [...new_conditions[0].filters];
+        this.triggerData.query_conditions = new_conditions;
         this.editDrawerItem = {
           query: { option: 'contains', keyword: '' },
           filters: []
@@ -423,7 +451,7 @@ export default {
     z-index: 9999;
   }
 
-  .description {
+  .searchbar {
     margin: 0 32px;
     padding: 80px 0 24px 0;
   }

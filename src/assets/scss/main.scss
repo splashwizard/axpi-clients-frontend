@@ -26,6 +26,54 @@
   margin-left: 8px;
 }
 
+.status-success {
+  padding: 0 8px;
+  display: inline-block;
+  border-radius: 100px;
+  background-color: rgb(217, 241, 208);
+  color: #458b4f;
+  margin-left: 8px;
+}
+
+.status-warning {
+  padding: 0 8px;
+  display: inline-block;
+  border-radius: 100px;
+  background-color: rgb(242, 230, 194);
+  color: rgb(175, 134, 97);
+  margin-left: 8px;
+}
+
 .row-disabled {
   opacity: 0.5;
+}
+
+.d-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-gray {
+  color: #777777;
 }

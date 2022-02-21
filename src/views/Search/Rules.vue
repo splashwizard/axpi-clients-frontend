@@ -18,7 +18,7 @@ import LeftSidebar from "./LeftSidebar";
 
 export default {
   name: "Landing",
-  components: {RulesHeader, RulesTable,  LeftSidebar},
+  components: {RulesHeader, RulesTable, LeftSidebar},
   data() {
     return {
       rules: [],

@@ -51,13 +51,13 @@
 </template>
 
 <script>
-import QueryCondition from "../VisualEditor/QueryCondition.vue"
-import DatePeriod from "../VisualEditor/DatePeriod.vue"
-import PinnedItem from "../VisualEditor/PinnedItem.vue"
-import HiddenItem from "../VisualEditor/HiddenItem.vue"
-import BoostCategory from "../VisualEditor/BoostCategory.vue"
-import BuryCategory from "../VisualEditor/BuryCategory.vue"
-import FilterResult from "../VisualEditor/FilterResult.vue"
+import QueryCondition from "./VisualEditor/QueryCondition.vue"
+import DatePeriod from "./VisualEditor/DatePeriod.vue"
+import PinnedItem from "./VisualEditor/PinnedItem.vue"
+import HiddenItem from "./VisualEditor/HiddenItem.vue"
+import BoostCategory from "./VisualEditor/BoostCategory.vue"
+import BuryCategory from "./VisualEditor/BuryCategory.vue"
+import FilterResult from "./VisualEditor/FilterResult.vue"
 const moment = require('moment');
 
 function strContains(str, keyword) {

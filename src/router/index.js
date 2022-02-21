@@ -322,7 +322,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "view-project" */ '../views/Search/VisualEditor.vue'),
+        component: () => import(/* webpackChunkName: "view-project" */ '../views/Search/Rules/VisualEditor.vue'),
         meta: {
             auth: true
         }
@@ -333,7 +333,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "view-project" */ '../views/Search/EditVisualEditor.vue'),
+        component: () => import(/* webpackChunkName: "view-project" */ '../views/Search/Rules/EditVisualEditor.vue'),
         meta: {
             auth: true
         }

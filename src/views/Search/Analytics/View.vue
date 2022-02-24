@@ -1,15 +1,18 @@
 <template>
   <div>
     <div class="controls">
-      <a-select default-value="4_weeks" style="width: 120px" @change="handleChangeOption">
-        <a-select-option value="day">
-          Last day
+      <a-select default-value="week" style="width: 120px" @change="handleChangeOption">
+        <a-select-option value="year">
+          Last year
+        </a-select-option>
+        <a-select-option value="month">
+          Last 3 months
         </a-select-option>
         <a-select-option value="week">
-          Last week
-        </a-select-option>
-        <a-select-option value="4_weeks">
           Last 4 weeks
+        </a-select-option>
+        <a-select-option value="day">
+          Last 7 days
         </a-select-option>
       </a-select>
       <a-range-picker @change="onChangeStartPeriod" :value="startperiod" />
@@ -18,7 +21,7 @@
     </div>
     <a-card class="mt-2">
       <a-card-grid style="width:33.33%" v-for="item of chartData" :key="item.label">
-        <card :title="item.label" :total="item.total" :percent="item.percent" />
+        <card :title="item.label" :startperiod="startperiod" :endperiod="endperiod" :total="item.total" :percent="item.percent" />
       </a-card-grid>
     </a-card>
   </div>
@@ -26,8 +29,42 @@
 
 <script>
 
-
 import Card from "./Card";
+import moment from "moment";
+
+const exampleData = [
+  {
+    label: 'Total Users',
+    total: ['$1000', '$1029'],
+    percent: 6.7
+  },
+  {
+    label: 'Total Searches',
+    total: ['$1000', '$1029'],
+    percent: 4.2
+  },
+  {
+    label: 'No Results Rate',
+    total: ['$1000', '$1029'],
+    percent: -1.9
+  },
+  {
+    label: 'Click Rate',
+    total: ['$1000', '$1029'],
+    percent: 6.7
+  },
+  {
+    label: 'Conversion Rate',
+    total: ['$1000', '$1029'],
+    percent: 4.2
+  },
+  {
+    label: 'No Clicks Rate',
+    total: ['$1000', '$1029'],
+    percent: -1.9
+  },
+]
+
 export default {
   name: "AnalyticsView",
   props: [],
@@ -35,45 +72,34 @@ export default {
   data() {
     return {
       option: '4_weeks',
-      chartData: [
-        {
-          label: 'Total Users',
-          total: ['$1000', '$1029'],
-          percent: 6.7
-        },
-        {
-          label: 'Total Searches',
-          total: ['$1000', '$1029'],
-          percent: 4.2
-        },
-        {
-          label: 'No Results Rate',
-          total: ['$1000', '$1029'],
-          percent: -1.9
-        },
-        {
-          label: 'Click Rate',
-          total: ['$1000', '$1029'],
-          percent: 6.7
-        },
-        {
-          label: 'Conversion Rate',
-          total: ['$1000', '$1029'],
-          percent: 4.2
-        },
-        {
-          label: 'No Clicks Rate',
-          total: ['$1000', '$1029'],
-          percent: -1.9
-        },
-      ],
+      chartData: [],
       startperiod: [],
       endperiod: []
     }
   },
+  created() {
+    this.handleChangeOption('week');
+    this.chartData = exampleData;
+  },
   methods: {
     handleChangeOption(option) {
       this.option = option;
+      if(option === 'year') {
+        this.startperiod = [moment().subtract(1, 'year').add(1, 'day'), moment()];
+        this.endperiod = [moment().subtract(2, 'years').add(1, 'day'), moment().subtract(1, 'year')];
+      }
+      else if(option === 'month') {
+        this.startperiod = [moment().subtract(3, 'months').add(1, 'day'), moment()];
+        this.endperiod = [moment().subtract(6, 'months').add(1, 'day'), moment().subtract(3, 'months')];
+      }
+      else if(option === 'week') {
+        this.startperiod = [moment().subtract(4, 'weeks').add(1, 'day'), moment()];
+        // this.endperiod = [moment().subtract(8, 'weeks').add(1, 'day'), moment().subtract(4, 'weeks')];
+      }
+      else if(option === 'day') {
+        this.startperiod = [moment().subtract(7, 'days').add(1, 'day'), moment()];
+        this.endperiod = [moment().subtract(14, 'days').add(1, 'day'), moment().subtract(7, 'days')];
+      }
     },
     onChangeStartPeriod(date) {
       this.startperiod = date;

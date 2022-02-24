@@ -17,31 +17,39 @@
 }
 
 .badge {
-  padding: 0 8px;
+  padding: 0 6px;
   display: inline-block;
   border-radius: 100px;
   background-color: rgb(245,245,250);
   color: rgb(72,76,122);
   border: 1px solid rgb(214,214,231);
-  margin-left: 8px;
+  margin-left: 6px;
 }
 
 .status-success {
-  padding: 0 8px;
+  padding: 0 6px;
   display: inline-block;
   border-radius: 100px;
   background-color: rgb(217, 241, 208);
   color: #458b4f;
-  margin-left: 8px;
+  margin-left: 6px;
+
+  &.bordered {
+    border: 1px solid rgb(153, 190, 139);
+  }
 }
 
 .status-warning {
-  padding: 0 8px;
+  padding: 0 6px;
   display: inline-block;
   border-radius: 100px;
   background-color: rgb(242, 230, 194);
   color: rgb(175, 134, 97);
-  margin-left: 8px;
+  margin-left: 6px;
+  
+  &.bordered {
+    border: 1px solid rgb(202, 184, 130);
+  }
 }
 
 .row-disabled {
@@ -68,6 +76,10 @@
 
 .mt-2 {
   margin-top: 0.5rem;
+}
+
+.p-6{
+  padding: 1.5rem;
 }
 
 .text-bold {

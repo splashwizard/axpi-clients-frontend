@@ -94,7 +94,7 @@ export default {
       }
       else if(option === 'week') {
         this.startperiod = [moment().subtract(4, 'weeks').add(1, 'day'), moment()];
-        // this.endperiod = [moment().subtract(8, 'weeks').add(1, 'day'), moment().subtract(4, 'weeks')];
+        this.endperiod = [moment().subtract(8, 'weeks').add(1, 'day'), moment().subtract(4, 'weeks')];
       }
       else if(option === 'day') {
         this.startperiod = [moment().subtract(7, 'days').add(1, 'day'), moment()];

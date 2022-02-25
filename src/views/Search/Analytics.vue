@@ -11,7 +11,7 @@
         <analytics-search />
       </a-tab-pane>
       <a-tab-pane key="searches_without_results" tab="Searches without Results">
-        Searches without Results
+        <analytics-search-without-result />
       </a-tab-pane>
       <a-tab-pane key="searches_without_clicks" tab="Searches without Clicks">
         Searches without clicks
@@ -32,10 +32,11 @@
 import LeftSidebar from "./LeftSidebar";
 import AnalyticsView from "./Analytics/View";
 import AnalyticsSearch from "./Analytics/Searches";
+import AnalyticsSearchWithoutResult from "./Analytics/SearchesWithoutResult";
 
 export default {
   name: "Landing",
-  components: { LeftSidebar, AnalyticsView, AnalyticsSearch }
+  components: { LeftSidebar, AnalyticsView, AnalyticsSearch, AnalyticsSearchWithoutResult }
 }
 </script>
 

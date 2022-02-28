@@ -28,7 +28,7 @@
           </a-input>
         </a-row>
       </div>
-      <searches-without-click-table :data="tableData"/>
+      <searches-without-click-table :data="tableData" :compared="endperiod.length > 0" />
     </a-card>
   </div>
 </template>

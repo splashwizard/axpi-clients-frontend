@@ -20,7 +20,7 @@
       <a-range-picker @change="onChangeEndPeriod" :value="endperiod" />
     </div>
     <a-card class="mt-2">
-      <a-card-grid style="width:33.33%" v-for="item of chartData" :key="item.label">
+      <a-card-grid style="width:33.33%" v-for="item of chartData" :key="item.label" :hoverable="false">
         <card :title="item.label" :startperiod="startperiod" :endperiod="endperiod" :total="item.total" :percent="item.percent" />
       </a-card-grid>
     </a-card>

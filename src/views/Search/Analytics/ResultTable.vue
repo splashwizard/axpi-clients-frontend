@@ -14,7 +14,7 @@
     <template slot="count-column" slot-scope="count, record">
       <div class="d-flex">
         <div style="min-width: 20px">{{count}}</div>
-        <div :class="record.countpercent >= 0 ? 'status-success bordered' : 'status-warning bordered'">
+        <div :class="record.countpercent >= 0 ? 'status-success bordered' : 'status-warning bordered'" v-if="compared">
           <a-icon :type="record.countpercent > 0 ? 'arrow-up' : 'arrow-down'" /> 
           <div class="percent">
             {{record.countpercent}}%
@@ -70,7 +70,7 @@ const columns = [
 ];
 export default {
   name: "SearchesWithoutResultTable",
-  props: ['data'],
+  props: ['data', 'compared'],
   components: {},
   data() {
     return {

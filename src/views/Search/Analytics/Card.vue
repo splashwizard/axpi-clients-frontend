@@ -67,7 +67,7 @@ export default {
             key: 'start',
             label: 'Last period',
             backgroundColor: '#ffffff00',
-            borderColor: '#777777',
+            borderColor: 'rgb(191,195,205)',
             data: [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(),this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
             tension: 0.1
           },
@@ -75,7 +75,7 @@ export default {
             key: 'end',
             label: 'Previous period',
             backgroundColor: '#ffffff00',
-            borderColor: '#9999ff',
+            borderColor: 'rgb(147,159,222)',
             data: [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(),this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
             tension: 0.1
           }

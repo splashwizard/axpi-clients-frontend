@@ -28,7 +28,7 @@
           </a-input>
         </a-row>
       </div>
-      <result-table :data="tableData"/>
+      <result-table :data="tableData" :compared="endperiod.length > 0" />
     </a-card>
   </div>
 </template>

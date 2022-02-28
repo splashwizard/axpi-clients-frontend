@@ -28,7 +28,7 @@
           </a-input>
         </a-row>
       </div>
-      <searches-table :data="tableData" :handleClickQuery="handleClickQuery"/>
+      <searches-table :data="tableData" :handleClickQuery="handleClickQuery" :compared="endperiod.length > 0" />
       <a-modal v-model="visible" :closable="closable" :footer="null" :dialog-style="{width: '1000px!important'}" wrapClassName="modal-wrapper">
         <query-modal-content />
       </a-modal>

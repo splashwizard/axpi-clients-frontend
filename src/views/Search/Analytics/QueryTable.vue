@@ -3,16 +3,8 @@
     <template slot="id-column" slot-scope="id">
       <div>{{id}}</div>
     </template>
-    <template slot="count-column" slot-scope="count, record">
-      <div class="d-flex">
-        <div style="min-width: 20px">{{count}}</div>
-        <div :class="record.countpercent >= 0 ? 'status-success bordered' : 'status-warning bordered'">
-          <a-icon :type="record.countpercent > 0 ? 'arrow-up' : 'arrow-down'" /> 
-          <div class="percent">
-            {{record.countpercent}}%
-          </div>
-        </div>
-      </div>
+    <template slot="impressions-column" slot-scope="impressions">
+      <div>{{formatNumber(impressions)}}</div>
     </template>
     <template slot="ctr-column" slot-scope="CTR">
       <div>{{formatPercent(CTR)}}</div>
@@ -20,37 +12,61 @@
     <template slot="cvr-column" slot-scope="CVR">
       <div>{{formatPercent(CVR)}}</div>
     </template>
-    <template slot="total_searches-column" slot-scope="total_searches">
-      <div class="d-flex">
-        <div>{{formatPercent(total_searches)}}</div>
-        <div class="badge">
-          0 pts
-        </div>
-      </div>
-    </template>
   </a-table>
 </template>
 
 <script>
-// const moment = require('moment');
+import { numberWithCommas } from "../../../helpers/formatter";
 
-const columns = [
+const columnsWithoutPercent = [
   {
     title: '',
     dataIndex: 'id',
     key: 'id',
-    scopedSlots: { customRender: "id-column" },
   },
   {
-    title: 'Query',
-    dataIndex: 'query',
-    key: 'conditions',
+    title: 'Result',
+    dataIndex: 'result',
+    key: 'result',
   },
   {
-    title: 'Count',
-    dataIndex: 'count',
-    key: 'count',
-    scopedSlots: { customRender: "count-column" },
+    title: 'Impressions',
+    dataIndex: 'impressions',
+    key: 'impressions',
+    scopedSlots: { customRender: "impressions-column" },
+    align: 'right',
+  },
+  {
+    title: 'Clicks',
+    dataIndex: 'clicks',
+    key: 'clicks',
+    align: 'right',
+  },
+  {
+    title: 'Conversions',
+    dataIndex: 'conversions',
+    key: 'conversions',
+    align: 'right',
+  },
+];
+
+const columnsWithPercent = [
+  {
+    title: '',
+    dataIndex: 'id',
+    key: 'id',
+  },
+  {
+    title: 'Result',
+    dataIndex: 'result',
+    key: 'result',
+  },
+  {
+    title: 'Impressions',
+    dataIndex: 'impressions',
+    key: 'impressions',
+    scopedSlots: { customRender: "impressions-column" },
+    align: 'right',
   },
   {
     title: 'CTR',
@@ -66,32 +82,13 @@ const columns = [
     scopedSlots: { customRender: "cvr-column" },
     align: 'right',
   },
-  {
-    title: 'Click Pos.',
-    dataIndex: 'click_position',
-    key: 'click_position',
-    align: 'right',
-  },
-  {
-    title: '% Total Searches',
-    dataIndex: 'total_searches',
-    key: 'total_searches',
-    scopedSlots: { customRender: "total_searches-column" },
-  },
-  {
-    title: 'Opportunities',
-    dataIndex: 'opportunities',
-    key: 'opportunities',
-    align: 'right',
-  },
 ];
 export default {
-  name: "ViewTable",
-  props: ['data'],
+  name: "QueryTable",
+  props: ['data', 'showPercent'],
   components: {},
   data() {
     return {
-      columns,
       pagination: false,
       bordered: false,
       badgeStyle: {
@@ -105,13 +102,19 @@ export default {
     formatPercent(value) {
       return `${value.toFixed(2)}%`;
     },
+    formatNumber(value) {
+      return numberWithCommas(value);
+    }
   },
   computed: {
+    columns() {
+      return this.showPercent ? columnsWithPercent : columnsWithoutPercent;
+    }
   },
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .rules-table {
     border-top: 1px solid #e8e8e8;
   }
@@ -176,5 +179,14 @@ export default {
     display: inline-block;
     width: 40px;
     text-align: center;
+  }
+
+  .query-link {
+    font-size: 14px;
+    color: rgb(113,124,226);
+    &:hover {
+      cursor: pointer;
+      color:rgb(19, 42, 247);
+    }
   }
 </style>

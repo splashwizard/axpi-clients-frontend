@@ -82,10 +82,34 @@
   padding: 1.5rem;
 }
 
+.pr-2 {
+  padding-right: 0.5rem;
+}
+
 .text-bold {
   font-weight: bold;
 }
 
 .text-gray {
   color: #777777;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.ant-modal {
+  width: 900px!important;
 }

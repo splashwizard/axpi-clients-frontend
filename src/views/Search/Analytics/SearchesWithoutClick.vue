@@ -22,34 +22,30 @@
     <a-card :bodyStyle="{padding: 0}" class="mt-2">
       <div class="p-6">
         <a-row type="flex" justify="space-between" class="rule-row">
-          <h4>Searches</h4>
+          <h4>Searches without Clicks</h4>
           <a-input class="search-term" :value="searchTerm" @change="(e) => changeSearchTerm(e.target.value)" placeholder="Search for a query">
             <a-icon slot="prefix" type="search" />
           </a-input>
         </a-row>
       </div>
-      <searches-table :data="tableData" :handleClickQuery="handleClickQuery"/>
-      <a-modal v-model="visible" :closable="closable" :footer="null" :dialog-style="{width: '1000px!important'}" wrapClassName="modal-wrapper">
-        <query-modal-content />
-      </a-modal>
+      <searches-without-click-table :data="tableData"/>
     </a-card>
   </div>
 </template>
 
 <script>
 
-import SearchesTable from "./SearchesTable";
-import QueryModalContent from "./QueryModalContent";
+import SearchesWithoutClickTable from "./SearchesWithoutClickTable";
 
 const tableData = [
-  { id: 1, query: '<empty search>', count: 17, countpercent: 6, CTR: 0.5, CVR: 2, click_position: 0, total_searches: 100, opportunities: '-'},
-  { id: 32, query: '<empty search>', count: 8, countpercent: -50, CTR: 3, CVR: -5.8, click_position: 1, total_searches: 50, opportunities: '-'}
+  // { id: 1, query: '<empty search>', count: 17, countpercent: 6, CTR: 0.5, CVR: 2, click_position: 0, total_searches: 100, opportunities: '-'},
+  // { id: 32, query: '<empty search>', count: 8, countpercent: -50, CTR: 3, CVR: -5.8, click_position: 1, total_searches: 50, opportunities: '-'}
 ];
 
 export default {
-  name: "AnalyticsView",
+  name: "SearchesWithoutClick",
   props: [],
-  components: { SearchesTable, QueryModalContent },
+  components: { SearchesWithoutClickTable },
   data() {
     return {
       option: '4_weeks',
@@ -57,9 +53,7 @@ export default {
       startperiod: [],
       endperiod: [],
       searchTerm: '',
-      tableData: [],
-      visible: false,
-      closable: false
+      tableData: []
     }
   },
   created() {
@@ -77,9 +71,6 @@ export default {
     },
     changeSearchTerm(value) {
       this.searchTerm = value;
-    },
-    handleClickQuery() {
-      this.visible = true;
     }
   }
 }
@@ -98,9 +89,5 @@ export default {
 
   .search-term {
     width: 190px;
-  }
-
-  .ant-modal-content {
-    width: 1000px;
   }
 </style>

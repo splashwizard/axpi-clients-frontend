@@ -5,8 +5,8 @@
       <div v-if="endperiod.length !== 0" :class="percentChar >= 0 ? 'status-success text-bold' : 'status-warning text-bold'">{{percentChar}}%</div>
     </div>
     <div class="d-flex justify-between">
-      <h2 class="m-0">$4542345</h2>
-      <h2 v-if="endperiod.length !== 0" class="text-small m-0 text-gray">$4062123</h2>
+      <h2 class="m-0">${{formatNumber(4542345)}}</h2>
+      <h2 v-if="endperiod.length !== 0" class="text-small m-0 text-gray">${{formatNumber(4062123)}}</h2>
     </div>
     <line-chart :chartdata="charts" style="height: 100px"/>
     <div class="d-flex justify-between">
@@ -18,8 +18,9 @@
 
 <script>
 
-import LineChart from "./LineChart";
 import moment from "moment";
+import { numberWithCommas } from "../../../helpers/formatter";
+import LineChart from "./LineChart";
 
 export default {
   name: "AnalyticsView",
@@ -55,6 +56,9 @@ export default {
     this.fillData()
   },
   methods: {
+    formatNumber(value) {
+      return numberWithCommas(value);
+    },
     fillData () {
       this.chartData = {
         labels: ['', '', '', '', '', ''],

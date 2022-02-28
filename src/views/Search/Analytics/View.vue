@@ -24,12 +24,14 @@
         <card :title="item.label" :startperiod="startperiod" :endperiod="endperiod" :total="item.total" :percent="item.percent" />
       </a-card-grid>
     </a-card>
+    <view-click-section :data="clickData"/>
   </div>
 </template>
 
 <script>
 
 import Card from "./Card";
+import ViewClickSection from "./ViewClickSection";
 import moment from "moment";
 
 const exampleData = [
@@ -68,13 +70,14 @@ const exampleData = [
 export default {
   name: "AnalyticsView",
   props: [],
-  components: { Card },
+  components: { Card, ViewClickSection },
   data() {
     return {
       option: '4_weeks',
       chartData: [],
       startperiod: [],
-      endperiod: []
+      endperiod: [],
+      clickData: null
     }
   },
   created() {

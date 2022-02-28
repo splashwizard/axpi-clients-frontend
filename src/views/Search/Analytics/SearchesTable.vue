@@ -26,7 +26,7 @@
     <template slot="total_searches-column" slot-scope="total_searches">
       <div class="d-flex">
         <div>{{formatPercent(total_searches)}}</div>
-        <div class="badge">
+        <div class="badge" v-if="compared">
           0 pts
         </div>
       </div>

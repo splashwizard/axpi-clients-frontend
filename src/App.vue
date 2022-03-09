@@ -159,6 +159,12 @@
                     </a-badge>
                   </router-link>
                 </a-button>
+                <a-button>
+                  <router-link to="/shop/lists">
+                    <a-icon :style="{ fontSize: '18px'}" type="profile"
+                            theme="filled"></a-icon>
+                  </router-link>
+                </a-button>
               </div>
             </div>
           </div>
@@ -455,7 +461,7 @@ export default {
 
     noPadding() {
       return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details',
-      'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules', 'Visual Editor'].includes(this.$route.name);
+      'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Lists', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules', 'Visual Editor'].includes(this.$route.name);
     },
 
     menuCollapsed() {

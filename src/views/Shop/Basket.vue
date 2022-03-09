@@ -312,6 +312,7 @@ export default {
         {
           title: '',
           dataIndex: 'cost',
+          key: 'cost-tags',
           scopedSlots: {customRender: "cost-tags"},
           width: 180
         },
@@ -333,6 +334,7 @@ export default {
   },
   created() {
     this.loadSuppliers();
+    console.log('basket', this.basket);
 
     let vm = this;
 

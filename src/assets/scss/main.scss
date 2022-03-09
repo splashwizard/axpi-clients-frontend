@@ -66,8 +66,20 @@
   justify-content: space-between;
 }
 
+.border-bottom-gray {
+  border-bottom: 1px solid #cccccc;
+}
+
 .p-0 {
   padding: 0;
+}
+
+.p-6{
+  padding: 1.5rem;
+}
+
+.pr-2 {
+  padding-right: 0.5rem;
 }
 
 .m-0 {
@@ -78,12 +90,12 @@
   margin-top: 0.5rem;
 }
 
-.p-6{
-  padding: 1.5rem;
+.mr-2 {
+  margin-right: 0.5rem;
 }
 
-.pr-2 {
-  padding-right: 0.5rem;
+.text-normal {
+  font-weight: normal;
 }
 
 .text-bold {

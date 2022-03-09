@@ -350,6 +350,28 @@ const routes = [
         }
     },
     {
+        path: '/shop/lists',
+        name: 'Lists',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "basket" */ '../views/Shop/Lists.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/shop/lists/view/:id',
+        name: 'ViewList',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "basket" */ '../views/Shop/ViewList.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
         path: '/projects',
         name: 'Projects',
         // route level code-splitting

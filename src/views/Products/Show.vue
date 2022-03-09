@@ -262,6 +262,10 @@
                 <a-button v-if="!isProductInBasket" class="add-button button-yellow"
                           type="default" @click.prevent="() => addToBasket()">Add to basket
                 </a-button>
+                <div class="list-btn-wrapper">
+                  <a-button @click.prevent="compare" :style="{marginRight: '8px'}">Compare</a-button>
+                  <a-button @click.prevent="showAddToListModal">Add to List</a-button>
+                </div>
               </div>
 
               <div v-if="isProductInBasket" class="quantity-changer">
@@ -366,6 +370,58 @@
     <!--      </a-tabs>-->
     <!--    </div>-->
     <!--    &lt;!&ndash; / Tabs &ndash;&gt;-->
+
+    <a-modal v-model="addProductModalVisible" title="Add Product to Lists" @ok="handleAddProduct">
+      <template slot="footer">
+        <a-button key="back" @click="handleCancel">
+          Cancel
+        </a-button>
+        <a-button key="submit" type="primary" :disabled="selectedListIds.length === 0" @click="handleAddProduct">
+          Add
+        </a-button>
+      </template>
+      <div>
+        <div class="product-wrapper">
+          <div class="product-header">
+            <a-avatar size="large" :src="getImageSrc(product)"/>
+            <p class="m-0">{{product.name}}</p>
+          </div>
+          <div class="quantity-changer">
+            <a-input-group compact>
+              <a-button
+                  @click.prevent="() => quantityToAddList--"
+                  icon="minus">
+              </a-button>
+              <a-input type="number" class="quantity-input"
+                        @change="e => quantityToAddList = e.target.value"
+                        :value="quantityToAddList"></a-input>
+              <a-button
+                  @click.prevent="() => quantityToAddList++"
+                  icon="plus"></a-button>
+            </a-input-group>
+          </div>
+        </div>
+        <div class="list-header">
+          <div>
+            <div v-if="selectedListIds.length > 0">
+              <h4 class="text-normal m-0"><b>{{selectedListIds.length}}</b> List selected</h4>
+            </div>
+          </div>
+          <div>
+            <h4 class="text-normal m-0">Select All</h4>
+            <a-button @click.prevent="selectAllList" icon="plus-circle"></a-button>
+          </div>
+        </div>
+        <div :class="getListClass(listIdx)" v-for="(item, listIdx) in list" :key="item.id">
+          <h4 class="text-normal m-0">{{item.name}}</h4>
+          <div style="font-size: 28px">
+            <a-button @click.prevent="addToList(item.id)" icon="plus-circle" v-if="selectedListIds.indexOf(item.id) === -1" :disabled="isProductOnList(item.id)" />
+            <a-button @click.prevent="removeFromList(item.id)" icon="check-circle" v-else :disabled="isProductOnList(item.id)"/>
+          </div>
+        </div>
+        <a-input class="list-input" :value="newList" @change="e => this.newList = e.target.value" @keydown="keydownNewList" placeholder="Create a new List"/>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -420,7 +476,11 @@ export default {
       isMounted: false,
       selectedTab: 'properties',
 
-      isNavbarFixed: false
+      isNavbarFixed: false,
+      addProductModalVisible: false,
+      quantityToAddList: 1,
+      selectedListIds: [],
+      newList: ''
     }
   },
   created() {
@@ -451,7 +511,8 @@ export default {
     }),
 
     ...mapGetters('shop', {
-      basket: 'basket'
+      basket: 'basket',
+      list: 'list'
     }),
 
     productId() {
@@ -533,6 +594,38 @@ export default {
     }
   },
   methods: {
+    keydownNewList(e) {
+      if(e.keyCode === 13) {
+        this.createList({name: this.newList});
+        this.newList = '';
+      }
+    },
+    isProductOnList(listId) {
+      const listIdx = this.list.findIndex(item => item.id === listId);
+      const productId = this.product.id;
+      return this.list[listIdx].items.findIndex(item => item.id === productId) !== -1;
+    },
+    getListClass(listIdx) {
+      let className = listIdx === this.list.length - 1 ? 'list-content' : 'list-content border-bottom-gray';
+      if(this.selectedListIds.indexOf(this.list[listIdx].id) !== -1)
+        className += ' selected';
+      return className;
+    },
+    addToList(listId) {
+      this.selectedListIds.push(listId);
+    },
+    removeFromList(listId) {
+      this.selectedListIds = this.selectedListIds.filter(item => item !== listId);
+    },
+    selectAllList() {
+      this.selectedListIds = this.list.map(item => item.id);
+    },
+    getImageSrc(item) {
+      if (item['product'] && item['product']['imageURLs'] && item['product']['imageURLs'].length) {
+        return item['product']['imageURLs'][0];
+      }
+      return '/img/icons/basket-order-icon.png';
+    },
     ...mapActions('productViewer', {
       loadProduct: 'loadProduct',
       selectPrice: 'selectPrice'
@@ -540,6 +633,8 @@ export default {
 
     ...mapActions('shop', {
       addProductToBasket: 'addProductToBasket',
+      addProductToList: 'addProductToList',
+      createList: 'createList',
       incrementProductQuantity: 'incrementProductQuantity',
       decrementProductQuantity: 'decrementProductQuantity',
       setProductQuantity: 'setProductQuantity'
@@ -585,6 +680,29 @@ export default {
       this.$refs[e + '-tab'].scrollIntoView({behavior: "smooth"});
     },
 
+    compare() {
+
+    },
+
+    handleCancel() {
+      this.addProductModalVisible = false;
+    },
+
+    handleAddProduct() {
+      let quantity = this.quantityToAddList;
+      if (!quantity) {
+        quantity = 1;
+      }
+      this.addProductToList({
+        product: this.product,
+        quantity: quantity,
+        selectedPrice: this.selectedPrice,
+        selectedPriceId: this.selectedPrice.id,
+        prices: this.prices,
+        selectedListIds: this.selectedListIds
+      });
+    },
+
     addToBasket() {
       let quantity = this.quantityToAdd;
       if (!quantity) {
@@ -597,6 +715,10 @@ export default {
         selectedPriceId: this.selectedPrice.id,
         prices: this.prices
       });
+    },
+
+    showAddToListModal() {
+      this.addProductModalVisible = true;
     },
 
     toggleDescriptionShowMore() {
@@ -667,6 +789,84 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px;
+  border-bottom: 1px solid #cccccc;
+  div {
+    display: flex;
+    align-items: center;
+    h4 {
+      padding-right: 6px;
+    }
+    button {
+      border: none;
+    }
+  }
+}
+
+.list-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px;
+  button {
+    border: none;
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+  }
+  &.selected {
+    h4 {
+      color: rgb(108,170,52);
+    }
+    button {
+      color: rgb(108,170,52);
+    }
+  }
+}
+
+.list-input {
+  padding: 18px 12px;
+  background: #eeeeee;
+  border-radius: 4px;
+}
+
+.quantity-changer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .quantity-input {
+    width: calc(100% - 32px - 32px);
+    -moz-appearance: textfield;
+    text-align: center;
+    padding-left: 7px;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.product-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .product-header {
+    display: flex;
+    align-items: center;
+    span {
+      margin-right: 8px;
+    }
+  }
+}
+
 .product-show {
   padding: 7px 30px;
 }
@@ -826,6 +1026,12 @@ export default {
         margin: 0;
       }
     }
+  }
+
+  .list-btn-wrapper {
+    display: flex;
+    padding-top: 12px;
+    justify-content: space-between;
   }
 
 }

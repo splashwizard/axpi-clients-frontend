@@ -2,9 +2,16 @@ import axios from 'axios';
 
 const _ = require('lodash');
 
+// const list = [
+//     {"id":"list-1","name":"Android","lastEdited":"2020-03-02","numberOfItems":"11","visible":true, items: []},
+//     {"id":"list-2","name":"Mac","lastEdited":"2020-03-02","numberOfItems":"11","visible":false,"visibleDropdown":false, items: []},
+//     {"id":"list-3","name":"iPhone","lastEdited":"2020-03-02","numberOfItems":"11","visible":true, items: []}
+// ]
+
 export const state = {
     searchResults: [],
     basket: [],
+    list: [],
     isLoading: false,
     isEnriching: false,
     searchQuery: '',
@@ -68,6 +75,67 @@ export const mutations = {
             selectedPriceId: selectedPrice.id,
             isLoadingSuggestedProducts: true
         });
+        this._vm.$forceUpdate();
+    },
+
+    ADD_PRODUCT_TO_LIST(state, params) {
+        let {product, quantity, prices, selectedPrice, selectedListIds} = params;
+
+        let id = product['id'];
+        if (!id) {
+            id = product['_id'];
+        }
+
+        for(let i = 0; i < selectedListIds.length; i ++) {
+            const listIdx = state.list.findIndex(item => item.id === selectedListIds[i]);
+            state.list[listIdx].items.push({
+                id: id,
+                name: product.name,
+                product: product,
+                quantity: quantity,
+                prices: prices,
+                selectedPrice: selectedPrice,
+                selectedPriceId: selectedPrice.id,
+                isLoadingSuggestedProducts: true
+            });
+        }
+        // state.list = list;
+        this._vm.$forceUpdate();
+    },
+
+    CREATE_LIST(state, params) {
+        let { name } = params;
+
+        state.list.push({
+            id: `list-${state.list.length + 1}${name}`,
+            name: name,
+            lastEdited: '2020-03-02',
+            numberOfItems: '11',
+            visible: true,
+            items: []
+        });
+
+        // state.list = list;
+        this._vm.$forceUpdate();
+    },
+
+    EDIT_LIST(state, params) {
+        let { id, name } = params;
+
+        const listIdx = state.list.findIndex(item => item.id === id);
+
+        state.list = state.list.map((item, itemIdx) => (itemIdx === listIdx ? {
+            ...state.list[listIdx],
+            name: name
+        }: item));
+
+        // this._vm.$forceUpdate();
+    },
+
+    DELETE_LIST_ITEM(state, params) {
+        let { id } = params;
+
+        state.list = state.list.filter(item => item.id !== id);
         this._vm.$forceUpdate();
     },
 
@@ -416,6 +484,9 @@ export const getters = {
     basket: (state) => {
         return state.basket;
     },
+    list: (state) => {
+        return state.list;
+    },
     searchQuery: (state) => {
         return state.searchQuery;
     },
@@ -528,6 +599,23 @@ export const actions = {
         commit('ADD_PRODUCT_TO_BASKET', params);
         dispatch('loadSuggestedProductsForProduct', params['product']);
         // dispatch('loadCo2eForProduct', params['product']);
+    },
+
+    addProductToList({commit}, params) {
+        commit('ADD_PRODUCT_TO_LIST', params);
+        // dispatch('loadCo2eForProduct', params['product']);
+    },
+
+    createList({commit}, params) {
+        commit('CREATE_LIST', params);
+    },
+
+    editList({commit}, params) {
+        commit('EDIT_LIST', params);
+    },
+
+    deleteList({commit}, params) {
+        commit('DELETE_LIST_ITEM', params);
     },
 
     loadSuggestedProductsForProduct({commit}, product) {

@@ -196,6 +196,10 @@
                 <orders-icon class="nav-icon"></orders-icon>
                 <span v-if="!menuCollapsed">Past Orders</span>
               </a-menu-item>
+              <a-menu-item  title="Products" key="products/index">
+                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
+                <span v-if="!menuCollapsed">Product</span>
+              </a-menu-item>
               <!--            <a-menu-item title="Specifications" key="specifications">-->
               <!--              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save"-->
               <!--                      theme="filled"></a-icon>-->
@@ -269,7 +273,7 @@
               <!--                        </a-menu-item>-->
               <!--                    </a-sub-menu>-->
               <a-menu-item key="shop/landing" title="Shop">
-               <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
+                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
                 <span v-if="!menuCollapsed">Shop</span>
               </a-menu-item>
               <a-menu-item title="Search" key="search/analytics">
@@ -460,8 +464,11 @@ export default {
     },
 
     noPadding() {
-      return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details',
-      'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Lists', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules', 'Visual Editor'].includes(this.$route.name);
+      return [
+        'View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details',
+        'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Lists', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules', 'Visual Editor',
+        'Products', 'Product Category', 'Product Attribute'
+      ].includes(this.$route.name);
     },
 
     menuCollapsed() {

@@ -202,6 +202,30 @@ const routes = [
         }
     },
     {
+        path: '/products/index',
+        name: 'Products',
+        component: () => import(/* webpackChunkName: "view-product" */ '../views/Products/Products.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/products/category',
+        name: 'Product Category',
+        component: () => import(/* webpackChunkName: "view-product" */ '../views/Products/Categories.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/products/attribute',
+        name: 'Product Attribute',
+        component: () => import(/* webpackChunkName: "view-product" */ '../views/Products/Attributes.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
         path: '/products/:id',
         name: 'View Product',
         component: () => import(/* webpackChunkName: "view-product" */ '../views/Products/Show.vue'),
@@ -329,7 +353,7 @@ const routes = [
     },
     {
         path: '/search/rules/visual-editor/edit/:id',
-        name: 'Visual Editor',
+        name: 'Edit Visual Editor',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.

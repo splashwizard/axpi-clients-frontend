@@ -1,11 +1,13 @@
 import Vue from 'vue'
 // import { VuePlugin } from 'vuera'
+import Element from 'element-ui'
 import App from './App.vue'
 // import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import axios from 'axios';
 
+Vue.use(Element);
 // Vue.use(VuePlugin);
 
 Vue.config.productionTip = false;

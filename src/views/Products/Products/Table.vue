@@ -1,51 +1,53 @@
 <template>
-  <a-table :row-selection="rowSelection" :row-class-name="rowClassName" :columns="columns" :data-source="data" :bordered="bordered" :pagination="pagination" class="rules-table">
-    <template slot="image-column" slot-scope="image, record">
-      <a-avatar
-        size="large"
-        :src="getImageSrc(record)"
-      />
-    </template>
-    <template slot="cost-column" slot-scope="cost, record">
-      <div v-if="getSavingType(record) === 'Suggested'">
-        <span>
-        {{
-            record.selectedPrice ? formatCostInPence2dp({
-              cost: getPriceToShow(record.selectedPrice.price, record.quantity, record.itemType),
-              cost_currency: 'USD'
-            }) : '-'
-          }}
-        </span>
-      </div>
-      <div v-if="getSavingType(record) === 'Exact'">
-        <span>
-        {{
-            record.selectedPrice ? formatCostInPence2dp({
-              cost: record.order.cost,
-              cost_currency: 'USD'
-            }) : '-'
-          }}
-        </span>
-      </div>
+  <a-card :bodyStyle="{padding: 0}">
+    <a-table :row-selection="rowSelection" :row-class-name="rowClassName" :columns="columns" :data-source="data" :bordered="bordered" :pagination="pagination" class="rules-table">
+      <template slot="image-column" slot-scope="image, record">
+        <a-avatar
+          size="large"
+          :src="getImageSrc(record)"
+        />
+      </template>
+      <template slot="cost-column" slot-scope="cost, record">
+        <div v-if="getSavingType(record) === 'Suggested'">
+          <span>
+          {{
+              record.selectedPrice ? formatCostInPence2dp({
+                cost: getPriceToShow(record.selectedPrice.price, record.quantity, record.itemType),
+                cost_currency: 'USD'
+              }) : '-'
+            }}
+          </span>
+        </div>
+        <div v-if="getSavingType(record) === 'Exact'">
+          <span>
+          {{
+              record.selectedPrice ? formatCostInPence2dp({
+                cost: record.order.cost,
+                cost_currency: 'USD'
+              }) : '-'
+            }}
+          </span>
+        </div>
 
-      <div style="margin-top: 10px;"
-                     v-if="record.prices && record.selectedPrice">
-        <span>{{
-            getSavings(record) ? formatCostInPence2dp({
-              cost: getSavings(record),
-              cost_currency: 'USD'
-            }) : '-'
-          }}</span>
-      </div>
-    </template>
-    <template slot="supplier-column" slot-scope="id, record">
-      <span v-if="record.prices && record.selectedPrice">{{getSupplierName(record)}}</span>
-      <span v-else>No suppliers</span>
-    </template>
-    <template slot="action-column" slot-scope="id">
-      <a-button class="mr-2" type="primary" @click="addToBasket(id)">Add to Basket</a-button>
-    </template>
-  </a-table>
+        <div style="margin-top: 10px;"
+                      v-if="record.prices && record.selectedPrice">
+          <span>{{
+              getSavings(record) ? formatCostInPence2dp({
+                cost: getSavings(record),
+                cost_currency: 'USD'
+              }) : '-'
+            }}</span>
+        </div>
+      </template>
+      <template slot="supplier-column" slot-scope="id, record">
+        <span v-if="record.prices && record.selectedPrice">{{getSupplierName(record)}}</span>
+        <span v-else>No suppliers</span>
+      </template>
+      <template slot="action-column" slot-scope="id">
+        <a-button class="mr-2" type="primary" @click="addToBasket(id)">Add to Basket</a-button>
+      </template>
+    </a-table>
+  </a-card>
 </template>
 
 <script>
@@ -88,7 +90,7 @@ const columns = [
 export default {
   name: "ViewListTable",
   props: ['data', 'addToBasket'],
-  mixins: [ Orders ],
+  mixins: [ Orders],
   components: {  },
   data() {
     return {
@@ -183,7 +185,8 @@ export default {
 
 <style scoped>
   .rules-table {
-    border-top: 1px solid #e8e8e8;
+    border-top: none;
+    border-bottom: none;
   }
 
   .badge {

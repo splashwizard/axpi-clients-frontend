@@ -33,7 +33,6 @@ export default {
   created() {
     const listId = this.$route.params.id;
     const list = this.list.find(item => item.id === listId);
-    console.log(list);
     this.listName = list.name;
     this.products = list.items;
   },

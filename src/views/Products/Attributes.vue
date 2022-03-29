@@ -64,7 +64,7 @@ export default {
     return {
       treeData1: [{
         id: 1,
-        label: "Category",
+        label: "Category 1",
         children: [
           {
             id: 2,
@@ -76,18 +76,25 @@ export default {
             label: "Attribute 2",
             type: 'custom'
           },
+        ],
+      },
+      {
+        id: 4,
+        label: "Category 2",
+        children: [
           {
-            id: 4,
+            id: 5,
             label: "Attribute 3",
             type: 'custom'
           },
           {
-            id: 5,
+            id: 6,
             label: "Attribute 4",
             type: 'custom'
-          }
+          },
         ],
-      }],
+      }
+      ],
       treeData2: [{
         id: 2,
         label: "Attribute 2",

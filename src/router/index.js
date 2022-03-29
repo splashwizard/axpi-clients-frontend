@@ -202,6 +202,14 @@ const routes = [
         }
     },
     {
+        path: '/store',
+        name: 'Stores',
+        component: () => import(/* webpackChunkName: "view-product" */ '../views/Store/Store.vue'),
+        meta: {
+            auth: true
+        }
+    },
+    {
         path: '/products/index',
         name: 'Products',
         component: () => import(/* webpackChunkName: "view-product" */ '../views/Products/Products.vue'),

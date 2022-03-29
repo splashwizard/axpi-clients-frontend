@@ -196,7 +196,11 @@
                 <orders-icon class="nav-icon"></orders-icon>
                 <span v-if="!menuCollapsed">Past Orders</span>
               </a-menu-item>
-              <a-menu-item  title="Products" key="products/index">
+              <a-menu-item title="Stores" key="store">
+                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shop" theme="filled"></a-icon>
+                <span v-if="!menuCollapsed">Store</span>
+              </a-menu-item>
+              <a-menu-item title="Products" key="products/index">
                 <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
                 <span v-if="!menuCollapsed">Product</span>
               </a-menu-item>

@@ -134,9 +134,9 @@ export default {
     }
   },
   methods: {
-    onMenuClick({key}) {
-      if (key === 'visual')
-        this.$router.push('/search/rules/visual-editor/new');
+    onMenuClick() {
+      // if (key === 'visual')
+      //   this.$router.push('/search/rules/visual-editor/new');
     },
     onChangeStartDate(date) {
       this.filters.date.from = date;

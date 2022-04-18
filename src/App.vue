@@ -60,6 +60,7 @@
               <!--            <a-icon class="org-group-selector-arrow" type="down"/>-->
             </div>
 
+            <product-categories-menu />
             <div class="top-nav-search-bar" v-click-outside="unfocusSearch">
               <!--            <a-input ref="userNameInput" placeholder="Search..." size="large">-->
               <!--              <a-icon slot="prefix" type="search"/>-->
@@ -371,6 +372,7 @@ import UserIcon from "./components/Icons/UserIcon";
 // import QuestionMarkIcon from "./components/Icons/QuestionMarkIcon";
 // import BellIcon from "./components/Icons/BellIcon";
 import FeedbackPopup from "./components/FeedbackPopup";
+import ProductCategoriesMenu from "./components/ProductCategories/ProductCategoriesMenu";
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
 import ClickOutside from "vue-click-outside";
 import AddSpecToBasketButtonAndModal from "./views/Shop/AddSpecToBasketButtonAndModal";
@@ -419,7 +421,8 @@ export default {
     UserIcon,
     // QuestionMarkIcon,
     FeedbackPopup,
-    AddSpecToBasketButtonAndModal,
+    ProductCategoriesMenu,
+    AddSpecToBasketButtonAndModal
   },
   mixins: [Images],
   data() {
@@ -594,7 +597,7 @@ export default {
     }
 
     .top-nav-search-bar {
-      padding-left: 35px;
+      padding-left: 15px;
       padding-right: 35px;
       position: relative;
 

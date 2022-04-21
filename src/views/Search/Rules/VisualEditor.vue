@@ -22,7 +22,7 @@
         <edit-drawer :list="list" :drawerVisible="editDrawerVisible" :drawerType="editDrawerType" :drawerClose="editDrawerClose" :updateDrawerItem="updateDrawerItem" 
           :editDrawerItem="editDrawerItem" :setItem="setItem"/>
         <div class="actionContainer" v-if="ruleValid">
-          <a-button type="primary" @click="onPublish"> Publish </a-button>
+          <a-button type="primary" @click="onPublish" :loading="loading"> Publish </a-button>
         </div>        
       </div>
     </div>
@@ -39,7 +39,9 @@ import EditDrawer from "./VisualEditor/EditDrawer";
 import SearchItem from './VisualEditor/SearchItem';
 import QueryFilter from './VisualEditor/Filter';
 
-const moment = require('moment');
+// const moment = require('moment');
+import moment from 'moment';
+import axios from 'axios';
 
 
 // let schema = {
@@ -125,6 +127,7 @@ export default {
   components: { Sidebar, AddDrawer, EditDrawer, SearchItem, QueryFilter, draggable },
   data() {
     return {
+      loading: false,
       addDrawerType: 'condition',
       addDrawerVisible: false,
       editDrawerType: 'condition',
@@ -280,10 +283,37 @@ export default {
       }
     },
     onPublish() {
-      const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-      rules.push({key: `qr-${rules.length + 1}`, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
-      localStorage.setItem('rules', JSON.stringify(rules));
-      this.$router.push('/search/rules');
+      const { query_conditions } = this.triggerData;
+      let payload = {
+        query_name: query_conditions[0].query.keyword,
+        query_type: query_conditions[0].query.option
+      }
+      const { pinnedItems, hiddenItems } = this.strategyData;
+      if(pinnedItems.length > 0) {
+        payload['pin_items'] = pinnedItems.map(item => ({
+          id: item.id,
+          position: item.position
+        }));
+      }
+      if(hiddenItems.length > 0) {
+        payload['hidden_items'] = hiddenItems.map(item => ({
+          id: item.id,
+          position: item.position
+        }));
+      }
+
+      console.log(process.env.VUE_APP_API_BASE_URL, 'conditions', this.strategyData, payload, moment().toISOString());
+      this.loading = true;
+      axios.post(`${window.API_BASE}/rules`, payload).then(() => {
+        this.loading = false;
+        this.$router.push('/search/rules');
+      }).catch(() => {
+        this.$message.error('Error creating rule');
+      });
+      // const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
+      // rules.push({key: `qr-${rules.length + 1}`, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
+      // localStorage.setItem('rules', JSON.stringify(rules));
+      // this.$router.push('/search/rules');
     },
     toggleAddDrawer(type) {
       this.editDrawerVisible = false;

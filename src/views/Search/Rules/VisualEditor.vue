@@ -41,7 +41,7 @@ import QueryFilter from './VisualEditor/Filter';
 
 // const moment = require('moment');
 import moment from 'moment';
-import axios from 'axios';
+// import axios from 'axios';
 
 
 // let schema = {
@@ -302,18 +302,17 @@ export default {
         }));
       }
 
-      console.log(process.env.VUE_APP_API_BASE_URL, 'conditions', this.strategyData, payload, moment().toISOString());
-      this.loading = true;
-      axios.post(`${window.API_BASE}/rules`, payload).then(() => {
-        this.loading = false;
-        this.$router.push('/search/rules');
-      }).catch(() => {
-        this.$message.error('Error creating rule');
-      });
-      // const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-      // rules.push({key: `qr-${rules.length + 1}`, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
-      // localStorage.setItem('rules', JSON.stringify(rules));
-      // this.$router.push('/search/rules');
+      // this.loading = true;
+      // axios.post(`${window.API_BASE}/rules`, payload).then(() => {
+      //   this.loading = false;
+      //   this.$router.push('/search/rules');
+      // }).catch(() => {
+      //   this.$message.error('Error creating rule');
+      // });
+      const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
+      rules.push({key: `qr-${rules.length + 1}`, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
+      localStorage.setItem('rules', JSON.stringify(rules));
+      this.$router.push('/search/rules');
     },
     toggleAddDrawer(type) {
       this.editDrawerVisible = false;

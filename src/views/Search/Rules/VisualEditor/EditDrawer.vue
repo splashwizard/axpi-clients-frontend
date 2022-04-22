@@ -34,12 +34,6 @@
                 <a-select-option value="is">
                   is
                 </a-select-option>
-                <a-select-option value="starts_with">
-                  starts with
-                </a-select-option>
-                <a-select-option value="ends_with">
-                  ends with
-                </a-select-option>
                 <a-select-option value="contains">
                   contains
                 </a-select-option>
@@ -48,7 +42,7 @@
             </div>
           </div>
         </section>
-        <section class="drawer-section">
+        <section class="drawer-section" style="display: none">
           <div class="condition-wrapper" @click="triggerFilters">
             <div>
               <a-switch default-checked :checked="filtersExpanded">

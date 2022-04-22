@@ -177,7 +177,7 @@
               :collapsed-width="70"
               :trigger="null"
               collapsible
-              v-model="menuCollapsed"
+              :collapsed="true"
               :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
               v-if="hasSider"
           >
@@ -377,7 +377,8 @@ export default {
       userPopoverVisible: false,
       settingsPopoverVisible: false,
       searchClient,
-      searchBarFocussed: false
+      searchBarFocussed: false,
+      menuCollapsed: true
     }
   },
   mounted() {
@@ -460,25 +461,25 @@ export default {
     },
 
     hasHeader() {
-      return 'Visual Editor' !== this.$route.name;
+      return !['Visual Editor', 'Edit Visual Editor'].includes(this.$route.name);
     },
 
     hasSider() {
-      return 'Visual Editor' !== this.$route.name;
+      return !['Visual Editor', 'Edit Visual Editor'].includes(this.$route.name);
     },
 
     noPadding() {
       return [
         'View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details',
         'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Lists', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules', 'Visual Editor',
-        'Products', 'Product Category', 'Product Attribute'
+        'Edit Visual Editor', 'Products', 'Product Category', 'Product Attribute'
       ].includes(this.$route.name);
     },
 
-    menuCollapsed() {
-      // return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
-      return true;
-    },
+    // menuCollapsed() {
+    //   // return ['View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details', 'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket'].includes(this.$route.name);
+    //   return true;
+    // },
 
     basketCount() {
       return this.basket.length;

@@ -1,6 +1,6 @@
 <template>
   <div class="add-spec-to-basket-button-and-modal" style="display: inline !important;">
-    <a-button size="medium" class="add-spec-btn"
+    <a-button class="add-spec-btn"
               type="default" icon="plus" @click.prevent="showMethodSelectorModal"></a-button>
 
     <edit-order-modal v-if="order && type === 'specification'">

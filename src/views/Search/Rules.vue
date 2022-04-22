@@ -15,6 +15,7 @@
 import RulesHeader from "./Rules/Header";
 import RulesTable from "./Rules/Table";
 import LeftSidebar from "./LeftSidebar";
+import axios from 'axios';
 
 export default {
   name: "Landing",
@@ -41,12 +42,48 @@ export default {
     },
   },
   created() {
-    const ruleData = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-    this.rules = ruleData.map((rule) => ({
-      ...rule,
-      disabled: false,
-      visibleActions: false
-    }));
+    // const ruleData = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
+    // this.rules = ruleData.map((rule) => ({
+    //   ...rule,
+    //   disabled: false,
+    //   visibleActions: false
+    // }));
+    axios.get(`${window.API_BASE}/rules`).then((res) => {
+      const { overrides } = res.data;
+      this.rules = overrides.map(override => {
+        const { id, rule, includes } = override;
+        let query_conditions = [
+          {
+            query: {
+              option: rule.match,
+              keyword: rule.query
+            }
+          }
+        ];
+        let pinnedItems = includes.map(include => ({
+          id: include.id,
+          position: include.position,
+          title: "CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical"
+        }));
+        return {
+          conditions: {
+            query_conditions: query_conditions,
+            period: []
+          },
+          consequences: {
+            filterResults: [],
+            boostCategories: [],
+            buryCategories: [],
+            pinnedItems: pinnedItems,
+            hiddenItems: []
+          },
+          key: id,
+          timestamp: '2022-02-24T15:28:32.318Z'
+        };
+      })
+    }).catch(() => {
+      this.$message.error('Error fetching rules');
+    });
   }
 }
 </script>

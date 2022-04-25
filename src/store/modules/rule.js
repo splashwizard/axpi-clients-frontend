@@ -1,0 +1,90 @@
+import axios from 'axios';
+
+// const list = [
+//     {"id":"list-1","name":"Android","lastEdited":"2020-03-02","numberOfItems":"11","visible":true, items: []},
+//     {"id":"list-2","name":"Mac","lastEdited":"2020-03-02","numberOfItems":"11","visible":false,"visibleDropdown":false, items: []},
+//     {"id":"list-3","name":"iPhone","lastEdited":"2020-03-02","numberOfItems":"11","visible":true, items: []}
+// ]
+
+export const state = {
+    list: [],
+    loading: false,
+    isLoaded: false
+};
+
+export const mutations = {
+    SET_LOADING_DATA(state, data) {
+        state.list = data;
+        state.loading = false;
+        state.isLoaded = true;
+    },
+
+    START_LOADING(state) {
+        state.loading = true;
+    },
+
+    STOP_LOADING(state) {
+        state.loading = false;
+    },
+};
+
+export const getters = {
+    list: (state) => {
+        return state.list;
+    },
+    loading: (state) => {
+        return state.loading;
+    },
+    isLoaded: (state) => {
+        return state.isLoaded;
+    },
+};
+
+export const actions = {
+    load({ commit }) {
+        commit('START_LOADING');
+        axios.get(`${window.API_BASE}/rules`).then((res) => {
+            const { overrides } = res.data;
+            const rules = overrides.map(override => {
+                const { id, rule, includes } = override;
+                let query_conditions = [
+                    {
+                        query: {
+                            option: rule.match,
+                            keyword: rule.query
+                        },
+                        filters: []
+                    }
+                ];
+                let pinnedItems = includes.map(include => ({
+                    id: include.id,
+                    position: include.position,
+                    title: "CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical"
+                }));
+                return {
+                    conditions: {
+                        query_conditions: query_conditions,
+                        period: []
+                    },
+                    consequences: {
+                        filterResults: [],
+                        boostCategories: [],
+                        buryCategories: [],
+                        pinnedItems: pinnedItems,
+                        hiddenItems: []
+                    },
+                    key: id,
+                    timestamp: '2022-02-24T15:28:32.318Z'
+                };
+            })
+            commit('SET_LOADING_DATA', rules);
+        }).catch(() => {
+            this._vm.$message.error('Error fetching rules');
+            commit('STOP_LOADING');
+        });
+    },
+    editingRule: (state) => {
+        // return state.list[ruleId];
+        return state.list;        
+    }
+};

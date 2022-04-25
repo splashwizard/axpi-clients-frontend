@@ -32,6 +32,7 @@
 <script>
 import Typesense from 'typesense';
 import draggable from 'vuedraggable'
+import {mapGetters, mapActions} from 'vuex';
 
 import Sidebar from "./VisualEditor/Sidebar";
 import AddDrawer from "./VisualEditor/AddDrawer";
@@ -172,10 +173,17 @@ export default {
     }
   },
   async created() {
-    const ruleId = this.$route.params.id;
-    const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-    const rule = rules.find(item => item.key === ruleId);
+    let rule = null;
+    console.log('this.$route.params.id', this.$route.params.id, this.rules);
+    for (let r of this.rules) {
+      if (r.key === this.$route.params.id) {
+        rule = r;
+        break;
+      }
+    }
+    console.log('rule', rule.conditions);
     this.triggerData = rule.conditions;
+    // this.triggerData = {period: [], query_conditions: []};
     this.strategyData = rule.consequences;
     const typesense = new Typesense.Client({
       nodes: [
@@ -216,6 +224,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('rule', {
+      rules: 'list',
+    }),
     availableList: {
       get: function () {
         const showedList = this.list.filter(item => this.strategyData.hiddenItems.findIndex(hiddenItem => hiddenItem.id === item.id) === -1);
@@ -254,6 +265,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions('rule', {
+      editingRule: 'editingRule',
+    }),
     deleteTag(fIdx) {
       console.log(fIdx);
       this.searchFilters.splice(fIdx, 1);

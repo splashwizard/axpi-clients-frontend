@@ -3,9 +3,12 @@
     <left-sidebar></left-sidebar>
     <a-layout style="padding: 7px 30px">
       <h1 class="page-title">Rules</h1>
-      <a-card :bodyStyle="{padding: 0}">
-        <rules-header :searchTerm="searchTerm" :changeSearchTerm="changeSearchTerm" :rulesCount="rules.length"/>
-        <rules-table :searchTerm="searchTerm" :rules="rules" :editRule="editRule" :disableRule="disableRule" :deleteRule="deleteRule" />
+      <a-card v-if="loading" class="loading-card">
+        <a-spin size="large" />
+      </a-card>
+      <a-card v-else :bodyStyle="{padding: 0}">
+        <rules-header :searchTerm="searchTerm" :changeSearchTerm="changeSearchTerm" :rulesCount="list.length"/>
+        <rules-table :searchTerm="searchTerm" :rules="list" :editRule="editRule" :disableRule="disableRule" :deleteRule="deleteRule" />
       </a-card>
     </a-layout>
   </a-layout>
@@ -15,18 +18,30 @@
 import RulesHeader from "./Rules/Header";
 import RulesTable from "./Rules/Table";
 import LeftSidebar from "./LeftSidebar";
-import axios from 'axios';
+// import axios from 'axios';
+import {mapGetters, mapActions} from 'vuex';
+
 
 export default {
   name: "Landing",
-  components: {RulesHeader, RulesTable, LeftSidebar},
+  components: { RulesHeader, RulesTable, LeftSidebar },
   data() {
     return {
       rules: [],
       searchTerm: '',
     }
   },
+  computed: {
+    ...mapGetters('rule', {
+      list: 'list',
+      loading: 'loading',
+      isLoaded: 'isLoaded'
+    }),
+  },
   methods: {
+    ...mapActions('rule', {
+      load: 'load',
+    }),
     changeSearchTerm(value) {
       this.searchTerm = value;
     },
@@ -46,48 +61,19 @@ export default {
     // this.rules = ruleData.map((rule) => ({
     //   ...rule,
     //   disabled: false,
-    //   visibleActions: false
     // }));
-    axios.get(`${window.API_BASE}/rules`).then((res) => {
-      const { overrides } = res.data;
-      this.rules = overrides.map(override => {
-        const { id, rule, includes } = override;
-        let query_conditions = [
-          {
-            query: {
-              option: rule.match,
-              keyword: rule.query
-            }
-          }
-        ];
-        let pinnedItems = includes.map(include => ({
-          id: include.id,
-          position: include.position,
-          title: "CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical"
-        }));
-        return {
-          conditions: {
-            query_conditions: query_conditions,
-            period: []
-          },
-          consequences: {
-            filterResults: [],
-            boostCategories: [],
-            buryCategories: [],
-            pinnedItems: pinnedItems,
-            hiddenItems: []
-          },
-          key: id,
-          timestamp: '2022-02-24T15:28:32.318Z'
-        };
-      })
-    }).catch(() => {
-      this.$message.error('Error fetching rules');
-    });
+    if(!this.isLoaded)
+      this.load();
   }
 }
 </script>
 
 <style scoped>
-
+  .loading-card {
+    background-color: #fafafa;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items:center
+  }
 </style>

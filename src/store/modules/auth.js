@@ -104,6 +104,7 @@ export const actions = {
     logout({commit}) {
         commit('SET_API_TOKEN', null);
         commit('SET_USER', null);
+        localStorage.removeItem('axpi-frontend-auth');
         router.push('/login');
         this._vm.$message.success('Logged out successfully');
     },

@@ -5,7 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "prepare": "husky install",
+    "prettier-all": "prettier --write '**/*.{js,jsx,ts,tsx,html,css,scss,json,md}'",
+    "husky": "lint-staged"
   },
   "dependencies": {
     "@antv/data-set": "^0.11.8",
@@ -68,8 +71,14 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.0",
+    "prettier": "^2.6.2",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
+  },
+  "lint-staged": {
+    "src/**/*.{js,vue,jsx,ts,tsx,html,css,scss,json,md}": "prettier --write --ignore-unknown"
   }
 }

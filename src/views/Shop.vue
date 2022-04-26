@@ -3,7 +3,6 @@
     <a-layout>
       <a-layout style="padding: 7px 30px">
         <div class="wrapper">
-
           <a-row :gutter="20" class="shop-topbar">
             <a-col :span="5">
               <ais-panel>
@@ -13,30 +12,42 @@
             <a-col :span="19" class="shop-topbar-right">
               <div class="left">
                 <ais-stats>
-                  <template v-slot="{ hitsPerPage, nbPages, nbHits, page, processingTimeMS, query }">
+                  <template
+                    v-slot="{
+                      hitsPerPage,
+                      nbPages,
+                      nbHits,
+                      page,
+                      processingTimeMS,
+                      query,
+                    }"
+                  >
                     <!--                    Page {{ page + 1 }} of {{ nbPages }} with {{ hitsPerPage }} hits per page - -->
                     <!--                    {{ nbHits }} hits retrieved in {{ processingTimeMS }}ms for <q>{{ query }}</q>-->
 
-                    Showing {{ (page * hitsPerPage) + 1 }} - {{
+                    Showing {{ page * hitsPerPage + 1 }} -
+                    {{
                       (((page * hitsPerPage) + 1 + hitsPerPage) &lt; nbHits) ? ((page * hitsPerPage) + 1 + hitsPerPage) : nbHits
-                    }} of {{ nbHits }} results for <span class="stats-search-query">"{{ query }}"</span>
+                    }}
+                    of {{ nbHits }} results for
+                    <span class="stats-search-query">"{{ query }}"</span>
                   </template>
                 </ais-stats>
               </div>
               <div class="right">
-                <a-button>Compare</a-button>
+                <!-- <a-button>Compare</a-button> -->
 
-                <div class="sort-by-wrapper">
+                <!-- <div class="sort-by-wrapper">
                   <ais-sort-by
                       :items="[
     { value: 'products', label: 'Most Relevant' }
   ]"
                   />
-                </div>
+                </div> -->
 
                 <a-radio-group v-model="display_mode">
                   <a-radio-button value="prices">
-                    <span style="margin-right: 3px;">$</span>
+                    <span style="margin-right: 3px">$</span>
                     Prices
                   </a-radio-button>
                   <a-radio-button value="specs">
@@ -95,41 +106,41 @@
           <!--            <ais-configure :hits-per-page.camel="8"/>-->
 
           <a-row :gutter="30">
-            <a-col span="5" style="padding-left: 17px;">
+            <a-col span="5" style="padding-left: 17px">
               <ais-panel>
                 <h4>Manufacturer</h4>
-                <ais-refinement-list attribute="manufacturer"/>
+                <ais-refinement-list attribute="manufacturer" />
               </ais-panel>
               <ais-panel>
                 <h4>Certifications</h4>
-                <ais-refinement-list attribute="certifications"/>
+                <ais-refinement-list attribute="certifications" />
               </ais-panel>
               <ais-panel>
                 <h4>Materials</h4>
-                <ais-refinement-list attribute="materials"/>
+                <ais-refinement-list attribute="materials" />
               </ais-panel>
               <ais-panel>
                 <h4>Quantity</h4>
-                <ais-range-input attribute="quantity"/>
+                <ais-range-input attribute="quantity" />
               </ais-panel>
-<!--              <ais-panel>-->
-<!--                <h4>Width (mm)</h4>-->
-<!--                <ais-range-input attribute="width"/>-->
-<!--              </ais-panel>-->
-<!--              <ais-panel>-->
-<!--                <h4>Height (mm)</h4>-->
-<!--                <ais-range-input attribute="height"/>-->
-<!--              </ais-panel>-->
-<!--              <ais-panel>-->
-<!--                <h4>Depth (mm)</h4>-->
-<!--                <ais-range-input attribute="depth"/>-->
-<!--              </ais-panel>-->
-<!--              <ais-panel>-->
-<!--                <h4>Capacity (L)</h4>-->
-<!--                <ais-range-input attribute="capacity"/>-->
-<!--              </ais-panel>-->
+              <!--              <ais-panel>-->
+              <!--                <h4>Width (mm)</h4>-->
+              <!--                <ais-range-input attribute="width"/>-->
+              <!--              </ais-panel>-->
+              <!--              <ais-panel>-->
+              <!--                <h4>Height (mm)</h4>-->
+              <!--                <ais-range-input attribute="height"/>-->
+              <!--              </ais-panel>-->
+              <!--              <ais-panel>-->
+              <!--                <h4>Depth (mm)</h4>-->
+              <!--                <ais-range-input attribute="depth"/>-->
+              <!--              </ais-panel>-->
+              <!--              <ais-panel>-->
+              <!--                <h4>Capacity (L)</h4>-->
+              <!--                <ais-range-input attribute="capacity"/>-->
+              <!--              </ais-panel>-->
             </a-col>
-            <a-col :span="19" style="padding-right: 17px;">
+            <a-col :span="19" style="padding-right: 17px">
               <!--              <ais-panel>-->
               <!--                <ais-search-box placeholder=""/>-->
               <!--              </ais-panel>-->
@@ -144,9 +155,9 @@
                           <div class="product-image-wrapper">
                             <router-link :to="getProductPageUrl(item)">
                               <img
-                                  :src="getImageSrc(item)"
-                                  :alt="item['name']"
-                                  class="product-image"
+                                :src="getImageSrc(item)"
+                                :alt="item['name']"
+                                class="product-image"
                               />
                             </router-link>
                           </div>
@@ -157,19 +168,19 @@
                               <router-link :to="getProductPageUrl(item)">
                                 <h1 class="item-title">
                                   <ais-highlight
-                                      :hit="item"
-                                      attribute="name"
-                                      class="hit-name"
+                                    :hit="item"
+                                    attribute="name"
+                                    class="hit-name"
                                   />
                                 </h1>
                               </router-link>
                             </div>
                             <div class="right">
-<!--                              <approved-badge v-if="item.certified"></approved-badge>-->
-<!--                              <span v-if="!isLoadingPrices">-->
-<!--                              {{ getPriceRange(item.id) }}-->
-<!--                              </span>-->
-<!--                              <a-spin size="small" v-else></a-spin>-->
+                              <!--                              <approved-badge v-if="item.certified"></approved-badge>-->
+                              <!--                              <span v-if="!isLoadingPrices">-->
+                              <!--                              {{ getPriceRange(item.id) }}-->
+                              <!--                              </span>-->
+                              <!--                              <a-spin size="small" v-else></a-spin>-->
                             </div>
                           </div>
 
@@ -177,38 +188,42 @@
                             {{ truncateDescription(item.description) }}
                           </div>
 
-<!--                          <div class="price-list-actions-wrapper">-->
-<!--                            <div class="left"></div>-->
-<!--                            <div class="right">-->
-<!--                              <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1"-->
-<!--                                       v-model="quantities[item.id]" type="number"></a-input>-->
-<!--                              <a-button v-if="!isProductInBasket(item)" :disabled="isLoadingPrices"-->
-<!--                                        type="primary" @click.prevent="() => addToBasket(item)">Add to basket-->
-<!--                              </a-button>-->
+                          <!--                          <div class="price-list-actions-wrapper">-->
+                          <!--                            <div class="left"></div>-->
+                          <!--                            <div class="right">-->
+                          <!--                              <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1"-->
+                          <!--                                       v-model="quantities[item.id]" type="number"></a-input>-->
+                          <!--                              <a-button v-if="!isProductInBasket(item)" :disabled="isLoadingPrices"-->
+                          <!--                                        type="primary" @click.prevent="() => addToBasket(item)">Add to basket-->
+                          <!--                              </a-button>-->
 
-<!--                              <div v-else class="quantity-changer">-->
-<!--                                <a-button @click.prevent="() => decrementProductQuantity(item)"-->
-<!--                                          icon="minus">-->
-<!--                                </a-button>-->
-<!--                                <div>-->
-<!--                                  <a-input type="number"-->
-<!--                                           @change="e => setProductQuantity({quantity: e.target.value, id: item['id']})"-->
-<!--                                           :value="getQuantityOfProductInBasket(item)"></a-input>-->
-<!--                                </div>-->
-<!--                                &lt;!&ndash;                        <div>{{ getQuantityOfProductInBasket(item) }}</div>&ndash;&gt;-->
-<!--                                <a-button @click.prevent="() => incrementProductQuantity(item)"-->
-<!--                                          icon="plus"></a-button>-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
+                          <!--                              <div v-else class="quantity-changer">-->
+                          <!--                                <a-button @click.prevent="() => decrementProductQuantity(item)"-->
+                          <!--                                          icon="minus">-->
+                          <!--                                </a-button>-->
+                          <!--                                <div>-->
+                          <!--                                  <a-input type="number"-->
+                          <!--                                           @change="e => setProductQuantity({quantity: e.target.value, id: item['id']})"-->
+                          <!--                                           :value="getQuantityOfProductInBasket(item)"></a-input>-->
+                          <!--                                </div>-->
+                          <!--                                &lt;!&ndash;                        <div>{{ getQuantityOfProductInBasket(item) }}</div>&ndash;&gt;-->
+                          <!--                                <a-button @click.prevent="() => incrementProductQuantity(item)"-->
+                          <!--                                          icon="plus"></a-button>-->
+                          <!--                              </div>-->
+                          <!--                            </div>-->
+                          <!--                          </div>-->
                         </a-col>
                       </a-row>
 
-<!--                      <product-group :quantities="quantities" class="product-group"-->
-<!--                          :product-code="item.productCode" :product="item"></product-group>-->
+                      <!--                      <product-group :quantities="quantities" class="product-group"-->
+                      <!--                          :product-code="item.productCode" :product="item"></product-group>-->
 
-                      <name-group :quantities="quantities" class="product-group"
-                                     :name="item.name" :product="item"></name-group>
+                      <name-group
+                        :quantities="quantities"
+                        class="product-group"
+                        :name="item.name"
+                        :product="item"
+                      ></name-group>
                     </article>
                   </template>
                 </ais-hits>
@@ -216,19 +231,21 @@
 
                 <!-- Specs display mode -->
                 <specs-display
-                    :prices="prices" :is-loading-prices="isLoadingPrices"
-                               :quantities="quantities" v-if="displayMode == 'specs'"></specs-display>
+                  :prices="prices"
+                  :is-loading-prices="isLoadingPrices"
+                  :quantities="quantities"
+                  v-if="displayMode == 'specs'"
+                ></specs-display>
                 <!-- / Specs display mode -->
               </ais-panel>
 
               <ais-panel>
-                <ais-pagination/>
+                <ais-pagination />
               </ais-panel>
             </a-col>
           </a-row>
           <!--          </ais-instant-search>-->
           <!-- / Instant search -->
-
         </div>
       </a-layout>
     </a-layout>
@@ -236,9 +253,9 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 import Units from "../mixins/Units";
-import axios from 'axios';
+import axios from "axios";
 // import AddSpecToBasketButtonAndModal from "./Shop/AddSpecToBasketButtonAndModal";
 // import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
 import SpecsDisplay from "./Shop/SpecsDisplay";
@@ -267,10 +284,10 @@ import NameGroup from "./Shop/NameGroup";
 // });
 // const searchClient = typesenseInstantsearchAdapter.searchClient;
 
-const _ = require('lodash');
+const _ = require("lodash");
 
-import {connectHitsWithInsights} from 'instantsearch.js/es/connectors';
-import {createWidgetMixin} from 'vue-instantsearch/src/mixins/widget';
+import { connectHitsWithInsights } from "instantsearch.js/es/connectors";
+import { createWidgetMixin } from "vue-instantsearch/src/mixins/widget";
 // import ApprovedBadge from "./Products/Show/ApprovedBadge";
 
 export default {
@@ -279,33 +296,33 @@ export default {
     // ApprovedBadge,
     SpecsDisplay,
     // ProductGroup,
-    NameGroup
+    NameGroup,
     // AddSpecToBasketButtonAndModal
   },
   mixins: [
     Units,
     Orders,
-    createWidgetMixin({connector: connectHitsWithInsights})
+    createWidgetMixin({ connector: connectHitsWithInsights }),
   ],
   watch: {
-    'state.hits'() {
+    "state.hits"() {
       if (this.state.hits && this.state.hits.length) {
         // this.enrichWithPrices()
       }
-    }
+    },
   },
   data() {
     return {
       quantities: {},
       isLoadingPrices: false,
-      prices: []
+      prices: [],
       // searchClient
-    }
+    };
   },
   computed: {
-    ...mapGetters('shop', {
-      displayMode: 'displayMode',
-      basket: 'basket'
+    ...mapGetters("shop", {
+      displayMode: "displayMode",
+      basket: "basket",
     }),
 
     uniqueProperties() {
@@ -318,19 +335,19 @@ export default {
       },
       set(val) {
         this.setDisplayMode(val);
-      }
-    }
+      },
+    },
   },
   created() {
     // this.search();
   },
   methods: {
-    ...mapActions('shop', {
-      addProductToBasket: 'addProductToBasket',
-      incrementProductQuantity: 'incrementProductQuantity',
-      decrementProductQuantity: 'decrementProductQuantity',
-      setProductQuantity: 'setProductQuantity',
-      setDisplayMode: 'setDisplayMode'
+    ...mapActions("shop", {
+      addProductToBasket: "addProductToBasket",
+      incrementProductQuantity: "incrementProductQuantity",
+      decrementProductQuantity: "decrementProductQuantity",
+      setProductQuantity: "setProductQuantity",
+      setDisplayMode: "setDisplayMode",
     }),
 
     addToBasket(record) {
@@ -338,12 +355,12 @@ export default {
         return false;
       }
 
-      let prices = this.prices[record['id']];
+      let prices = this.prices[record["id"]];
       if (!prices) {
         prices = [];
       }
 
-      let quantity = this.quantities[record['id']];
+      let quantity = this.quantities[record["id"]];
       if (!quantity) {
         quantity = 1;
       }
@@ -351,103 +368,101 @@ export default {
         quantity: quantity,
         product: record,
         selectedPrice: _.first(prices),
-        prices: prices
+        prices: prices,
       });
     },
 
     getProductPageUrl(product) {
-      return '/products/' + product['id'] + '?fromShop=1';
+      return "/products/" + product["id"] + "?fromShop=1";
     },
 
     getImageSrc(order) {
-      if (order['imageURLs'] && order['imageURLs'].length) {
-        return order['imageURLs'][0];
+      if (order["imageURLs"] && order["imageURLs"].length) {
+        return order["imageURLs"][0];
       }
     },
 
     goToBasket() {
-      this.$router.push('/shop/basket');
+      this.$router.push("/shop/basket");
     },
 
     isProductInBasket(product) {
-      return _.filter(this.basket, item => {
-        return (
-            item.itemType === 'product'
-            && item.id === product['id']
-        );
-      }).length > 0;
+      return (
+        _.filter(this.basket, (item) => {
+          return item.itemType === "product" && item.id === product["id"];
+        }).length > 0
+      );
     },
 
     getQuantityOfProductInBasket(product) {
-      return _.find(this.basket, item => {
-        return (
-            item.itemType === 'product'
-            && item.id === product['id']
-        );
+      return _.find(this.basket, (item) => {
+        return item.itemType === "product" && item.id === product["id"];
       }).quantity;
     },
 
     getPriceRange(productId) {
       let prices = this.prices[productId];
       if (prices && prices.length) {
-        let ordered = _.orderBy(prices, 'price');
+        let ordered = _.orderBy(prices, "price");
         let minPrice = _.first(ordered);
         let maxPrice = _.last(ordered);
 
         if (minPrice !== maxPrice) {
           let minPriceFormatted = this.formatCostInPence2dp({
             cost: minPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
 
           let maxPriceFormatted = this.formatCostInPence2dp({
             cost: maxPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
 
-          return minPriceFormatted + ' - ' + maxPriceFormatted;
+          return minPriceFormatted + " - " + maxPriceFormatted;
         } else {
           return this.formatCostInPence2dp({
             cost: minPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
         }
       }
-      return '-';
+      return "-";
     },
 
     enrichWithPrices() {
       let vm = this;
       vm.isLoadingPrices = true;
       vm.prices = [];
-      axios.post(window.API_BASE + '/products/get-prices-for-many', {
-        ids: _.map(this.state.hits, 'id')
-      }).then(r => {
-        vm.prices = r.data;
-        vm.isLoadingPrices = false;
-      }).catch(e => {
-        console.log(e);
-        vm.prices = [];
-        vm.isLoadingPrices = false;
-        vm.$message.error('Error loading product prices');
-      });
+      axios
+        .post(window.API_BASE + "/products/get-prices-for-many", {
+          ids: _.map(this.state.hits, "id"),
+        })
+        .then((r) => {
+          vm.prices = r.data;
+          vm.isLoadingPrices = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.prices = [];
+          vm.isLoadingPrices = false;
+          vm.$message.error("Error loading product prices");
+        });
     },
 
     truncateDescription(description) {
       if (description && description.length > 300) {
-        return description.slice(0, 300) + '...';
+        return description.slice(0, 300) + "...";
       }
       return description;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 .shop-index {
-  .shop-index {
-
-  }
+  // .shop-index {
+  // }
 
   .table-wrapper {
     margin-top: 25px;
@@ -482,8 +497,6 @@ export default {
       //  color: #000;
       //}
     }
-
-
   }
 
   .price-list-actions-wrapper {
@@ -723,7 +736,7 @@ export default {
   margin-right: 10px;
 
   .ais-SortBy-select {
-   height: 32px;
+    height: 32px;
     line-height: 25px;
   }
 }

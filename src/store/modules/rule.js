@@ -26,6 +26,10 @@ export const mutations = {
     STOP_LOADING(state) {
         state.loading = false;
     },
+
+    DELETE_RULE(state, delete_key) {
+        state.list = state.list.filter(rule => rule.key !== delete_key); 
+    }
 };
 
 export const getters = {
@@ -46,7 +50,7 @@ export const actions = {
         axios.get(`${window.API_BASE}/rules`).then((res) => {
             const { overrides } = res.data;
             const rules = overrides.map(override => {
-                const { id, rule, includes } = override;
+                const { id, rule, includes, excludes } = override;
                 let query_conditions = [
                     {
                         query: {
@@ -61,6 +65,10 @@ export const actions = {
                     position: include.position,
                     title: "CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical"
                 }));
+                let hiddenItems = excludes.map(exclude => ({
+                    id: exclude.id,
+                    title: "CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical"
+                }));
                 return {
                     conditions: {
                         query_conditions: query_conditions,
@@ -71,10 +79,10 @@ export const actions = {
                         boostCategories: [],
                         buryCategories: [],
                         pinnedItems: pinnedItems,
-                        hiddenItems: []
+                        hiddenItems: hiddenItems
                     },
                     key: id,
-                    timestamp: '2022-02-24T15:28:32.318Z'
+                    timestamp: '2022-04-27T09:05:32.318Z'
                 };
             })
             commit('SET_LOADING_DATA', rules);
@@ -83,8 +91,7 @@ export const actions = {
             commit('STOP_LOADING');
         });
     },
-    editingRule: (state) => {
-        // return state.list[ruleId];
-        return state.list;        
+    deleteRule: ({commit}, key) => {
+        commit('DELETE_RULE', key);
     }
 };

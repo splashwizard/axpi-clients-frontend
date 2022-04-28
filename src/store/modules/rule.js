@@ -48,8 +48,7 @@ export const actions = {
     load({ commit }) {
         commit('START_LOADING');
         axios.get(`${window.API_BASE}/rules`).then((res) => {
-            const { overrides } = res.data;
-            const rules = overrides.map(override => {
+            const rules = res.data.map(override => {
                 const { id, rule, includes, excludes } = override;
                 let query_conditions = [
                     {
@@ -63,11 +62,11 @@ export const actions = {
                 let pinnedItems = includes.map(include => ({
                     id: include.id,
                     position: include.position,
-                    title: "CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical"
+                    title: include.product_name
                 }));
                 let hiddenItems = excludes.map(exclude => ({
                     id: exclude.id,
-                    title: "CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical"
+                    title: exclude.product_name
                 }));
                 return {
                     conditions: {

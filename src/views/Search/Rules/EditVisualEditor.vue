@@ -4,7 +4,7 @@
     <div class="wrapper">
       <div class="content">
         <div class="searchbar" v-if="triggerData.query_conditions.length > 0">
-          <a-input v-model="searchTerm" placeholder="Enter search query" >
+          <a-input v-model="searchTerm" placeholder="Enter search query" v-on:keyup="handleSearchKeyUp">
             <a-icon slot="prefix" type="search" />
           </a-input>
           <p>Your query may not match the text and other conditions defined in your trigger.</p>
@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import Typesense from 'typesense';
 import draggable from 'vuedraggable'
 import {mapGetters, mapActions} from 'vuex';
 import axios from 'axios';
@@ -40,84 +39,6 @@ import AddDrawer from "./VisualEditor/AddDrawer";
 import EditDrawer from "./VisualEditor/EditDrawer";
 import SearchItem from './VisualEditor/SearchItem';
 import QueryFilter from './VisualEditor/Filter';
-
-// let schema = {
-//   name: 'companies',
-//   num_documents: 0,
-//   fields: [
-//     {
-//       name: 'company_name',
-//       type: 'string',
-//       facet: false
-//     },
-//     {
-//       name: 'num_employees',
-//       type: 'int32',
-//       facet: false
-//     },
-//     {
-//       name: 'country',
-//       type: 'string',
-//       facet: true
-//     }
-//   ],
-//   default_sorting_field: 'num_employees'
-// }
-
-// let documents = [
-//   {
-//     id: '124',
-//     company_name: 'Stark Industries',
-//     num_employees: 5215,
-//     country: 'USA'
-//   },
-//   {
-//     id: '125',
-//     company_name: 'Acme Corp',
-//     num_employees: 1002,
-//     country: 'France'
-//   },
-//   {
-//     id: '127',
-//     company_name: 'Stark Corp',
-//     num_employees: 1031,
-//     country: 'USA'
-//   },
-//   {
-//     id: '126',
-//     company_name: 'Doofenshmirtz Inc',
-//     num_employees: 2,
-//     country: 'Tri-State Area'
-//   }
-// ]
-
-const searchItems = [
-  {
-    id: 'a',
-    title: 'AGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical',
-    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
-  },
-  {
-    id: 'b',
-    title: 'Vacuum Traps, Dewar Type with Ace-Thred Inlet/Outlet, Ace Glass',
-    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
-  },
-  {
-    id: 'c',
-    title: 'BGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical',
-    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
-  },
-  {
-    id: 'd',
-    title: 'Wacuum Traps, Dewar Type with Ace-Thred Inlet/Outlet, Ace Glass',
-    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
-  },
-  {
-    id: 'e',
-    title: 'CGE Syringes, General Purpose Manual Syringe, PTFE Tipped Plunger, Trajan Scientific and Medical',
-    imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg'
-  },
-]
 
 export default {
   name: "Landing",
@@ -159,16 +80,7 @@ export default {
         pinnedItems: [],
         hiddenItems: []
       },
-      list: searchItems.map((item, index) => {
-        return {
-          ...item,
-          key: index + 1,
-          fixed: false,
-          pinned: false,
-          pinnedposition: 0,
-          hidden: false,
-        };
-      }),
+      list: [],
     }
   },
   async created() {
@@ -179,47 +91,11 @@ export default {
         break;
       }
     }
-    console.log('rule', rule.conditions);
     this.triggerData = rule.conditions;
     // this.triggerData = {period: [], query_conditions: []};
     this.strategyData = rule.consequences;
-    const typesense = new Typesense.Client({
-      nodes: [
-        {
-          host: 'jcmib1wyvr5en7xap-1.a1.typesense.net',
-          port: '443',
-          protocol: 'https'
-        }
-      ],
-      numRetries: 10,
-      apiKey: 'kEMj84g6InUbtKwQ6gRSVpb8Vxn857Lw',
-      connectionTimeoutSeconds: 10,
-      retryIntervalSeconds: 0.1,
-      healthcheckIntervalSeconds: 2,
-      logLevel: 'debug'
-    })
-
-    try {
-      // create a collection
-      // await typesense.collections().create(schema)
-
-      // Index documents
-      // await Promise.all(
-      //   documents.map((document) => {
-      //     return typesense.collections('companies').documents().create(document)
-      //   })
-      // )
-
-      // Search for documents
-      let searchResults = []
-      searchResults = await typesense.collections('companies').documents().search({
-        q: 'Corp',
-        query_by: 'company_name'
-      })
-      console.log(searchResults)
-    } catch (error) {
-      console.log(error)
-    }
+    this.searchTerm = rule.conditions.query_conditions[0].query.keyword;
+    this.updateProductList(this.searchTerm);
   },
   computed: {
     ...mapGetters('rule', {
@@ -235,7 +111,6 @@ export default {
           if(pinnedItem.position <= showedList.length)
             resultList[pinnedItem.position - 1] = showedList[pinnedIndex];
         }
-        console.log('resultList', resultList);
         let insertionIndex = 0;
         for(let unpinnedItem of unpinnedList) {
           while(Object.keys(resultList).indexOf(insertionIndex.toString()) !== -1) {
@@ -244,7 +119,6 @@ export default {
           resultList[insertionIndex++] = unpinnedItem;
         }
         const finalList = resultList.filter(item => item);
-        console.log('finalList', finalList);
         return finalList;
       },
       set: function (newValue) {
@@ -266,8 +140,33 @@ export default {
     ...mapActions('rule', {
       editingRule: 'editingRule',
     }),
+    updateProductList(searchTerm) {
+      axios.post(`${window.API_BASE}/product/search`, {
+        "q": searchTerm,
+        "query_by": "product_name"
+      }).then((res) => {
+        this.list = res.data.hits.map((item) => {
+          const { id, product_name } = item.document;
+          return {
+            id: id,
+            key: id,
+            title: product_name,
+            imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg',
+            fixed: false,
+            pinned: false,
+            pinnedposition: 0,
+            hidden: false,
+          };
+        });
+      }).catch(() => {
+        this.$message.error('Error fetching products');
+      });
+    },
+    handleSearchKeyUp() {
+      if(this.searchTerm)
+        this.updateProductList(this.searchTerm);
+    },
     deleteTag(fIdx) {
-      console.log(fIdx);
       this.searchFilters.splice(fIdx, 1);
     },
     handlePin(index) {

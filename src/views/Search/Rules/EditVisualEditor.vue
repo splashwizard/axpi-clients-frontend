@@ -22,7 +22,7 @@
         <edit-drawer :list="list" :drawerVisible="editDrawerVisible" :drawerType="editDrawerType" :drawerClose="editDrawerClose" :updateDrawerItem="updateDrawerItem" 
           :editDrawerItem="editDrawerItem" :setItem="setItem"/>
         <div class="actionContainer" v-if="ruleValid">
-          <a-button type="primary" @click="onPublish"> Publish </a-button>
+          <a-button type="primary" @click="onPublish" :loading="loading"> Publish </a-button>
         </div>        
       </div>
     </div>
@@ -33,15 +33,13 @@
 import Typesense from 'typesense';
 import draggable from 'vuedraggable'
 import {mapGetters, mapActions} from 'vuex';
+import axios from 'axios';
 
 import Sidebar from "./VisualEditor/Sidebar";
 import AddDrawer from "./VisualEditor/AddDrawer";
 import EditDrawer from "./VisualEditor/EditDrawer";
 import SearchItem from './VisualEditor/SearchItem';
 import QueryFilter from './VisualEditor/Filter';
-
-const moment = require('moment');
-
 
 // let schema = {
 //   name: 'companies',
@@ -126,6 +124,7 @@ export default {
   components: { Sidebar, AddDrawer, EditDrawer, SearchItem, QueryFilter, draggable },
   data() {
     return {
+      loading: false,
       addDrawerType: 'condition',
       addDrawerVisible: false,
       editDrawerType: 'condition',
@@ -174,7 +173,6 @@ export default {
   },
   async created() {
     let rule = null;
-    console.log('this.$route.params.id', this.$route.params.id, this.rules);
     for (let r of this.rules) {
       if (r.key === this.$route.params.id) {
         rule = r;
@@ -301,17 +299,44 @@ export default {
       }
     },
     onPublish() {
-      const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-      const ruleId = this.$route.params.id;
+      const { query_conditions } = this.triggerData;
+      let payload = {
+        query_name: query_conditions[0].query.keyword,
+        query_type: query_conditions[0].query.option
+      }
+      const { pinnedItems, hiddenItems } = this.strategyData;
+      if(pinnedItems.length > 0) {
+        payload['pin_items'] = pinnedItems.map(item => ({
+          id: item.id,
+          position: item.position
+        }));
+      }
+      if(hiddenItems.length > 0) {
+        payload['hidden_items'] = hiddenItems.map(item => ({
+          id: item.id,
+          position: item.position
+        }));
+      }
+      
+      this.loading = true;
+      axios.put(`${window.API_BASE}/rules/${this.$route.params.id}`, payload).then(() => {
+        this.loading = false;
+        window.location.href="/search/rules";
+      }).catch(() => {
+        this.$message.error('Error updating rule');
+      });
 
-      rules[rules.findIndex(rule => rule.key === ruleId)] = {
-        key: ruleId,
-        conditions: this.triggerData,
-        consequences: this.strategyData,
-        timestamp: moment().toISOString(),
-      };
-      localStorage.setItem('rules', JSON.stringify(rules));
-      this.$router.push('/search/rules');
+      // const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
+      // const ruleId = this.$route.params.id;
+
+      // rules[rules.findIndex(rule => rule.key === ruleId)] = {
+      //   key: ruleId,
+      //   conditions: this.triggerData,
+      //   consequences: this.strategyData,
+      //   timestamp: moment().toISOString(),
+      // };
+      // localStorage.setItem('rules', JSON.stringify(rules));
+      // this.$router.push('/search/rules');
     },
     toggleAddDrawer(type) {
       this.editDrawerVisible = false;

@@ -4,7 +4,7 @@
     <div class="wrapper">
       <div class="content">
         <div class="searchbar" v-if="triggerData.query_conditions.length > 0">
-          <a-input v-model="searchTerm" placeholder="Enter search query" >
+          <a-input v-model="searchTerm" placeholder="Enter search query" v-on:keyup="handleSearchKeyUp" >
             <a-icon slot="prefix" type="search" />
           </a-input>
           <p>Your query may not match the text and other conditions defined in your trigger.</p>
@@ -39,9 +39,7 @@ import EditDrawer from "./VisualEditor/EditDrawer";
 import SearchItem from './VisualEditor/SearchItem';
 import QueryFilter from './VisualEditor/Filter';
 
-// const moment = require('moment');
-import moment from 'moment';
-// import axios from 'axios';
+import axios from 'axios';
 
 
 // let schema = {
@@ -162,6 +160,7 @@ export default {
         pinnedItems: [],
         hiddenItems: []
       },
+      // list: []
       list: searchItems.map((item, index) => {
         return {
           ...item,
@@ -250,6 +249,30 @@ export default {
     },
   },
   methods: {
+    handleSearchKeyUp() {
+      // if (e.keyCode === 13) {
+      //   axios.post(`${window.API_BASE}/product/search`, {
+      //     "q": this.searchTerm,
+      //     "query_by": "product_name"
+      //   }).then((res) => {
+
+      //     this.list = res.data.map((item) => {
+      //       const { id, product_name } = item.document;
+      //       return {
+      //         key: id,
+      //         title: product_name,
+      //         imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg',
+      //         fixed: false,
+      //         pinned: false,
+      //         pinnedposition: 0,
+      //         hidden: false,
+      //       };
+      //     });
+      //   }).catch(() => {
+      //     this.$message.error('Error creating rule');
+      //   });
+      // }
+    },
     deleteTag(fIdx) {
       console.log(fIdx);
       this.searchFilters.splice(fIdx, 1);
@@ -302,17 +325,18 @@ export default {
         }));
       }
 
-      // this.loading = true;
-      // axios.post(`${window.API_BASE}/rules`, payload).then(() => {
-      //   this.loading = false;
-      //   this.$router.push('/search/rules');
-      // }).catch(() => {
-      //   this.$message.error('Error creating rule');
-      // });
-      const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-      rules.push({key: `qr-${rules.length + 1}`, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
-      localStorage.setItem('rules', JSON.stringify(rules));
-      this.$router.push('/search/rules');
+      this.loading = true;
+      axios.post(`${window.API_BASE}/rules`, payload).then(() => {
+        this.loading = false;
+        window.location.href="/search/rules";
+      }).catch(() => {
+        this.$message.error('Error creating rule');
+      });
+
+      // const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
+      // rules.push({key: `qr-${rules.length + 1}`, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
+      // localStorage.setItem('rules', JSON.stringify(rules));
+      // this.$router.push('/search/rules');
     },
     toggleAddDrawer(type) {
       this.editDrawerVisible = false;

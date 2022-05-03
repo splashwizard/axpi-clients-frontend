@@ -18,7 +18,7 @@
 import RulesHeader from "./Rules/Header";
 import RulesTable from "./Rules/Table";
 import LeftSidebar from "./LeftSidebar";
-// import axios from 'axios';
+import axios from 'axios';
 import {mapGetters, mapActions} from 'vuex';
 
 
@@ -41,6 +41,7 @@ export default {
   methods: {
     ...mapActions('rule', {
       load: 'load',
+      delete: 'deleteRule'
     }),
     changeSearchTerm(value) {
       this.searchTerm = value;
@@ -52,8 +53,13 @@ export default {
       this.rules[this.rules.findIndex(item => item.key === key)].disabled = checked;
     },
     deleteRule(key) {
-      this.rules = this.rules.filter(item => item.key !== key);
-      localStorage.setItem('rules', JSON.stringify(this.rules));
+      axios.delete(`${window.API_BASE}/rules/${key}`).then(() => {
+        this.delete(key);
+        this.loading = false;
+        this.$message.success('Rule deleted successfully');
+      }).catch(() => {
+        this.$message.error('Error deleting rule');
+      });
     },
   },
   created() {

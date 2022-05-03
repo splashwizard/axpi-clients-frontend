@@ -3,10 +3,6 @@
     <a-dropdown>
       <a-button size="medium" class="product-menu-btn" type="default" icon="menu" @click.prevent>
       </a-button>
-      <!-- <a class="ant-dropdown-link" @click.prevent>
-        Cascading menu
-        <DownOutlined />
-      </a> -->
       <template #overlay>
         <a-menu>
           <template v-for="(item, index) in categories">
@@ -16,16 +12,6 @@
             <sub-menu v-else :key="index" :menu-info="item"/>
           </template>
         </a-menu>
-
-        <!-- <a-menu-item class="dropdown-item">1st menu item</a-menu-item>
-        <a-menu-item class="dropdown-item">2nd menu item</a-menu-item>
-        <a-sub-menu class="sub-item" title="sub menu">
-          <a-menu-item class="dropdown-item">3rd menu item</a-menu-item>
-          <a-sub-menu class="sub-item" title="sub menu">
-            <a-menu-item class="dropdown-item">3rd menu item</a-menu-item>
-            <a-menu-item class="dropdown-item">4th menu item</a-menu-item>
-          </a-sub-menu>
-        </a-sub-menu> -->
       </template>
     </a-dropdown>
   </div>
@@ -41,87 +27,20 @@ export default {
   components: { subMenu },
   data() {
     return {
-      menuInfo: [
-        {
-            key: '1',
-            title: 'Home',
-            icon: 'home',
-            children: [{
-                key: '1.1',
-                title: 'Bell',
-                icon: 'bell'
-            }]
-        },
-        {
-            title: 'Bedroom',
-            children: [{
-                title: 'bulb',
-            }]
-        },
-        {
-          title: 'Livingroom',
-        }
-    ],
-      categories: [
-        {
-          name: 'Appliances',
-          url: 'http://xxxxxxxxx.com',
-          children: [
-            {
-              name: 'Television',
-              url: 'http://xxxxxxxxx.com',
-              children: [
-                {
-                  name: 'Apple',
-                  url: 'http://xxxxxxxxx.com',
-                },
-                {
-                  name: 'Microsoft',
-                  url: 'http://xxxxxxxxx.com',
-                },
-              ],
-            },
-            {
-              name: 'Microwaves',
-              url: 'http://xxxxxxxxx.com',
-            },
-          ],
-        },
-        {
-          name: 'Furniture',
-          url: 'http://xxxxxxxxx.com',
-          children: [
-            {
-              name: 'Couch',
-              url: 'http://xxxxxxxxx.com',
-            },
-            {
-              name: 'Bed',
-              url: 'http://xxxxxxxxx.com',
-              children: [
-                {
-                  name: 'King Size',
-                  url: 'http://xxxxxxxxx.com'
-                },
-                {
-                  name: 'Queen Size',
-                  url: 'http://xxxxxxxxx.com',
-                },
-              ],
-            },
-          ],
-        },
-      ]
+      categories: []
     }
   },
-  created() {
-    const storeID = 2;
-    client.get(`/stores/${storeID}/categories`).then((res) => {
-      console.log('res', res);
-      this.categories = this.getCategories(res.data);
-    }).catch(() => {
-      this.$message.error('Error deleting rule');
-    });
+  async created() {
+    try {
+      const store = (await client.get(`/stores`)).data;
+      if(store.length > 0) {
+        const categoriesData = (await client.get(`/stores/${store[0].id}}}/categories`)).data;
+        this.categories = this.getCategories(categoriesData);
+      }
+    }
+    catch(e){
+      console.log('err', e);
+    }
   },
   methods: {
     getCategories(data, parent_id = null) {
@@ -140,9 +59,6 @@ export default {
       }
       return treedata;
     },
-    showMethodSelectorModal() {
-
-    }
   }
 }
 </script>

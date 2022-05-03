@@ -1,29 +1,54 @@
 <template>
   <div id="app">
     <ais-instant-search :search-client="searchClient" index-name="products">
-      <ais-configure :hits-per-page.camel="8"/>
+      <ais-configure :hits-per-page.camel="8" />
 
       <a-layout v-if="loggedIn">
-        <a-layout-header :style="{ background: '#fff', padding: '0 20px', borderBottom: '1px solid #e3e8ee' }" v-if="hasHeader">
+        <a-layout-header
+          :style="{
+            background: '#fff',
+            padding: '0 20px',
+            borderBottom: '1px solid #e3e8ee',
+          }"
+          v-if="hasHeader"
+        >
           <div class="top-nav">
             <div class="logo">
               <!--                    <router-link to="/">-->
               <!--                        <img src="/img/axiom.png" alt="">-->
               <!--                    </router-link>-->
               <div class="logo-circle">
-                <img v-if="user.client.logo" :src="getImageSrc(user.client.logo)" alt="">
-                <img v-else src="/img/axiom-tab-icon.svg" alt="">
+                <img
+                  v-if="user.client.logo"
+                  :src="getImageSrc(user.client.logo)"
+                  alt=""
+                />
+                <img v-else src="/img/axiom-tab-icon.svg" alt="" />
               </div>
 
               <div class="organisation-unit-selector">
                 <a-dropdown :trigger="['click']">
-                  <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-                    {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : 'Please select a unit' }}
-                    <a-icon type="down"/>
+                  <a
+                    class="ant-dropdown-link"
+                    @click="(e) => e.preventDefault()"
+                  >
+                    {{
+                      selectedOrganisationalUnit
+                        ? selectedOrganisationalUnit.name
+                        : "Please select a unit"
+                    }}
+                    <a-icon type="down" />
                   </a>
                   <a-menu slot="overlay">
-                    <a-menu-item v-for="(unit, key) in organisationalUnits" :key="key">
-                      <a href="#" @click.prevent="selectOrganisationalUnit(unit)">{{ unit.name }}</a>
+                    <a-menu-item
+                      v-for="(unit, key) in organisationalUnits"
+                      :key="key"
+                    >
+                      <a
+                        href="#"
+                        @click.prevent="selectOrganisationalUnit(unit)"
+                        >{{ unit.name }}</a
+                      >
                     </a-menu-item>
                   </a-menu>
                 </a-dropdown>
@@ -41,18 +66,21 @@
               <!--            </a-input>-->
               <!--              <a-input-search placeholder="Search products..." style="width: 200px" @search="onSearch"/>-->
 
-
               <!-- eCom search bar -->
               <div class="search-bar-inner" v-if="$route.path !== '/analytics'">
                 <ais-search-box placeholder="">
-                  <template v-slot="{ currentRefinement, isSearchStalled, refine }">
+                  <template
+                    v-slot="{ currentRefinement, isSearchStalled, refine }"
+                  >
                     <a-input-search
-                        :value="currentRefinement"
-                        @focus="searchBarFocussed = true"
-                        @pressEnter="$router.push('/shop')"
-                        @search="$router.push('/shop')"
-                        @input="refine($event.currentTarget.value)"
-                        placeholder="Search products..." style="width: 200px"/>
+                      :value="currentRefinement"
+                      @focus="searchBarFocussed = true"
+                      @pressEnter="$router.push('/shop')"
+                      @search="$router.push('/shop')"
+                      @input="refine($event.currentTarget.value)"
+                      placeholder="Search products..."
+                      style="width: 200px"
+                    />
                     <span :hidden="!isSearchStalled">Loading...</span>
                   </template>
                 </ais-search-box>
@@ -67,65 +95,41 @@
               </div>
               <!-- / Amazon Q -->
 
-              <div class="searchResults"
-                   v-if="shouldShowSearchResults">
+              <div class="searchResults" v-if="shouldShowSearchResults">
                 <ais-hits>
                   <template slot="item" slot-scope="{ item }">
-                    <li @click.prevent="() => handleSearchItemSelected(item)" class="ant-list-item">
+                    <li
+                      @click.prevent="() => handleSearchItemSelected(item)"
+                      class="ant-list-item"
+                    >
                       <div class="ant-list-item-meta">
-                        <div class="ant-list-item-meta-avatar"><span
-                            class="ant-avatar ant-avatar-circle ant-avatar-image"><img
-                            :src="getOrderImageSrc(item)"></span></div>
-                        <div class="ant-list-item-meta-content"><h4 class="ant-list-item-meta-title">
-                          {{ item.name }}
-                        </h4>
+                        <div class="ant-list-item-meta-avatar">
+                          <span
+                            class="ant-avatar ant-avatar-circle ant-avatar-image"
+                            ><img :src="getOrderImageSrc(item)"
+                          /></span>
+                        </div>
+                        <div class="ant-list-item-meta-content">
+                          <h4 class="ant-list-item-meta-title">
+                            {{ item.name }}
+                          </h4>
                         </div>
                       </div>
                     </li>
                   </template>
                 </ais-hits>
               </div>
-
             </div>
 
             <div class="top-nav-links">
               <div id="nav">
                 <feedback-popup></feedback-popup>
-                <a-popover title="Settings" trigger="click" placement="bottomRight" v-model="settingsPopoverVisible">
-                  <div slot="content">
-                    <div class="popover-inner">
-                      <div class="popover-menu">
-                        <div>
-                          <a @click="navigateToSpecifications">Specifications</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <a-button>
-                    <div>
-                      <a-icon type="setting" theme="filled" style="font-size: 16px;"></a-icon>
-                      <!--                    <bell-icon></bell-icon>-->
-                    </div>
-                  </a-button>
-                </a-popover>
-                <a-popover title="Help" trigger="click" placement="bottomRight">
-                  <div slot="content">
-                    <div class="popover-inner">
-                      <div>
-                        <a href="#">Documentation</a>
-                      </div>
-                      <div>
-                        <a href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core">API Docs</a>
-                      </div>
-                    </div>
-                  </div>
-                  <a-button>
-                    <div>
-                      <question-mark-icon></question-mark-icon>
-                    </div>
-                  </a-button>
-                </a-popover>
-                <a-popover title="Account" trigger="click" placement="bottomRight" v-model="userPopoverVisible">
+                <a-popover
+                  title="Account"
+                  trigger="click"
+                  placement="bottomRight"
+                  v-model="userPopoverVisible"
+                >
                   <div slot="content">
                     <div class="popover-inner">
                       <div v-if="user.client" class="company-property">
@@ -137,6 +141,20 @@
                         </div>
                         <div>
                           <a @click="navigateToDevelopers">Developers</a>
+                        </div>
+                        <div>
+                          <a @click="navigateToSpecifications"
+                            >Specifications</a
+                          >
+                        </div>
+                        <div>
+                          <a href="#">Documentation</a>
+                        </div>
+                        <div>
+                          <a
+                            href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core"
+                            >API Docs</a
+                          >
                         </div>
                         <div>
                           <a @click="logout">Logout</a>
@@ -154,15 +172,21 @@
                 <a-button>
                   <router-link to="/shop/basket">
                     <a-badge :count="basketCount">
-                      <a-icon :style="{ fontSize: '18px'}" type="shopping"
-                              theme="filled"></a-icon>
+                      <a-icon
+                        :style="{ fontSize: '18px' }"
+                        type="shopping"
+                        theme="filled"
+                      ></a-icon>
                     </a-badge>
                   </router-link>
                 </a-button>
                 <a-button>
                   <router-link to="/shop/lists">
-                    <a-icon :style="{ fontSize: '18px'}" type="profile"
-                            theme="filled"></a-icon>
+                    <a-icon
+                      :style="{ fontSize: '18px' }"
+                      type="profile"
+                      theme="filled"
+                    ></a-icon>
                   </router-link>
                 </a-button>
               </div>
@@ -171,22 +195,22 @@
         </a-layout-header>
         <a-layout id="components-layout-demo-responsive">
           <a-layout-sider
-              width="240"
-              breakpoint="lg"
-              theme="dark"
-              :collapsed-width="70"
-              :trigger="null"
-              collapsible
-              :collapsed="true"
-              :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
-              v-if="hasSider"
+            width="240"
+            breakpoint="lg"
+            theme="dark"
+            :collapsed-width="70"
+            :trigger="null"
+            collapsible
+            :collapsed="true"
+            :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
+            v-if="hasSider"
           >
             <a-menu
-                @click="handleMenuItemClicked"
-                :selected-keys="[selectedMenuKey]"
-                mode="inline"
-                theme="light"
-                :class="{'menu-collapsed': menuCollapsed}"
+              @click="handleMenuItemClicked"
+              :selected-keys="[selectedMenuKey]"
+              mode="inline"
+              theme="light"
+              :class="{ 'menu-collapsed': menuCollapsed }"
             >
               <a-menu-item title="Home" key="" class="menu-space-below">
                 <home-icon class="nav-icon"></home-icon>
@@ -196,32 +220,39 @@
                 <orders-icon class="nav-icon"></orders-icon>
                 <span v-if="!menuCollapsed">Past Orders</span>
               </a-menu-item>
-              <a-menu-item title="Stores" key="store">
+              <!-- <a-menu-item title="Stores" key="store">
                 <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shop" theme="filled"></a-icon>
                 <span v-if="!menuCollapsed">Store</span>
               </a-menu-item>
               <a-menu-item title="Products" key="products/index">
                 <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
                 <span v-if="!menuCollapsed">Product</span>
-              </a-menu-item>
+              </a-menu-item> -->
               <!--            <a-menu-item title="Specifications" key="specifications">-->
               <!--              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save"-->
               <!--                      theme="filled"></a-icon>-->
               <!--              <span v-if="!menuCollapsed">Specifications</span>-->
               <!--            </a-menu-item>-->
-              <a-menu-item title="Projects" key="projects">
+              <!-- <a-menu-item title="Projects" key="projects">
                 <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="carry-out"
                         theme="filled"></a-icon>
                 <span v-if="!menuCollapsed">Projects</span>
-              </a-menu-item>
+              </a-menu-item> -->
               <!--              <a-menu-item title="Matcher" key="matcher">-->
               <!--                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="pushpin"-->
               <!--                        theme="filled"></a-icon>-->
               <!--                <span v-if="!menuCollapsed">Matcher</span>-->
               <!--              </a-menu-item>-->
               <a-menu-item title="Insights" key="intelligence">
-                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="bulb"
-                        theme="filled"></a-icon>
+                <a-icon
+                  :style="{
+                    fontSize: '17px',
+                    marginLeft: '1px',
+                    marginRight: '17px',
+                  }"
+                  type="bulb"
+                  theme="filled"
+                ></a-icon>
                 <span v-if="!menuCollapsed">Insights</span>
               </a-menu-item>
               <a-menu-item title="Suppliers" key="suppliers">
@@ -277,11 +308,25 @@
               <!--                        </a-menu-item>-->
               <!--                    </a-sub-menu>-->
               <a-menu-item key="shop/landing" title="Shop">
-                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
+                <a-icon
+                  :style="{
+                    fontSize: '17px',
+                    marginLeft: '1px',
+                    marginRight: '17px',
+                  }"
+                  type="shopping-cart"
+                ></a-icon>
                 <span v-if="!menuCollapsed">Shop</span>
               </a-menu-item>
               <a-menu-item title="Search" key="search/analytics">
-                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="search"></a-icon>
+                <a-icon
+                  :style="{
+                    fontSize: '17px',
+                    marginLeft: '1px',
+                    marginRight: '17px',
+                  }"
+                  type="search"
+                ></a-icon>
                 <span v-if="!menuCollapsed">Search</span>
               </a-menu-item>
               <!--            <a-menu-item key="developers" title="Developers">-->
@@ -295,18 +340,24 @@
             </a-menu>
           </a-layout-sider>
           <a-layout>
-            <a-layout-content :style="{ padding: (noPadding ? 0 : '20px 30px'), background: '#fff', height: '100%' }">
-              <router-view/>
+            <a-layout-content
+              :style="{
+                padding: noPadding ? 0 : '20px 30px',
+                background: '#fff',
+                height: '100%',
+              }"
+            >
+              <router-view />
             </a-layout-content>
           </a-layout>
         </a-layout>
       </a-layout>
-      <router-view v-else/>
+      <router-view v-else />
     </ais-instant-search>
   </div>
 </template>
 <script>
-import {mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import HomeIcon from "./components/Icons/HomeIcon";
 import OrdersIcon from "./components/Icons/OrdersIcon";
 import SuppliersIcon from "./components/Icons/SuppliersIcon";
@@ -317,18 +368,18 @@ import AnalyticsIcon from "./components/Icons/AnalyticsIcon";
 // import DevelopersIcon from "./components/Icons/DevelopersIcon";
 // import AccountIcon from "./components/Icons/AccountIcon";
 import UserIcon from "./components/Icons/UserIcon";
-import QuestionMarkIcon from "./components/Icons/QuestionMarkIcon";
+// import QuestionMarkIcon from "./components/Icons/QuestionMarkIcon";
 // import BellIcon from "./components/Icons/BellIcon";
 import FeedbackPopup from "./components/FeedbackPopup";
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
-import ClickOutside from 'vue-click-outside'
+import ClickOutside from "vue-click-outside";
 import AddSpecToBasketButtonAndModal from "./views/Shop/AddSpecToBasketButtonAndModal";
 import QuicksightQBar from "./components/QuicksightQBar";
 import Images from "./mixins/Images";
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
-    apiKey: 'zBpwkAIxhaS03cvrGPF8HK0qnWluTEwE', // Be sure to use an API key that only allows searches, in production
+    apiKey: "zBpwkAIxhaS03cvrGPF8HK0qnWluTEwE", // Be sure to use an API key that only allows searches, in production
     nodes: [
       // {
       //   host: 'localhost',
@@ -336,10 +387,10 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
       //   protocol: 'http',
       // },
       {
-        host: 'jcmib1wyvr5en7xap-1.a1.typesense.net',
-        port: '443',
-        protocol: 'https'
-      }
+        host: "jcmib1wyvr5en7xap-1.a1.typesense.net",
+        port: "443",
+        protocol: "https",
+      },
     ],
   },
   // The following parameters are directly passed to Typesense's search API endpoint.
@@ -347,10 +398,10 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   //  queryBy is required.
   //  filterBy is managed and overridden by InstantSearch.js. To set it, you want to use one of the filter widgets like refinementList or use the `configure` widget.
   additionalSearchParameters: {
-    queryBy: 'name,productCode,catalogCode',
+    queryBy: "name,productCode,catalogCode",
     // groupBy: 'productCode',
-    groupBy: 'name',
-    groupLimit: 1
+    groupBy: "name",
+    groupLimit: 1,
   },
 });
 const searchClient = typesenseInstantsearchAdapter.searchClient;
@@ -366,9 +417,9 @@ export default {
     AnalyticsIcon,
     // ReportsIcon,
     UserIcon,
-    QuestionMarkIcon,
+    // QuestionMarkIcon,
     FeedbackPopup,
-    AddSpecToBasketButtonAndModal
+    AddSpecToBasketButtonAndModal,
   },
   mixins: [Images],
   data() {
@@ -378,24 +429,24 @@ export default {
       settingsPopoverVisible: false,
       searchClient,
       searchBarFocussed: false,
-      menuCollapsed: true
-    }
+      menuCollapsed: true,
+    };
   },
   mounted() {
-    this.selectedMenuKey = this.$router.currentRoute.path.split("/")[1]
+    this.selectedMenuKey = this.$router.currentRoute.path.split("/")[1];
   },
   watch: {
-    '$route'(to) {
-      this.selectedMenuKey = to.path.split("/")[1]
-    }
+    $route(to) {
+      this.selectedMenuKey = to.path.split("/")[1];
+    },
   },
   directives: {
-    ClickOutside
+    ClickOutside,
   },
   methods: {
-    ...mapActions('auth', {
-      logout: 'logout',
-      selectOrganisationalUnit: 'selectOrganisationalUnit'
+    ...mapActions("auth", {
+      logout: "logout",
+      selectOrganisationalUnit: "selectOrganisationalUnit",
     }),
     handleSearchItemSelected(product) {
       this.searchBarFocussed = false;
@@ -413,7 +464,7 @@ export default {
       this.$router.push(this.getProductPageUrl(product));
     },
     getProductPageUrl(product) {
-      return '/products/' + product['id'] + '?fromShop=1';
+      return "/products/" + product["id"] + "?fromShop=1";
     },
     onBreakpoint(broken) {
       console.log(broken);
@@ -423,56 +474,75 @@ export default {
       this.$router.push("/" + navigateTo);
     },
     navigateToAccount() {
-      this.$router.push('/account');
+      this.$router.push("/account");
       this.userPopoverVisible = false;
     },
     navigateToDevelopers() {
-      this.$router.push('/developers');
+      this.$router.push("/developers");
       this.userPopoverVisible = false;
     },
     navigateToSpecifications() {
-      this.$router.push('/specifications');
+      this.$router.push("/specifications");
       this.settingsPopoverVisible = false;
     },
     getOrderImageSrc(order) {
-      if (order['imageURLs'] && order['imageURLs'].length) {
-        return order['imageURLs'][0];
+      if (order["imageURLs"] && order["imageURLs"].length) {
+        return order["imageURLs"][0];
       }
-    }
+    },
   },
   computed: {
-    ...mapGetters('auth', {
-      loggedIn: 'loggedIn',
-      user: 'user',
-      selectedOrganisationalUnit: 'selectedOrganisationalUnit',
-      organisationalUnits: 'organisationalUnits'
+    ...mapGetters("auth", {
+      loggedIn: "loggedIn",
+      user: "user",
+      selectedOrganisationalUnit: "selectedOrganisationalUnit",
+      organisationalUnits: "organisationalUnits",
     }),
 
-    ...mapGetters('shop', {
-      basket: 'basket'
+    ...mapGetters("shop", {
+      basket: "basket",
     }),
 
     shouldShowSearchResults() {
       // return true;
-      return (
-          this.$route.name !== 'Shop'
-          && this.searchBarFocussed
-      );
+      return this.$route.name !== "Shop" && this.searchBarFocussed;
     },
 
     hasHeader() {
-      return !['Visual Editor', 'Edit Visual Editor'].includes(this.$route.name);
+      return !["Visual Editor", "Edit Visual Editor"].includes(
+        this.$route.name
+      );
     },
 
     hasSider() {
-      return !['Visual Editor', 'Edit Visual Editor'].includes(this.$route.name);
+      return !["Visual Editor", "Edit Visual Editor"].includes(
+        this.$route.name
+      );
     },
 
     noPadding() {
       return [
-        'View Project', 'Project Team', 'Optimisation Analytics', 'Optimisation Scenarios', 'Optimisation Scenario Review', 'Optimisation Specification Details',
-        'Matcher', 'View Cluster', 'View Product', 'Shop', 'Basket', 'Lists', 'Analytics', 'Shop Landing', 'Search Analytics', 'Search Rules', 'Visual Editor',
-        'Edit Visual Editor', 'Products', 'Product Category', 'Product Attribute'
+        "View Project",
+        "Project Team",
+        "Optimisation Analytics",
+        "Optimisation Scenarios",
+        "Optimisation Scenario Review",
+        "Optimisation Specification Details",
+        "Matcher",
+        "View Cluster",
+        "View Product",
+        "Shop",
+        "Basket",
+        "Lists",
+        "Analytics",
+        "Shop Landing",
+        "Search Analytics",
+        "Search Rules",
+        "Visual Editor",
+        "Edit Visual Editor",
+        "Products",
+        "Product Category",
+        "Product Attribute",
       ].includes(this.$route.name);
     },
 
@@ -487,14 +557,15 @@ export default {
 
     selectedSuppliers() {
       return false;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="scss">
-#app, .ant-layout {
+#app,
+.ant-layout {
   height: 100%;
-  background: #fff ! important;
+  background: #fff !important;
 }
 
 .ais-InstantSearch {
@@ -547,7 +618,8 @@ export default {
         }
       }
 
-      .ant-input-search, input {
+      .ant-input-search,
+      input {
         width: 100% !important;
         border-radius: 30px;
       }
@@ -635,7 +707,6 @@ export default {
 }
 
 .ant-layout-sider {
-
   .nav-icon {
     margin-right: 15px;
   }
@@ -659,7 +730,8 @@ export default {
     align-items: center;
   }
 
-  .ant-menu, .ant-menu-submenu {
+  .ant-menu,
+  .ant-menu-submenu {
     border: 0;
     background: none !important;
   }
@@ -693,9 +765,9 @@ export default {
     padding-left: 55px !important;
   }
 
-  .menu-space-below {
-    //margin-bottom: 25px !important;
-  }
+  // .menu-space-below {
+  //   margin-bottom: 25px !important;
+  // }
 
   &.ant-layout-sider-collapsed {
     .menu-space-below {

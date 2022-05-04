@@ -48,7 +48,7 @@ export const actions = {
     load({ commit }) {
         commit('START_LOADING');
         axios.get(`${window.API_BASE}/rules`).then((res) => {
-            const rules = res.data.map(override => {
+            const rules = res.data.overrides.map(override => {
                 const { id, rule, includes, excludes } = override;
                 let query_conditions = [
                     {

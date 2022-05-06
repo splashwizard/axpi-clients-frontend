@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <ais-instant-search :search-client="searchClient" index-name="products">
+  <div id="app" v-if="hasCollectionName">
+    <ais-instant-search :search-client="searchClient" :stalled-search-delay="100" :index-name="collectionName">
       <ais-configure :hits-per-page.camel="8" />
 
       <a-layout v-if="loggedIn">
@@ -18,37 +18,19 @@
               <!--                        <img src="/img/axiom.png" alt="">-->
               <!--                    </router-link>-->
               <div class="logo-circle">
-                <img
-                  v-if="user.client.logo"
-                  :src="getImageSrc(user.client.logo)"
-                  alt=""
-                />
+                <img v-if="user.client.logo" :src="getImageSrc(user.client.logo)" alt="" />
                 <img v-else src="/img/axiom-tab-icon.svg" alt="" />
               </div>
 
               <div class="organisation-unit-selector">
                 <a-dropdown :trigger="['click']">
-                  <a
-                    class="ant-dropdown-link"
-                    @click="(e) => e.preventDefault()"
-                  >
-                    {{
-                      selectedOrganisationalUnit
-                        ? selectedOrganisationalUnit.name
-                        : "Please select a unit"
-                    }}
+                  <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
+                    {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : "Please select a unit" }}
                     <a-icon type="down" />
                   </a>
                   <a-menu slot="overlay">
-                    <a-menu-item
-                      v-for="(unit, key) in organisationalUnits"
-                      :key="key"
-                    >
-                      <a
-                        href="#"
-                        @click.prevent="selectOrganisationalUnit(unit)"
-                        >{{ unit.name }}</a
-                      >
+                    <a-menu-item v-for="(unit, key) in organisationalUnits" :key="key">
+                      <a href="#" @click.prevent="selectOrganisationalUnit(unit)">{{ unit.name }}</a>
                     </a-menu-item>
                   </a-menu>
                 </a-dropdown>
@@ -70,9 +52,7 @@
               <!-- eCom search bar -->
               <div class="search-bar-inner" v-if="$route.path !== '/analytics'">
                 <ais-search-box placeholder="">
-                  <template
-                    v-slot="{ currentRefinement, isSearchStalled, refine }"
-                  >
+                  <template v-slot="{ currentRefinement, isSearchStalled, refine }">
                     <a-input-search
                       :value="currentRefinement"
                       @focus="searchBarFocussed = true"
@@ -99,21 +79,15 @@
               <div class="searchResults" v-if="shouldShowSearchResults">
                 <ais-hits>
                   <template slot="item" slot-scope="{ item }">
-                    <li
-                      @click.prevent="() => handleSearchItemSelected(item)"
-                      class="ant-list-item"
-                    >
+                    <li @click.prevent="() => handleSearchItemSelected(item)" class="ant-list-item">
                       <div class="ant-list-item-meta">
                         <div class="ant-list-item-meta-avatar">
-                          <span
-                            class="ant-avatar ant-avatar-circle ant-avatar-image"
-                            ><img :src="getOrderImageSrc(item)"
-                          /></span>
+                          <span class="ant-avatar ant-avatar-circle ant-avatar-image">
+                            <img :src="getOrderImageSrc(item)" @error="onImgErr" />
+                          </span>
                         </div>
                         <div class="ant-list-item-meta-content">
-                          <h4 class="ant-list-item-meta-title">
-                            {{ item.name }}
-                          </h4>
+                          <h4 class="ant-list-item-meta-title" v-html="item.name" />
                         </div>
                       </div>
                     </li>
@@ -125,12 +99,7 @@
             <div class="top-nav-links">
               <div id="nav">
                 <feedback-popup></feedback-popup>
-                <a-popover
-                  title="Account"
-                  trigger="click"
-                  placement="bottomRight"
-                  v-model="userPopoverVisible"
-                >
+                <a-popover title="Account" trigger="click" placement="bottomRight" v-model="userPopoverVisible">
                   <div slot="content">
                     <div class="popover-inner">
                       <div v-if="user.client" class="company-property">
@@ -144,18 +113,13 @@
                           <a @click="navigateToDevelopers">Developers</a>
                         </div>
                         <div>
-                          <a @click="navigateToSpecifications"
-                            >Specifications</a
-                          >
+                          <a @click="navigateToSpecifications">Specifications</a>
                         </div>
                         <div>
                           <a href="#">Documentation</a>
                         </div>
                         <div>
-                          <a
-                            href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core"
-                            >API Docs</a
-                          >
+                          <a href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core">API Docs</a>
                         </div>
                         <div>
                           <a @click="logout">Logout</a>
@@ -173,21 +137,13 @@
                 <a-button>
                   <router-link to="/shop/basket">
                     <a-badge :count="basketCount">
-                      <a-icon
-                        :style="{ fontSize: '18px' }"
-                        type="shopping"
-                        theme="filled"
-                      ></a-icon>
+                      <a-icon :style="{ fontSize: '18px' }" type="shopping" theme="filled"></a-icon>
                     </a-badge>
                   </router-link>
                 </a-button>
                 <a-button>
                   <router-link to="/shop/lists">
-                    <a-icon
-                      :style="{ fontSize: '18px' }"
-                      type="profile"
-                      theme="filled"
-                    ></a-icon>
+                    <a-icon :style="{ fontSize: '18px' }" type="profile" theme="filled"></a-icon>
                   </router-link>
                 </a-button>
               </div>
@@ -378,16 +334,12 @@ import ClickOutside from "vue-click-outside";
 import AddSpecToBasketButtonAndModal from "./views/Shop/AddSpecToBasketButtonAndModal";
 import QuicksightQBar from "./components/QuicksightQBar";
 import Images from "./mixins/Images";
+import client from "@/api/client";
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
-    apiKey: "zBpwkAIxhaS03cvrGPF8HK0qnWluTEwE", // Be sure to use an API key that only allows searches, in production
+    apiKey: "4Q7Xr61bB4jUyDpS7ER5TpybRm5uC74s", // Be sure to use an API key that only allows searches, in production
     nodes: [
-      // {
-      //   host: 'localhost',
-      //   port: '8108',
-      //   protocol: 'http',
-      // },
       {
         host: "jcmib1wyvr5en7xap-1.a1.typesense.net",
         port: "443",
@@ -395,15 +347,10 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
       },
     ],
   },
-  // The following parameters are directly passed to Typesense's search API endpoint.
-  //  So you can pass any parameters supported by the search endpoint below.
-  //  queryBy is required.
-  //  filterBy is managed and overridden by InstantSearch.js. To set it, you want to use one of the filter widgets like refinementList or use the `configure` widget.
   additionalSearchParameters: {
-    queryBy: "name,productCode,catalogCode",
-    // groupBy: 'productCode',
-    groupBy: "name",
-    groupLimit: 1,
+    query_by: "name,description",
+    group_by: "name",
+    group_limit: 1,
   },
 });
 const searchClient = typesenseInstantsearchAdapter.searchClient;
@@ -422,7 +369,7 @@ export default {
     // QuestionMarkIcon,
     FeedbackPopup,
     ProductCategoriesMenu,
-    AddSpecToBasketButtonAndModal
+    AddSpecToBasketButtonAndModal,
   },
   mixins: [Images],
   data() {
@@ -433,7 +380,11 @@ export default {
       searchClient,
       searchBarFocussed: false,
       menuCollapsed: true,
+      collectionName: "",
     };
+  },
+  created() {
+    this.getCollections();
   },
   mounted() {
     this.selectedMenuKey = this.$router.currentRoute.path.split("/")[1];
@@ -488,10 +439,38 @@ export default {
       this.$router.push("/specifications");
       this.settingsPopoverVisible = false;
     },
+
+    // to get image src for items in the search results list
     getOrderImageSrc(order) {
-      if (order["imageURLs"] && order["imageURLs"].length) {
-        return order["imageURLs"][0];
+      if (order.image_urls && order.image_urls.length) {
+        return order.image_urls[0];
       }
+      return "/img/product_placeholder.png";
+    },
+
+    // to get collections
+    async getCollections() {
+      try {
+        const res = (await client.get("/get-collections")).data;
+        if (res.message === "Success!") {
+          const {
+            collections: { collection_name },
+          } = res.data;
+
+          if (collection_name) {
+            this.collectionName = collection_name;
+          }
+        }
+      } catch (err) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error(err);
+        }
+      }
+    },
+
+    // handle image load error
+    onImgErr(e) {
+      e.target.src = "/img/product_placeholder.png";
     },
   },
   computed: {
@@ -512,15 +491,11 @@ export default {
     },
 
     hasHeader() {
-      return !["Visual Editor", "Edit Visual Editor"].includes(
-        this.$route.name
-      );
+      return !["Visual Editor", "Edit Visual Editor"].includes(this.$route.name);
     },
 
     hasSider() {
-      return !["Visual Editor", "Edit Visual Editor"].includes(
-        this.$route.name
-      );
+      return !["Visual Editor", "Edit Visual Editor"].includes(this.$route.name);
     },
 
     noPadding() {
@@ -560,6 +535,10 @@ export default {
 
     selectedSuppliers() {
       return false;
+    },
+
+    hasCollectionName() {
+      return this.collectionName !== "";
     },
   },
 };

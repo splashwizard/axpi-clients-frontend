@@ -1,316 +1,325 @@
 <template>
-  <div id="app" v-if="hasCollectionName">
-    <ais-instant-search :search-client="searchClient" :stalled-search-delay="100" :index-name="collectionName">
-      <ais-configure :hits-per-page.camel="8" />
+  <div id="app">
+    <template v-if="loggedIn">
+      <ais-instant-search
+        :search-client="searchClient"
+        :stalled-search-delay="100"
+        :index-name="collectionName"
+        v-if="hasCollectionName"
+      >
+        <ais-configure :hits-per-page.camel="8" />
 
-      <a-layout v-if="loggedIn">
-        <a-layout-header
-          :style="{
-            background: '#fff',
-            padding: '0 20px',
-            borderBottom: '1px solid #e3e8ee',
-          }"
-          v-if="hasHeader"
-        >
-          <div class="top-nav">
-            <div class="logo">
-              <!--                    <router-link to="/">-->
-              <!--                        <img src="/img/axiom.png" alt="">-->
-              <!--                    </router-link>-->
-              <div class="logo-circle">
-                <img v-if="user.client.logo" :src="getImageSrc(user.client.logo)" alt="" />
-                <img v-else src="/img/axiom-tab-icon.svg" alt="" />
-              </div>
-
-              <div class="organisation-unit-selector">
-                <a-dropdown :trigger="['click']">
-                  <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-                    {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : "Please select a unit" }}
-                    <a-icon type="down" />
-                  </a>
-                  <a-menu slot="overlay">
-                    <a-menu-item v-for="(unit, key) in organisationalUnits" :key="key">
-                      <a href="#" @click.prevent="selectOrganisationalUnit(unit)">{{ unit.name }}</a>
-                    </a-menu-item>
-                  </a-menu>
-                </a-dropdown>
-              </div>
-
-              <!--            <span>-->
-              <!--                        {{ user.client.name }}-->
-              <!--                    </span>-->
-              <!--            <a-icon class="org-group-selector-arrow" type="down"/>-->
-            </div>
-
-            <product-categories-menu />
-            <div class="top-nav-search-bar" v-click-outside="unfocusSearch">
-              <!--            <a-input ref="userNameInput" placeholder="Search..." size="large">-->
-              <!--              <a-icon slot="prefix" type="search"/>-->
-              <!--            </a-input>-->
-              <!--              <a-input-search placeholder="Search products..." style="width: 200px" @search="onSearch"/>-->
-
-              <!-- eCom search bar -->
-              <div class="search-bar-inner" v-if="$route.path !== '/analytics'">
-                <ais-search-box placeholder="">
-                  <template v-slot="{ currentRefinement, isSearchStalled, refine }">
-                    <a-input-search
-                      :value="currentRefinement"
-                      @focus="searchBarFocussed = true"
-                      @pressEnter="$router.push('/shop')"
-                      @search="$router.push('/shop')"
-                      @input="refine($event.currentTarget.value)"
-                      placeholder="Search products..."
-                      style="width: 200px"
-                    />
-                    <span :hidden="!isSearchStalled">Loading...</span>
-                  </template>
-                </ais-search-box>
-
-                <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
-              </div>
-              <!-- / eCom search bar -->
-
-              <!-- Amazon Q -->
-              <div class="search-bar-inner" v-if="$route.path === '/analytics'">
-                <quicksight-q-bar></quicksight-q-bar>
-              </div>
-              <!-- / Amazon Q -->
-
-              <div class="searchResults" v-if="shouldShowSearchResults">
-                <ais-hits>
-                  <template slot="item" slot-scope="{ item }">
-                    <li @click.prevent="() => handleSearchItemSelected(item)" class="ant-list-item">
-                      <div class="ant-list-item-meta">
-                        <div class="ant-list-item-meta-avatar">
-                          <span class="ant-avatar ant-avatar-circle ant-avatar-image">
-                            <img :src="getOrderImageSrc(item)" @error="onImgErr" />
-                          </span>
-                        </div>
-                        <div class="ant-list-item-meta-content">
-                          <h4 class="ant-list-item-meta-title" v-html="item.name" />
-                        </div>
-                      </div>
-                    </li>
-                  </template>
-                </ais-hits>
-              </div>
-            </div>
-
-            <div class="top-nav-links">
-              <div id="nav">
-                <feedback-popup></feedback-popup>
-                <a-popover title="Account" trigger="click" placement="bottomRight" v-model="userPopoverVisible">
-                  <div slot="content">
-                    <div class="popover-inner">
-                      <div v-if="user.client" class="company-property">
-                        {{ user.client.name }}
-                      </div>
-                      <div class="popover-menu">
-                        <div>
-                          <a @click="navigateToAccount">Account</a>
-                        </div>
-                        <div>
-                          <a @click="navigateToDevelopers">Developers</a>
-                        </div>
-                        <div>
-                          <a @click="navigateToSpecifications">Specifications</a>
-                        </div>
-                        <div>
-                          <a href="#">Documentation</a>
-                        </div>
-                        <div>
-                          <a href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core">API Docs</a>
-                        </div>
-                        <div>
-                          <a @click="logout">Logout</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <a-button>
-                    <div>
-                      <user-icon></user-icon>
-                    </div>
-                  </a-button>
-                  <!--                                    <a-button icon="user">{{ user.name }}</a-button>-->
-                </a-popover>
-                <a-button>
-                  <router-link to="/shop/basket">
-                    <a-badge :count="basketCount">
-                      <a-icon :style="{ fontSize: '18px' }" type="shopping" theme="filled"></a-icon>
-                    </a-badge>
-                  </router-link>
-                </a-button>
-                <a-button>
-                  <router-link to="/shop/lists">
-                    <a-icon :style="{ fontSize: '18px' }" type="profile" theme="filled"></a-icon>
-                  </router-link>
-                </a-button>
-              </div>
-            </div>
-          </div>
-        </a-layout-header>
-        <a-layout id="components-layout-demo-responsive">
-          <a-layout-sider
-            width="240"
-            breakpoint="lg"
-            theme="dark"
-            :collapsed-width="70"
-            :trigger="null"
-            collapsible
-            :collapsed="true"
-            :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
-            v-if="hasSider"
+        <a-layout>
+          <a-layout-header
+            :style="{
+              background: '#fff',
+              padding: '0 20px',
+              borderBottom: '1px solid #e3e8ee',
+            }"
+            v-if="hasHeader"
           >
-            <a-menu
-              @click="handleMenuItemClicked"
-              :selected-keys="[selectedMenuKey]"
-              mode="inline"
-              theme="light"
-              :class="{ 'menu-collapsed': menuCollapsed }"
+            <div class="top-nav">
+              <div class="logo">
+                <!--                    <router-link to="/">-->
+                <!--                        <img src="/img/axiom.png" alt="">-->
+                <!--                    </router-link>-->
+                <div class="logo-circle">
+                  <img v-if="user.client.logo" :src="getImageSrc(user.client.logo)" alt="" />
+                  <img v-else src="/img/axiom-tab-icon.svg" alt="" />
+                </div>
+
+                <div class="organisation-unit-selector">
+                  <a-dropdown :trigger="['click']">
+                    <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
+                      {{ selectedOrganisationalUnit ? selectedOrganisationalUnit.name : "Please select a unit" }}
+                      <a-icon type="down" />
+                    </a>
+                    <a-menu slot="overlay">
+                      <a-menu-item v-for="(unit, key) in organisationalUnits" :key="key">
+                        <a href="#" @click.prevent="selectOrganisationalUnit(unit)">{{ unit.name }}</a>
+                      </a-menu-item>
+                    </a-menu>
+                  </a-dropdown>
+                </div>
+
+                <!--            <span>-->
+                <!--                        {{ user.client.name }}-->
+                <!--                    </span>-->
+                <!--            <a-icon class="org-group-selector-arrow" type="down"/>-->
+              </div>
+
+              <product-categories-menu />
+              <div class="top-nav-search-bar" v-click-outside="unfocusSearch">
+                <!--            <a-input ref="userNameInput" placeholder="Search..." size="large">-->
+                <!--              <a-icon slot="prefix" type="search"/>-->
+                <!--            </a-input>-->
+                <!--              <a-input-search placeholder="Search products..." style="width: 200px" @search="onSearch"/>-->
+
+                <!-- eCom search bar -->
+                <div class="search-bar-inner" v-if="$route.path !== '/analytics'">
+                  <ais-search-box placeholder="">
+                    <template v-slot="{ currentRefinement, isSearchStalled, refine }">
+                      <a-input-search
+                        :value="currentRefinement"
+                        @focus="searchBarFocussed = true"
+                        @pressEnter="$router.push('/shop')"
+                        @search="$router.push('/shop')"
+                        @input="refine($event.currentTarget.value)"
+                        placeholder="Search products..."
+                        style="width: 200px"
+                      />
+                      <span :hidden="!isSearchStalled">Loading...</span>
+                    </template>
+                  </ais-search-box>
+
+                  <add-spec-to-basket-button-and-modal></add-spec-to-basket-button-and-modal>
+                </div>
+                <!-- / eCom search bar -->
+
+                <!-- Amazon Q -->
+                <div class="search-bar-inner" v-if="$route.path === '/analytics'">
+                  <quicksight-q-bar></quicksight-q-bar>
+                </div>
+                <!-- / Amazon Q -->
+
+                <div class="searchResults" v-if="shouldShowSearchResults">
+                  <ais-hits>
+                    <template slot="item" slot-scope="{ item }">
+                      <li @click.prevent="() => handleSearchItemSelected(item)" class="ant-list-item">
+                        <div class="ant-list-item-meta">
+                          <div class="ant-list-item-meta-avatar">
+                            <span class="ant-avatar ant-avatar-circle ant-avatar-image">
+                              <img :src="getOrderImageSrc(item)" @error="onImgErr" />
+                            </span>
+                          </div>
+                          <div class="ant-list-item-meta-content">
+                            <h4 class="ant-list-item-meta-title" v-html="item.name" />
+                          </div>
+                        </div>
+                      </li>
+                    </template>
+                  </ais-hits>
+                </div>
+              </div>
+
+              <div class="top-nav-links">
+                <div id="nav">
+                  <feedback-popup></feedback-popup>
+                  <a-popover title="Account" trigger="click" placement="bottomRight" v-model="userPopoverVisible">
+                    <div slot="content">
+                      <div class="popover-inner">
+                        <div v-if="user.client" class="company-property">
+                          {{ user.client.name }}
+                        </div>
+                        <div class="popover-menu">
+                          <div>
+                            <a @click="navigateToAccount">Account</a>
+                          </div>
+                          <div>
+                            <a @click="navigateToDevelopers">Developers</a>
+                          </div>
+                          <div>
+                            <a @click="navigateToSpecifications">Specifications</a>
+                          </div>
+                          <div>
+                            <a href="#">Documentation</a>
+                          </div>
+                          <div>
+                            <a href="https://enhanceable.stoplight.io/docs/axiom/YXBpOjE3NDg1NjY1-axiom-core"
+                              >API Docs</a
+                            >
+                          </div>
+                          <div>
+                            <a @click="logout">Logout</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a-button>
+                      <div>
+                        <user-icon></user-icon>
+                      </div>
+                    </a-button>
+                    <!--                                    <a-button icon="user">{{ user.name }}</a-button>-->
+                  </a-popover>
+                  <a-button>
+                    <router-link to="/shop/basket">
+                      <a-badge :count="basketCount">
+                        <a-icon :style="{ fontSize: '18px' }" type="shopping" theme="filled"></a-icon>
+                      </a-badge>
+                    </router-link>
+                  </a-button>
+                  <a-button>
+                    <router-link to="/shop/lists">
+                      <a-icon :style="{ fontSize: '18px' }" type="profile" theme="filled"></a-icon>
+                    </router-link>
+                  </a-button>
+                </div>
+              </div>
+            </div>
+          </a-layout-header>
+          <a-layout id="components-layout-demo-responsive">
+            <a-layout-sider
+              width="240"
+              breakpoint="lg"
+              theme="dark"
+              :collapsed-width="70"
+              :trigger="null"
+              collapsible
+              :collapsed="true"
+              :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
+              v-if="hasSider"
             >
-              <a-menu-item title="Home" key="" class="menu-space-below">
-                <home-icon class="nav-icon"></home-icon>
-                <span v-if="!menuCollapsed">Home</span>
-              </a-menu-item>
-              <a-menu-item title="Orders" key="matcher">
-                <orders-icon class="nav-icon"></orders-icon>
-                <span v-if="!menuCollapsed">Past Orders</span>
-              </a-menu-item>
-              <!-- <a-menu-item title="Stores" key="store">
-                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shop" theme="filled"></a-icon>
-                <span v-if="!menuCollapsed">Store</span>
-              </a-menu-item>
-              <a-menu-item title="Products" key="products/index">
-                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
-                <span v-if="!menuCollapsed">Product</span>
-              </a-menu-item> -->
-              <!--            <a-menu-item title="Specifications" key="specifications">-->
-              <!--              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save"-->
-              <!--                      theme="filled"></a-icon>-->
-              <!--              <span v-if="!menuCollapsed">Specifications</span>-->
-              <!--            </a-menu-item>-->
-              <!-- <a-menu-item title="Projects" key="projects">
-                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="carry-out"
-                        theme="filled"></a-icon>
-                <span v-if="!menuCollapsed">Projects</span>
-              </a-menu-item> -->
-              <!--              <a-menu-item title="Matcher" key="matcher">-->
-              <!--                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="pushpin"-->
-              <!--                        theme="filled"></a-icon>-->
-              <!--                <span v-if="!menuCollapsed">Matcher</span>-->
-              <!--              </a-menu-item>-->
-              <a-menu-item title="Insights" key="intelligence">
-                <a-icon
-                  :style="{
-                    fontSize: '17px',
-                    marginLeft: '1px',
-                    marginRight: '17px',
-                  }"
-                  type="bulb"
-                  theme="filled"
-                ></a-icon>
-                <span v-if="!menuCollapsed">Insights</span>
-              </a-menu-item>
-              <a-menu-item title="Suppliers" key="suppliers">
-                <suppliers-icon class="nav-icon"></suppliers-icon>
-                <span v-if="!menuCollapsed">Suppliers</span>
-              </a-menu-item>
-              <!-- <a-menu-item title="Strategy" key="goals">
-                <goals-icon class="nav-icon"></goals-icon>
-                <span v-if="!menuCollapsed">Strategy</span>
-              </a-menu-item> -->
-              <!--            <a-menu-item title="Optimisations" key="optimisations">-->
-              <!--              <optimise-icon class="nav-icon"></optimise-icon>-->
-              <!--              <span v-if="!menuCollapsed">Optimisations</span>-->
-              <!--            </a-menu-item>-->
-              <a-menu-item title="Analytics" key="analytics">
-                <analytics-icon class="nav-icon"></analytics-icon>
-                <span v-if="!menuCollapsed">Analytics</span>
-              </a-menu-item>
-              <!--            <a-menu-item title="Reports" key="reports" class="menu-space-below">-->
-              <!--              <reports-icon class="nav-icon"></reports-icon>-->
-              <!--              <span v-if="!menuCollapsed">Reports</span>-->
-              <!--            </a-menu-item>-->
-              <!--                    <a-sub-menu key="sub1">-->
-              <!--                        <span slot="title"><a-icon type="appstore"/><span>Navigation Three</span></span>-->
-              <!--                        <a-menu-item key="3">-->
-              <!--                            Option 3-->
-              <!--                        </a-menu-item>-->
-              <!--                        <a-menu-item key="4">-->
-              <!--                            Option 4-->
-              <!--                        </a-menu-item>-->
-              <!--                        <a-sub-menu key="sub1-2" title="Submenu">-->
-              <!--                            <a-menu-item key="5">-->
-              <!--                                Option 5-->
-              <!--                            </a-menu-item>-->
-              <!--                            <a-menu-item key="6">-->
-              <!--                                Option 6-->
-              <!--                            </a-menu-item>-->
-              <!--                        </a-sub-menu>-->
-              <!--                    </a-sub-menu>-->
-              <!--                    <a-sub-menu key="sub2">-->
-              <!--                        <span slot="title"><a-icon type="chart"/><span>Reports</span></span>-->
-              <!--                        <a-menu-item key="7">-->
-              <!--                            Option 7-->
-              <!--                        </a-menu-item>-->
-              <!--                        <a-menu-item key="8">-->
-              <!--                            Option 8-->
-              <!--                        </a-menu-item>-->
-              <!--                        <a-menu-item key="9">-->
-              <!--                            Option 9-->
-              <!--                        </a-menu-item>-->
-              <!--                        <a-menu-item key="10">-->
-              <!--                            Option 10-->
-              <!--                        </a-menu-item>-->
-              <!--                    </a-sub-menu>-->
-              <a-menu-item key="shop/landing" title="Shop">
-                <a-icon
-                  :style="{
-                    fontSize: '17px',
-                    marginLeft: '1px',
-                    marginRight: '17px',
-                  }"
-                  type="shopping-cart"
-                ></a-icon>
-                <span v-if="!menuCollapsed">Shop</span>
-              </a-menu-item>
-              <a-menu-item title="Search" key="search/analytics">
-                <a-icon
-                  :style="{
-                    fontSize: '17px',
-                    marginLeft: '1px',
-                    marginRight: '17px',
-                  }"
-                  type="search"
-                ></a-icon>
-                <span v-if="!menuCollapsed">Search</span>
-              </a-menu-item>
-              <!--            <a-menu-item key="developers" title="Developers">-->
-              <!--              <developers-icon class="nav-icon"></developers-icon>-->
-              <!--              <span v-if="!menuCollapsed">Developers</span>-->
-              <!--            </a-menu-item>-->
-              <!--            <a-menu-item key="account" title="Account">-->
-              <!--              <account-icon class="nav-icon"></account-icon>-->
-              <!--              <span v-if="!menuCollapsed">Account</span>-->
-              <!--            </a-menu-item>-->
-            </a-menu>
-          </a-layout-sider>
-          <a-layout>
-            <a-layout-content
-              :style="{
-                padding: noPadding ? 0 : '20px 30px',
-                background: '#fff',
-                height: '100%',
-              }"
-            >
-              <router-view />
-            </a-layout-content>
+              <a-menu
+                @click="handleMenuItemClicked"
+                :selected-keys="[selectedMenuKey]"
+                mode="inline"
+                theme="light"
+                :class="{ 'menu-collapsed': menuCollapsed }"
+              >
+                <a-menu-item title="Home" key="" class="menu-space-below">
+                  <home-icon class="nav-icon"></home-icon>
+                  <span v-if="!menuCollapsed">Home</span>
+                </a-menu-item>
+                <a-menu-item title="Orders" key="matcher">
+                  <orders-icon class="nav-icon"></orders-icon>
+                  <span v-if="!menuCollapsed">Past Orders</span>
+                </a-menu-item>
+                <!-- <a-menu-item title="Stores" key="store">
+                  <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shop" theme="filled"></a-icon>
+                  <span v-if="!menuCollapsed">Store</span>
+                </a-menu-item>
+                <a-menu-item title="Products" key="products/index">
+                  <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="shopping-cart"></a-icon>
+                  <span v-if="!menuCollapsed">Product</span>
+                </a-menu-item> -->
+                <!--            <a-menu-item title="Specifications" key="specifications">-->
+                <!--              <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="save"-->
+                <!--                      theme="filled"></a-icon>-->
+                <!--              <span v-if="!menuCollapsed">Specifications</span>-->
+                <!--            </a-menu-item>-->
+                <!-- <a-menu-item title="Projects" key="projects">
+                  <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="carry-out"
+                          theme="filled"></a-icon>
+                  <span v-if="!menuCollapsed">Projects</span>
+                </a-menu-item> -->
+                <!--              <a-menu-item title="Matcher" key="matcher">-->
+                <!--                <a-icon :style="{ fontSize: '17px', marginLeft: '1px', marginRight: '17px' }" type="pushpin"-->
+                <!--                        theme="filled"></a-icon>-->
+                <!--                <span v-if="!menuCollapsed">Matcher</span>-->
+                <!--              </a-menu-item>-->
+                <a-menu-item title="Insights" key="intelligence">
+                  <a-icon
+                    :style="{
+                      fontSize: '17px',
+                      marginLeft: '1px',
+                      marginRight: '17px',
+                    }"
+                    type="bulb"
+                    theme="filled"
+                  ></a-icon>
+                  <span v-if="!menuCollapsed">Insights</span>
+                </a-menu-item>
+                <a-menu-item title="Suppliers" key="suppliers">
+                  <suppliers-icon class="nav-icon"></suppliers-icon>
+                  <span v-if="!menuCollapsed">Suppliers</span>
+                </a-menu-item>
+                <!-- <a-menu-item title="Strategy" key="goals">
+                  <goals-icon class="nav-icon"></goals-icon>
+                  <span v-if="!menuCollapsed">Strategy</span>
+                </a-menu-item> -->
+                <!--            <a-menu-item title="Optimisations" key="optimisations">-->
+                <!--              <optimise-icon class="nav-icon"></optimise-icon>-->
+                <!--              <span v-if="!menuCollapsed">Optimisations</span>-->
+                <!--            </a-menu-item>-->
+                <a-menu-item title="Analytics" key="analytics">
+                  <analytics-icon class="nav-icon"></analytics-icon>
+                  <span v-if="!menuCollapsed">Analytics</span>
+                </a-menu-item>
+                <!--            <a-menu-item title="Reports" key="reports" class="menu-space-below">-->
+                <!--              <reports-icon class="nav-icon"></reports-icon>-->
+                <!--              <span v-if="!menuCollapsed">Reports</span>-->
+                <!--            </a-menu-item>-->
+                <!--                    <a-sub-menu key="sub1">-->
+                <!--                        <span slot="title"><a-icon type="appstore"/><span>Navigation Three</span></span>-->
+                <!--                        <a-menu-item key="3">-->
+                <!--                            Option 3-->
+                <!--                        </a-menu-item>-->
+                <!--                        <a-menu-item key="4">-->
+                <!--                            Option 4-->
+                <!--                        </a-menu-item>-->
+                <!--                        <a-sub-menu key="sub1-2" title="Submenu">-->
+                <!--                            <a-menu-item key="5">-->
+                <!--                                Option 5-->
+                <!--                            </a-menu-item>-->
+                <!--                            <a-menu-item key="6">-->
+                <!--                                Option 6-->
+                <!--                            </a-menu-item>-->
+                <!--                        </a-sub-menu>-->
+                <!--                    </a-sub-menu>-->
+                <!--                    <a-sub-menu key="sub2">-->
+                <!--                        <span slot="title"><a-icon type="chart"/><span>Reports</span></span>-->
+                <!--                        <a-menu-item key="7">-->
+                <!--                            Option 7-->
+                <!--                        </a-menu-item>-->
+                <!--                        <a-menu-item key="8">-->
+                <!--                            Option 8-->
+                <!--                        </a-menu-item>-->
+                <!--                        <a-menu-item key="9">-->
+                <!--                            Option 9-->
+                <!--                        </a-menu-item>-->
+                <!--                        <a-menu-item key="10">-->
+                <!--                            Option 10-->
+                <!--                        </a-menu-item>-->
+                <!--                    </a-sub-menu>-->
+                <a-menu-item key="shop/landing" title="Shop">
+                  <a-icon
+                    :style="{
+                      fontSize: '17px',
+                      marginLeft: '1px',
+                      marginRight: '17px',
+                    }"
+                    type="shopping-cart"
+                  ></a-icon>
+                  <span v-if="!menuCollapsed">Shop</span>
+                </a-menu-item>
+                <a-menu-item title="Search" key="search/analytics">
+                  <a-icon
+                    :style="{
+                      fontSize: '17px',
+                      marginLeft: '1px',
+                      marginRight: '17px',
+                    }"
+                    type="search"
+                  ></a-icon>
+                  <span v-if="!menuCollapsed">Search</span>
+                </a-menu-item>
+                <!--            <a-menu-item key="developers" title="Developers">-->
+                <!--              <developers-icon class="nav-icon"></developers-icon>-->
+                <!--              <span v-if="!menuCollapsed">Developers</span>-->
+                <!--            </a-menu-item>-->
+                <!--            <a-menu-item key="account" title="Account">-->
+                <!--              <account-icon class="nav-icon"></account-icon>-->
+                <!--              <span v-if="!menuCollapsed">Account</span>-->
+                <!--            </a-menu-item>-->
+              </a-menu>
+            </a-layout-sider>
+            <a-layout>
+              <a-layout-content
+                :style="{
+                  padding: noPadding ? 0 : '20px 30px',
+                  background: '#fff',
+                  height: '100%',
+                }"
+              >
+                <router-view />
+              </a-layout-content>
+            </a-layout>
           </a-layout>
         </a-layout>
-      </a-layout>
-      <router-view v-else />
-    </ais-instant-search>
+      </ais-instant-search>
+    </template>
+    <router-view v-else />
   </div>
 </template>
 <script>
@@ -393,6 +402,12 @@ export default {
     $route(to) {
       this.selectedMenuKey = to.path.split("/")[1];
     },
+
+    loggedIn(val) {
+      if (val) {
+        this.getCollections();
+      }
+    },
   },
   directives: {
     ClickOutside,
@@ -450,6 +465,10 @@ export default {
 
     // to get collections
     async getCollections() {
+      if (!this.loggedIn) {
+        return;
+      }
+
       try {
         const res = (await client.get("/get-collections")).data;
         if (res.message === "Success!") {

@@ -17,13 +17,12 @@ export default {
     };
   },
   methods: {
-    // get category
     getCategory(product) {
       if (!product.category_breadcrumbs) {
         return;
       }
       const category = product.category_breadcrumbs
-        .replace(/[^a-zA-Z0-9,]/g, "")
+        .replace(/[^a-zA-Z0-9, ]/g, "")
         .split(`,`)
         .pop();
 
@@ -56,13 +55,14 @@ export default {
 .category-chip {
   margin-bottom: 1rem;
   padding: 2px 6px;
-  max-width: 60%;
+  max-width: 150px;
   width: min-content;
   background-color: #188fff1d;
   color: #188fff;
   font-size: 10px;
   font-weight: 700;
-  border-radius: 9999px;
+  white-space: nowrap;
+  border-radius: 4px;
   text-overflow: ellipsis;
   overflow: hidden;
   user-select: none;

@@ -1,9 +1,13 @@
 <template>
-  <ais-hits>
+  <ais-hits
+    :class-names="{
+      'ais-Hits-item': 'custom-ais-hits-item',
+    }"
+  >
     <template slot="item" slot-scope="{ item }">
       <article class="shop-item-result">
         <a-row :gutter="32">
-          <a-col :span="6">
+          <a-col :span="5">
             <category-show :item="item" />
             <div class="product-image-wrapper">
               <router-link :to="getProductPageUrl(item)">
@@ -11,7 +15,7 @@
               </router-link>
             </div>
           </a-col>
-          <a-col :span="18">
+          <a-col :span="19">
             <div class="product-top">
               <div class="left">
                 <router-link :to="getProductPageUrl(item)">
@@ -70,7 +74,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .shop-item-result {
   width: 100%;
 
@@ -85,7 +89,6 @@ export default {
   }
 
   .product-image-wrapper {
-    margin: 0 auto;
     width: 150px;
     height: 150px;
     border: 1px solid #eaeaea;
@@ -123,5 +126,10 @@ export default {
     color: inherit;
     background-color: #188fff61;
   }
+}
+
+.custom-ais-hits-item {
+  margin-bottom: 2rem;
+  border-radius: 4px !important;
 }
 </style>

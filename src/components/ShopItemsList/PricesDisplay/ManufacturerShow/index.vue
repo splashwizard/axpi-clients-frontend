@@ -1,18 +1,18 @@
 <template>
-  <div class="root">
-    <div class="manufacturer-wrapper">
-      <div class="manufacturer-head-line">
-        <span>Manufacturer</span>
-        <div />
-      </div>
+  <div class="manufacturer-wrapper">
+    <div class="manufacturer-head-line">
+      <span>Manufacturer</span>
+      <div />
+    </div>
+    <div class="info-wrapper">
       <div class="manufacturer-info-show">
         <div class="name">{{ item.manufacturer }}</div>
         <div class="id">{{ getManufacturId(item) }}</div>
       </div>
+      <router-link :to="ctaLink">
+        <a-button type="primary">View & Buy</a-button>
+      </router-link>
     </div>
-    <router-link :to="ctaLink">
-      <a-button type="primary">View & Buy</a-button>
-    </router-link>
   </div>
 </template>
 
@@ -32,27 +32,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.root {
-  display: flex;
-  align-items: center;
+.manufacturer-wrapper {
+  flex: 1;
+  margin-top: 20px;
+  user-select: none;
 
-  .manufacturer-wrapper {
-    flex: 1;
-    margin-top: 20px;
-    user-select: none;
+  .manufacturer-head-line {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
 
-    .manufacturer-head-line {
-      display: flex;
-      align-items: center;
-      font-size: 20px;
-      font-weight: 600;
-
-      div {
-        margin-left: 1rem;
-        border-top: 1px solid #eaeaea;
-        width: 100%;
-      }
+    div {
+      margin-left: 1rem;
+      border-top: 1px solid #eaeaea;
+      width: 100%;
     }
+  }
+
+  .info-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 
     .manufacturer-info-show {
       margin-top: 1rem;
@@ -69,17 +70,17 @@ export default {
         background-color: #188fff1d;
         padding: 4px 8px;
         font-size: 12px;
-        border-radius: 9999px;
+        border-radius: 4px;
       }
     }
-  }
 
-  button {
-    margin-left: 2rem;
-    background-color: #1890ff;
-    border-color: #1890ff;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    button {
+      margin-left: 2rem;
+      background-color: #1890ff;
+      border-color: #1890ff;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
   }
 }
 </style>

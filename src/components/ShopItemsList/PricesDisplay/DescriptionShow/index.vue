@@ -14,7 +14,11 @@
       <div class="gradient-overlay" v-if="isCollapsed"></div>
     </div>
     <div class="btn-wrapper" v-if="longTxt">
-      <a-button @click="toggleTxt">Show {{ isCollapsed ? "More" : "Less" }}</a-button>
+      <div class="btn" @click="toggleTxt">
+        <a-button type="link"> Show {{ isCollapsed ? "More" : "Less" }} </a-button>
+        <a-icon type="caret-down" v-if="isCollapsed" />
+        <a-icon type="caret-up" v-else />
+      </div>
     </div>
   </div>
 </template>
@@ -57,7 +61,7 @@ export default {
 <style lang="scss" scoped>
 .description-wrapper {
   position: relative;
-  padding: 0 14px 14px;
+  padding-bottom: 14px;
   overflow: hidden;
 
   .description {
@@ -75,5 +79,17 @@ export default {
 
 .btn-wrapper {
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
+
+  .btn {
+    display: flex;
+    align-items: center;
+    color: #1890ff;
+
+    button {
+      padding: 0 4px;
+    }
+  }
 }
 </style>

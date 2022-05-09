@@ -14,7 +14,7 @@
         </a-menu>
       </template>
     </a-dropdown>
-    <div class="menu-bg" v-if="visible">
+    <div class="menu-bg" :style="visible ? 'visibility: visible;opacity: 1' : 'visibility: hidden;opacity: 0;transition: visibility 0.5s,opacity 1s linear'">
     </div>
   </div>
 </template>

@@ -121,7 +121,7 @@ export default {
     updateProductList(searchTerm) {
       axios.post(`${window.API_BASE}/product/search`, {
         "q": searchTerm,
-        "query_by": "product_name"
+        "query_by": "name"
       }).then((res) => {
         this.list = res.data.hits.map((item) => {
           const { id, product_name } = item.document;

@@ -31,4 +31,9 @@ export default {
     min-width: 200px;
     padding-right: 8px;
   }
+
+  .ant-dropdown-menu-submenu-popup ul {
+    box-shadow: none;
+    margin: 0!important;
+  }
 </style>

@@ -1,9 +1,10 @@
 <template>
   <div class="product-menu-wrapper">
-    <a-dropdown>
-      <a-button class="product-menu-btn" type="default" icon="menu" @click.prevent> </a-button>
+    <a-dropdown :visible="visible" @visibleChange="visibleChange" trigger="click">
+      <a-button size="medium" class="product-menu-btn" type="default" icon="menu" @click.prevent>
+      </a-button>
       <template #overlay>
-        <a-menu>
+        <a-menu class="menu">
           <template v-for="(item, index) in categories">
             <a-menu-item v-if="!item.children" class="dropdown-item" :key="index">
               {{ item.name }}
@@ -13,12 +14,14 @@
         </a-menu>
       </template>
     </a-dropdown>
+    <div class="menu-bg" v-if="visible">
+    </div>
   </div>
 </template>
 
 <script>
-import client from "@/api/client";
-import subMenu from "./SubMenu";
+import client from '@/api/client'
+import subMenu from './SubMenu';
 
 export default {
   name: "ProductCategoriesMenu",
@@ -26,7 +29,8 @@ export default {
   data() {
     return {
       categories: [],
-    };
+      visible: false
+    }
   },
   async created() {
     try {
@@ -40,6 +44,9 @@ export default {
     }
   },
   methods: {
+    visibleChange(visible) {
+      this.visible = visible;
+    },
     getCategories(data, parent_id = null) {
       let treedata = [];
       for (let item of data) {
@@ -60,22 +67,38 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.product-menu-btn {
-  border-radius: 31px;
-  width: 50px;
-}
+  .product-menu-btn {
+    border-radius: 31px;
+    width: 50px;
+  }
 
-.product-menu-wrapper {
-  padding-left: 35px;
-}
+  .product-menu-wrapper {
+    padding-left: 35px;
+  }
 
-.dropdown-item {
-  font-size: 16px;
-  min-width: 200px;
-  padding-right: 8px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
+  .dropdown-item {
+    font-size: 16px;
+    min-width: 200px;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .menu-bg {
+    width: 100vw;
+    height: calc(90vh - 100px);
+    background: white;
+    border-bottom: 1px solid #cccccc;
+    position: fixed;
+    top: 57px;
+    left: 0;
+    z-index: 2;
+  }
+
+  .menu {
+    box-shadow: none;
+    margin-top: 12px;
+  }
 </style>

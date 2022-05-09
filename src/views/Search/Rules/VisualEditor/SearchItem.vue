@@ -8,7 +8,7 @@
       <div class="imgWrapper">
         <img :src="item.imgsrc">
       </div>
-      <h4>{{item.title}}</h4>
+      <h4 v-html="item.title"></h4>
       <div class="action-wrapper">
         <div class="badge" v-if="pinnedItems.find(pinnedItem => pinnedItem.id === item.id)">
           <a-icon type="pushpin" :style="{fontSize: '12px' }" /> Pinned

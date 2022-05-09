@@ -92,7 +92,6 @@ export default {
       }
     }
     this.triggerData = rule.conditions;
-    // this.triggerData = {period: [], query_conditions: []};
     this.strategyData = rule.consequences;
     this.searchTerm = rule.conditions.query_conditions[0].query.keyword;
     this.updateProductList(this.searchTerm);
@@ -146,12 +145,14 @@ export default {
         "query_by": "name"
       }).then((res) => {
         this.list = res.data.hits.map((item) => {
-          const { id, product_name } = item.document;
+          const { id, name } = item.document;
+          const image_urls = item.document.image_urls ? JSON.parse(item.document.image_urls) : [];
           return {
             id: id,
             key: id,
-            title: product_name,
-            imgsrc: 'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg',
+            title: name,
+            imgsrc: image_urls.length > 0 ? image_urls[0] :
+              'https://user-content.algolia.com/QHyD9SpPVAKetU8FXYRXz41a2U0ha4l3fir7COiMnVU/resizing_type:fit/width:224/height:224/gravity:sm/enlarge:true/extend:true/aHR0cHM6Ly91cy52d3IuY29tL3N0aWJvL2JpZ3dlYi9zdGQubGFuZy5hbGwvNTkvNzcvMTAwMDU5NzcuanBn.jpg',
             fixed: false,
             pinned: false,
             pinnedposition: 0,
@@ -294,6 +295,7 @@ export default {
       if(drawerType === 'condition') {
         const new_conditions = [...this.triggerData.query_conditions, drawerData];
         this.searchTerm = new_conditions[0].query.keyword;
+        this.updateProductList(this.searchTerm);
         this.searchFilters = [...new_conditions[0].filters];
         this.triggerData.query_conditions = new_conditions;
       }
@@ -322,6 +324,7 @@ export default {
           filters: this.editDrawerItem.filters
         }: item);
         this.searchTerm = new_conditions[0].query.keyword;
+        this.updateProductList(this.searchTerm);
         this.searchFilters = [...new_conditions[0].filters];
         this.triggerData.query_conditions = new_conditions;
         this.editDrawerItem = {

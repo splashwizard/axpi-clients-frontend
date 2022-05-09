@@ -63,11 +63,6 @@ export default {
     },
   },
   created() {
-    // const ruleData = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-    // this.rules = ruleData.map((rule) => ({
-    //   ...rule,
-    //   disabled: false,
-    // }));
     if(!this.isLoaded)
       this.load();
   }

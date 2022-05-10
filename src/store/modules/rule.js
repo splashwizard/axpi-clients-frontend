@@ -27,6 +27,14 @@ export const mutations = {
         state.loading = false;
     },
 
+    DISABLE_RULE(state, {key, checked}) {
+        const disablingIdx = state.list.findIndex(item => item.key === key);
+        state.list = state.list.map((item, index) => (index === disablingIdx ? {
+            ...item,
+            disabled: checked
+        } : item))
+    },
+
     DELETE_RULE(state, delete_key) {
         state.list = state.list.filter(rule => rule.key !== delete_key); 
     }
@@ -89,6 +97,9 @@ export const actions = {
             this._vm.$message.error('Error fetching rules');
             commit('STOP_LOADING');
         });
+    },
+    disableRule: ({commit}, payload) => {
+        commit('DISABLE_RULE', payload);
     },
     deleteRule: ({commit}, key) => {
         commit('DELETE_RULE', key);

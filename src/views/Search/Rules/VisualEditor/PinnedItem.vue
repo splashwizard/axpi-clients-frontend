@@ -113,7 +113,7 @@ export default {
     background-color: rgb(245,245,250);
     color: rgb(72,76,122);
     border: 1px solid rgb(214,214,231);
-    margin-left: 8px;
+    margin: 0 8px;
   }
 
   .stl-truncate {

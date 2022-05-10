@@ -22,11 +22,11 @@
     <template slot="action-column" slot-scope="key, record">
       <a-dropdown :trigger="['click']" v-model="record.visibleDropdown">
         <a-menu slot="overlay" style="padding: 0">
-          <a-menu-item key="edit" class="dropdown-item" @click="editRule(key)">
-            <a-icon type="edit"  />
+          <a-menu-item key="edit" class="dropdown-item-between" @click="editRule(key)">
             <span>
               Edit Rule
             </span>
+            <a-icon type="edit"  />
           </a-menu-item>
           <a-menu-item key="disable" class="dropdown-item-between">
             <span style="margin-right: 80px">
@@ -37,11 +37,11 @@
               <a-icon type="close" />
             </a-switch>
           </a-menu-item>
-          <a-menu-item key="delete" class="dropdown-item" @click="deleteRule(key)">
-            <a-icon type="delete"  />
+          <a-menu-item key="delete" class="dropdown-item-between" @click="deleteRule(key)">
             <span>
               Delete Rule
             </span>
+            <a-icon type="delete"  />
           </a-menu-item>
         </a-menu>
         <a-button icon="more"/>
@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       columns,
-      pagination: false,
+      pagination: {defaultPageSize: 5},
       bordered: false,
       badgeStyle: {
         backgroundColor: 'rgb(232,250,255)',

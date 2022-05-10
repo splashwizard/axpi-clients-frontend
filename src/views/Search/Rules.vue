@@ -27,7 +27,6 @@ export default {
   components: { RulesHeader, RulesTable, LeftSidebar },
   data() {
     return {
-      rules: [],
       searchTerm: '',
     }
   },
@@ -41,6 +40,7 @@ export default {
   methods: {
     ...mapActions('rule', {
       load: 'load',
+      disable: 'disableRule',
       delete: 'deleteRule'
     }),
     changeSearchTerm(value) {
@@ -50,7 +50,8 @@ export default {
       this.$router.push(`/search/rules/visual-editor/edit/${key}`);
     },
     disableRule(key, checked) {
-      this.rules[this.rules.findIndex(item => item.key === key)].disabled = checked;
+      this.disable({key, checked});
+      // this.rules[this.rules.findIndex(item => item.key === key)].disabled = checked;
     },
     deleteRule(key) {
       axios.delete(`${window.API_BASE}/rules/${key}`).then(() => {

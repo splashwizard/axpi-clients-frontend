@@ -358,7 +358,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   },
   additionalSearchParameters: {
     query_by: "name,description",
-    group_by: "name",
+    group_by: "product_identifier",
     group_limit: 1,
   },
 });

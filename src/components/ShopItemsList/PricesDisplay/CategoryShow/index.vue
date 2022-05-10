@@ -1,30 +1,38 @@
 <template>
   <div>
-    <a-tooltip :title="getCategory(item)" overlayClassName="product-category-tooltip" v-if="visibleTooltip">
-      <div class="category-chip">{{ getCategory(item) }}</div>
+    <a-tooltip :title="categoryDisplay" overlayClassName="product-category-tooltip" v-if="visibleTooltip">
+      <div class="category-chip">{{ categoryDisplay }}</div>
     </a-tooltip>
-    <div class="category-chip" v-else>{{ getCategory(item) }}</div>
+    <div class="category-chip" v-else>{{ categoryDisplay }}</div>
   </div>
 </template>
 
 <script>
 export default {
   name: "CategoryShow",
-  props: ["item"],
+  props: {
+    item: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       visibleTooltip: false,
     };
   },
+  computed: {
+    categoryDisplay: function () {
+      return this.getCategory(this.item);
+    },
+  },
   methods: {
     getCategory(product) {
-      if (!product.category_breadcrumbs) {
+      if (!product.category_breadcrumbs || !product.category_breadcrumbs.length) {
         return;
       }
-      const category = product.category_breadcrumbs
-        .replace(/[^a-zA-Z0-9, ]/g, "")
-        .split(`,`)
-        .pop();
+
+      const category = product.category_breadcrumbs[product.category_breadcrumbs.length - 1];
 
       if (category.length > 19) {
         this.visibleTooltip = true;

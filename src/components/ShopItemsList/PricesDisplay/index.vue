@@ -49,7 +49,12 @@ import ManufacturerShow from "./ManufacturerShow";
 
 export default {
   name: "PricesDisplay",
-  props: ["quantities"],
+  props: {
+    // @TODO: check if quantities is needed
+    quantities: {
+      type: Object,
+    },
+  },
   components: {
     DescriptionShow,
     CategoryShow,

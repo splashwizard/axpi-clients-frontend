@@ -16,8 +16,8 @@
     <div class="btn-wrapper" v-if="longTxt">
       <div class="btn" @click="toggleTxt">
         <a-button type="link"> Show {{ isCollapsed ? "More" : "Less" }} </a-button>
-        <a-icon type="caret-down" v-if="isCollapsed" />
-        <a-icon type="caret-up" v-else />
+        <a-icon type="caret-down" v-if="isCollapsed" key="i-arrow-down" />
+        <a-icon type="caret-up" v-else key="i-arrow-up" />
       </div>
     </div>
   </div>
@@ -26,7 +26,12 @@
 <script>
 export default {
   name: "DescriptionShow",
-  props: ["item"],
+  props: {
+    item: {
+      type: Object,
+      required: true,
+    },
+  },
   mounted() {
     this.checkTxtLength();
   },

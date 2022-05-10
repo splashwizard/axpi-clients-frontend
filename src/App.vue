@@ -58,7 +58,7 @@
                 <!-- eCom search bar -->
                 <div class="search-bar-inner" v-if="$route.path !== '/analytics'">
                   <ais-search-box placeholder="">
-                    <template v-slot="{ currentRefinement, isSearchStalled, refine }">
+                    <template v-slot="{ currentRefinement, refine }">
                       <a-input-search
                         :value="currentRefinement"
                         @focus="searchBarFocussed = true"
@@ -68,7 +68,7 @@
                         placeholder="Search products..."
                         style="width: 200px"
                       />
-                      <span :hidden="!isSearchStalled">Loading...</span>
+                      <!-- <span :hidden="!isSearchStalled">Loading...</span> -->
                     </template>
                   </ais-search-box>
 

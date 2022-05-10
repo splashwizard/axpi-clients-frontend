@@ -38,22 +38,11 @@
           </a-row>
           <a-row :gutter="30">
             <a-col :span="5" style="padding-left: 17px">
-              <!-- <ais-panel>
-                <h4>Manufacturer</h4>
-                <ais-refinement-list attribute="manufacturer" />
-              </ais-panel>
-              <ais-panel>
-                <h4>Certifications</h4>
-                <ais-refinement-list attribute="certifications" />
-              </ais-panel>
-              <ais-panel>
-                <h4>Materials</h4>
-                <ais-refinement-list attribute="materials" />
-              </ais-panel>
-              <ais-panel>
-                <h4>Quantity</h4>
-                <ais-range-input attribute="quantity" />
-              </ais-panel> -->
+              <ais-state-results>
+                <template v-slot="{ results: { hits } }">
+                  <shop-filter-options :results="hits" />
+                </template>
+              </ais-state-results>
             </a-col>
             <a-col :span="19" style="padding-right: 17px">
               <shop-items-list
@@ -77,6 +66,7 @@ import Units from "../mixins/Units";
 import axios from "axios";
 import Orders from "../mixins/Orders";
 import ShopItemsList from "@/components/ShopItemsList";
+import ShopFilterOptions from "@/components/ShopFilterOptions";
 
 const _ = require("lodash");
 
@@ -87,6 +77,7 @@ export default {
   name: "Shop",
   components: {
     ShopItemsList,
+    ShopFilterOptions,
   },
   mixins: [Units, Orders, createWidgetMixin({ connector: connectHitsWithInsights })],
   watch: {
@@ -366,7 +357,6 @@ export default {
 }
 
 .shop-topbar-right {
-  margin-top: 1rem;
   display: flex;
 
   .left {

@@ -7,7 +7,7 @@
         :index-name="collectionName"
         v-if="hasCollectionName"
       >
-        <ais-configure :hits-per-page.camel="8" />
+        <ais-configure :hits-per-page.camel="12" />
 
         <a-layout>
           <a-layout-header

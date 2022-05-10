@@ -6,8 +6,8 @@
     </div>
     <div class="info-wrapper">
       <div class="manufacturer-info-show">
-        <div class="name">{{ item.manufacturer }}</div>
-        <div class="id">{{ getManufacturId(item) }}</div>
+        <div class="name" v-html="item.manufacturer" />
+        <div class="id" v-html="manufacturerId" />
       </div>
       <router-link :to="ctaLink">
         <a-button type="primary">View & Buy</a-button>
@@ -19,7 +19,21 @@
 <script>
 export default {
   name: "ManufacturerShow",
-  props: ["item", "ctaLink"],
+  props: {
+    item: {
+      type: Object,
+      required: true,
+    },
+    ctaLink: {
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
+    manufacturerId: function () {
+      return this.getManufacturId(this.item);
+    },
+  },
   methods: {
     getManufacturId(product) {
       if (product.variant_identifier === "NA") {

@@ -1,5 +1,5 @@
 <template>
-  <div class="root">
+  <div class="root" v-if="visible">
     <div
       class="title-box"
       :class="{ 'has-refined': hasRefined }"
@@ -74,6 +74,7 @@ export default {
       isCollapsed: true,
       hasRefined: false,
       isRefinedNumber: 0,
+      visible: false,
     };
   },
   watch: {
@@ -81,6 +82,14 @@ export default {
       if (val && val.length) {
         this.getOptions();
       }
+    },
+    orgOptions: function (val) {
+      if (val && val.length) {
+        this.visible = true;
+        return;
+      }
+
+      this.visible = false;
     },
   },
   methods: {

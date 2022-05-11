@@ -96,15 +96,13 @@ export default {
   .product-image-wrapper {
     width: 150px;
     height: 150px;
-    border: 1px solid #eaeaea;
     border-radius: 4px;
     overflow: hidden;
   }
 
   .product-image {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
   }
 
   .product-top {

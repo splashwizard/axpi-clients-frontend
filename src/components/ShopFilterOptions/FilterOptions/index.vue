@@ -5,6 +5,7 @@
       :class="{ 'has-refined': hasRefined }"
       @mouseenter="showOptionsNumber"
       @mouseleave="hideOptionsNumber"
+      @click="toggleOptions"
     >
       <div class="options-title-wrapper">
         <span class="options-title">{{ title }}</span>
@@ -13,7 +14,7 @@
         </span>
         <span class="options-count" v-else-if="hasRefined">{{ isRefinedNumber }} selected</span>
       </div>
-      <div @click="toggleOptions">
+      <div>
         <a-icon type="caret-right" v-if="isCollapsed" key="i-arrow-right" />
         <a-icon type="caret-down" v-else key="i-arrow-down" />
       </div>
@@ -211,6 +212,7 @@ export default {
   .options-list {
     max-height: 300px;
     overflow-y: auto;
+    overflow-x: hidden;
     list-style: none;
     margin: 0;
     padding: 0;

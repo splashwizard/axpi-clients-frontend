@@ -35,8 +35,8 @@ export default {
   async created() {
     try {
       const store = (await client.get(`/stores`)).data;
-      if (store.length > 0) {
-        const categoriesData = (await client.get(`/stores/${store[0].id}}}/categories`)).data;
+      if(store.length > 0) {
+        const categoriesData = (await client.get(`/stores/${store[0].id}}}/categories`)).data.sort((a,b) => (a.name.localeCompare(b.name)));
         this.categories = this.getCategories(categoriesData);
       }
     } catch (e) {

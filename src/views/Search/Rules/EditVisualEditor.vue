@@ -146,7 +146,7 @@ export default {
       }).then((res) => {
         this.list = res.data.hits.map((item) => {
           const { id, name } = item.document;
-          const image_urls = item.document.image_urls ? JSON.parse(item.document.image_urls) : [];
+          const image_urls = item.document.image_urls ? item.document.image_urls : [];
           return {
             id: id,
             key: id,

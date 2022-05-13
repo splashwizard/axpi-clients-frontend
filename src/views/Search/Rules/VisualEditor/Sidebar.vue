@@ -82,13 +82,13 @@
               <a-icon type="arrow-down" />
             </div>
             <h4>Bury categories</h4>
-          </div>
+          </div> -->
           <div class="Picker" @click="addFilterResults">
             <div class="Picker-icon">
               <a-icon type="filter" />
             </div>
             <h4>Filter results</h4>
-          </div> -->
+          </div>
         </div>
       </div>
 

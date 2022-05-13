@@ -183,18 +183,26 @@ export default {
         query_name: query_conditions[0].query.keyword,
         query_type: query_conditions[0].query.option
       }
-      const { pinnedItems, hiddenItems } = this.strategyData;
+      const { pinnedItems, hiddenItems, filterResults } = this.strategyData;
       if(pinnedItems.length > 0) {
         payload['pin_items'] = pinnedItems.map(item => ({
           id: item.id,
           position: item.position
         }));
       }
+
       if(hiddenItems.length > 0) {
         payload['hidden_items'] = hiddenItems.map(item => ({
           id: item.id,
           position: item.position
         }));
+      }
+
+      if(filterResults.length > 0) {
+        payload['filter_by'] = {};
+        filterResults.forEach(item => {
+          payload['filter_by'][item[0].name] = item[0].keyword;
+        });
       }
 
       this.loading = true;

@@ -275,7 +275,7 @@
                 </div>
               </div>
             </div>
-            <a-button class="btn-non-border btn-filter-margin" @click="addResultFilter(si)"><a-icon type="plus" />Or</a-button>
+            <!-- <a-button class="btn-non-border btn-filter-margin" @click="addResultFilter(si)"><a-icon type="plus" />Or</a-button> -->
           </div>
           <a-button class="btn-non-border btn-filter-margin" @click="addSubFilter"><a-icon type="plus" />And</a-button>
         </section>
@@ -571,7 +571,7 @@ export default {
   }
 
   .filter-wrapper {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 
     .labels {
       display: flex;

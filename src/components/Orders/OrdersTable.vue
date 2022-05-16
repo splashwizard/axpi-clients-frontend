@@ -9,18 +9,17 @@
       <a-tab-pane :key="4" tab="Completed"></a-tab-pane>
     </a-tabs>
 
-    <a-table class="axpi-table"
-             :row-selection="rowSelection"
-             :columns="columns"
-             :row-key="record => record.id"
-             :data-source="data"
-             :pagination="pagination"
-             :loading="loading||searchQueryIsDirty"
-             @change="handleTableChange"
+    <a-table
+      class="axpi-table"
+      :row-selection="rowSelection"
+      :columns="columns"
+      :row-key="(record) => record.id"
+      :data-source="data"
+      :pagination="pagination"
+      :loading="loading || searchQueryIsDirty"
+      @change="handleTableChange"
     >
-      <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{
-          name
-        }}</a>
+      <a href="#" slot="name" slot-scope="name, record" @click.prevent="handleRecordSelected(record)">{{ name }}</a>
       <div slot="status" slot-scope="status">
         <a-badge :count="getHumanReadableStatus(status)" :number-style="getStatusBadgeStyle(status)"></a-badge>
       </div>
@@ -38,7 +37,7 @@
       </div>
       <div slot="actions" class="table-actions" slot-scope="actions, record">
         <a-dropdown :trigger="['click']">
-          <a-button type="link" icon="ellipsis" @click.prevent="e => e.preventDefault()"></a-button>
+          <a-button type="link" icon="ellipsis" @click.prevent="(e) => e.preventDefault()"></a-button>
           <a-menu slot="overlay">
             <a-menu-item>
               <a href="#" @click="editOrder(record)">Edit</a>
@@ -53,63 +52,63 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 import Orders from "../../mixins/Orders";
 import Dates from "../../mixins/Dates";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'product_name',
+    title: "Name",
+    dataIndex: "product_name",
     sorter: true,
-    scopedSlots: {customRender: 'name'}
+    scopedSlots: { customRender: "name" },
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
+    title: "Status",
+    dataIndex: "status",
     sorter: true,
-    scopedSlots: {customRender: 'status'}
+    scopedSlots: { customRender: "status" },
   },
   {
-    title: 'Type',
-    dataIndex: 'product_type',
+    title: "Type",
+    dataIndex: "product_type",
     sorter: true,
-    scopedSlots: {customRender: 'type'}
+    scopedSlots: { customRender: "type" },
   },
   {
-    title: 'Cost',
-    dataIndex: 'cost',
+    title: "Cost",
+    dataIndex: "cost",
     sorter: true,
-    scopedSlots: {customRender: 'cost'}
+    scopedSlots: { customRender: "cost" },
   },
   {
-    title: 'Supplier',
-    dataIndex: 'supplier.name',
+    title: "Supplier",
+    dataIndex: "supplier.name",
     sorter: true,
   },
   {
-    title: 'Order Date',
-    dataIndex: 'order_date',
+    title: "Order Date",
+    dataIndex: "order_date",
     sorter: true,
-    scopedSlots: {customRender: 'order_date'}
+    scopedSlots: { customRender: "order_date" },
   },
   {
-    title: 'Last Updated',
-    dataIndex: 'updated_at',
+    title: "Last Updated",
+    dataIndex: "updated_at",
     sorter: true,
-    scopedSlots: {customRender: 'updated_at'}
+    scopedSlots: { customRender: "updated_at" },
   },
   {
-    title: '',
-    scopedSlots: {customRender: 'actions'},
-    width: 10
-  }
+    title: "",
+    scopedSlots: { customRender: "actions" },
+    width: 10,
+  },
 ];
 
 export default {
-  props: ['reloadKey', 'searchQuery', 'filters'],
+  props: ["reloadKey", "searchQuery", "filters"],
   data() {
     return {
       data: [],
@@ -118,7 +117,7 @@ export default {
       loading: false,
       statusToShow: null,
       columns,
-      selectedOrderIds: []
+      selectedOrderIds: [],
     };
   },
   mixins: [Orders, Dates],
@@ -134,12 +133,12 @@ export default {
       this.fetch();
     },
     selectedOrderIds(newSelection) {
-      this.$emit('set-selected-order-ids', newSelection);
+      this.$emit("set-selected-order-ids", newSelection);
     },
     searchQuery: function () {
       this.searchQueryIsDirty = true;
       this.fetch();
-    }
+    },
   },
   computed: {
     rowSelection() {
@@ -148,18 +147,18 @@ export default {
           this.selectedOrderIds = selectedRowKeys;
           // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         },
-        getCheckboxProps: record => ({
+        getCheckboxProps: (record) => ({
           props: {
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            disabled: record.name === "Disabled User", // Column configuration not to be checked
             name: record.name,
           },
         }),
       };
-    }
+    },
   },
   methods: {
     handleTableChange(pagination, filters, sorter) {
-      const pager = {...this.pagination};
+      const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
       this.fetch({
@@ -175,12 +174,12 @@ export default {
       let search = {
         results_per_page: 10,
         status: this.statusToShow,
-        q: this.searchQuery
+        q: this.searchQuery,
       };
 
       if (this.filters && this.filters.filters_enabled.length) {
         search.filters = {};
-        _.each(this.filters.filters_enabled, filter => {
+        _.each(this.filters.filters_enabled, (filter) => {
           search.filters[filter] = this.filters[filter];
         });
       }
@@ -189,42 +188,45 @@ export default {
 
       return {
         ...search,
-        ...params
-      }
+        ...params,
+      };
     },
 
     fetch: _.debounce(function (params = {}) {
       this.loading = true;
-      axios.post(window.API_BASE + '/orders/search', this.determineSearchParams(params)).then(r => {
-        const pagination = {...this.pagination};
-        // Read total count from server
-        pagination.total = r.data.total;
-        this.loading = false;
-        this.data = r.data.data;
-        this.pagination = pagination;
-        this.searchQueryIsDirty = false;
-      }).catch(e => {
-        console.log(e);
-        this.$message.error('Error loading orders');
-      });
+      axios
+        .post(window.API_BASE + "/orders/search", this.determineSearchParams(params))
+        .then((r) => {
+          const pagination = { ...this.pagination };
+          // Read total count from server
+          pagination.total = r.data.total;
+          this.loading = false;
+          this.data = r.data.data;
+          this.pagination = pagination;
+          this.searchQueryIsDirty = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("Error loading orders");
+        });
     }, 500),
 
     handleRecordSelected(order) {
       // this.$emit('selected', order);
-      this.$router.push('/orders/' + order.id);
+      this.$router.push("/orders/" + order.id);
     },
 
     editOrder(order) {
-      this.$emit('selected', order);
+      this.$emit("selected", order);
     },
 
     deleteRecord(order) {
-      this.$emit('delete-order', order);
+      this.$emit("delete-order", order);
     },
 
     getStatusBadgeStyle(status) {
       return {
-        backgroundColor: this.getStatusColor(status)
+        backgroundColor: this.getStatusColor(status),
       };
     },
 

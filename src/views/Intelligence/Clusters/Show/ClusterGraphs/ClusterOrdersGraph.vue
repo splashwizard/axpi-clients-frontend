@@ -7,38 +7,19 @@
     <!--        </a-select-option>-->
     <!--      </a-select>-->
     <!--    </div>-->
-    <v-chart
-        :key="graphReloadKey"
-        :forceFit="true"
-        renderer="svg"
-        height="400"
-        :data="graphDataToShow"
-        :scale="scale"
-    >
-      <v-legend v-if="selectedColourByOption" data-key="Vendor"/>
-      <v-tooltip
-          :showTitle="false"
-          :crosshairs="tooltipCrosshairs"
-          :itemTpl="tooltipItemTpl"
-      />
-      <v-axis
-          dataKey="x"
-          :title="{'text': formatGraphLabel(xLabel) + (xUnit ? ' (' + xUnit + ')' : '')}"
-      >
-      </v-axis>
-      <v-axis
-          dataKey="cost_per_unit"
-          :title="{'text': 'Cost per ' + costPerLabel}"
-      >
-      </v-axis>
+    <v-chart :key="graphReloadKey" :forceFit="true" renderer="svg" height="400" :data="graphDataToShow" :scale="scale">
+      <v-legend v-if="selectedColourByOption" data-key="Vendor" />
+      <v-tooltip :showTitle="false" :crosshairs="tooltipCrosshairs" :itemTpl="tooltipItemTpl" />
+      <v-axis dataKey="x" :title="{ text: formatGraphLabel(xLabel) + (xUnit ? ' (' + xUnit + ')' : '') }"> </v-axis>
+      <v-axis dataKey="cost_per_unit" :title="{ text: 'Cost per ' + costPerLabel }"> </v-axis>
       <v-point
-          position="x*cost_per_unit"
-          size="size"
-          color="color"
-          opacity="opacity"
-          :tooltip="pointTooltip"
-          shape="circle"
-          :on-click="handlePointClicked"
+        position="x*cost_per_unit"
+        size="size"
+        color="color"
+        opacity="opacity"
+        :tooltip="pointTooltip"
+        shape="circle"
+        :on-click="handlePointClicked"
       />
     </v-chart>
   </div>
@@ -47,9 +28,9 @@
 <script>
 const _ = require("lodash");
 import Orders from "../../../../../mixins/Orders";
-import {mapActions, mapGetters} from "vuex";
-import Moment from 'moment';
-import {extendMoment} from 'moment-range';
+import { mapActions, mapGetters } from "vuex";
+import Moment from "moment";
+import { extendMoment } from "moment-range";
 
 const moment = extendMoment(Moment);
 
@@ -57,14 +38,14 @@ export default {
   props: ["orders", "graphReloadKey"],
   mixins: [Orders],
   computed: {
-    ...mapGetters('clusterViewer', {
-      selectedOrders: 'selectedOrders',
-      selectedXOption: 'selectedXOption',
-      selectedColourByOption: 'selectedColourByOption',
-      selectedSizeByOption: 'selectedSizeByOption',
-      clusterViewerReloadKey: 'clusterViewerReloadKey',
-      startDate: 'startDate',
-      endDate: 'endDate'
+    ...mapGetters("clusterViewer", {
+      selectedOrders: "selectedOrders",
+      selectedXOption: "selectedXOption",
+      selectedColourByOption: "selectedColourByOption",
+      selectedSizeByOption: "selectedSizeByOption",
+      clusterViewerReloadKey: "clusterViewerReloadKey",
+      startDate: "startDate",
+      endDate: "endDate",
     }),
 
     start_date: {
@@ -73,7 +54,7 @@ export default {
       },
       set(val) {
         this.setStartDate(val);
-      }
+      },
     },
 
     end_date: {
@@ -82,11 +63,11 @@ export default {
       },
       set(val) {
         this.setEndDate(val);
-      }
+      },
     },
 
     datesFromGraphData() {
-      return _.map(this.graphData, 'order_date_moment');
+      return _.map(this.graphData, "order_date_moment");
     },
 
     earliestDate() {
@@ -112,25 +93,24 @@ export default {
     },
 
     xLabel() {
-      if (this.xType === 'Quantity') {
-        return 'Quantity'
+      if (this.xType === "Quantity") {
+        return "Quantity";
       }
       return this.xType;
     },
 
     xUnit() {
-      if (this.xLabel === 'volume') {
-        return 'cubic metres';
+      if (this.xLabel === "volume") {
+        return "cubic metres";
       }
-      return '';
+      return "";
     },
 
-
     costPerLabel() {
-      if (this.xType === 'Quantity') {
-        return 'unit';
-      } else if (this.xType === 'volume') {
-        return 'cubic metre';
+      if (this.xType === "Quantity") {
+        return "unit";
+      } else if (this.xType === "volume") {
+        return "cubic metre";
       }
       return this.xLabel;
     },
@@ -138,18 +118,19 @@ export default {
     scale() {
       return [
         {
-          dataKey: 'cost_per_unit',
+          dataKey: "cost_per_unit",
           formatter: (val) => {
-            return this.formatCostGraph({cost: val, cost_currency: 'USD'})
-          }
-        }];
+            return this.formatCostGraph({ cost: val, cost_currency: "USD" });
+          },
+        },
+      ];
     },
 
     graphDataToShow() {
-      return _.filter(this.graphData, d => {
+      return _.filter(this.graphData, (d) => {
         if (d.order_date_moment && moment(d.order_date_moment).isValid() && this.start_date) {
           if (d.order_date_moment.isBefore(this.start_date)) {
-           return false;
+            return false;
           }
         }
         if (d.order_date_moment && moment(d.order_date_moment).isValid() && this.end_date) {
@@ -175,7 +156,7 @@ export default {
         let orderQuantity = order["Quantity"] !== "None" ? order["Quantity"] : 1;
 
         // Get total quantity (product quantity x erp order quantity)
-        let totalQuantity = order['total_quantity'];
+        let totalQuantity = order["total_quantity"];
         // if (order['product_quantity']) {
         //   totalQuantity = Number(orderQuantity) * Number(order['product_quantity']);
         // }
@@ -183,21 +164,21 @@ export default {
         // Measure
         let measure = null;
         if (order["products"] && order["products"].length) {
-          if (order["products"][0]['normalisedMeasure']) {
-            measure = order['products'][0]['normalisedMeasure'];
+          if (order["products"][0]["normalisedMeasure"]) {
+            measure = order["products"][0]["normalisedMeasure"];
           }
         }
 
         // Properties
         let properties = {};
         if (order["products"] && order["products"].length) {
-          if (order['product_numeric_properties']) {
-            _.each(order['product_numeric_properties'], p => {
+          if (order["product_numeric_properties"]) {
+            _.each(order["product_numeric_properties"], (p) => {
               let property = {
                 // magnitude: p.propertyValue * orderQuantity,
                 magnitude: p.propertyValue,
                 property_type: p.propertyName,
-                unit: p.propertyUnit
+                unit: p.propertyUnit,
               };
               properties[p.propertyName] = property;
             });
@@ -206,12 +187,12 @@ export default {
         order["properties"] = properties;
 
         // Get x value
-        if (this.xType === 'Quantity') {
+        if (this.xType === "Quantity") {
           x = totalQuantity;
         } else {
-          if (measure && measure['entity'] === this.xType) {
+          if (measure && measure["entity"] === this.xType) {
             // x = measure['normalisedUnitMagnitude'];
-            x = measure['normalisedUnitMagnitude'] * orderQuantity;
+            x = measure["normalisedUnitMagnitude"] * orderQuantity;
           } else {
             x = null;
           }
@@ -219,22 +200,22 @@ export default {
 
         // let opacity = 0.65;
         let opacity = 0.7;
-        let selectedOrderIds = _.map(this.selectedOrders, '_id');
-        if (selectedOrderIds.includes(order['_id'])) {
+        let selectedOrderIds = _.map(this.selectedOrders, "_id");
+        if (selectedOrderIds.includes(order["_id"])) {
           opacity = 0.9;
         }
 
-        let color = 'Other';
+        let color = "Other";
         if (this.selectedColourByOption !== null) {
           let key = this.selectedColourByOption.key;
           if (key in order) {
             color = order[key];
           } else {
-            let colourByProperty = _.find(order['product_categorical_properties'], p => {
-              return p['propertyName'] === this.selectedColourByOption.key;
+            let colourByProperty = _.find(order["product_categorical_properties"], (p) => {
+              return p["propertyName"] === this.selectedColourByOption.key;
             });
             if (colourByProperty) {
-              color = colourByProperty['propertyValue'];
+              color = colourByProperty["propertyValue"];
             }
           }
         }
@@ -242,11 +223,11 @@ export default {
         // Size by
         let size = null;
         if (this.selectedSizeByOption) {
-          let sizeByProperty = _.find(order['product_numeric_properties'], p => {
-            return p['propertyName'] === this.selectedSizeByOption;
+          let sizeByProperty = _.find(order["product_numeric_properties"], (p) => {
+            return p["propertyName"] === this.selectedSizeByOption;
           });
           if (sizeByProperty) {
-            size = sizeByProperty['propertyValue'];
+            size = sizeByProperty["propertyValue"];
           } else {
             size = 0;
           }
@@ -255,20 +236,21 @@ export default {
         // Order date
         let orderDate = null;
         let orderDateMoment = null;
-        if (order["PO Initial Create Date"] && order["PO Initial Create Date"]["$date"] && order["PO Initial Create Date"]["$date"]["$numberLong"]) {
-          orderDateMoment = moment.unix(
-              Number(order["PO Initial Create Date"]["$date"]["$numberLong"]) / 1000
-          );
-          orderDate = orderDateMoment.format("DD/MM/YYYY")
+        if (
+          order["PO Initial Create Date"] &&
+          order["PO Initial Create Date"]["$date"] &&
+          order["PO Initial Create Date"]["$date"]["$numberLong"]
+        ) {
+          orderDateMoment = moment.unix(Number(order["PO Initial Create Date"]["$date"]["$numberLong"]) / 1000);
+          orderDate = orderDateMoment.format("DD/MM/YYYY");
         }
 
-
         gd.push({
-          id: order['_id'],
+          id: order["_id"],
           // description: order['PO Li Description'],
-          description: order['product_name'],
-          vendor: order['Vendor'] ? order['Vendor'] : '-',
-          order_date: orderDate ? orderDate : '-',
+          description: order["product_name"],
+          vendor: order["Vendor"] ? order["Vendor"] : "-",
+          order_date: orderDate ? orderDate : "-",
           order_date_moment: orderDateMoment,
           quantity: totalQuantity,
           measure: measure,
@@ -278,7 +260,7 @@ export default {
           x: x,
           opacity: opacity,
           color: color,
-          size: size
+          size: size,
         });
       });
 
@@ -286,15 +268,15 @@ export default {
     },
 
     xOptions() {
-      let options = ['Quantity'];
+      let options = ["Quantity"];
       // _.each(this.graphData, gd => {
       //   let propertyLabels = Object.keys(gd['properties']);
       //   options.push(propertyLabels);
       //   options = _.flatten(options);
       // });
-      _.each(this.graphData, gd => {
-        if (gd['measure'] !== null) {
-          options.push(gd['measure']['entity']);
+      _.each(this.graphData, (gd) => {
+        if (gd["measure"] !== null) {
+          options.push(gd["measure"]["entity"]);
         }
       });
       return _.uniq(options);
@@ -307,23 +289,35 @@ export default {
           if (x < 1 && x !== 0) {
             // x = Number.parseFloat(x).toExponential(3);
             let exp = Number.parseFloat(x).toExponential(3);
-            let split = exp.split('e');
-            x = split[0] + ' x 10' + '<sup>' + split[1] + '</sup>'
+            let split = exp.split("e");
+            x = split[0] + " x 10" + "<sup>" + split[1] + "</sup>";
           }
           return {
             name: description,
             // x: this.xLabel + ': ' +x,
-            x_description: '<b>' + this.formatGraphLabel(this.xLabel) + ': ' + '</b>' + x + ' ' + this.xUnit,
-            cost_per_unit: '<b>Cost per ' + this.costPerLabel + ': </b>' + this.formatCostGraph({
-              cost: cost_per_unit,
-              cost_currency: 'USD'
-            }),
-            order_date: '<b>Order date: </b>' + order_date,
-            vendor: '<b>Vendor: </b>' + vendor,
-            value: this.xLabel + " (" + x + "), " + 'Cost per unit ' + "(" + this.formatCostGraph({
-              cost: cost_per_unit,
-              cost_currency: 'USD'
-            }) + ")",
+            x_description: "<b>" + this.formatGraphLabel(this.xLabel) + ": " + "</b>" + x + " " + this.xUnit,
+            cost_per_unit:
+              "<b>Cost per " +
+              this.costPerLabel +
+              ": </b>" +
+              this.formatCostGraph({
+                cost: cost_per_unit,
+                cost_currency: "USD",
+              }),
+            order_date: "<b>Order date: </b>" + order_date,
+            vendor: "<b>Vendor: </b>" + vendor,
+            value:
+              this.xLabel +
+              " (" +
+              x +
+              "), " +
+              "Cost per unit " +
+              "(" +
+              this.formatCostGraph({
+                cost: cost_per_unit,
+                cost_currency: "USD",
+              }) +
+              ")",
           };
         },
       ];
@@ -335,15 +329,15 @@ export default {
       },
       set(val) {
         this.selectXOption(val);
-      }
-    }
+      },
+    },
   },
 
   data() {
     return {
       // xType: 'Quantity',
       height: 500,
-      tooltipCrosshairs: {type: "cross"},
+      tooltipCrosshairs: { type: "cross" },
       tooltipItemTpl: `
         <li data-index={index} style="margin-bottom:4px;">
           <span style="background-color:{color};" class="g2-tooltip-marker"></span>
@@ -359,7 +353,7 @@ export default {
 
   created() {
     this.setXOptions(this.xOptions);
-    this.selectXOption('Quantity');
+    this.selectXOption("Quantity");
 
     if (!this.start_date) {
       this.start_date = this.earliestDate.clone();
@@ -370,12 +364,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('clusterViewer', {
-      toggleOrderSelected: 'toggleOrderSelected',
-      setXOptions: 'setXOptions',
-      selectXOption: 'selectXOption',
-      setStartDate: 'setStartDate',
-      setEndDate: 'setEndDate'
+    ...mapActions("clusterViewer", {
+      toggleOrderSelected: "toggleOrderSelected",
+      setXOptions: "setXOptions",
+      selectXOption: "selectXOption",
+      setStartDate: "setStartDate",
+      setEndDate: "setEndDate",
     }),
 
     formatGraphLabel(label) {
@@ -384,24 +378,24 @@ export default {
 
     formatCostGraph(order) {
       if (order.cost) {
-        let currency = order.cost_currency ? order.cost_currency : 'GBP';
-        return new Intl.NumberFormat('en-US', {
-          style: 'currency',
+        let currency = order.cost_currency ? order.cost_currency : "GBP";
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
           currency: currency,
           minimumFractionDigits: 2,
-          maximumFractionDigits: 2
+          maximumFractionDigits: 2,
         }).format(order.cost);
       }
       return order.cost;
     },
 
     handlePointClicked(point) {
-      let orderId = point['data']['_origin']['id'];
-      let order = _.find(this.orders, {'_id': orderId});
+      let orderId = point["data"]["_origin"]["id"];
+      let order = _.find(this.orders, { _id: orderId });
       // console.log(order);
       this.toggleOrderSelected(order);
-    }
-  }
+    },
+  },
 };
 </script>
 

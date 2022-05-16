@@ -1,36 +1,38 @@
 <template>
   <div class="optimisations">
     <loading-screen
-        :is-loading="isLoading||isLoadingSpecifications||isLoadingScenarios||isLoadingSuppliers"></loading-screen>
+      :is-loading="isLoading || isLoadingSpecifications || isLoadingScenarios || isLoadingSuppliers"
+    ></loading-screen>
 
     <a-layout>
       <left-sidebar :optimisation="optimisation"></left-sidebar>
       <a-layout style="padding: 7px 30px">
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }}</h1>
-          <div class="actions" style="padding-top: 15px;">
-            <create-scenario-modal :key="createScenarioModalKey"
-                                   @scenario-created="handleScenarioCreated"
-                                   :optimisation-id="optimisation.id"></create-scenario-modal>
+          <div class="actions" style="padding-top: 15px">
+            <create-scenario-modal
+              :key="createScenarioModalKey"
+              @scenario-created="handleScenarioCreated"
+              :optimisation-id="optimisation.id"
+            ></create-scenario-modal>
           </div>
         </div>
 
         <div v-if="optimisation">
-
           <a-tabs>
             <a-tab-pane key="scenarios" tab="Scenarios">
               <scenario-graphs v-if="scenarios && scenarios.length" :scenarios="scenarios"></scenario-graphs>
-              <scenarios-table v-if="scenarios"
-                               @scenario-deleted="refresh"
-                               @scenario-duplicated="refresh"
-                               @scenario-updated="refresh"
-                               :scenarios="scenarios" :optimisation="optimisation"></scenarios-table>
+              <scenarios-table
+                v-if="scenarios"
+                @scenario-deleted="refresh"
+                @scenario-duplicated="refresh"
+                @scenario-updated="refresh"
+                :scenarios="scenarios"
+                :optimisation="optimisation"
+              ></scenarios-table>
             </a-tab-pane>
-            <a-tab-pane key="overview" tab="Overview">
-              Content of Tab Pane 2
-            </a-tab-pane>
+            <a-tab-pane key="overview" tab="Overview"> Content of Tab Pane 2 </a-tab-pane>
           </a-tabs>
-
         </div>
       </a-layout>
     </a-layout>
@@ -38,14 +40,14 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
-import axios from 'axios';
+import { mapGetters, mapActions } from "vuex";
+import axios from "axios";
 import LeftSidebar from "./LeftSidebar";
 import CreateScenarioModal from "./Scenarios/CreateScenarioModal";
 import ScenariosTable from "./Scenarios/ScenariosTable";
 import ScenarioGraphs from "./Scenarios/ScenarioGraphs";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "Show",
@@ -61,14 +63,14 @@ export default {
       this.loadSpecifications(this.$route.params.id);
       this.loadScenarios(this.$route.params.id);
       this.loadSuppliers();
-    }
+    },
   },
   data() {
     return {
       sidebarCollapsed: true,
-      selectedSidebar: '',
+      selectedSidebar: "",
 
-      route: 'all-scenarios',
+      route: "all-scenarios",
       selectedScenario: null,
       // scenarios: [
       //   {
@@ -90,15 +92,15 @@ export default {
       isLoadingSuppliers: false,
       suppliers: [],
 
-      createScenarioModalKey: 1
-    }
+      createScenarioModalKey: 1,
+    };
   },
-  components: {ScenarioGraphs, LeftSidebar, CreateScenarioModal, ScenariosTable},
+  components: { ScenarioGraphs, LeftSidebar, CreateScenarioModal, ScenariosTable },
   computed: {
-    ...mapGetters('optimisationEditor', {
-      isLoading: 'isLoading',
-      optimisation: 'optimisation'
-    })
+    ...mapGetters("optimisationEditor", {
+      isLoading: "isLoading",
+      optimisation: "optimisation",
+    }),
   },
   methods: {
     navigateTo(route) {
@@ -117,8 +119,8 @@ export default {
       this.createScenarioModalKey += 1;
     },
 
-    ...mapActions('optimisationEditor', {
-      loadOptimisation: 'loadOptimisation'
+    ...mapActions("optimisationEditor", {
+      loadOptimisation: "loadOptimisation",
     }),
 
     selectScenario(scenario) {
@@ -127,28 +129,28 @@ export default {
 
     closeCreateScenario() {
       this.selectedScenario = null;
-      this.navigateTo('all-scenarios');
+      this.navigateTo("all-scenarios");
     },
 
     addNewScenario() {
       let scenario = {
-        name: 'Untitled',
-        items: []
-      }
+        name: "Untitled",
+        items: [],
+      };
       this.scenarios.push(scenario);
       this.selectedScenario = scenario;
-      this.navigateTo('edit-scenario');
+      this.navigateTo("edit-scenario");
     },
 
     editScenario(scenario) {
       this.selectedScenario = scenario;
-      this.navigateTo('edit-scenario');
+      this.navigateTo("edit-scenario");
     },
 
     addItemToScenario() {
       this.selectedScenario.items.push({
         optimisationSpecificationId: null,
-        supplierId: null
+        supplierId: null,
       });
     },
 
@@ -164,60 +166,69 @@ export default {
       let vm = this;
       vm.isLoadingSpecifications = true;
       vm.specifications = [];
-      axios.get(window.API_BASE + '/optimisations/' + optimisationId + '/specifications').then(r => {
-        vm.specifications = r.data;
-        vm.isLoadingSpecifications = false;
-      }).catch(e => {
-        vm.specifications = [];
-        console.log(e);
-        this.$message.error('Error loading specifications');
-        vm.isLoadingSpecifications = false;
-      });
+      axios
+        .get(window.API_BASE + "/optimisations/" + optimisationId + "/specifications")
+        .then((r) => {
+          vm.specifications = r.data;
+          vm.isLoadingSpecifications = false;
+        })
+        .catch((e) => {
+          vm.specifications = [];
+          console.log(e);
+          this.$message.error("Error loading specifications");
+          vm.isLoadingSpecifications = false;
+        });
     },
 
     loadScenarios(optimisationId) {
       let vm = this;
       vm.isLoadingScenarios = true;
       vm.scenarios = [];
-      axios.get(window.API_BASE + '/optimisations/' + optimisationId + '/scenarios').then(r => {
-        vm.scenarios = r.data;
-        vm.isLoadingScenarios = false;
-      }).catch(e => {
-        vm.scenarios = [];
-        console.log(e);
-        this.$message.error('Error loading scenrios');
-        vm.isLoadingScenarios = false;
-      });
+      axios
+        .get(window.API_BASE + "/optimisations/" + optimisationId + "/scenarios")
+        .then((r) => {
+          vm.scenarios = r.data;
+          vm.isLoadingScenarios = false;
+        })
+        .catch((e) => {
+          vm.scenarios = [];
+          console.log(e);
+          this.$message.error("Error loading scenrios");
+          vm.isLoadingScenarios = false;
+        });
     },
 
     loadSuppliers() {
       let vm = this;
       vm.isLoadingSuppliers = true;
       vm.suppliers = [];
-      axios.get(window.API_BASE + '/suppliers').then(r => {
-        vm.suppliers = r.data;
-        vm.isLoadingSuppliers = false;
-      }).catch(e => {
-        vm.suppliers = [];
-        console.log(e);
-        this.$message.error('Error loading suppliers');
-        vm.isLoadingSuppliers = false;
-      });
+      axios
+        .get(window.API_BASE + "/suppliers")
+        .then((r) => {
+          vm.suppliers = r.data;
+          vm.isLoadingSuppliers = false;
+        })
+        .catch((e) => {
+          vm.suppliers = [];
+          console.log(e);
+          this.$message.error("Error loading suppliers");
+          vm.isLoadingSuppliers = false;
+        });
     },
 
     toggleSidebar(sidebarName) {
       if (this.selectedSidebar !== sidebarName) {
         this.selectedSidebar = sidebarName;
         this.sidebarCollapsed = false;
-        if (sidebarName === 'scenarios') {
-          this.route = 'all-scenarios';
+        if (sidebarName === "scenarios") {
+          this.route = "all-scenarios";
         }
       } else {
         this.sidebarCollapsed = !this.sidebarCollapsed;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -250,7 +261,7 @@ export default {
     flex: 1;
     font-size: 26px;
     display: flex;
-    align-items: center;;
+    align-items: center;
 
     i {
       display: inline;
@@ -363,7 +374,6 @@ export default {
   font-size: 20px;
 }
 
-
 .share-button {
   text-align: left;
   height: 50px;
@@ -397,7 +407,8 @@ export default {
   margin-bottom: 20px;
 }
 
-.ant-collapse-content-box .ant-btn, .ant-collapse-content-box .ant-btn span {
+.ant-collapse-content-box .ant-btn,
+.ant-collapse-content-box .ant-btn span {
   width: 100%;
   word-wrap: break-word;
   height: auto;

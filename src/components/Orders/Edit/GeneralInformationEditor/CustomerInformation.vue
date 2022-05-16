@@ -10,7 +10,7 @@
     <!--            <a-input size="large" :value="organisationalUnit.name" disabled placeholder="Organisation Unit"/>-->
     <!--        </a-form-item>-->
     <validated-form-item label="Name" id="customer-information-name">
-      <a-input size="large" :value="clientName" disabled placeholder="Name"/>
+      <a-input size="large" :value="clientName" disabled placeholder="Name" />
     </validated-form-item>
     <!--      <a-form-item label="Country">-->
     <!--        <a-input size="large" :value="orderLocal.country" disabled placeholder="Country"/>-->
@@ -22,23 +22,23 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "CustomerInformation",
-  props: ['client', 'organisationalUnit', 'orderLocal'],
+  props: ["client", "organisationalUnit", "orderLocal"],
   computed: {
-    ...mapGetters('auth', {
-      user: 'user'
+    ...mapGetters("auth", {
+      user: "user",
     }),
     clientName() {
       if (this.orderLocal.client) {
         return this.orderLocal.client.name;
       }
       return null;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

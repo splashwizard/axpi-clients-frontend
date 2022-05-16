@@ -1,14 +1,18 @@
 <template>
-  <a-layout-sider width="180" theme="dark"
-                  :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
-                  :collapsed-width="0" :trigger="null">
+  <a-layout-sider
+    width="180"
+    theme="dark"
+    :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
+    :collapsed-width="0"
+    :trigger="null"
+  >
     <div class="wrapper">
       <div class="sidebar-menu">
-        <router-link to="/products/index" :class="{'selected': isProducts}">Products</router-link>
-        <router-link to="/products/category" :class="{'selected': isCategory}">Category Mapping</router-link>
-        <router-link to="/products/attribute" :class="{'selected': isAttribute}">Attributes Mapping</router-link>
+        <router-link to="/products/index" :class="{ selected: isProducts }">Products</router-link>
+        <router-link to="/products/category" :class="{ selected: isCategory }">Category Mapping</router-link>
+        <router-link to="/products/attribute" :class="{ selected: isAttribute }">Attributes Mapping</router-link>
       </div>
-      <div class="sidebar-footer"/>
+      <div class="sidebar-footer" />
     </div>
   </a-layout-sider>
 </template>
@@ -16,26 +20,24 @@
 <script>
 export default {
   name: "LeftSidebar",
-  methods: {
-  },
+  methods: {},
   computed: {
     isProducts() {
-      return this.$route.name === 'Products';
+      return this.$route.name === "Products";
     },
 
     isCategory() {
-      return this.$route.name === 'Product Category';
+      return this.$route.name === "Product Category";
     },
 
     isAttribute() {
-      return this.$route.name === 'Product Attribute';
+      return this.$route.name === "Product Attribute";
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped lang="scss">
-
 .wrapper {
   display: flex;
   height: 100%;
@@ -54,7 +56,7 @@ export default {
     display: block;
     margin-bottom: 19px;
     font-size: 15px;
-    color: #4F566B;
+    color: #4f566b;
     padding-left: 20px;
     padding-right: 20px;
     position: relative;

@@ -1,13 +1,11 @@
 <template>
-  <a-dropdown-button :disabled="requested||isSaving"
-                     @click.prevent="requestQuote"
-                     :trigger="['click']">
+  <a-dropdown-button :disabled="requested || isSaving" @click.prevent="requestQuote" :trigger="['click']">
     {{ buttonText }}
 
     <a-icon slot="icon" type="down" />
     <a-menu slot="overlay">
       <a-menu-item key="1">
-        <a-icon type="clock-circle"/>
+        <a-icon type="clock-circle" />
         Create order window
       </a-menu-item>
     </a-menu>
@@ -20,19 +18,19 @@ export default {
   data() {
     return {
       isSaving: false,
-      requested: false
-    }
+      requested: false,
+    };
   },
   computed: {
     buttonText() {
-     if (this.isSaving) {
-         return 'Requesting Quote...';
-     }
+      if (this.isSaving) {
+        return "Requesting Quote...";
+      }
 
       if (this.requested) {
-        return 'Quote Requested';
+        return "Quote Requested";
       }
-      return 'Request Quote';
+      return "Request Quote";
     },
   },
   methods: {
@@ -43,11 +41,9 @@ export default {
         vm.isSaving = false;
         vm.requested = true;
       }, 1000);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

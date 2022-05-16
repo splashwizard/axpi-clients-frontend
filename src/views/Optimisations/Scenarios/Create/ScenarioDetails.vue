@@ -8,7 +8,7 @@
       <a-row :gutter="50">
         <a-col :span="12">
           <a-form-item label="Name">
-            <a-input size="large" v-model="scenario.name"/>
+            <a-input size="large" v-model="scenario.name" />
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -32,19 +32,13 @@
 <script>
 export default {
   name: "ScenarioDetails",
-  props: ['scenario'],
+  props: ["scenario"],
   data() {
     return {
-      possibleTags: [
-          'Environmental',
-          'Social Responsibility',
-          'Cost'
-      ]
-    }
-  }
-}
+      possibleTags: ["Environmental", "Social Responsibility", "Cost"],
+    };
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

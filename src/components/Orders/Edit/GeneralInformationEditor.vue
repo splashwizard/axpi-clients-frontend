@@ -1,15 +1,15 @@
 <template>
   <div class="axpi-form width-medium">
     <!-- Customer Information -->
-<!--    <div class="form-section" v-if="user.supplier">-->
-<!--      <div class="form-header">-->
-<!--        <h2>Customer Information</h2>-->
-<!--      </div>-->
-<!--      <customer-information-->
-<!--          :client="orderLocal.client"-->
-<!--          :order-local="orderLocal"-->
-<!--          :organisational-unit="orderLocal.organisational_unit"></customer-information>-->
-<!--    </div>-->
+    <!--    <div class="form-section" v-if="user.supplier">-->
+    <!--      <div class="form-header">-->
+    <!--        <h2>Customer Information</h2>-->
+    <!--      </div>-->
+    <!--      <customer-information-->
+    <!--          :client="orderLocal.client"-->
+    <!--          :order-local="orderLocal"-->
+    <!--          :organisational-unit="orderLocal.organisational_unit"></customer-information>-->
+    <!--    </div>-->
     <!-- /Customer Information -->
 
     <!-- Product Information -->
@@ -42,32 +42,30 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import ProductInformation from "./GeneralInformationEditor/ProductInformation";
 import OrderInformation from "./GeneralInformationEditor/OrderInformation";
 
 export default {
   name: "GeneralInformationEditor",
-  props: ['orderLocal', 'suppliers'],
-  components: {ProductInformation, OrderInformation},
+  props: ["orderLocal", "suppliers"],
+  components: { ProductInformation, OrderInformation },
   computed: {
-    ...mapGetters('auth', {
-      user: 'user'
+    ...mapGetters("auth", {
+      user: "user",
     }),
 
-    ...mapGetters('orderEditor', {
-      type: 'type'
-    })
+    ...mapGetters("orderEditor", {
+      type: "type",
+    }),
   },
   methods: {
-    ...mapActions('orderEditor', {
-      goToNextStage: 'goToNextStage'
-    })
-  }
-}
+    ...mapActions("orderEditor", {
+      goToNextStage: "goToNextStage",
+    }),
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

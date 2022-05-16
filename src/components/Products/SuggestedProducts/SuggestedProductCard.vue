@@ -1,12 +1,10 @@
 <template>
   <div class="suggested-product-card-wrapper">
     <div class="suggested-product-card" @click.prevent="navigateToProduct(product)">
-
       <!--      <a-avatar v-if="product.comparison && product.comparison === 'cheaper'"-->
       <!--          icon="dollar" class="comparison-icon" style="background-color:#87d068" />-->
 
-      <div class="top" :style="{backgroundImage: 'url(' + getImageSrc(product) + ')'}">
-      </div>
+      <div class="top" :style="{ backgroundImage: 'url(' + getImageSrc(product) + ')' }"></div>
       <div class="bottom">
         <div class="left">
           <div class="title">
@@ -19,24 +17,25 @@
             <!--            </a-tag>-->
 
             <!--            <img src="/img/leaf.jpg" v-if="product.comparison && product.comparison == 'more-environmentally-friendly'" class="leaf" width="15" style="margin-left: 5px;" alt="Leaf">-->
-
           </div>
         </div>
         <div class="right">
           <a-spin size="small" v-if="isLoadingPrices"></a-spin>
           <div v-else>{{ priceRange }}</div>
-          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block;"
-                 v-if="suggestion.cheaper">Cost Effective
+          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block" v-if="suggestion.cheaper"
+            >Cost Effective
           </a-tag>
-          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block;"
-                 v-if="suggestion.more_effective">More Effective
+          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block" v-if="suggestion.more_effective"
+            >More Effective
           </a-tag>
-          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block;"
-                 v-if="suggestion.in_stock">In Stock
+          <a-tag color="blue" style="margin-right: 0 !important; display: inline-block" v-if="suggestion.in_stock"
+            >In Stock
           </a-tag>
           <a-tag
-              v-if="suggestion.more_environmentally_friendly" color="green"
-              style="margin-right: 0 !important; display: inline-block;">
+            v-if="suggestion.more_environmentally_friendly"
+            color="green"
+            style="margin-right: 0 !important; display: inline-block"
+          >
             Environmentally Friendly
           </a-tag>
         </div>
@@ -48,18 +47,18 @@
 <script>
 import axios from "axios";
 
-const _ = require('lodash');
+const _ = require("lodash");
 import Orders from "../../../mixins/Orders";
 
 export default {
   name: "SuggestedProductCard",
-  props: ['suggestion'],
+  props: ["suggestion"],
   mixins: [Orders],
   data() {
     return {
       prices: [],
-      isLoadingPrices: true
-    }
+      isLoadingPrices: true,
+    };
   },
   computed: {
     product() {
@@ -69,31 +68,31 @@ export default {
     priceRange() {
       let prices = this.prices;
       if (prices && prices.length) {
-        let ordered = _.orderBy(prices, 'price');
+        let ordered = _.orderBy(prices, "price");
         let minPrice = _.first(ordered);
         let maxPrice = _.last(ordered);
 
         if (minPrice !== maxPrice) {
           let minPriceFormatted = this.formatCostInPence2dp({
             cost: minPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
 
           let maxPriceFormatted = this.formatCostInPence2dp({
             cost: maxPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
 
-          return minPriceFormatted + ' - ' + maxPriceFormatted;
+          return minPriceFormatted + " - " + maxPriceFormatted;
         } else {
           return this.formatCostInPence2dp({
             cost: minPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
         }
       }
-      return '-';
-    }
+      return "-";
+    },
   },
   created() {
     this.loadPrices();
@@ -108,19 +107,22 @@ export default {
     loadPrices() {
       let vm = this;
       vm.isLoadingPrices = true;
-      axios.get(window.API_BASE + '/products/' + this.product['_id'] + '/prices').then(r => {
-        vm.isLoadingPrices = false;
-        vm.prices = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoadingPrices = false;
-        vm.$message.error('Error loading product prices');
-      });
+      axios
+        .get(window.API_BASE + "/products/" + this.product["_id"] + "/prices")
+        .then((r) => {
+          vm.isLoadingPrices = false;
+          vm.prices = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoadingPrices = false;
+          vm.$message.error("Error loading product prices");
+        });
     },
 
     truncate(str, maxLength) {
       if (str && str.length > maxLength) {
-        return str.slice(0, maxLength) + '...';
+        return str.slice(0, maxLength) + "...";
       }
       return str;
     },
@@ -129,18 +131,18 @@ export default {
       if (product.taxonomyCategory) {
         return product.taxonomyCategory[product.taxonomyCategory.length - 1];
       }
-      return 'Miscellaneous';
+      return "Miscellaneous";
     },
 
     navigateToProduct(product) {
       let id = product.id;
       if (!id) {
-        id = product['_id'];
+        id = product["_id"];
       }
-      this.$router.push('/products/' + id);
-    }
-  }
-}
+      this.$router.push("/products/" + id);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -193,7 +195,6 @@ export default {
         padding-right: 15px;
       }
     }
-
   }
 }
 </style>

@@ -1,12 +1,16 @@
 <template>
-  <a-layout-sider width="170" theme="dark"
-                  :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
-                  :collapsed-width="0" :trigger="null">
+  <a-layout-sider
+    width="170"
+    theme="dark"
+    :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
+    :collapsed-width="0"
+    :trigger="null"
+  >
     <div class="wrapper">
       <div class="sidebar-menu">
-        <a :href="scenarioHref" :class="{'selected': isScenarios}">Scenarios</a>
-        <a :href="analyticsHref" :class="{'selected': isAnalytics}">Analytics</a>
-<!--        <a :href="reviewHref" :class="{'selected': isReview}">Review</a>-->
+        <a :href="scenarioHref" :class="{ selected: isScenarios }">Scenarios</a>
+        <a :href="analyticsHref" :class="{ selected: isAnalytics }">Analytics</a>
+        <!--        <a :href="reviewHref" :class="{'selected': isReview}">Review</a>-->
       </div>
       <div class="sidebar-footer">
         <a-button block type="primary" @click="saveAndExit">Save and exit</a-button>
@@ -18,51 +22,50 @@
 <script>
 export default {
   name: "LeftSidebar",
-  props: ['optimisation'],
+  props: ["optimisation"],
   methods: {
     saveAndExit() {
-      this.$router.push('/optimisations');
-    }
+      this.$router.push("/optimisations");
+    },
   },
   computed: {
     isScenarios() {
-      return this.$route.name === 'Optimisation Scenarios';
+      return this.$route.name === "Optimisation Scenarios";
     },
 
     scenarioHref() {
       if (this.optimisation) {
-        return '/optimisations/' + this.optimisation.id + '/scenarios';
+        return "/optimisations/" + this.optimisation.id + "/scenarios";
       }
-      return '#';
+      return "#";
     },
 
     isAnalytics() {
-      return this.$route.name === 'Optimisation Analytics';
+      return this.$route.name === "Optimisation Analytics";
     },
 
     analyticsHref() {
       if (this.optimisation) {
-        return '/optimisations/' + this.optimisation.id + '/analytics';
+        return "/optimisations/" + this.optimisation.id + "/analytics";
       }
-      return '#';
+      return "#";
     },
 
     isReview() {
-      return this.$route.name === 'Optimisation Scenario Review';
+      return this.$route.name === "Optimisation Scenario Review";
     },
 
     reviewHref() {
       if (this.optimisation) {
-        return '/optimisations/' + this.optimisation.id + '/scenarios/1/review';
+        return "/optimisations/" + this.optimisation.id + "/scenarios/1/review";
       }
-      return '#';
-    }
-  }
-}
+      return "#";
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
-
 .wrapper {
   display: flex;
   height: 100%;
@@ -81,7 +84,7 @@ export default {
     display: block;
     margin-bottom: 19px;
     font-size: 15px;
-    color: #4F566B;
+    color: #4f566b;
     padding-left: 20px;
     padding-right: 20px;
     position: relative;
@@ -104,7 +107,7 @@ export default {
 }
 
 .sidebar-footer {
- flex-shrink: 1;
+  flex-shrink: 1;
   padding: 10px 10px;
 }
 </style>

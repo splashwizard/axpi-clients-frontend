@@ -5,12 +5,12 @@
     </div>
     <div class="stat" v-for="(stat, i) in statsToShow" :key="i">
       <a-statistic
-          v-if="!isLoading"
-          style="text-align: right"
-          :title="stat.title"
-          :value="stats[stat.value]"
-          :precision="stat['precision'] ? stat['precision'] : 0"
-          :prefix="stat['prefix'] ? stat['prefix'] : null"
+        v-if="!isLoading"
+        style="text-align: right"
+        :title="stat.title"
+        :value="stats[stat.value]"
+        :precision="stat['precision'] ? stat['precision'] : 0"
+        :prefix="stat['prefix'] ? stat['prefix'] : null"
       />
     </div>
   </div>
@@ -18,7 +18,7 @@
 
 <script>
 import axios from "axios";
-import {mapGetters} from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   props: ["clusterId"],
@@ -56,10 +56,10 @@ export default {
     this.fetch();
   },
   computed: {
-   ...mapGetters('clusterViewer', {
-     startDate: 'startDate',
-     endDate: 'endDate'
-   })
+    ...mapGetters("clusterViewer", {
+      startDate: "startDate",
+      endDate: "endDate",
+    }),
   },
   watch: {},
   methods: {
@@ -69,28 +69,22 @@ export default {
 
       let params = {};
       if (this.startDate) {
-        params['start_date'] = this.startDate;
+        params["start_date"] = this.startDate;
       }
       if (this.endDate) {
-        params['end_date'] = this.endDate;
+        params["end_date"] = this.endDate;
       }
 
       axios
-          .post(
-              window.API_BASE +
-              "/intelligence/clusters/" +
-              this.clusterId +
-              "/stats",
-              params
-          )
-          .then((r) => {
-            vm.isLoading = false;
-            vm.stats = r.data;
-          })
-          .catch((e) => {
-            console.log(e);
-            vm.$message.error("Error loading cluster stats");
-          });
+        .post(window.API_BASE + "/intelligence/clusters/" + this.clusterId + "/stats", params)
+        .then((r) => {
+          vm.isLoading = false;
+          vm.stats = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading cluster stats");
+        });
     },
   },
 };

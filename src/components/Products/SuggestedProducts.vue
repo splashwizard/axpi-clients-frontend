@@ -5,9 +5,15 @@
         <h2>Recommended Products</h2>
       </div>
       <div class="right">
-        <a-button @click.prevent="scrollLeft" type="default" shape="circle" icon="left" size="large"
-                  class="left-button"/>
-        <a-button @click.prevent="scrollRight" type="default" shape="circle" icon="right" size="large"/>
+        <a-button
+          @click.prevent="scrollLeft"
+          type="default"
+          shape="circle"
+          icon="left"
+          size="large"
+          class="left-button"
+        />
+        <a-button @click.prevent="scrollRight" type="default" shape="circle" icon="right" size="large" />
       </div>
     </div>
 
@@ -19,12 +25,11 @@
 
     <!-- Loaded -->
     <div v-if="!isLoading">
-      <a-alert message="No suggested products to show" v-if="suggestedProducts.length === 0" banner/>
+      <a-alert message="No suggested products to show" v-if="suggestedProducts.length === 0" banner />
 
       <div class="carousel-container" ref="carousel">
         <div class="carousel-card" v-for="(suggestedProduct, i) in suggestedProducts" :key="i">
-          <suggested-product-card
-              :suggestion="suggestedProduct"></suggested-product-card>
+          <suggested-product-card :suggestion="suggestedProduct"></suggested-product-card>
         </div>
       </div>
     </div>
@@ -34,22 +39,22 @@
 
 <script>
 import SuggestedProductCard from "./SuggestedProducts/SuggestedProductCard";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "SuggestedProducts",
-  props: ['product'],
-  components: {SuggestedProductCard},
+  props: ["product"],
+  components: { SuggestedProductCard },
   data() {
     return {
       isLoading: false,
-      suggestedProducts: []
-    }
+      suggestedProducts: [],
+    };
   },
   watch: {
     product() {
       this.loadSuggestedProducts();
-    }
+    },
   },
   created() {
     this.loadSuggestedProducts();
@@ -60,64 +65,67 @@ export default {
 
       let id = this.product.id;
       if (!id) {
-        id = this.product['_id'];
+        id = this.product["_id"];
       }
 
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/products/' + id + '/suggestions').then(r => {
-        vm.suggestedProducts = r.data;
-        vm.isLoading = false;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.$message.error('Error loading suggested products');
-      });
+      axios
+        .get(window.API_BASE + "/products/" + id + "/suggestions")
+        .then((r) => {
+          vm.suggestedProducts = r.data;
+          vm.isLoading = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          vm.$message.error("Error loading suggested products");
+        });
     },
 
     scrollLeft() {
       let scrollStep = 400;
-      let carousel = this.$refs['carousel'];
+      let carousel = this.$refs["carousel"];
 
       let sl = carousel.scrollLeft;
 
-      if ((sl - scrollStep) <= 0) {
+      if (sl - scrollStep <= 0) {
         carousel.scrollTo({
           left: 0,
           top: 0,
-          behaviour: 'smooth'
+          behaviour: "smooth",
         });
       } else {
         carousel.scrollTo({
-          left: (sl - scrollStep),
+          left: sl - scrollStep,
           top: 0,
-          behaviour: 'smooth'
+          behaviour: "smooth",
         });
       }
     },
 
     scrollRight() {
       let scrollStep = 400;
-      let carousel = this.$refs['carousel'];
+      let carousel = this.$refs["carousel"];
 
       let sl = carousel.scrollLeft,
-          cw = carousel.scrollWidth;
+        cw = carousel.scrollWidth;
 
-      if ((sl + scrollStep) >= cw) {
+      if (sl + scrollStep >= cw) {
         carousel.scrollTo({
           left: cw,
           top: 0,
-          behaviour: 'smooth'
+          behaviour: "smooth",
         });
       } else {
         carousel.scrollTo({
-          left: (sl + scrollStep),
+          left: sl + scrollStep,
           top: 0,
-          behaviour: 'smooth'
+          behaviour: "smooth",
         });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

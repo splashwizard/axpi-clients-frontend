@@ -3,13 +3,13 @@
     <template slot="title">
       <div class="infobox-header" v-if="numberOfStages > 1">
         <div class="left">
-          <a-button @click.prevent="goToPreviousStage" :disabled="!canGoLeft" size="small" icon="left"/>
+          <a-button @click.prevent="goToPreviousStage" :disabled="!canGoLeft" size="small" icon="left" />
         </div>
         <div class="center">
           {{ currentStageTitle }}
         </div>
         <div class="right">
-          <a-button @click.prevent="goToNextStage" :disabled="!canGoRight" size="small" icon="right"/>
+          <a-button @click.prevent="goToNextStage" :disabled="!canGoRight" size="small" icon="right" />
         </div>
       </div>
     </template>
@@ -21,24 +21,24 @@
     <div class="infobox-btn-wrapper">
       <div class="infobox-btn">
         <span>?</span>
-<!--        <a-icon type="question"></a-icon>-->
+        <!--        <a-icon type="question"></a-icon>-->
       </div>
     </div>
   </a-popover>
 </template>
 
 <script>
-import {fields} from "../../configs/infoboxes.json";
+import { fields } from "../../configs/infoboxes.json";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "Infobox",
-  props: ['id'],
+  props: ["id"],
   data() {
     return {
-      stage: 1
-    }
+      stage: 1,
+    };
   },
   methods: {
     goToNextStage() {
@@ -47,28 +47,28 @@ export default {
 
     goToPreviousStage() {
       this.stage -= 1;
-    }
+    },
   },
   computed: {
     canGoLeft() {
-      return (this.stage > 1);
+      return this.stage > 1;
     },
 
     canGoRight() {
-      return (this.stage < this.numberOfStages);
+      return this.stage < this.numberOfStages;
     },
 
     fieldDetails() {
       return _.find(fields, {
-        "Field": this.id
+        Field: this.id,
       });
     },
 
     numberOfStages() {
       if (this.fieldDetails) {
         let number = 0;
-        _.each([1, 2, 3, 4, 5, 6, 7, 8, 9], stage => {
-          if (this.fieldDetails['Help Section ' + stage + ' Text']) {
+        _.each([1, 2, 3, 4, 5, 6, 7, 8, 9], (stage) => {
+          if (this.fieldDetails["Help Section " + stage + " Text"]) {
             number = stage;
           }
         });
@@ -79,19 +79,19 @@ export default {
 
     currentStageTitle() {
       if (this.fieldDetails) {
-        return this.fieldDetails['Help Section ' + this.stage + ' Title'];
+        return this.fieldDetails["Help Section " + this.stage + " Title"];
       }
       return null;
     },
 
     currentStageText() {
       if (this.fieldDetails) {
-        return this.fieldDetails['Help Section ' + this.stage + ' Text'];
+        return this.fieldDetails["Help Section " + this.stage + " Text"];
       }
       return null;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
@@ -120,7 +120,8 @@ export default {
   background: #5469d4;
 }
 
-.infobox-btn i, .infobox-btn span {
+.infobox-btn i,
+.infobox-btn span {
   font-size: 11px;
   text-align: center;
   color: #fff;
@@ -131,7 +132,8 @@ export default {
   display: flex;
 }
 
-.infobox-header .left, .infobox-header .right {
+.infobox-header .left,
+.infobox-header .right {
   flex-shrink: 1;
 }
 

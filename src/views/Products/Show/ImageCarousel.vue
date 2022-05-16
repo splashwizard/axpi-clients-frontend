@@ -10,10 +10,9 @@
 </template>
 <script>
 export default {
-  props: ['urls'],
+  props: ["urls"],
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     getImgUrl(i) {

@@ -1,10 +1,14 @@
 <template>
   <div class="environment-tab">
     <a-table
-        :expandIconAsCell="false"
-        :expand-icon="getExpandIcon"
-        :expand-icon-column-index="4"
-        class="axpi-table" :columns="columns" :data-source="tableData" :pagination="false">
+      :expandIconAsCell="false"
+      :expand-icon="getExpandIcon"
+      :expand-icon-column-index="4"
+      class="axpi-table"
+      :columns="columns"
+      :data-source="tableData"
+      :pagination="false"
+    >
       <template slot="icon" slot-scope="icon, row">
         <a-icon class="section-icon" v-if="row.section == 'Lifespan'" type="clock-circle"></a-icon>
         <a-icon class="section-icon" v-if="row.section == 'Materials'" type="copy"></a-icon>
@@ -15,19 +19,19 @@
         <span class="section-title">{{ section }}</span>
       </template>
       <a-table
-          slot="expandedRowRender"
-          slot-scope="row"
-          v-if="row.innerTableColumns"
-          :columns="row.innerTableColumns"
-          :data-source="row.innerTableData"
-          :pagination="false"
-          :loading="row.isLoading"
+        slot="expandedRowRender"
+        slot-scope="row"
+        v-if="row.innerTableColumns"
+        :columns="row.innerTableColumns"
+        :data-source="row.innerTableData"
+        :pagination="false"
+        :loading="row.isLoading"
       >
         <template slot="from_address" slot-scope="from_address">
-          {{ from_address ? formatAddress(from_address) : '-' }}
+          {{ from_address ? formatAddress(from_address) : "-" }}
         </template>
         <template slot="to_address" slot-scope="to_address">
-          {{ to_address ? formatAddress(to_address) : '-' }}
+          {{ to_address ? formatAddress(to_address) : "-" }}
         </template>
         <template slot="recyclable" slot-scope="recyclable">
           <a-tag color="blue" v-if="recyclable == null">Unknown</a-tag>
@@ -40,11 +44,14 @@
         <template slot="actions" slot-scope="actions, innerRow">
           <div class="actions">
             <delete-property-button
-                v-if="view === 'edit'"
-                @material-deleted="handleMaterialDeleted"
-                @certification-deleted="handleCertificationDeleted"
-                @transportation-deleted="handleTransportationDeleted"
-                :product-id="productId" :type="row.section" :id="innerRow.id"></delete-property-button>
+              v-if="view === 'edit'"
+              @material-deleted="handleMaterialDeleted"
+              @certification-deleted="handleCertificationDeleted"
+              @transportation-deleted="handleTransportationDeleted"
+              :product-id="productId"
+              :type="row.section"
+              :id="innerRow.id"
+            ></delete-property-button>
           </div>
         </template>
       </a-table>
@@ -52,29 +59,29 @@
       <template slot="measure" slot-scope="measure, record">
         <a-spin v-if="record.isLoading"></a-spin>
         <span v-if="record.section === 'Materials' && !record.isLoading">
-        <a-tag v-if="totalMaterialCo2e" color="blue">{{ totalMaterialCo2e }}kg CO2e</a-tag>
-        <a-tag v-if="totalMaterialWater" color="blue">{{ totalMaterialWater }}L Water</a-tag>
+          <a-tag v-if="totalMaterialCo2e" color="blue">{{ totalMaterialCo2e }}kg CO2e</a-tag>
+          <a-tag v-if="totalMaterialWater" color="blue">{{ totalMaterialWater }}L Water</a-tag>
         </span>
         <span v-if="record.section === 'Transport' && !record.isLoading">
-        <a-tag v-if="totalTransportCo2e" color="blue">{{ totalTransportCo2e }}kg CO2e</a-tag>
+          <a-tag v-if="totalTransportCo2e" color="blue">{{ totalTransportCo2e }}kg CO2e</a-tag>
         </span>
         <span v-if="record.section === 'Certifications' && !record.isLoading">
-         <a-tag v-for="(certification, i) in record.innerTableData" :key="i" color="blue">
-           {{ certification.name }}
-         </a-tag>
+          <a-tag v-for="(certification, i) in record.innerTableData" :key="i" color="blue">
+            {{ certification.name }}
+          </a-tag>
         </span>
-        <span v-if="record.section === 'Lifespan' && !record.isLoading && record.innerTableData && record.innerTableData[0]">
-         <a-tag color="blue">
-           {{ record.innerTableData[0].lifespan_formatted }}
-         </a-tag>
+        <span
+          v-if="record.section === 'Lifespan' && !record.isLoading && record.innerTableData && record.innerTableData[0]"
+        >
           <a-tag color="blue">
-           {{ record.innerTableData[0].usage }}
+            {{ record.innerTableData[0].lifespan_formatted }}
+          </a-tag>
+          <a-tag color="blue">
+            {{ record.innerTableData[0].usage }}
           </a-tag>
         </span>
         <span v-if="record.section === 'Lifespan' && !record.isLoading && !record.innerTableData.length">
-         <a-tag color="red">
-           Unknown
-         </a-tag>
+          <a-tag color="red"> Unknown </a-tag>
         </span>
       </template>
 
@@ -84,83 +91,87 @@
 
       <template slot="actions" slot-scope="actions, record">
         <div v-if="record.actionButton && view === 'edit'" class="actions">
-          <a-button class="action-button" type="primary" icon="plus" @click.prevent="record.actionButtonClicked">{{
-              record.actionButton
-            }}
+          <a-button class="action-button" type="primary" icon="plus" @click.prevent="record.actionButtonClicked"
+            >{{ record.actionButton }}
           </a-button>
         </div>
       </template>
     </a-table>
 
-    <add-material-modal :product-id="productId"
-                        :visible="addMaterialModalVisible"
-                        :is-loading-material-options="isLoadingMaterialOptions"
-                        :material-options="materialOptions"
-                        :is-loading-aspect-options="isLoadingAspectOptions"
-                        :aspect-options="aspectOptions"
-                        @material-added="handleMaterialAdded"
-                        @close-modal="closeAddMaterialModal"></add-material-modal>
+    <add-material-modal
+      :product-id="productId"
+      :visible="addMaterialModalVisible"
+      :is-loading-material-options="isLoadingMaterialOptions"
+      :material-options="materialOptions"
+      :is-loading-aspect-options="isLoadingAspectOptions"
+      :aspect-options="aspectOptions"
+      @material-added="handleMaterialAdded"
+      @close-modal="closeAddMaterialModal"
+    ></add-material-modal>
 
-    <add-transportation-modal :product-id="productId"
-                              :visible="addTransportationModalVisible"
-                              :transportation-options="transportOptions"
-                              :is-loading-transportation-options="isLoadingTransportOptions"
-                              @transportation-added="handleTransportationAdded"
-                              @close-modal="closeAddTransportationModal"></add-transportation-modal>
+    <add-transportation-modal
+      :product-id="productId"
+      :visible="addTransportationModalVisible"
+      :transportation-options="transportOptions"
+      :is-loading-transportation-options="isLoadingTransportOptions"
+      @transportation-added="handleTransportationAdded"
+      @close-modal="closeAddTransportationModal"
+    ></add-transportation-modal>
 
-
-    <add-certification-modal :product-id="productId"
-                             :visible="addCertificationModalVisible"
-                             :is-loading-certification-options="isLoadingCertificationOptions"
-                             :certification-options="certificationOptions"
-                             @certification-added="handleCertificationAdded"
-                             @close-modal="closeAddCertificationModal"></add-certification-modal>
+    <add-certification-modal
+      :product-id="productId"
+      :visible="addCertificationModalVisible"
+      :is-loading-certification-options="isLoadingCertificationOptions"
+      :certification-options="certificationOptions"
+      @certification-added="handleCertificationAdded"
+      @close-modal="closeAddCertificationModal"
+    ></add-certification-modal>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import Addresses from "../../../mixins/Addresses";
-import {mapGetters} from 'vuex';
+import { mapGetters } from "vuex";
 import AddMaterialModal from "./EnvironmentTab/AddMaterialModal";
 import AddCertificationModal from "./EnvironmentTab/AddCertificationModal";
 import DeletePropertyButton from "./EnvironmentTab/DeletePropertyButton";
 import AddTransportationModal from "./EnvironmentTab/AddTransportationModal";
 import eventBus from "../../../event-bus";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 const columns = [
   {
-    title: '',
+    title: "",
     width: 20,
-    scopedSlots: {customRender: 'icon'}
+    scopedSlots: { customRender: "icon" },
   },
   {
-    title: 'Section',
-    dataIndex: 'section',
+    title: "Section",
+    dataIndex: "section",
     width: 245,
-    scopedSlots: {customRender: 'section'}
+    scopedSlots: { customRender: "section" },
   },
   {
-    title: 'Measure',
-    dataIndex: 'measure',
-    scopedSlots: {customRender: 'measure'}
+    title: "Measure",
+    dataIndex: "measure",
+    scopedSlots: { customRender: "measure" },
   },
   {
-    title: '',
-    scopedSlots: {customRender: 'tags'}
+    title: "",
+    scopedSlots: { customRender: "tags" },
   },
   {
-    title: '',
-    dataIndex: 'actions',
-    scopedSlots: {customRender: 'actions'}
-  }
+    title: "",
+    dataIndex: "actions",
+    scopedSlots: { customRender: "actions" },
+  },
 ];
 
 export default {
   name: "EnvironmentTab",
-  components: {DeletePropertyButton, AddMaterialModal, AddCertificationModal, AddTransportationModal},
+  components: { DeletePropertyButton, AddMaterialModal, AddCertificationModal, AddTransportationModal },
   mixins: [Addresses],
   data() {
     return {
@@ -191,8 +202,8 @@ export default {
       certificationOptions: [],
 
       isLoadingTransportOptions: false,
-      transportOptions: []
-    }
+      transportOptions: [],
+    };
   },
   created() {
     this.loadAspectOptions();
@@ -205,61 +216,62 @@ export default {
     this.loadProductLifespans();
   },
   computed: {
-    ...mapGetters('productViewer', {
-      product: 'product',
-      view: 'view'
+    ...mapGetters("productViewer", {
+      product: "product",
+      view: "view",
     }),
 
     totalMaterialCo2e() {
-      return Math.round(_.sum(_.map(this.materials, 'co2e')) * 100) / 100;
+      return Math.round(_.sum(_.map(this.materials, "co2e")) * 100) / 100;
     },
 
     totalMaterialWater() {
-      return Math.round(_.sum(_.map(this.materials, 'water')) * 100) / 100;
+      return Math.round(_.sum(_.map(this.materials, "water")) * 100) / 100;
     },
 
     totalTransportCo2e() {
-      return Math.round(_.sum(_.map(this.transportations, 'co2e')) * 100) / 100;
+      return Math.round(_.sum(_.map(this.transportations, "co2e")) * 100) / 100;
     },
 
     productId() {
-      return this.product['_id'];
+      return this.product["_id"];
     },
 
     materialsTableData() {
-      return _.map(this.materials, material => {
-        let materialOption = _.find(this.materialOptions, {name: material.material});
+      return _.map(this.materials, (material) => {
+        let materialOption = _.find(this.materialOptions, { name: material.material });
         return {
-          weight_formatted: (material.weight && material.weight_unit) ? (material.weight + ' ' + material.weight_unit) : '-',
-          co2e_formatted: (material.co2e) ? (Math.round(material.co2e * 100) / 100 + ' kg') : '-',
-          water_formatted: (material.water) ? (Math.round(material.water * 100) / 100 + ' kg') : '-',
+          weight_formatted:
+            material.weight && material.weight_unit ? material.weight + " " + material.weight_unit : "-",
+          co2e_formatted: material.co2e ? Math.round(material.co2e * 100) / 100 + " kg" : "-",
+          water_formatted: material.water ? Math.round(material.water * 100) / 100 + " kg" : "-",
           recyclable: materialOption ? materialOption.recyclable : null,
-          recycled_content_percentage: materialOption ? materialOption.recycled_content_percentage + '%' : (0 + '%'),
-          ...material
+          recycled_content_percentage: materialOption ? materialOption.recycled_content_percentage + "%" : 0 + "%",
+          ...material,
         };
       });
     },
 
     certificationsTableData() {
-      return _.map(this.certifications, certification => {
+      return _.map(this.certifications, (certification) => {
         return certification;
       });
     },
 
     transportationsTableData() {
-      return _.map(this.transportations, transportation => {
+      return _.map(this.transportations, (transportation) => {
         return {
-          co2e_formatted: (transportation.co2e) ? (Math.round(transportation.co2e * 100) / 100 + ' kg') : '-',
-          ...transportation
+          co2e_formatted: transportation.co2e ? Math.round(transportation.co2e * 100) / 100 + " kg" : "-",
+          ...transportation,
         };
       });
     },
 
     lifespansTableData() {
-      return _.map(this.productLifespans, lifespan => {
+      return _.map(this.productLifespans, (lifespan) => {
         return {
-          lifespan_formatted: lifespan.lifespan + ' ' + lifespan.lifespan_unit,
-          ...lifespan
+          lifespan_formatted: lifespan.lifespan + " " + lifespan.lifespan_unit,
+          ...lifespan,
         };
       });
     },
@@ -267,52 +279,52 @@ export default {
     tableData() {
       return [
         {
-          section: 'Materials',
-          measure: '?',
-          actionButton: 'Add Material',
+          section: "Materials",
+          measure: "?",
+          actionButton: "Add Material",
           actionButtonClicked: () => {
-            this.openAddMaterialModal()
+            this.openAddMaterialModal();
           },
           innerTableColumns: [
             {
-              title: 'Aspect',
-              dataIndex: 'aspect'
+              title: "Aspect",
+              dataIndex: "aspect",
             },
             {
-              title: 'Material',
-              dataIndex: 'material'
+              title: "Material",
+              dataIndex: "material",
             },
             {
-              title: 'Weight',
-              dataIndex: 'weight_formatted'
+              title: "Weight",
+              dataIndex: "weight_formatted",
             },
             {
-              title: 'CO2e',
-              dataIndex: 'co2e_formatted'
+              title: "CO2e",
+              dataIndex: "co2e_formatted",
             },
             {
-              title: 'Water',
-              dataIndex: 'water_formatted'
+              title: "Water",
+              dataIndex: "water_formatted",
             },
             {
-              title: 'Recyclable',
-              dataIndex: 'recyclable',
-              scopedSlots: {customRender: 'recyclable'}
+              title: "Recyclable",
+              dataIndex: "recyclable",
+              scopedSlots: { customRender: "recyclable" },
             },
             {
-              title: 'Recycled Content',
-              dataIndex: 'recycled_content_percentage'
+              title: "Recycled Content",
+              dataIndex: "recycled_content_percentage",
             },
             {
-              scopedSlots: {customRender: 'tags'},
-              width: 100
+              scopedSlots: { customRender: "tags" },
+              width: 100,
             },
             {
-              scopedSlots: {customRender: 'actions'}
-            }
+              scopedSlots: { customRender: "actions" },
+            },
           ],
           innerTableData: this.materialsTableData,
-          isLoading: (this.isLoadingMaterials || this.isLoadingAspectOptions || this.isLoadingMaterialOptions)
+          isLoading: this.isLoadingMaterials || this.isLoadingAspectOptions || this.isLoadingMaterialOptions,
         },
         // {
         //   section: 'Efficiency',
@@ -330,78 +342,81 @@ export default {
         //   isLoading: this.isLoadingCertifications
         // },
         {
-          section: 'Transport',
-          measure: '?',
-          actionButton: 'Add Transport',
+          section: "Transport",
+          measure: "?",
+          actionButton: "Add Transport",
           actionButtonClicked: () => {
-            this.openAddTransportationModal()
+            this.openAddTransportationModal();
           },
           innerTableData: this.transportationsTableData,
           innerTableColumns: [
             {
-              title: 'Method',
-              dataIndex: 'method'
+              title: "Method",
+              dataIndex: "method",
             },
             {
-              title: 'From',
-              dataIndex: 'from_address',
-              scopedSlots: {customRender: 'from_address'}
+              title: "From",
+              dataIndex: "from_address",
+              scopedSlots: { customRender: "from_address" },
             },
             {
-              title: 'To',
-              dataIndex: 'to_address',
-              scopedSlots: {customRender: 'to_address'}
+              title: "To",
+              dataIndex: "to_address",
+              scopedSlots: { customRender: "to_address" },
             },
             {
-              title: 'CO2e',
-              dataIndex: 'co2e_formatted'
+              title: "CO2e",
+              dataIndex: "co2e_formatted",
             },
             {
-              scopedSlots: {customRender: 'actions'}
-            }
+              scopedSlots: { customRender: "actions" },
+            },
           ],
-          isLoading: this.isLoadingTransportations
+          isLoading: this.isLoadingTransportations,
         },
         {
-          section: 'Certifications',
-          measure: this.certificationsTableData ? this.certificationsTableData.length + ' ' + (this.certificationsTableData.length === 1 ? 'certification' : 'certifications') : '-',
-          actionButton: 'Add Certification',
+          section: "Certifications",
+          measure: this.certificationsTableData
+            ? this.certificationsTableData.length +
+              " " +
+              (this.certificationsTableData.length === 1 ? "certification" : "certifications")
+            : "-",
+          actionButton: "Add Certification",
           actionButtonClicked: () => {
-            this.openAddCertificationModal()
+            this.openAddCertificationModal();
           },
           innerTableColumns: [
             {
-              title: 'Name',
-              dataIndex: 'name'
+              title: "Name",
+              dataIndex: "name",
             },
             {
-              scopedSlots: {customRender: 'actions'}
-            }
+              scopedSlots: { customRender: "actions" },
+            },
           ],
           innerTableData: this.certificationsTableData,
-          isLoading: (this.isLoadingCertifications || this.isLoadingCertificationOptions)
+          isLoading: this.isLoadingCertifications || this.isLoadingCertificationOptions,
         },
         {
-          section: 'Lifespan',
-          measure: '',
-          actionButton: '',
-          actionButtonClicked: () => {
-          },
+          section: "Lifespan",
+          measure: "",
+          actionButton: "",
+          actionButtonClicked: () => {},
           innerTableColumns: [
             {
-              title: 'Lifespan',
-              dataIndex: 'lifespan_formatted'
+              title: "Lifespan",
+              dataIndex: "lifespan_formatted",
             },
             {
-              title: 'Usage',
-              dataIndex: 'usage'
+              title: "Usage",
+              dataIndex: "usage",
             },
             {
-              scopedSlots: {customRender: 'actions'}
-            }
+              scopedSlots: { customRender: "actions" },
+            },
           ],
           innerTableData: this.lifespansTableData,
-          isLoading: (this.isLoadingProductLifespans)
+          isLoading: this.isLoadingProductLifespans,
         },
         // {
         //   section: 'Features',
@@ -414,75 +429,90 @@ export default {
     hasBannedMaterials() {
       let hasBannedMaterials = false;
 
-      _.each(this.materials, material => {
-        let m = _.find(this.materialOptions, {name: material.material});
+      _.each(this.materials, (material) => {
+        let m = _.find(this.materialOptions, { name: material.material });
         if (m && m.banned) {
           hasBannedMaterials = true;
         }
       });
 
       return hasBannedMaterials;
-    }
+    },
   },
   methods: {
     loadAspectOptions() {
       let vm = this;
       vm.isLoadingAspectOptions = true;
-      axios.get(window.API_COMMON_BASE + '/aspects').then(r => {
-        vm.isLoadingAspectOptions = false;
-        vm.aspectOptions = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading aspect options');
-      });
+      axios
+        .get(window.API_COMMON_BASE + "/aspects")
+        .then((r) => {
+          vm.isLoadingAspectOptions = false;
+          vm.aspectOptions = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading aspect options");
+        });
     },
 
     loadMaterialOptions() {
       let vm = this;
       vm.isLoadingMaterialOptions = true;
-      axios.get(window.API_COMMON_BASE + '/materials').then(r => {
-        vm.isLoadingMaterialOptions = false;
-        vm.materialOptions = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading material dropdown options');
-      });
+      axios
+        .get(window.API_COMMON_BASE + "/materials")
+        .then((r) => {
+          vm.isLoadingMaterialOptions = false;
+          vm.materialOptions = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading material dropdown options");
+        });
     },
 
     loadCertificationOptions() {
       let vm = this;
       vm.isLoadingCertificationOptions = true;
-      axios.get(window.API_COMMON_BASE + '/certifications').then(r => {
-        vm.isLoadingCertificationOptions = false;
-        vm.certificationOptions = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading certification options');
-      });
+      axios
+        .get(window.API_COMMON_BASE + "/certifications")
+        .then((r) => {
+          vm.isLoadingCertificationOptions = false;
+          vm.certificationOptions = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading certification options");
+        });
     },
 
     loadTransportOptions() {
       let vm = this;
       vm.isLoadingTransportOptions = true;
-      axios.get(window.API_COMMON_BASE + '/transportation-methods').then(r => {
-        vm.isLoadingTransportOptions = false;
-        vm.transportOptions = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading certification options');
-      });
+      axios
+        .get(window.API_COMMON_BASE + "/transportation-methods")
+        .then((r) => {
+          vm.isLoadingTransportOptions = false;
+          vm.transportOptions = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading certification options");
+        });
     },
 
     loadMaterials() {
       let vm = this;
       vm.isLoadingMaterials = true;
-      axios.get(window.API_BASE + '/products/' + this.productId + '/esg/materials').then(r => {
-        vm.isLoadingMaterials = false;
-        vm.materials = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading materials');
-      });
+      axios
+        .get(window.API_BASE + "/products/" + this.productId + "/esg/materials")
+        .then((r) => {
+          vm.isLoadingMaterials = false;
+          vm.materials = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading materials");
+        });
     },
 
     openAddMaterialModal() {
@@ -495,25 +525,28 @@ export default {
 
     handleMaterialAdded() {
       this.addMaterialModalVisible = false;
-      eventBus.$emit('product-materials-updated');
+      eventBus.$emit("product-materials-updated");
       this.loadMaterials();
     },
 
     handleMaterialDeleted() {
-      eventBus.$emit('product-materials-updated');
+      eventBus.$emit("product-materials-updated");
       this.loadMaterials();
     },
 
     loadCertifications() {
       let vm = this;
       vm.isLoadingCertifications = true;
-      axios.get(window.API_BASE + '/products/' + this.productId + '/esg/certifications').then(r => {
-        vm.isLoadingCertifications = false;
-        vm.certifications = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading certifications');
-      });
+      axios
+        .get(window.API_BASE + "/products/" + this.productId + "/esg/certifications")
+        .then((r) => {
+          vm.isLoadingCertifications = false;
+          vm.certifications = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading certifications");
+        });
     },
 
     openAddCertificationModal() {
@@ -536,25 +569,31 @@ export default {
     loadTransportations() {
       let vm = this;
       vm.isLoadingTransportations = true;
-      axios.get(window.API_BASE + '/products/' + this.productId + '/esg/transportations').then(r => {
-        vm.isLoadingTransportations = false;
-        vm.transportations = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading transportations');
-      });
+      axios
+        .get(window.API_BASE + "/products/" + this.productId + "/esg/transportations")
+        .then((r) => {
+          vm.isLoadingTransportations = false;
+          vm.transportations = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading transportations");
+        });
     },
 
     loadProductLifespans() {
       let vm = this;
       vm.isLoadingProductLifespans = true;
-      axios.get(window.API_BASE + '/products/' + this.productId + '/esg/lifespans').then(r => {
-        vm.isLoadingProductLifespans = false;
-        vm.productLifespans = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.$message.error('Error loading product lifespan');
-      });
+      axios
+        .get(window.API_BASE + "/products/" + this.productId + "/esg/lifespans")
+        .then((r) => {
+          vm.isLoadingProductLifespans = false;
+          vm.productLifespans = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.$message.error("Error loading product lifespan");
+        });
     },
 
     openAddTransportationModal() {
@@ -576,29 +615,32 @@ export default {
 
     isMaterialBanned(material) {
       if (this.materialOptions) {
-        let m = _.find(this.materialOptions, {name: material});
+        let m = _.find(this.materialOptions, { name: material });
         return m ? m.banned : false;
       }
       return false;
     },
 
-    getExpandIcon({expanded, record, onExpand}) {
-      return record.section !== 'Lifespan' ? (
-          <a-button style="font-weight: 500; padding-left: 0; padding-right; 0;"
-                    type="link"
-                    {...{
-                      on: {
-                        click: onExpand.bind(this, [expanded, record])
-                      }
-                    }}
-          >
-            <span>{expanded ? 'Hide' : 'Expand'}</span>
-            <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? 'up' : 'down'}></a-icon>
-          </a-button>
-      ) : <a-button style="opacity: 0; cursor: default;"></a-button>;
-    }
-  }
-}
+    getExpandIcon({ expanded, record, onExpand }) {
+      return record.section !== "Lifespan" ? (
+        <a-button
+          style="font-weight: 500; padding-left: 0; padding-right; 0;"
+          type="link"
+          {...{
+            on: {
+              click: onExpand.bind(this, [expanded, record]),
+            },
+          }}
+        >
+          <span>{expanded ? "Hide" : "Expand"}</span>
+          <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? "up" : "down"}></a-icon>
+        </a-button>
+      ) : (
+        <a-button style="opacity: 0; cursor: default;"></a-button>
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss">

@@ -2,7 +2,6 @@
   <div class="shop-basket">
     <a-layout>
       <a-layout style="padding: 7px 30px">
-
         <div class="wrapper">
           <a-page-header title="Basket" @back="goBackToShop">
             <template slot="extra">
@@ -15,28 +14,27 @@
         </edit-order-modal>
 
         <div class="table-wrapper" :key="tableUpdateKey">
-          <a-table v-if="!isLoading" class="axpi-table"
-                   :columns="columns"
-                   :pagination="false"
-                   :data-source="basket"
-                   :loading="isLoading"
+          <a-table
+            v-if="!isLoading"
+            class="axpi-table"
+            :columns="columns"
+            :pagination="false"
+            :data-source="basket"
+            :loading="isLoading"
           >
             <div slot="name" slot-scope="name, record">
-              <router-link v-if="record.itemType == 'product'"
-                           :to="getProductPageUrl(record)">{{ name }}
-              </router-link>
-              <a v-if="record.itemType == 'order'" href="#" @click.prevent="editOrder(record.order)">{{ name }}
-              </a>
-              <a v-if="record.itemType == 'specification'" href="#"
-                 @click.prevent="editSpecification(record.specification)">{{ name }}
+              <router-link v-if="record.itemType == 'product'" :to="getProductPageUrl(record)">{{ name }} </router-link>
+              <a v-if="record.itemType == 'order'" href="#" @click.prevent="editOrder(record.order)">{{ name }} </a>
+              <a
+                v-if="record.itemType == 'specification'"
+                href="#"
+                @click.prevent="editSpecification(record.specification)"
+                >{{ name }}
               </a>
             </div>
 
             <div slot="image" slot-scope="image, row">
-              <a-avatar
-                  size="large"
-                  :src="getImageSrc(row)"
-              />
+              <a-avatar size="large" :src="getImageSrc(row)" />
             </div>
 
             <div slot="quantity" slot-scope="quantity, record">
@@ -44,60 +42,82 @@
               <div v-if="record.itemType === 'product'" class="quantity-changer">
                 <a-input-group compact>
                   <a-button
-                      @click.prevent="() => decrementProductQuantity({product: record.product, selectedPriceId: record.selectedPriceId})"
-                      icon="minus">
+                    @click.prevent="
+                      () =>
+                        decrementProductQuantity({ product: record.product, selectedPriceId: record.selectedPriceId })
+                    "
+                    icon="minus"
+                  >
                   </a-button>
                   <!--                  <div>{{ record.quantity }}</div>-->
-                  <a-input type="number" class="quantity-input"
-                           @change="e => setProductQuantity({quantity: e.target.value, id: record['id'], selectedPriceId: record.selectedPriceId})"
-                           :value="record.quantity"></a-input>
+                  <a-input
+                    type="number"
+                    class="quantity-input"
+                    @change="
+                      (e) =>
+                        setProductQuantity({
+                          quantity: e.target.value,
+                          id: record['id'],
+                          selectedPriceId: record.selectedPriceId,
+                        })
+                    "
+                    :value="record.quantity"
+                  ></a-input>
                   <a-button
-                      @click.prevent="() => incrementProductQuantity({product: record.product, selectedPriceId: record.selectedPriceId})"
-                      icon="plus"></a-button>
+                    @click.prevent="
+                      () =>
+                        incrementProductQuantity({ product: record.product, selectedPriceId: record.selectedPriceId })
+                    "
+                    icon="plus"
+                  ></a-button>
                 </a-input-group>
               </div>
               <!-- / Product -->
               <!-- Order -->
               <div v-if="record.itemType === 'order'" class="quantity-changer">
                 <a-input-group compact>
-                  <a-button @click.prevent="() => decrementPastOrderQuantity(record.order)"
-                            icon="minus">
-                  </a-button>
-                  <a-input type="number" class="quantity-input"
-                           @change="e => setPastOrderQuantity({quantity: e.target.value, id: record['id']})"
-                           :value="record.quantity"></a-input>
-                  <a-button @click.prevent="() => incrementPastOrderQuantity(record.order)"
-                            icon="plus"></a-button>
+                  <a-button @click.prevent="() => decrementPastOrderQuantity(record.order)" icon="minus"> </a-button>
+                  <a-input
+                    type="number"
+                    class="quantity-input"
+                    @change="(e) => setPastOrderQuantity({ quantity: e.target.value, id: record['id'] })"
+                    :value="record.quantity"
+                  ></a-input>
+                  <a-button @click.prevent="() => incrementPastOrderQuantity(record.order)" icon="plus"></a-button>
                 </a-input-group>
               </div>
               <!-- / Order -->
               <!-- Specification -->
               <div v-if="record.itemType === 'specification'" class="quantity-changer">
                 <a-input-group compact>
-                  <a-button @click.prevent="() => decrementSpecificationQuantity(record.specification)"
-                            icon="minus">
+                  <a-button @click.prevent="() => decrementSpecificationQuantity(record.specification)" icon="minus">
                   </a-button>
-                  <a-input type="number" class="quantity-input"
-                           @change="e => setSpecificationQuantity({quantity: e.target.value, id: record['id']})"
-                           :value="record.quantity"></a-input>
-                  <a-button @click.prevent="() => incrementSpecificationQuantity(record.specification)"
-                            icon="plus"></a-button>
+                  <a-input
+                    type="number"
+                    class="quantity-input"
+                    @change="(e) => setSpecificationQuantity({ quantity: e.target.value, id: record['id'] })"
+                    :value="record.quantity"
+                  ></a-input>
+                  <a-button
+                    @click.prevent="() => incrementSpecificationQuantity(record.specification)"
+                    icon="plus"
+                  ></a-button>
                 </a-input-group>
               </div>
               <!-- / Specification -->
             </div>
 
             <div slot="supplier" slot-scope="supplier, record">
-              <a-select :value="record.selectedPrice.id"
-                        v-if="!record.isLoadingPrices && record.prices && record.selectedPrice"
-                        option-filter-prop="children"
-                        :filter-option="filterOption"
-                        show-search
-                        @change="(e) => selectPriceById(record, e)"
-                        style="width: 200px">
-                <a-select-option v-for="(price, i) in record.prices"
-                                 :value="price.id"
-                                 :key="i">
+              <a-select
+                :value="record.selectedPrice.id"
+                v-if="!record.isLoadingPrices && record.prices && record.selectedPrice"
+                option-filter-prop="children"
+                :filter-option="filterOption"
+                show-search
+                @change="(e) => selectPriceById(record, e)"
+                style="width: 200px"
+              >
+                <a-select-option v-for="(price, i) in record.prices" :value="price.id" :key="i">
                   {{ price.supplier_name }}
                 </a-select-option>
               </a-select>
@@ -121,56 +141,59 @@
             <div slot="cost" slot-scope="cost, record">
               <a-spin v-if="record.isLoadingPrices" size="small"></a-spin>
               <div v-if="!record.isLoadingPrices">
-
                 <!-- Suggested -->
                 <div v-if="getSavingType(record) === 'Suggested'">
-              <span>
-              {{
-                  record.selectedPrice ? formatCostInPence2dp({
-                    cost: getPriceToShow(record.selectedPrice.price, record.quantity, record.itemType),
-                    cost_currency: 'USD'
-                  }) : '-'
-                }}
-              </span>
-<!--                  <a-tag-->
-<!--                      v-if="record.prices && record.itemType !== 'product' && record.selectedPrice"-->
-<!--                      color="blue" style="margin-left: 5px;">Suggested-->
-<!--                  </a-tag>-->
+                  <span>
+                    {{
+                      record.selectedPrice
+                        ? formatCostInPence2dp({
+                            cost: getPriceToShow(record.selectedPrice.price, record.quantity, record.itemType),
+                            cost_currency: "USD",
+                          })
+                        : "-"
+                    }}
+                  </span>
+                  <!--                  <a-tag-->
+                  <!--                      v-if="record.prices && record.itemType !== 'product' && record.selectedPrice"-->
+                  <!--                      color="blue" style="margin-left: 5px;">Suggested-->
+                  <!--                  </a-tag>-->
                 </div>
                 <!-- / Suggested -->
 
                 <!-- Exact -->
                 <div v-if="getSavingType(record) === 'Exact'">
-              <span>
-              {{
-                  record.selectedPrice ? formatCostInPence2dp({
-                    cost: record.order.cost,
-                    cost_currency: 'USD'
-                  }) : '-'
-                }}
-              </span>
-<!--                  <a-tag-->
-<!--                      color="blue" style="margin-left: 5px;">Exact-->
-<!--                  </a-tag>-->
+                  <span>
+                    {{
+                      record.selectedPrice
+                        ? formatCostInPence2dp({
+                            cost: record.order.cost,
+                            cost_currency: "USD",
+                          })
+                        : "-"
+                    }}
+                  </span>
+                  <!--                  <a-tag-->
+                  <!--                      color="blue" style="margin-left: 5px;">Exact-->
+                  <!--                  </a-tag>-->
                 </div>
                 <!-- / Exact -->
 
                 <!-- Savings -->
-                <div style="margin-top: 10px;"
-                     v-if="record.prices && record.selectedPrice">
+                <div style="margin-top: 10px" v-if="record.prices && record.selectedPrice">
                   <span>{{
-                      getSavings(record) ? formatCostInPence2dp({
-                        cost: getSavings(record),
-                        cost_currency: 'USD'
-                      }) : '-'
-                    }}</span>
-<!--                  <a-tag-->
-<!--                      :color="(getSavings(record) && getSavings(record) > 0) ? 'green' : 'red'"-->
-<!--                      style="margin-left: 5px;">Savings-->
-<!--                  </a-tag>-->
+                    getSavings(record)
+                      ? formatCostInPence2dp({
+                          cost: getSavings(record),
+                          cost_currency: "USD",
+                        })
+                      : "-"
+                  }}</span>
+                  <!--                  <a-tag-->
+                  <!--                      :color="(getSavings(record) && getSavings(record) > 0) ? 'green' : 'red'"-->
+                  <!--                      style="margin-left: 5px;">Savings-->
+                  <!--                  </a-tag>-->
                 </div>
                 <!-- / Savings -->
-
               </div>
             </div>
 
@@ -178,21 +201,18 @@
               <a-spin v-if="record.isLoadingPrices" size="small"></a-spin>
               <div v-if="!record.isLoadingPrices">
                 <div v-if="getSavingType(record) === 'Suggested'">
-                  <a-tag
-                      v-if="record.prices && record.selectedPrice"
-                      color="blue" style="margin-left: 5px;">Suggested
+                  <a-tag v-if="record.prices && record.selectedPrice" color="blue" style="margin-left: 5px"
+                    >Suggested
                   </a-tag>
                 </div>
                 <div v-if="getSavingType(record) === 'Exact'">
-                  <a-tag
-                      color="blue" style="margin-left: 5px;">Exact
-                  </a-tag>
+                  <a-tag color="blue" style="margin-left: 5px">Exact </a-tag>
                 </div>
-                <div style="margin-top: 10px;"
-                     v-if="record.prices && record.selectedPrice">
+                <div style="margin-top: 10px" v-if="record.prices && record.selectedPrice">
                   <a-tag
-                      :color="(getSavings(record) && getSavings(record) > 0) ? 'green' : 'red'"
-                      style="margin-left: 5px;">Savings
+                    :color="getSavings(record) && getSavings(record) > 0 ? 'green' : 'red'"
+                    style="margin-left: 5px"
+                    >Savings
                   </a-tag>
                 </div>
               </div>
@@ -248,7 +268,6 @@
         <div class="optimise-wrapper">
           <optimise-basket></optimise-basket>
         </div>
-
       </a-layout>
     </a-layout>
   </div>
@@ -256,7 +275,7 @@
 
 <script>
 import Orders from "../../mixins/Orders";
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 import OptimiseBasket from "./Basket/OptimiseBasket";
 import RequestQuoteButton from "./Basket/RequestQuoteButton";
 import EditOrderModal from "../../components/Orders/EditOrderModal";
@@ -264,133 +283,127 @@ import axios from "axios";
 import eventBus from "../../event-bus";
 import BasketRowInner from "./Basket/BasketRowInner";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 const innerColumns = [
-  {title: 'Supplier', dataIndex: 'supplier_name', key: 'supplier_name'},
-  {title: 'Cost', dataIndex: 'cost', key: 'cost', scopedSlots: {customRender: 'cost'}},
-  {title: 'CO2e', dataIndex: 'co2e', key: 'co2e', scopedSlots: {customRender: 'co2e'}},
+  { title: "Supplier", dataIndex: "supplier_name", key: "supplier_name" },
+  { title: "Cost", dataIndex: "cost", key: "cost", scopedSlots: { customRender: "cost" } },
+  { title: "CO2e", dataIndex: "co2e", key: "co2e", scopedSlots: { customRender: "co2e" } },
 ];
 
 export default {
   name: "Basket",
   mixins: [Orders],
-  components: {BasketRowInner, RequestQuoteButton, OptimiseBasket, EditOrderModal},
+  components: { BasketRowInner, RequestQuoteButton, OptimiseBasket, EditOrderModal },
   data() {
     return {
       innerColumns,
       columns: [
         {
-          title: '',
+          title: "",
           width: 20,
-          scopedSlots: {customRender: 'image'}
+          scopedSlots: { customRender: "image" },
         },
         {
-          title: 'Name',
-          dataIndex: 'name',
+          title: "Name",
+          dataIndex: "name",
           width: 200,
-          scopedSlots: {customRender: 'name'}
+          scopedSlots: { customRender: "name" },
         },
         {
-          title: 'Quantity',
-          dataIndex: 'quantity',
-          scopedSlots: {customRender: "quantity"},
-          width: 140
+          title: "Quantity",
+          dataIndex: "quantity",
+          scopedSlots: { customRender: "quantity" },
+          width: 140,
         },
         {
-          title: 'Supplier',
-          dataIndex: 'supplier',
-          scopedSlots: {customRender: "supplier"},
-          width: 130
+          title: "Supplier",
+          dataIndex: "supplier",
+          scopedSlots: { customRender: "supplier" },
+          width: 130,
         },
         {
-          title: 'Cost',
-          dataIndex: 'cost',
-          scopedSlots: {customRender: "cost"},
-          width: 110
-        },
-        {
-          title: '',
-          dataIndex: 'cost',
-          key: 'cost-tags',
-          scopedSlots: {customRender: "cost-tags"},
-          width: 180
-        },
-        {
-          title: 'CO2e',
-          dataIndex: 'co2e',
-          scopedSlots: {customRender: "co2e"},
-          width: 100
+          title: "Cost",
+          dataIndex: "cost",
+          scopedSlots: { customRender: "cost" },
+          width: 110,
         },
         {
           title: "",
-          scopedSlots: {customRender: "actions"},
-          width: 10
-        }
+          dataIndex: "cost",
+          key: "cost-tags",
+          scopedSlots: { customRender: "cost-tags" },
+          width: 180,
+        },
+        {
+          title: "CO2e",
+          dataIndex: "co2e",
+          scopedSlots: { customRender: "co2e" },
+          width: 100,
+        },
+        {
+          title: "",
+          scopedSlots: { customRender: "actions" },
+          width: 10,
+        },
       ],
       suppliers: [],
-      isLoadingSuppliers: false
-    }
+      isLoadingSuppliers: false,
+    };
   },
   created() {
     this.loadSuppliers();
-    console.log('basket', this.basket);
+    console.log("basket", this.basket);
 
     let vm = this;
 
-    eventBus.$on('specification-updated', function (params) {
-      let p = _.find(vm.basket, item => {
-        return (
-            item.itemType === 'specification'
-            && item.id === params.id
-        );
+    eventBus.$on("specification-updated", function (params) {
+      let p = _.find(vm.basket, (item) => {
+        return item.itemType === "specification" && item.id === params.id;
       });
       vm.loadTruepricesForSpecification({
-        spec: {id: params.id},
-        quantity: p.quantity
+        spec: { id: params.id },
+        quantity: p.quantity,
       });
     });
 
-    eventBus.$on('order-updated', function (params) {
-      let p = _.find(vm.basket, item => {
-        return (
-            item.itemType === 'order'
-            && item.id === params.id
-        );
+    eventBus.$on("order-updated", function (params) {
+      let p = _.find(vm.basket, (item) => {
+        return item.itemType === "order" && item.id === params.id;
       });
       vm.loadTruepricesForOrder({
-        order: {id: params.id},
-        quantity: p.quantity
+        order: { id: params.id },
+        quantity: p.quantity,
       });
     });
   },
   methods: {
-    ...mapActions('shop', {
-      incrementProductQuantity: 'incrementProductQuantity',
-      decrementProductQuantity: 'decrementProductQuantity',
-      setProductQuantity: 'setProductQuantity',
+    ...mapActions("shop", {
+      incrementProductQuantity: "incrementProductQuantity",
+      decrementProductQuantity: "decrementProductQuantity",
+      setProductQuantity: "setProductQuantity",
 
-      incrementPastOrderQuantity: 'incrementPastOrderQuantity',
-      decrementPastOrderQuantity: 'decrementPastOrderQuantity',
-      setPastOrderQuantity: 'setPastOrderQuantity',
+      incrementPastOrderQuantity: "incrementPastOrderQuantity",
+      decrementPastOrderQuantity: "decrementPastOrderQuantity",
+      setPastOrderQuantity: "setPastOrderQuantity",
 
-      incrementSpecificationQuantity: 'incrementSpecificationQuantity',
-      decrementSpecificationQuantity: 'decrementSpecificationQuantity',
-      setSpecificationQuantity: 'setSpecificationQuantity',
+      incrementSpecificationQuantity: "incrementSpecificationQuantity",
+      decrementSpecificationQuantity: "decrementSpecificationQuantity",
+      setSpecificationQuantity: "setSpecificationQuantity",
 
-      updateBasketSelectedPrice: 'updateBasketSelectedPrice',
-      loadTruepricesForSpecification: 'loadTruepricesForSpecification',
-      loadTruepricesForOrder: 'loadTruepricesForOrder'
+      updateBasketSelectedPrice: "updateBasketSelectedPrice",
+      loadTruepricesForSpecification: "loadTruepricesForSpecification",
+      loadTruepricesForOrder: "loadTruepricesForOrder",
     }),
 
-    ...mapActions('orderEditor', {
-      setWizardStage: 'setWizardStage',
-      loadOrder: 'loadOrder',
-      loadSpecification: 'loadSpecification'
+    ...mapActions("orderEditor", {
+      setWizardStage: "setWizardStage",
+      loadOrder: "loadOrder",
+      loadSpecification: "loadSpecification",
     }),
 
     getSavingType(row) {
-      let prices = _.map(row.prices, 'price');
+      let prices = _.map(row.prices, "price");
       let benchmarkPrice = _.mean(prices) * 1.3;
 
       // let savingFromBenchmark = (benchmarkPrice - row.selectedPrice.price);
@@ -399,21 +412,21 @@ export default {
         // let savingComparedToBefore = (row.order.cost - row.selectedPrice.price);
         let isSupplierSame = row.order.supplier_id == row.selectedPrice.supplier_id;
         if (row.order.cost < benchmarkPrice && isSupplierSame) {
-          return 'Exact';
+          return "Exact";
         }
       }
 
-      return 'Suggested';
+      return "Suggested";
     },
 
     getSavings(row) {
-      let prices = _.map(row.prices, 'price');
+      let prices = _.map(row.prices, "price");
       let benchmarkPrice = _.mean(prices) * 1.3;
 
-      let savingFromBenchmark = (benchmarkPrice - row.selectedPrice.price);
+      let savingFromBenchmark = benchmarkPrice - row.selectedPrice.price;
 
       if (row.order && row.order.cost) {
-        let savingComparedToBefore = (row.order.cost - row.selectedPrice.price);
+        let savingComparedToBefore = row.order.cost - row.selectedPrice.price;
 
         // let isSupplierSame = row.order.supplier_id == row.selectedPrice.supplier_id;
         if (row.order.cost < benchmarkPrice) {
@@ -422,9 +435,9 @@ export default {
       }
 
       if (row.suggestedProducts && row.suggestedProducts.length) {
-        let orderedByCost = _.orderBy(row.suggestedProducts, 'cost');
+        let orderedByCost = _.orderBy(row.suggestedProducts, "cost");
         let lowestPrice = _.first(orderedByCost).cost;
-        let savingComparedToBefore = (lowestPrice - row.selectedPrice.price);
+        let savingComparedToBefore = lowestPrice - row.selectedPrice.price;
         if (lowestPrice < benchmarkPrice) {
           return savingComparedToBefore * row.quantity;
         }
@@ -439,16 +452,16 @@ export default {
       let vm = this;
       vm.isLoadingSuppliers = true;
       axios
-          .get(window.API_BASE + "/suppliers")
-          .then((r) => {
-            vm.suppliers = r.data;
-            vm.isLoadingSuppliers = false;
-          })
-          .catch((e) => {
-            console.log(e);
-            vm.isLoadingSuppliers = false;
-            vm.$message.error("Error loading suppliers");
-          });
+        .get(window.API_BASE + "/suppliers")
+        .then((r) => {
+          vm.suppliers = r.data;
+          vm.isLoadingSuppliers = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoadingSuppliers = false;
+          vm.$message.error("Error loading suppliers");
+        });
     },
 
     editOrder(order) {
@@ -458,13 +471,11 @@ export default {
 
     editSpecification(specification) {
       this.setWizardStage(0);
-      this.loadSpecification(
-          specification.id
-      );
+      this.loadSpecification(specification.id);
     },
 
     getPriceToShow(price, quantity, itemType) {
-      if (itemType === 'product') {
+      if (itemType === "product") {
         return price * quantity;
       }
       return price;
@@ -472,8 +483,8 @@ export default {
 
     getTotalCo2e(item) {
       let co2e = 0;
-      if (item.itemType === 'product' && item.selectedPrice && item.selectedPrice.co2e) {
-        co2e = Math.round((item.quantity * item.selectedPrice.co2e) * 100) / 100;
+      if (item.itemType === "product" && item.selectedPrice && item.selectedPrice.co2e) {
+        co2e = Math.round(item.quantity * item.selectedPrice.co2e * 100) / 100;
       } else if (item.selectedPrice && item.selectedPrice.co2e) {
         co2e = Math.round(item.selectedPrice.co2e * 100) / 100;
       }
@@ -482,85 +493,83 @@ export default {
 
     getSupplierCo2e(co2e, item) {
       let co2eToReturn = co2e;
-      if (item.itemType === 'product') {
+      if (item.itemType === "product") {
         co2eToReturn = co2eToReturn * item.quantity;
       }
       return co2eToReturn ? Math.round(co2eToReturn * 100) / 100 : 0;
     },
 
     filterOption(input, option) {
-      return (
-          option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      );
+      return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     },
 
     getProductPageUrl(product) {
-      return '/products/' + product['id'] + '?fromBasket=1';
+      return "/products/" + product["id"] + "?fromBasket=1";
     },
 
     getOrderUrl(order) {
-      return '/orders/' + order.id;
+      return "/orders/" + order.id;
     },
 
     goBackToShop() {
-      this.$router.push('/shop');
+      this.$router.push("/shop");
     },
 
     getImageSrc(item) {
-      if (item['product'] && item['product']['imageURLs'] && item['product']['imageURLs'].length) {
-        return item['product']['imageURLs'][0];
+      if (item["product"] && item["product"]["imageURLs"] && item["product"]["imageURLs"].length) {
+        return item["product"]["imageURLs"][0];
       }
-      return '/img/icons/basket-order-icon.png';
+      return "/img/icons/basket-order-icon.png";
     },
 
     selectPrice(record, price) {
       this.updateBasketSelectedPrice({
         selectedPrice: price,
-        basketItem: record
+        basketItem: record,
       });
     },
 
     selectPriceById(record, priceId) {
       this.updateBasketSelectedPrice({
-        selectedPrice: _.find(record.prices, {id: priceId}),
-        basketItem: record
+        selectedPrice: _.find(record.prices, { id: priceId }),
+        basketItem: record,
       });
     },
 
-    getExpandIcon({expanded, record, onExpand}) {
+    getExpandIcon({ expanded, record, onExpand }) {
       return (
-          <a-button style="font-weight: 500; padding-left: 0; padding-right; 0; float: right;"
-                    type="link"
-                    {...{
-                      on: {
-                        click: onExpand.bind(this, [expanded, record])
-                      }
-                    }}
-          >
-            <span>{expanded ? 'Hide' : 'Expand'}</span>
-            <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? 'up' : 'down'}></a-icon>
-          </a-button>
+        <a-button
+          style="font-weight: 500; padding-left: 0; padding-right; 0; float: right;"
+          type="link"
+          {...{
+            on: {
+              click: onExpand.bind(this, [expanded, record]),
+            },
+          }}
+        >
+          <span>{expanded ? "Hide" : "Expand"}</span>
+          <a-icon style="font-size: 10px; font-weight: 500;" type={expanded ? "up" : "down"}></a-icon>
+        </a-button>
       );
-    }
+    },
   },
   computed: {
-    ...mapGetters('shop', {
-      basket: 'basket',
-      isLoading: 'isLoading',
-      tableUpdateKey: 'tableUpdateKey'
+    ...mapGetters("shop", {
+      basket: "basket",
+      isLoading: "isLoading",
+      tableUpdateKey: "tableUpdateKey",
     }),
 
-    ...mapGetters('orderEditor', {
-      order: 'order',
-      type: 'type'
-    })
-  }
-}
+    ...mapGetters("orderEditor", {
+      order: "order",
+      type: "type",
+    }),
+  },
+};
 </script>
 
 <style scoped lang="scss">
 .shop-basket {
-
 }
 
 .wrapper {

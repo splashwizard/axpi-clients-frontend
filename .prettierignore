@@ -1,0 +1,15 @@
+**/.git
+**/.svn
+**/.husky
+**/configs
+**/dist
+**/public
+**/node_modules
+
+.eslintrc.js
+.gitignore
+.prettierrc.json
+babel.config.js
+package.json
+
+README.md

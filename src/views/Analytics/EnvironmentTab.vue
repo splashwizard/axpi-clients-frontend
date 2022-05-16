@@ -4,10 +4,14 @@
       <a-col :span="12">
         <b>Which are your most environmentally friendly suppliers?</b>
         <div class="graph-container">
-          <iframe src='https://flo.uri.sh/visualisation/5840581/embed' title='Interactive or visual content'
-                  frameborder='0'
-                  scrolling='no' style='width:100%;height:400px;'
-                  sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+          <iframe
+            src="https://flo.uri.sh/visualisation/5840581/embed"
+            title="Interactive or visual content"
+            frameborder="0"
+            scrolling="no"
+            style="width: 100%; height: 400px"
+            sandbox="allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+          ></iframe>
 
           <!-- Bottom toolbar -->
           <div class="bottom-toolbar">
@@ -22,9 +26,14 @@
       <a-col :span="12">
         <b>Where are your emissions coming from?</b>
         <div class="graph-container">
-          <iframe src='https://flo.uri.sh/visualisation/5840604/embed' title='Interactive or visual content'
-                  frameborder='0' scrolling='no' style='width:100%;height:400px;'
-                  sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+          <iframe
+            src="https://flo.uri.sh/visualisation/5840604/embed"
+            title="Interactive or visual content"
+            frameborder="0"
+            scrolling="no"
+            style="width: 100%; height: 400px"
+            sandbox="allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+          ></iframe>
 
           <!-- Bottom toolbar -->
           <div class="bottom-toolbar">
@@ -41,9 +50,14 @@
       <a-col :span="12">
         <b>How much of the material you use comes from recycled sources?</b>
         <div class="graph-container">
-          <iframe src='https://flo.uri.sh/visualisation/5840997/embed' title='Interactive or visual content'
-                  frameborder='0' scrolling='no' style='width:100%;height:400px;'
-                  sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+          <iframe
+            src="https://flo.uri.sh/visualisation/5840997/embed"
+            title="Interactive or visual content"
+            frameborder="0"
+            scrolling="no"
+            style="width: 100%; height: 400px"
+            sandbox="allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+          ></iframe>
 
           <!-- Bottom toolbar -->
           <div class="bottom-toolbar">
@@ -58,9 +72,14 @@
       <a-col :span="12">
         <b>In which categories are your emissions coming from?</b>
         <div class="graph-container">
-          <iframe src='https://flo.uri.sh/visualisation/5840812/embed' title='Interactive or visual content'
-                  frameborder='0' scrolling='no' style='width:100%;height:400px;'
-                  sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+          <iframe
+            src="https://flo.uri.sh/visualisation/5840812/embed"
+            title="Interactive or visual content"
+            frameborder="0"
+            scrolling="no"
+            style="width: 100%; height: 400px"
+            sandbox="allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+          ></iframe>
 
           <!-- Bottom toolbar -->
           <div class="bottom-toolbar">
@@ -77,9 +96,14 @@
       <a-col :span="12">
         <b>What accreditations do the papers you use have?</b>
         <div class="graph-container">
-          <iframe src='https://flo.uri.sh/visualisation/5840918/embed' title='Interactive or visual content'
-                  frameborder='0' scrolling='no' style='width:100%;height:400px;'
-                  sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+          <iframe
+            src="https://flo.uri.sh/visualisation/5840918/embed"
+            title="Interactive or visual content"
+            frameborder="0"
+            scrolling="no"
+            style="width: 100%; height: 400px"
+            sandbox="allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+          ></iframe>
 
           <!-- Bottom toolbar -->
           <div class="bottom-toolbar">
@@ -94,9 +118,14 @@
       <a-col :span="12">
         <b>How do your suppliers perform across the metrics?</b>
         <div class="graph-container">
-          <iframe src='https://flo.uri.sh/visualisation/5840907/embed' title='Interactive or visual content'
-                  frameborder='0' scrolling='no' style='width:100%;height:400px;'
-                  sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe>
+          <iframe
+            src="https://flo.uri.sh/visualisation/5840907/embed"
+            title="Interactive or visual content"
+            frameborder="0"
+            scrolling="no"
+            style="width: 100%; height: 400px"
+            sandbox="allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+          ></iframe>
 
           <!-- Bottom toolbar -->
           <div class="bottom-toolbar">
@@ -114,8 +143,8 @@
 
 <script>
 export default {
-  name: "EnvironmentTab"
-}
+  name: "EnvironmentTab",
+};
 </script>
 
 <style scoped>

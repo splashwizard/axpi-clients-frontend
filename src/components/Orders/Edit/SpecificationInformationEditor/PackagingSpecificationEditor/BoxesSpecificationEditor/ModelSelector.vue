@@ -8,11 +8,7 @@
           <!--              alt="Image"-->
           <!--              :src="getImageSrc(model['3d_image'])"-->
           <!--          />-->
-          <img
-              slot="cover"
-              alt="Image"
-              :src="getThreeDimensionalImageForModel(model)"
-          />
+          <img slot="cover" alt="Image" :src="getThreeDimensionalImageForModel(model)" />
 
           <a-card-meta :title="model.name">
             <!--            <template slot="description">-->
@@ -30,16 +26,16 @@ import Images from "../../../../../../mixins/Images";
 
 export default {
   name: "ModelSelector",
-  props: ['models', 'selectedModel', 'searchQuery', 'selectedCategory'],
+  props: ["models", "selectedModel", "searchQuery", "selectedCategory"],
   mixins: [Images],
   methods: {
     selectModel(model) {
-      this.$emit('select-model', model);
+      this.$emit("select-model", model);
     },
 
     getThreeDimensionalImageForModel(model) {
-      return 'https://api.axiomdata.io/packaging/' + model.name + "_3d.png";
-    }
+      return "https://api.axiomdata.io/packaging/" + model.name + "_3d.png";
+    },
   },
   computed: {
     modelsToShow() {
@@ -51,12 +47,12 @@ export default {
       //   })
       // }
 
-      return filtered.filter(model => {
-        return model.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      return filtered.filter((model) => {
+        return model.name.toLowerCase().includes(this.searchQuery.toLowerCase());
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">
@@ -72,8 +68,8 @@ export default {
 
   &::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
   }
 
   .ant-card {

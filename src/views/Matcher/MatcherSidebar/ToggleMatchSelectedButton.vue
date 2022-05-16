@@ -1,46 +1,44 @@
 <template>
   <a-button :type="isMatchSelected ? 'danger' : 'default'" @click.prevent="toggle">
-    {{ isMatchSelected ? 'Unmatch' : 'Match' }}
+    {{ isMatchSelected ? "Unmatch" : "Match" }}
   </a-button>
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "ToggleMatchSelectedButton",
-  props: ['match'],
+  props: ["match"],
   methods: {
-    ...mapActions('matcher', {
-      toggleMatchSelected: 'toggleMatchSelected'
+    ...mapActions("matcher", {
+      toggleMatchSelected: "toggleMatchSelected",
     }),
 
     toggle() {
-      this.toggleMatchSelected(this.matchId)
-    }
+      this.toggleMatchSelected(this.matchId);
+    },
   },
   computed: {
-    ...mapGetters('matcher', {
-      selectedMatches: 'selectedMatches'
+    ...mapGetters("matcher", {
+      selectedMatches: "selectedMatches",
     }),
 
     matchId() {
-      if (typeof this.match['_id'] === 'string') {
-        return this.match['_id']
+      if (typeof this.match["_id"] === "string") {
+        return this.match["_id"];
       } else {
-        return Object.values(this.match['_id'])[0]
+        return Object.values(this.match["_id"])[0];
       }
     },
 
     isMatchSelected() {
       return _.includes(this.selectedMatches, this.matchId);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

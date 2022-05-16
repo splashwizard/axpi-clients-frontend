@@ -5,26 +5,24 @@
         <div class="left">
           <a-button size="small" @click.prevent="clear">Clear</a-button>
         </div>
-        <div class="center">
-          Filters
-        </div>
+        <div class="center">Filters</div>
         <div class="right">
-          <a-button :key="unsavedReloadKey"
-              :disabled="!hasUnsavedChanges" @click="save"
-                    type="primary" size="small">Save
+          <a-button :key="unsavedReloadKey" :disabled="!hasUnsavedChanges" @click="save" type="primary" size="small"
+            >Save
           </a-button>
         </div>
       </div>
     </template>
     <template slot="content">
       <div class="filters-inner">
-
-        <inline-filter :filters="filtersLocal"
-                       id="product_type"
-                       label="Type"
-                       type="categorical"
-                       @filter-updated="handleFilterUpdated"
-                       :options="typeOptions"></inline-filter>
+        <inline-filter
+          :filters="filtersLocal"
+          id="product_type"
+          label="Type"
+          type="categorical"
+          @filter-updated="handleFilterUpdated"
+          :options="typeOptions"
+        ></inline-filter>
 
         <!--        <inline-filter :filters="filtersLocal"-->
         <!--                       id="product_type"-->
@@ -32,7 +30,6 @@
         <!--                       type="categorical"-->
         <!--                       @filter-updated="handleFilterUpdated"-->
         <!--                       :options="typeOptions"></inline-filter>-->
-
       </div>
     </template>
     <a-button icon="filter">Filter</a-button>
@@ -42,12 +39,12 @@
 <script>
 import InlineFilter from "./InlineFilter";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "OrdersFilters",
-  props: ['filters'],
-  components: {InlineFilter},
+  props: ["filters"],
+  components: { InlineFilter },
   data() {
     return {
       filtersLocal: null,
@@ -55,31 +52,31 @@ export default {
       unsavedReloadKey: 1,
       typeOptions: [
         {
-         value: 'ERP',
-         label: 'ERP'
+          value: "ERP",
+          label: "ERP",
         },
         {
-          value: 'print',
-          label: 'Print'
+          value: "print",
+          label: "Print",
         },
         {
-          value: 'pos',
-          label: 'POS'
+          value: "pos",
+          label: "POS",
         },
         {
-          value: 'apparel',
-          label: 'Apparel'
+          value: "apparel",
+          label: "Apparel",
         },
         {
-          value: 'merchandise',
-          label: 'Merchandise'
+          value: "merchandise",
+          label: "Merchandise",
         },
         {
-          value: 'packaging',
-          label: 'Packaging'
-        }
-      ]
-    }
+          value: "packaging",
+          label: "Packaging",
+        },
+      ],
+    };
   },
   created() {
     this.filtersLocal = _.cloneDeep(this.filters);
@@ -94,12 +91,12 @@ export default {
         hasUnsaved = true;
       }
 
-      if (this.filters['product_type'] !== this.filtersLocal['product_type']) {
+      if (this.filters["product_type"] !== this.filtersLocal["product_type"]) {
         hasUnsaved = true;
       }
 
-      return (hasUnsaved || this.hasUnsavedChangesFromEvent);
-    }
+      return hasUnsaved || this.hasUnsavedChangesFromEvent;
+    },
   },
   methods: {
     handleFilterUpdated() {
@@ -110,7 +107,7 @@ export default {
     },
 
     incrementUnsavedReloadKey() {
-     this.unsavedReloadKey += 1;
+      this.unsavedReloadKey += 1;
     },
 
     clear() {
@@ -118,12 +115,12 @@ export default {
     },
 
     save() {
-      this.$emit('set-filters', _.cloneDeep(this.filtersLocal));
-      this.$emit('filter-updated');
+      this.$emit("set-filters", _.cloneDeep(this.filtersLocal));
+      this.$emit("filter-updated");
       this.hasUnsavedChangesFromEvent = false;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

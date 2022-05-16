@@ -1,13 +1,17 @@
 <template>
-  <a-layout-sider width="170" theme="dark"
-                  :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
-                  :collapsed-width="0" :trigger="null">
+  <a-layout-sider
+    width="170"
+    theme="dark"
+    :style="{ background: '#f7fafc', borderRight: '1px solid #e3e8ee' }"
+    :collapsed-width="0"
+    :trigger="null"
+  >
     <div class="wrapper">
       <div class="sidebar-menu">
-        <router-link to="/search/analytics" :class="{'selected': isAnalytics}">Analytics</router-link>
-        <router-link to="/search/rules" :class="{'selected': isRules}">Rules</router-link>
+        <router-link to="/search/analytics" :class="{ selected: isAnalytics }">Analytics</router-link>
+        <router-link to="/search/rules" :class="{ selected: isRules }">Rules</router-link>
       </div>
-      <div class="sidebar-footer"/>
+      <div class="sidebar-footer" />
     </div>
   </a-layout-sider>
 </template>
@@ -15,22 +19,20 @@
 <script>
 export default {
   name: "LeftSidebar",
-  methods: {
-  },
+  methods: {},
   computed: {
     isAnalytics() {
-      return this.$route.name === 'Search Analytics';
+      return this.$route.name === "Search Analytics";
     },
 
     isRules() {
-      return this.$route.name === 'Search Rules';
+      return this.$route.name === "Search Rules";
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped lang="scss">
-
 .wrapper {
   display: flex;
   height: 100%;
@@ -49,7 +51,7 @@ export default {
     display: block;
     margin-bottom: 19px;
     font-size: 15px;
-    color: #4F566B;
+    color: #4f566b;
     padding-left: 20px;
     padding-right: 20px;
     position: relative;

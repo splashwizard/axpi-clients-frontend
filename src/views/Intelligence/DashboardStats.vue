@@ -14,39 +14,39 @@
         <a-col :span="6">
           <table class="axpi-basic-table">
             <thead>
-            <tr>
-              <th colspan="2">
-                <div class="table-header-wrapper">
-                  <div class="table-header-left">
-                    <b>Data Overview</b><br>
-                    Current Data
+              <tr>
+                <th colspan="2">
+                  <div class="table-header-wrapper">
+                    <div class="table-header-left">
+                      <b>Data Overview</b><br />
+                      Current Data
+                    </div>
+                    <div class="table-header-right">
+                      <a-icon type="database"></a-icon>
+                    </div>
                   </div>
-                  <div class="table-header-right">
-                    <a-icon type="database"></a-icon>
-                  </div>
-                </div>
-              </th>
-            </tr>
+                </th>
+              </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>Suppliers</td>
-              <td>
-                {{ stats['number_of_suppliers'] }}
-              </td>
-            </tr>
-            <tr>
-              <td>Business Units</td>
-              <td>
-                {{ stats['number_of_organisational_units'] }}
-              </td>
-            </tr>
-            <tr>
-              <td>Categories</td>
-              <td>
-                {{ stats['number_of_categories'] }}
-              </td>
-            </tr>
+              <tr>
+                <td>Suppliers</td>
+                <td>
+                  {{ stats["number_of_suppliers"] }}
+                </td>
+              </tr>
+              <tr>
+                <td>Business Units</td>
+                <td>
+                  {{ stats["number_of_organisational_units"] }}
+                </td>
+              </tr>
+              <tr>
+                <td>Categories</td>
+                <td>
+                  {{ stats["number_of_categories"] }}
+                </td>
+              </tr>
             </tbody>
           </table>
         </a-col>
@@ -55,37 +55,39 @@
         <a-col :span="6">
           <table class="axpi-basic-table">
             <thead>
-            <tr>
-              <th colspan="2">
-                <div class="table-header-wrapper">
-                  <div class="table-header-left">
-                    <b>Spend</b><br>
-                    {{ dateRange }}
+              <tr>
+                <th colspan="2">
+                  <div class="table-header-wrapper">
+                    <div class="table-header-left">
+                      <b>Spend</b><br />
+                      {{ dateRange }}
+                    </div>
+                    <div class="table-header-right">
+                      <a-icon type="dollar"></a-icon>
+                    </div>
                   </div>
-                  <div class="table-header-right">
-                    <a-icon type="dollar"></a-icon>
-                  </div>
-                </div>
-              </th>
-            </tr>
+                </th>
+              </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>Spend Managed</td>
-              <td>
-                {{ stats['spend_managed'] ? formatCost({cost: stats['spend_managed'], cost_currency: 'USD'}) : '-' }}
-              </td>
-            </tr>
-            <tr>
-              <td>Orders Classified</td>
-              <td>{{ stats['orders_classified_percentage'] ? stats['orders_classified_percentage'] : '-' }}</td>
-            </tr>
-            <tr>
-              <td>Total Spend</td>
-              <td>
-                {{ stats['total_spend'] ? formatCost({cost: stats['total_spend'], cost_currency: 'USD'}) : '-' }}
-              </td>
-            </tr>
+              <tr>
+                <td>Spend Managed</td>
+                <td>
+                  {{
+                    stats["spend_managed"] ? formatCost({ cost: stats["spend_managed"], cost_currency: "USD" }) : "-"
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <td>Orders Classified</td>
+                <td>{{ stats["orders_classified_percentage"] ? stats["orders_classified_percentage"] : "-" }}</td>
+              </tr>
+              <tr>
+                <td>Total Spend</td>
+                <td>
+                  {{ stats["total_spend"] ? formatCost({ cost: stats["total_spend"], cost_currency: "USD" }) : "-" }}
+                </td>
+              </tr>
             </tbody>
           </table>
         </a-col>
@@ -94,38 +96,34 @@
         <a-col :span="6">
           <table class="axpi-basic-table">
             <thead>
-            <tr>
-              <th colspan="2">
-                <div class="table-header-wrapper">
-                  <div class="table-header-left">
-                    <b>Demand</b><br>
-                    {{ dateRange }}
+              <tr>
+                <th colspan="2">
+                  <div class="table-header-wrapper">
+                    <div class="table-header-left">
+                      <b>Demand</b><br />
+                      {{ dateRange }}
+                    </div>
+                    <div class="table-header-right">
+                      <a-icon type="up-circle"></a-icon>
+                    </div>
                   </div>
-                  <div class="table-header-right">
-                    <a-icon type="up-circle"></a-icon>
-                  </div>
-                </div>
-              </th>
-            </tr>
+                </th>
+              </tr>
             </thead>
             <tbody>
-            <tr>
-<!--              <td>{{ user.client.name }} Demand Change</td>-->
-              <td>Roche Demand Change</td>
-              <td>
-                -
-              </td>
-            </tr>
-            <tr>
-              <td>Market Demand Change</td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>Market Demand Volatility</td>
-              <td>
-                -
-              </td>
-            </tr>
+              <tr>
+                <!--              <td>{{ user.client.name }} Demand Change</td>-->
+                <td>Roche Demand Change</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Market Demand Change</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Market Demand Volatility</td>
+                <td>-</td>
+              </tr>
             </tbody>
           </table>
         </a-col>
@@ -134,31 +132,29 @@
         <a-col :span="6">
           <table class="axpi-basic-table">
             <thead>
-            <tr>
-              <th colspan="2">
-                <div class="table-header-wrapper">
-                  <div class="table-header-left">
-                    <b>Risk</b><br>
-                    Current Data
+              <tr>
+                <th colspan="2">
+                  <div class="table-header-wrapper">
+                    <div class="table-header-left">
+                      <b>Risk</b><br />
+                      Current Data
+                    </div>
+                    <div class="table-header-right">
+                      <a-icon type="alert"></a-icon>
+                    </div>
                   </div>
-                  <div class="table-header-right">
-                    <a-icon type="alert"></a-icon>
-                  </div>
-                </div>
-              </th>
-            </tr>
+                </th>
+              </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>Risk Level</td>
-              <td>
-                -
-              </td>
-            </tr>
-            <tr>
-              <td>Suppliers at Risk</td>
-              <td>-</td>
-            </tr>
+              <tr>
+                <td>Risk Level</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>Suppliers at Risk</td>
+                <td>-</td>
+              </tr>
             </tbody>
           </table>
         </a-col>
@@ -170,39 +166,39 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import Orders from "../../mixins/Orders";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "DashboardStats",
-  props: ['filters'],
+  props: ["filters"],
   mixins: [Orders],
   data() {
     return {
       isLoading: false,
-      stats: []
-    }
+      stats: [],
+    };
   },
   computed: {
-    ...mapGetters('auth', {
-      user: 'user'
+    ...mapGetters("auth", {
+      user: "user",
     }),
 
     dateRange() {
-      if (this.filters['filters_enabled'].length && this.filters['filters_enabled'].includes('date_range')) {
-        if (this.filters['date_range'] == 'last-5-years') {
-          return 'Last 5 Years';
-        } else if (this.filters['date_range'] == 'last-12-months') {
-          return 'Last 12 Months';
-        } else if (this.filters['date_range'] == 'last-month') {
-          return 'Last Month'
+      if (this.filters["filters_enabled"].length && this.filters["filters_enabled"].includes("date_range")) {
+        if (this.filters["date_range"] == "last-5-years") {
+          return "Last 5 Years";
+        } else if (this.filters["date_range"] == "last-12-months") {
+          return "Last 12 Months";
+        } else if (this.filters["date_range"] == "last-month") {
+          return "Last Month";
         }
       }
-      return 'Last 12 Months';
-    }
+      return "Last 12 Months";
+    },
   },
   created() {
     this.fetch();
@@ -211,32 +207,35 @@ export default {
     fetch() {
       let vm = this;
       vm.isLoading = true;
-      axios.post(window.API_BASE + '/intelligence/stats', this.getSearchParams()).then(r => {
-        vm.isLoading = false;
-        vm.stats = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.stats = null;
-        vm.$message.error('Error loading stats');
-      });
+      axios
+        .post(window.API_BASE + "/intelligence/stats", this.getSearchParams())
+        .then((r) => {
+          vm.isLoading = false;
+          vm.stats = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          vm.stats = null;
+          vm.$message.error("Error loading stats");
+        });
     },
 
     getSearchParams() {
       let filters = {};
 
-      _.each(this.filters['filters_enabled'], key => {
+      _.each(this.filters["filters_enabled"], (key) => {
         filters[key] = this.filters[key];
       });
 
-      if (!Object.keys(filters).includes('date_range')) {
-        filters['date_range'] = 'last-12-months';
+      if (!Object.keys(filters).includes("date_range")) {
+        filters["date_range"] = "last-12-months";
       }
 
       return filters;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -244,7 +243,7 @@ export default {
   text-align: center;
   padding-top: 20px;
   padding-bottom: 20px;
-  border: 1px solid #ECECEC;
+  border: 1px solid #ececec;
 }
 
 .loader-description {

@@ -5,8 +5,7 @@
       <a-tab-pane key="orders" tab="Orders"></a-tab-pane>
       <!--      <a-tab-pane key="prices" tab="Prices"></a-tab-pane>-->
       <a-tab-pane key="demand" tab="Demand"></a-tab-pane>
-      <a-tab-pane key="product-details" tab="Product Details">
-      </a-tab-pane>
+      <a-tab-pane key="product-details" tab="Product Details"> </a-tab-pane>
     </a-tabs>
     <!-- / Graph selector -->
 
@@ -15,18 +14,21 @@
       <a-row type="flex" :gutter="20">
         <a-col :span="19">
           <!-- Graphs -->
-          <div v-if="isLoading" style="text-align: center;">
+          <div v-if="isLoading" style="text-align: center">
             <a-spin></a-spin>
           </div>
           <div v-else>
-            <cluster-orders-graph :graph-reload-key="graphReloadKey"
-                                  v-if="activeGraph === 'orders'"
-                                  :orders="ordersWithMatchesFiltered"></cluster-orders-graph>
+            <cluster-orders-graph
+              :graph-reload-key="graphReloadKey"
+              v-if="activeGraph === 'orders'"
+              :orders="ordersWithMatchesFiltered"
+            ></cluster-orders-graph>
 
-            <cluster-demand-graph :graph-reload-key="graphReloadKey"
-                                  v-if="activeGraph === 'demand'"
-                                  :orders="ordersWithMatchesFiltered"></cluster-demand-graph>
-
+            <cluster-demand-graph
+              :graph-reload-key="graphReloadKey"
+              v-if="activeGraph === 'demand'"
+              :orders="ordersWithMatchesFiltered"
+            ></cluster-demand-graph>
           </div>
           <!-- / Graphs -->
         </a-col>
@@ -41,7 +43,7 @@
 
     <!-- Table -->
     <div v-if="activeGraph === 'product-details'">
-      <div v-if="isLoading" style="text-align: center;">
+      <div v-if="isLoading" style="text-align: center">
         <a-spin></a-spin>
       </div>
       <all-product-details-table v-if="activeGraph === 'product-details'"></all-product-details-table>
@@ -51,16 +53,16 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import ClusterStatsSidebar from "./ClusterGraphs/ClusterStatsSidebar.vue";
 // import axios from 'axios';
-import ClusterOrdersGraph from './ClusterGraphs/ClusterOrdersGraph.vue';
+import ClusterOrdersGraph from "./ClusterGraphs/ClusterOrdersGraph.vue";
 import ClusterDemandGraph from "./ClusterGraphs/ClusterDemandGraph";
 import AllProductDetailsTable from "./ClusterGraphs/AllProductDetailsTable";
 
 export default {
   props: ["clusterId", "graphReloadKey"],
-  components: {AllProductDetailsTable, ClusterDemandGraph, ClusterStatsSidebar, ClusterOrdersGraph},
+  components: { AllProductDetailsTable, ClusterDemandGraph, ClusterStatsSidebar, ClusterOrdersGraph },
   data() {
     return {
       // isLoading: false,
@@ -68,13 +70,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('clusterViewer', {
-      activeGraph: 'activeGraph',
-      ordersWithMatchesFiltered: 'ordersWithMatchesFiltered'
+    ...mapGetters("clusterViewer", {
+      activeGraph: "activeGraph",
+      ordersWithMatchesFiltered: "ordersWithMatchesFiltered",
     }),
 
     isLoading() {
-      return !(this.ordersWithMatchesFiltered.length);
+      return !this.ordersWithMatchesFiltered.length;
     },
 
     active_graph: {
@@ -83,15 +85,15 @@ export default {
       },
       set(val) {
         this.setActiveGraph(val);
-      }
-    }
+      },
+    },
   },
   created() {
     // this.fetch();
   },
   methods: {
-    ...mapActions('clusterViewer', {
-      setActiveGraph: 'setActiveGraph'
+    ...mapActions("clusterViewer", {
+      setActiveGraph: "setActiveGraph",
     }),
 
     // fetch() {
@@ -105,7 +107,7 @@ export default {
     //     vm.$message.error('Error loading cluster orders');
     //   });
     // }
-  }
+  },
 };
 </script>
 

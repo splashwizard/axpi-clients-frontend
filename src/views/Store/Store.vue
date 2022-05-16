@@ -1,12 +1,9 @@
 <template>
   <div class="home">
-
     <div class="page-header">
       <h1 class="page-title">Stores</h1>
     </div>
-    <stores-table :reload-key="reloadFactoriesKey"
-                     @selected="handleFactorySelected">
-    </stores-table>
+    <stores-table :reload-key="reloadFactoriesKey" @selected="handleFactorySelected"> </stores-table>
   </div>
 </template>
 
@@ -14,12 +11,11 @@
 import StoresTable from "./StoresTable";
 
 export default {
-  name: 'Stores',
+  name: "Stores",
   components: { StoresTable },
-  methods: {
-  },
+  methods: {},
   data() {
-    return {}
-  }
-}
+    return {};
+  },
+};
 </script>

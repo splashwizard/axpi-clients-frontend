@@ -13,46 +13,39 @@
           <!-- Orders table -->
           <div>
             <div style="margin-bottom: 20px; text-align: left">
-              <a-input-search
-                  placeholder="Search orders"
-                  v-model="searchQuery"
-                  style="width: 100%;"
-                  @search="fetch"
-              />
+              <a-input-search placeholder="Search orders" v-model="searchQuery" style="width: 100%" @search="fetch" />
             </div>
 
             <a-table
-                :key="reloadKey"
-                class="axpi-table"
-                :columns="columns"
-                :row-selection="rowSelection"
-                :row-key="(record) => record['_id']"
-                :data-source="data"
-                :pagination="pagination"
-                :loading="loading || searchQueryIsDirty"
-                @change="handleTableChange"
+              :key="reloadKey"
+              class="axpi-table"
+              :columns="columns"
+              :row-selection="rowSelection"
+              :row-key="(record) => record['_id']"
+              :data-source="data"
+              :pagination="pagination"
+              :loading="loading || searchQueryIsDirty"
+              @change="handleTableChange"
             >
               <div slot="name" slot-scope="name, order">
                 <!-- TODO: Get most relevant product if more than one product - in which case 0 element may not be the most appropriate match -->
                 <div class="product-name-wrapper">
                   <div class="left">
-                    <a-avatar style="margin-right: 20px;"
-                              size="large" :src="order['match_details_images']"/>
+                    <a-avatar style="margin-right: 20px" size="large" :src="order['match_details_images']" />
                   </div>
                   <div class="right">
-                    {{ order['match_details_names'][0] }}
+                    {{ order["match_details_names"][0] }}
                   </div>
                 </div>
               </div>
               <div slot="cost" slot-scope="cost">
-                {{ formatCost({cost: cost, cost_currency: 'USD'}) }}
+                {{ formatCost({ cost: cost, cost_currency: "USD" }) }}
               </div>
             </a-table>
           </div>
           <!-- / Orders table -->
         </a-tab-pane>
-        <a-tab-pane key="suggested" tab="Suggested Orders">
-        </a-tab-pane>
+        <a-tab-pane key="suggested" tab="Suggested Orders"> </a-tab-pane>
       </a-tabs>
     </div>
     <!-- / Top -->
@@ -60,9 +53,7 @@
     <!-- Bottom -->
     <div class="bottom">
       <div>
-        <span>
-          {{ selectedOrderIds.length }} {{ selectedOrderIds.length === 1 ? 'order' : 'orders' }} selected
-        </span>
+        <span> {{ selectedOrderIds.length }} {{ selectedOrderIds.length === 1 ? "order" : "orders" }} selected </span>
         <a-button @click.prevent="$emit('close')" style="margin-right: 10px" type="default">Cancel</a-button>
         <a-button @click.prevent="save" type="primary" :disabled="!canSave">Add to cluster</a-button>
       </div>
@@ -82,16 +73,16 @@ const columns = [
     title: "Name",
     dataIndex: "Name",
     sorter: true,
-    scopedSlots: {customRender: 'name'}
+    scopedSlots: { customRender: "name" },
   },
   {
     title: "Cost",
     // dataIndex: "Cost",
     dataIndex: "CHF_FLOAT",
-    scopedSlots: {customRender: 'cost'},
+    scopedSlots: { customRender: "cost" },
     sorter: true,
-    width: 110
-  }
+    width: 110,
+  },
   // {
   //   title: "PO Number",
   //   dataIndex: "PO Number",
@@ -147,26 +138,20 @@ export default {
       }
       vm.isSaving = true;
       axios
-          .post(
-              window.API_BASE +
-              "/intelligence/clusters/" +
-              this.clusterId +
-              "/add-orders",
-              {
-                erp_order_ids: this.selectedOrderIds,
-              }
-          )
-          .then(() => {
-            vm.isSaving = false;
-            vm.$message.success("Orders added to cluster successfully");
-            vm.$emit("reload");
-            vm.$emit("close");
-          })
-          .catch((e) => {
-            console.log(e);
-            vm.isSaving = false;
-            vm.$message.error("Error adding orders to cluster");
-          });
+        .post(window.API_BASE + "/intelligence/clusters/" + this.clusterId + "/add-orders", {
+          erp_order_ids: this.selectedOrderIds,
+        })
+        .then(() => {
+          vm.isSaving = false;
+          vm.$message.success("Orders added to cluster successfully");
+          vm.$emit("reload");
+          vm.$emit("close");
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isSaving = false;
+          vm.$message.error("Error adding orders to cluster");
+        });
     },
 
     determineSearchParams(params) {
@@ -181,27 +166,24 @@ export default {
     fetch: _.debounce(function (params = {}) {
       this.loading = true;
       axios
-          .post(
-              window.API_BASE + "/intelligence/clusters/search-erp-orders",
-              this.determineSearchParams(params)
-          )
-          .then((r) => {
-            const pagination = {...this.pagination};
-            // Read total count from server
-            pagination.total = r.data.total;
-            this.loading = false;
-            this.data = r.data.data;
-            this.pagination = pagination;
-            this.searchQueryIsDirty = false;
-          })
-          .catch((e) => {
-            console.log(e);
-            this.$message.error("Error searching ERP orders");
-          });
+        .post(window.API_BASE + "/intelligence/clusters/search-erp-orders", this.determineSearchParams(params))
+        .then((r) => {
+          const pagination = { ...this.pagination };
+          // Read total count from server
+          pagination.total = r.data.total;
+          this.loading = false;
+          this.data = r.data.data;
+          this.pagination = pagination;
+          this.searchQueryIsDirty = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("Error searching ERP orders");
+        });
     }, 500),
 
     handleTableChange(pagination, filters, sorter) {
-      const pager = {...this.pagination};
+      const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
       this.fetch({

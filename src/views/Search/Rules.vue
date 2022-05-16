@@ -6,9 +6,15 @@
       <a-card v-if="loading" class="loading-card">
         <a-spin size="large" />
       </a-card>
-      <a-card v-else :bodyStyle="{padding: 0}">
-        <rules-header :searchTerm="searchTerm" :changeSearchTerm="changeSearchTerm" :rulesCount="list.length"/>
-        <rules-table :searchTerm="searchTerm" :rules="list" :editRule="editRule" :disableRule="disableRule" :deleteRule="deleteRule" />
+      <a-card v-else :bodyStyle="{ padding: 0 }">
+        <rules-header :searchTerm="searchTerm" :changeSearchTerm="changeSearchTerm" :rulesCount="list.length" />
+        <rules-table
+          :searchTerm="searchTerm"
+          :rules="list"
+          :editRule="editRule"
+          :disableRule="disableRule"
+          :deleteRule="deleteRule"
+        />
       </a-card>
     </a-layout>
   </a-layout>
@@ -18,30 +24,29 @@
 import RulesHeader from "./Rules/Header";
 import RulesTable from "./Rules/Table";
 import LeftSidebar from "./LeftSidebar";
-import axios from 'axios';
-import {mapGetters, mapActions} from 'vuex';
-
+import axios from "axios";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Landing",
   components: { RulesHeader, RulesTable, LeftSidebar },
   data() {
     return {
-      searchTerm: '',
-    }
+      searchTerm: "",
+    };
   },
   computed: {
-    ...mapGetters('rule', {
-      list: 'list',
-      loading: 'loading',
-      isLoaded: 'isLoaded'
+    ...mapGetters("rule", {
+      list: "list",
+      loading: "loading",
+      isLoaded: "isLoaded",
     }),
   },
   methods: {
-    ...mapActions('rule', {
-      load: 'load',
-      disable: 'disableRule',
-      delete: 'deleteRule'
+    ...mapActions("rule", {
+      load: "load",
+      disable: "disableRule",
+      delete: "deleteRule",
     }),
     changeSearchTerm(value) {
       this.searchTerm = value;
@@ -50,32 +55,34 @@ export default {
       this.$router.push(`/search/rules/visual-editor/edit/${key}`);
     },
     disableRule(key, checked) {
-      this.disable({key, checked});
+      this.disable({ key, checked });
       // this.rules[this.rules.findIndex(item => item.key === key)].disabled = checked;
     },
     deleteRule(key) {
-      axios.delete(`${window.API_BASE}/rules/${key}`).then(() => {
-        this.delete(key);
-        this.loading = false;
-        this.$message.success('Rule deleted successfully');
-      }).catch(() => {
-        this.$message.error('Error deleting rule');
-      });
+      axios
+        .delete(`${window.API_BASE}/rules/${key}`)
+        .then(() => {
+          this.delete(key);
+          this.loading = false;
+          this.$message.success("Rule deleted successfully");
+        })
+        .catch(() => {
+          this.$message.error("Error deleting rule");
+        });
     },
   },
   created() {
-    if(!this.isLoaded)
-      this.load();
-  }
-}
+    if (!this.isLoaded) this.load();
+  },
+};
 </script>
 
 <style scoped>
-  .loading-card {
-    background-color: #fafafa;
-    height: 500px;
-    display: flex;
-    justify-content: center;
-    align-items:center
-  }
+.loading-card {
+  background-color: #fafafa;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

@@ -1,55 +1,60 @@
 <template>
   <div class="graph-container">
     <div v-if="isLoading" class="loading-screen">
-      <a-spin/>
+      <a-spin />
     </div>
     <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <!--      <v-legend/>-->
-      <v-tooltip/>
-      <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
-      <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
-      <v-polygon :position="seriesOpts.position" :color="seriesOpts.color" :label="seriesOpts.label"
-                 :vStyle="seriesOpts.style"/>
+      <v-tooltip />
+      <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid" />
+      <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid" />
+      <v-polygon
+        :position="seriesOpts.position"
+        :color="seriesOpts.color"
+        :label="seriesOpts.label"
+        :vStyle="seriesOpts.style"
+      />
     </v-chart>
   </div>
-</template>>
+</template>
+>
 
 <script>
 import axios from "axios";
-import {mapGetters} from "vuex";
-const _ = require('lodash');
+import { mapGetters } from "vuex";
+const _ = require("lodash");
 
 const axis1Opts = {
-  dataKey: 'supplier',
+  dataKey: "supplier",
   tickLine: null,
   grid: {
-    align: 'center',
+    align: "center",
     lineStyle: {
       lineWidth: 1,
       lineDash: null,
-      stroke: '#f0f0f0',
+      stroke: "#f0f0f0",
     },
   },
 };
 
 const axis2Opts = {
-  dataKey: 'specification',
+  dataKey: "specification",
   title: null,
   grid: {
-    align: 'center',
+    align: "center",
     lineStyle: {
       lineWidth: 1,
       lineDash: null,
-      stroke: '#f0f0f0',
+      stroke: "#f0f0f0",
     },
     showFirstLine: true,
   },
 };
 
 const seriesOpts = {
-  quickType: 'polygon',
-  color: ['value', '#BAE7FF-#1890FF-#0050B3'],
-  position: 'supplier*specification',
+  quickType: "polygon",
+  color: ["value", "#BAE7FF-#1890FF-#0050B3"],
+  position: "supplier*specification",
   // label: ['value', {
   //   offset: -2,
   //   textStyle: {
@@ -60,13 +65,13 @@ const seriesOpts = {
   // }],
   style: {
     lineWidth: 1,
-    stroke: '#fff',
+    stroke: "#fff",
   },
 };
 
 export default {
   name: "WhatEnvironmentalInformationCompleteForEachSpecification",
-  props: ['optimisationId'],
+  props: ["optimisationId"],
   data() {
     return {
       isLoading: false,
@@ -76,14 +81,14 @@ export default {
       axis1Opts,
       axis2Opts,
       seriesOpts,
-    }
+    };
   },
   computed: {
-    ...mapGetters('optimisationAnalyticsManager', {
-      filterBySupplier: 'filterBySupplier',
-      filterBySpecification: 'filterBySpecification',
-      selectedSupplier: 'selectedSupplier',
-      selectedSpecification: 'selectedSpecification'
+    ...mapGetters("optimisationAnalyticsManager", {
+      filterBySupplier: "filterBySupplier",
+      filterBySpecification: "filterBySpecification",
+      selectedSupplier: "selectedSupplier",
+      selectedSpecification: "selectedSpecification",
     }),
     // specifications() {
     //   if (this.data) {
@@ -99,26 +104,29 @@ export default {
     // },
     graphData() {
       let sourceData = [];
-      _.each(this.data, envData => {
+      _.each(this.data, (envData) => {
         sourceData.push({
-          specification: envData.specification.substring(0, 8) + '...',
+          specification: envData.specification.substring(0, 8) + "...",
           supplier: envData.supplier,
-          value: Math.round((envData.completeness.completed / envData.completeness.total) * 100)
+          value: Math.round((envData.completeness.completed / envData.completeness.total) * 100),
         });
       });
       return sourceData;
     },
     scale() {
-      return [{
-        dataKey: 'specification',
-        type: 'cat',
-        // values: this.specifications,
-      }, {
-        dataKey: 'supplier',
-        type: 'cat',
-        // values: this.suppliers
-      }];
-    }
+      return [
+        {
+          dataKey: "specification",
+          type: "cat",
+          // values: this.specifications,
+        },
+        {
+          dataKey: "supplier",
+          type: "cat",
+          // values: this.suppliers
+        },
+      ];
+    },
   },
   created() {
     this.fetch();
@@ -134,24 +142,27 @@ export default {
       let params = {};
 
       if (this.filterBySupplier && this.selectedSupplier) {
-        params['supplier_id'] = this.selectedSupplier.id;
+        params["supplier_id"] = this.selectedSupplier.id;
       }
 
       if (this.filterBySpecification && this.selectedSpecification) {
-        params['optimisation_specification_id'] = this.selectedSpecification.id;
+        params["optimisation_specification_id"] = this.selectedSpecification.id;
       }
 
       vm.isLoading = true;
-      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/environmental-analytics', params).then(r => {
-        vm.data = r.data;
-        console.log(r);
-        vm.isLoading = false;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.$message.error('Error loading environmental breakdown');
-      });
-    }
+      axios
+        .post(window.API_BASE + "/optimisations/" + this.optimisationId + "/environmental-analytics", params)
+        .then((r) => {
+          vm.data = r.data;
+          console.log(r);
+          vm.isLoading = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          vm.$message.error("Error loading environmental breakdown");
+        });
+    },
   },
   watch: {
     filterBySupplier() {
@@ -165,9 +176,9 @@ export default {
     },
     selectedSpecification() {
       this.fetch();
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

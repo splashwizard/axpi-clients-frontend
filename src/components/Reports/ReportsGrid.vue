@@ -4,15 +4,9 @@
       <a-col :span="6">
         <router-link to="/reports/roche">
           <a-card hoverable>
-            <img
-                slot="cover"
-                alt="report"
-                src="/img/reports/overview.png"
-            />
+            <img slot="cover" alt="report" src="/img/reports/overview.png" />
             <a-card-meta title="Roche POC Report">
-              <template slot="description">
-                05/07/2021
-              </template>
+              <template slot="description"> 05/07/2021 </template>
             </a-card-meta>
           </a-card>
         </router-link>
@@ -23,8 +17,8 @@
 
 <script>
 export default {
-  name: "ReportsGrid"
-}
+  name: "ReportsGrid",
+};
 </script>
 
 <style lang="scss">
@@ -34,7 +28,7 @@ export default {
   }
 
   .ant-card-cover {
-    background-color: #DDEAFB;
+    background-color: #ddeafb;
   }
 }
 </style>

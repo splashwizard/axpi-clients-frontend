@@ -1,0 +1,14 @@
+**/dist
+**/.husky
+**/configs
+**/node_modules
+**/public
+
+.gitignore
+
+package.json
+jsconfig.json
+.prettierrc.json
+
+babel.config.js
+

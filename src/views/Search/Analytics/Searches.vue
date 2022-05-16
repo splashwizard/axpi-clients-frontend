@@ -2,34 +2,37 @@
   <div>
     <div class="controls">
       <a-select default-value="week" style="width: 120px" @change="handleChangeOption">
-        <a-select-option value="year">
-          Last year
-        </a-select-option>
-        <a-select-option value="month">
-          Last 3 months
-        </a-select-option>
-        <a-select-option value="week">
-          Last 4 weeks
-        </a-select-option>
-        <a-select-option value="day">
-          Last 7 days
-        </a-select-option>
+        <a-select-option value="year"> Last year </a-select-option>
+        <a-select-option value="month"> Last 3 months </a-select-option>
+        <a-select-option value="week"> Last 4 weeks </a-select-option>
+        <a-select-option value="day"> Last 7 days </a-select-option>
       </a-select>
       <a-range-picker @change="onChangeStartPeriod" :value="startperiod" />
       <h4 class="controls-label">compared to</h4>
       <a-range-picker @change="onChangeEndPeriod" :value="endperiod" />
     </div>
-    <a-card :bodyStyle="{padding: 0}" class="mt-2">
+    <a-card :bodyStyle="{ padding: 0 }" class="mt-2">
       <div class="p-6">
         <a-row type="flex" justify="space-between" class="rule-row">
           <h4>Searches</h4>
-          <a-input class="search-term" :value="searchTerm" @change="(e) => changeSearchTerm(e.target.value)" placeholder="Search for a query">
+          <a-input
+            class="search-term"
+            :value="searchTerm"
+            @change="(e) => changeSearchTerm(e.target.value)"
+            placeholder="Search for a query"
+          >
             <a-icon slot="prefix" type="search" />
           </a-input>
         </a-row>
       </div>
       <searches-table :data="tableData" :handleClickQuery="handleClickQuery" :compared="endperiod.length > 0" />
-      <a-modal v-model="visible" :closable="closable" :footer="null" :dialog-style="{width: '1000px!important'}" wrapClassName="modal-wrapper">
+      <a-modal
+        v-model="visible"
+        :closable="closable"
+        :footer="null"
+        :dialog-style="{ width: '1000px!important' }"
+        wrapClassName="modal-wrapper"
+      >
         <query-modal-content />
       </a-modal>
     </a-card>
@@ -37,13 +40,32 @@
 </template>
 
 <script>
-
 import SearchesTable from "./SearchesTable";
 import QueryModalContent from "./QueryModalContent";
 
 const tableData = [
-  { id: 1, query: '<empty search>', count: 17, countpercent: 6, CTR: 0.5, CVR: 2, click_position: 0, total_searches: 100, opportunities: '-'},
-  { id: 32, query: '<empty search>', count: 8, countpercent: -50, CTR: 3, CVR: -5.8, click_position: 1, total_searches: 50, opportunities: '-'}
+  {
+    id: 1,
+    query: "<empty search>",
+    count: 17,
+    countpercent: 6,
+    CTR: 0.5,
+    CVR: 2,
+    click_position: 0,
+    total_searches: 100,
+    opportunities: "-",
+  },
+  {
+    id: 32,
+    query: "<empty search>",
+    count: 8,
+    countpercent: -50,
+    CTR: 3,
+    CVR: -5.8,
+    click_position: 1,
+    total_searches: 50,
+    opportunities: "-",
+  },
 ];
 
 export default {
@@ -52,15 +74,15 @@ export default {
   components: { SearchesTable, QueryModalContent },
   data() {
     return {
-      option: '4_weeks',
+      option: "4_weeks",
       chartData: [],
       startperiod: [],
       endperiod: [],
-      searchTerm: '',
+      searchTerm: "",
       tableData: [],
       visible: false,
-      closable: false
-    }
+      closable: false,
+    };
   },
   created() {
     this.tableData = tableData;
@@ -80,27 +102,27 @@ export default {
     },
     handleClickQuery() {
       this.visible = true;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
-  .controls {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
+.controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 
-  .controls-label {
-    padding: 0 4px;
-  }
+.controls-label {
+  padding: 0 4px;
+}
 
-  .search-term {
-    width: 190px;
-  }
+.search-term {
+  width: 190px;
+}
 
-  .ant-modal-content {
-    width: 1000px;
-  }
+.ant-modal-content {
+  width: 1000px;
+}
 </style>

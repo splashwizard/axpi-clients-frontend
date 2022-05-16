@@ -1,17 +1,17 @@
 <template>
   <div class="analytics-new">
     <loading-screen :is-loading="isLoading"></loading-screen>
-        <div id="embedding-container"></div>
+    <div id="embedding-container"></div>
 
-<!--    <iframe-->
-<!--        class="quicksight-iframe"-->
-<!--        src="https://eu-west-2.quicksight.aws.amazon.com/sn/embed/share/accounts/461953326420/dashboards/aecd70ca-668f-4fa8-997e-ffd13e3feefa">-->
-<!--    </iframe>-->
+    <!--    <iframe-->
+    <!--        class="quicksight-iframe"-->
+    <!--        src="https://eu-west-2.quicksight.aws.amazon.com/sn/embed/share/accounts/461953326420/dashboards/aecd70ca-668f-4fa8-997e-ffd13e3feefa">-->
+    <!--    </iframe>-->
   </div>
 </template>
 <script>
-import axios from 'axios';
-import * as QuickSightEmbedding from 'amazon-quicksight-embedding-sdk';
+import axios from "axios";
+import * as QuickSightEmbedding from "amazon-quicksight-embedding-sdk";
 
 export default {
   components: {},
@@ -19,8 +19,8 @@ export default {
   data() {
     return {
       isLoading: false,
-      embedUrl: null
-    }
+      embedUrl: null,
+    };
   },
 
   computed: {},
@@ -34,16 +34,19 @@ export default {
     getEmbedUrlAndSetup() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/quicksight').then(r => {
-        vm.isLoading = false;
-        this.embedUrl = r.data;
-        this.setup();
-        console.log(r.data);
-      }).catch(e => {
-        console.log(e);
-        this.isLoading = false;
-        this.$message.error('Error loading analytics');
-      });
+      axios
+        .get(window.API_BASE + "/quicksight")
+        .then((r) => {
+          vm.isLoading = false;
+          this.embedUrl = r.data;
+          this.setup();
+          console.log(r.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          this.isLoading = false;
+          this.$message.error("Error loading analytics");
+        });
     },
 
     setup() {
@@ -62,9 +65,9 @@ export default {
         defaultEmbeddingVisualType: "TABLE", // this option only applies to QuickSight console embedding and is not used for dashboard embedding
       };
       QuickSightEmbedding.embedSession(options);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style scoped lang="scss">
 .analytics-new {

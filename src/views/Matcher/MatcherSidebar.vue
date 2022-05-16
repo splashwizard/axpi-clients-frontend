@@ -2,37 +2,47 @@
   <div class="sidebar-wrapper">
     <!-- Top -->
     <div class="top">
-
       <!-- Header -->
-      <a-page-header :title="selectedErpOrder['product_name']"
-                     @back="clear"></a-page-header>
+      <a-page-header :title="selectedErpOrder['product_name']" @back="clear"></a-page-header>
       <!-- / Header -->
 
       <!-- ERP order details -->
-      <a-collapse v-model="showErpOrderDetails" style="margin-bottom: 20px;">
+      <a-collapse v-model="showErpOrderDetails" style="margin-bottom: 20px">
         <a-collapse-panel key="more-details" header="View More Details">
           <a-row>
             <a-col :span="12">
               <p>
-                <b>Manufacturer: </b><br>{{ selectedErpOrder['manufacturer'] ? selectedErpOrder['manufacturer']['name'] : '-' }}
+                <b>Manufacturer: </b><br />{{
+                  selectedErpOrder["manufacturer"] ? selectedErpOrder["manufacturer"]["name"] : "-"
+                }}
               </p>
               <p>
-                <b>Vendor: </b><br>{{ selectedErpOrder['supplier'] ? selectedErpOrder['supplier']['name'] : '-' }}
+                <b>Vendor: </b><br />{{ selectedErpOrder["supplier"] ? selectedErpOrder["supplier"]["name"] : "-" }}
               </p>
               <p>
-<!--                <b>Cost: </b><br>${{ selectedErpOrder['Cost'] }}-->
-                <b>Cost: </b><br>{{ formatCostInPence({cost_currency: 'USD', cost: selectedErpOrder['cost']}) }}
+                <!--                <b>Cost: </b><br>${{ selectedErpOrder['Cost'] }}-->
+                <b>Cost: </b><br />{{ formatCostInPence({ cost_currency: "USD", cost: selectedErpOrder["cost"] }) }}
               </p>
             </a-col>
             <a-col :span="12">
               <p>
-                <b>Manufacturer Part Number: </b><br>{{ selectedErpOrder['properties']['manufacturer_part_number'] ? selectedErpOrder['properties']['manufacturer_part_number'] : '-' }}
+                <b>Manufacturer Part Number: </b><br />{{
+                  selectedErpOrder["properties"]["manufacturer_part_number"]
+                    ? selectedErpOrder["properties"]["manufacturer_part_number"]
+                    : "-"
+                }}
               </p>
               <p>
-                <b>Vendor Product ID: </b><br>{{ selectedErpOrder['properties']['vendor_product_id'] ? selectedErpOrder['properties']['vendor_product_id'] : '-' }}
+                <b>Vendor Product ID: </b><br />{{
+                  selectedErpOrder["properties"]["vendor_product_id"]
+                    ? selectedErpOrder["properties"]["vendor_product_id"]
+                    : "-"
+                }}
               </p>
               <p>
-                <b>PO Number: </b><br>{{ selectedErpOrder['reference_number'] ? selectedErpOrder['reference_number'] : '-' }}
+                <b>PO Number: </b><br />{{
+                  selectedErpOrder["reference_number"] ? selectedErpOrder["reference_number"] : "-"
+                }}
               </p>
             </a-col>
           </a-row>
@@ -50,16 +60,13 @@
         </a-tab-pane>
       </a-tabs>
       <!-- / Match -->
-
     </div>
     <!-- / Top -->
 
     <!-- Bottom -->
     <div class="bottom">
       <div>
-        <span>
-          {{ selectedMatches.length }} {{ selectedMatches.length === 1 ? 'match' : 'matches' }} selected
-        </span>
+        <span> {{ selectedMatches.length }} {{ selectedMatches.length === 1 ? "match" : "matches" }} selected </span>
         <a-button @click.prevent="clear" style="margin-right: 10px" type="default">Cancel</a-button>
         <a-button @click.prevent="saveMatches" type="primary">Save</a-button>
       </div>
@@ -72,45 +79,45 @@
 import SuggestedMatches from "./MatcherSidebar/SuggestedMatches";
 import SearchProducts from "./MatcherSidebar/SearchProducts";
 import Orders from "../../mixins/Orders";
-import {mapActions, mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "MatcherSidebar",
   mixins: [Orders],
-  components: {SuggestedMatches, SearchProducts},
+  components: { SuggestedMatches, SearchProducts },
   computed: {
-    ...mapGetters('matcher', {
-      selectedErpOrder: 'selectedErpOrder',
-      selectedMatches: 'selectedMatches',
-      sidebarReloadKey: 'sidebarReloadKey'
+    ...mapGetters("matcher", {
+      selectedErpOrder: "selectedErpOrder",
+      selectedMatches: "selectedMatches",
+      sidebarReloadKey: "sidebarReloadKey",
     }),
 
     hasMatches() {
       return this.selectedMatches.length > 0;
-    }
+    },
   },
   methods: {
     clear() {
       this.selectErpOrder(null);
     },
 
-    ...mapActions('matcher', {
-      selectErpOrder: 'selectErpOrder',
-      saveMatches: 'saveMatches'
-    })
+    ...mapActions("matcher", {
+      selectErpOrder: "selectErpOrder",
+      saveMatches: "saveMatches",
+    }),
   },
   data() {
     return {
-      currentTab: 'suggested',
-      showErpOrderDetails: false
-    }
+      currentTab: "suggested",
+      showErpOrderDetails: false,
+    };
   },
   watch: {
     sidebarReloadKey() {
-      this.currentTab = 'suggested';
-    }
-  }
-}
+      this.currentTab = "suggested";
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

@@ -1,5 +1,5 @@
 <script>
-import { Line } from 'vue-chartjs'
+import { Line } from "vue-chartjs";
 
 export default {
   extends: Line,
@@ -10,46 +10,49 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          display: false
+          display: false,
         },
         tooltips: {
-          enabled: false
+          enabled: false,
         },
         elements: {
-          point:{
-            radius: 0
-          }
+          point: {
+            radius: 0,
+          },
         },
         scales: {
-          xAxes: [{
-            gridLines: {
-              drawBorder: false,
-              display: false
+          xAxes: [
+            {
+              gridLines: {
+                drawBorder: false,
+                display: false,
+              },
             },
-          }],
-          yAxes: [{
-            gridLines: {
-              drawBorder: false,
-              zeroLineColor: '#cccccc80',
-              display: false //
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                drawBorder: false,
+                zeroLineColor: "#cccccc80",
+                display: false, //
+              },
+              ticks: {
+                beginAtZero: true,
+                display: false, //
+              },
             },
-            ticks: {
-              beginAtZero: true,
-              display: false, //
-            }
-          }]
+          ],
         },
-
-      }
-    }
+      },
+    };
   },
-  mounted () {
-    this.renderChart(this.chartdata, this.options)
+  mounted() {
+    this.renderChart(this.chartdata, this.options);
   },
   watch: {
-    chartdata: function(newChartData) {
-      this.renderChart(newChartData, this.options)
-    }
-  }
-}
+    chartdata: function (newChartData) {
+      this.renderChart(newChartData, this.options);
+    },
+  },
+};
 </script>

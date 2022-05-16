@@ -1,14 +1,15 @@
 <template>
   <div class="optimisations">
     <loading-screen
-        :is-loading="isLoading||isLoadingSpecifications||isLoadingSuppliers||isLoadingScenario"></loading-screen>
+      :is-loading="isLoading || isLoadingSpecifications || isLoadingSuppliers || isLoadingScenario"
+    ></loading-screen>
 
     <a-layout>
       <left-sidebar :optimisation="optimisation"></left-sidebar>
       <a-layout style="padding: 7px 30px">
         <div class="page-header" v-if="optimisation">
           <h1 class="page-title">{{ optimisation.name }}</h1>
-          <div class="actions" style="padding-top: 15px;">
+          <div class="actions" style="padding-top: 15px">
             <a-button icon="share-alt">Share</a-button>
             <review-export-button-and-modal></review-export-button-and-modal>
             <!--            <a-button icon="export" type="primary">Export</a-button>-->
@@ -16,9 +17,7 @@
         </div>
 
         <div v-if="optimisation && scenario">
-
           <review-table :optimisation="optimisation" :table-data="tableData"></review-table>
-
         </div>
       </a-layout>
     </a-layout>
@@ -26,13 +25,13 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
-import axios from 'axios';
+import { mapGetters, mapActions } from "vuex";
+import axios from "axios";
 import LeftSidebar from "./LeftSidebar";
 import ReviewTable from "./Review/ReviewTable";
 import ReviewExportButtonAndModal from "./Review/ReviewExportButtonAndModal";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "Show",
@@ -48,24 +47,24 @@ export default {
       // this.loadSpecifications(this.$route.params.id);
       this.loadSuppliers();
       this.loadScenario(this.$route.params.id, this.$route.params.scenarioId);
-    }
+    },
   },
   data() {
     return {
       sidebarCollapsed: true,
-      selectedSidebar: '',
+      selectedSidebar: "",
 
-      route: 'all-scenarios',
+      route: "all-scenarios",
       selectedScenario: null,
       scenarios: [
         {
-          name: 'Demo Scenario 1',
-          items: []
+          name: "Demo Scenario 1",
+          items: [],
         },
         {
-          name: 'Demo Scenario 2',
-          items: []
-        }
+          name: "Demo Scenario 2",
+          items: [],
+        },
       ],
 
       isLoadingSpecifications: false,
@@ -75,42 +74,42 @@ export default {
       suppliers: [],
 
       isLoadingScenario: false,
-      scenario: null
-    }
+      scenario: null,
+    };
   },
-  components: {LeftSidebar, ReviewTable, ReviewExportButtonAndModal},
+  components: { LeftSidebar, ReviewTable, ReviewExportButtonAndModal },
   computed: {
-    ...mapGetters('optimisationEditor', {
-      isLoading: 'isLoading',
-      optimisation: 'optimisation'
+    ...mapGetters("optimisationEditor", {
+      isLoading: "isLoading",
+      optimisation: "optimisation",
     }),
 
     mappings() {
       if (this.scenario) {
-        return _.map(this.scenario.optimisation_scenario_specification_supplier_mappings, mapping => {
+        return _.map(this.scenario.optimisation_scenario_specification_supplier_mappings, (mapping) => {
           return {
             spec_name: mapping.optimisation_specification.product_name,
             spec_quantity: mapping.optimisation_specification.quantity,
             supplier_name: mapping.supplier.name,
-            ...mapping
-          }
+            ...mapping,
+          };
         });
       }
       return [];
     },
 
     mappingsGroupedBySpec() {
-      return _.groupBy(this.mappings, 'spec_name');
+      return _.groupBy(this.mappings, "spec_name");
     },
 
     tableData() {
       let data = [];
 
       _.each(this.mappingsGroupedBySpec, (specMappings, specName) => {
-        let expectedPrices = _.map(specMappings, mapping => {
+        let expectedPrices = _.map(specMappings, (mapping) => {
           return mapping.expected_price / 100;
         });
-        let co2es = _.map(specMappings, 'co2e');
+        let co2es = _.map(specMappings, "co2e");
 
         let specDetails = {
           name: specName,
@@ -121,13 +120,13 @@ export default {
           max_co2e: _.max(co2es),
           number_of_suppliers: specMappings.length,
           supplier: _.first(specMappings).supplier.name,
-          mappings: specMappings
+          mappings: specMappings,
         };
         data.push(specDetails);
       });
 
       return data;
-    }
+    },
   },
   methods: {
     navigateTo(route) {
@@ -138,8 +137,8 @@ export default {
       this.loadOptimisation(this.$route.params.id);
     },
 
-    ...mapActions('optimisationEditor', {
-      loadOptimisation: 'loadOptimisation'
+    ...mapActions("optimisationEditor", {
+      loadOptimisation: "loadOptimisation",
     }),
 
     selectScenario(scenario) {
@@ -148,28 +147,28 @@ export default {
 
     closeCreateScenario() {
       this.selectedScenario = null;
-      this.navigateTo('all-scenarios');
+      this.navigateTo("all-scenarios");
     },
 
     addNewScenario() {
       let scenario = {
-        name: 'Untitled',
-        items: []
-      }
+        name: "Untitled",
+        items: [],
+      };
       this.scenarios.push(scenario);
       this.selectedScenario = scenario;
-      this.navigateTo('edit-scenario');
+      this.navigateTo("edit-scenario");
     },
 
     editScenario(scenario) {
       this.selectedScenario = scenario;
-      this.navigateTo('edit-scenario');
+      this.navigateTo("edit-scenario");
     },
 
     addItemToScenario() {
       this.selectedScenario.items.push({
         optimisationSpecificationId: null,
-        supplierId: null
+        supplierId: null,
       });
     },
 
@@ -185,59 +184,68 @@ export default {
       let vm = this;
       vm.isLoadingSpecifications = true;
       vm.specifications = [];
-      axios.get(window.API_BASE + '/optimisations/' + optimisationId + '/specifications').then(r => {
-        vm.specifications = r.data;
-        vm.isLoadingSpecifications = false;
-      }).catch(e => {
-        vm.specifications = [];
-        console.log(e);
-        this.$message.error('Error loading specifications');
-        vm.isLoadingSpecifications = false;
-      });
+      axios
+        .get(window.API_BASE + "/optimisations/" + optimisationId + "/specifications")
+        .then((r) => {
+          vm.specifications = r.data;
+          vm.isLoadingSpecifications = false;
+        })
+        .catch((e) => {
+          vm.specifications = [];
+          console.log(e);
+          this.$message.error("Error loading specifications");
+          vm.isLoadingSpecifications = false;
+        });
     },
 
     loadSuppliers() {
       let vm = this;
       vm.isLoadingSuppliers = true;
       vm.suppliers = [];
-      axios.get(window.API_BASE + '/suppliers').then(r => {
-        vm.suppliers = r.data;
-        vm.isLoadingSuppliers = false;
-      }).catch(e => {
-        vm.suppliers = [];
-        console.log(e);
-        this.$message.error('Error loading suppliers');
-        vm.isLoadingSuppliers = false;
-      });
+      axios
+        .get(window.API_BASE + "/suppliers")
+        .then((r) => {
+          vm.suppliers = r.data;
+          vm.isLoadingSuppliers = false;
+        })
+        .catch((e) => {
+          vm.suppliers = [];
+          console.log(e);
+          this.$message.error("Error loading suppliers");
+          vm.isLoadingSuppliers = false;
+        });
     },
 
     loadScenario(optimisationId, scenarioId) {
       let vm = this;
       vm.isLoadingScenario = false;
       vm.scenario = null;
-      axios.get(window.API_BASE + '/optimisations/' + optimisationId + '/scenarios/' + scenarioId).then(r => {
-        vm.scenario = r.data;
-        vm.isLoadingScenario = false;
-      }).catch(e => {
-        console.log(e);
-        this.$message.error('Error loading scenario');
-        vm.isLoadingScenario = false;
-      });
+      axios
+        .get(window.API_BASE + "/optimisations/" + optimisationId + "/scenarios/" + scenarioId)
+        .then((r) => {
+          vm.scenario = r.data;
+          vm.isLoadingScenario = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$message.error("Error loading scenario");
+          vm.isLoadingScenario = false;
+        });
     },
 
     toggleSidebar(sidebarName) {
       if (this.selectedSidebar !== sidebarName) {
         this.selectedSidebar = sidebarName;
         this.sidebarCollapsed = false;
-        if (sidebarName === 'scenarios') {
-          this.route = 'all-scenarios';
+        if (sidebarName === "scenarios") {
+          this.route = "all-scenarios";
         }
       } else {
         this.sidebarCollapsed = !this.sidebarCollapsed;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -270,7 +278,7 @@ export default {
     flex: 1;
     font-size: 26px;
     display: flex;
-    align-items: center;;
+    align-items: center;
 
     i {
       display: inline;
@@ -383,7 +391,6 @@ export default {
   font-size: 20px;
 }
 
-
 .share-button {
   text-align: left;
   height: 50px;
@@ -417,7 +424,8 @@ export default {
   margin-bottom: 20px;
 }
 
-.ant-collapse-content-box .ant-btn, .ant-collapse-content-box .ant-btn span {
+.ant-collapse-content-box .ant-btn,
+.ant-collapse-content-box .ant-btn span {
   width: 100%;
   word-wrap: break-word;
   height: auto;

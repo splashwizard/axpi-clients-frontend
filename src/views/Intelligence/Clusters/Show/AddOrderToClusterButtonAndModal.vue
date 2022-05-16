@@ -1,26 +1,13 @@
 <template>
   <div>
-    <a-button type="primary" icon="plus" @click.prevent="showModal"
-      >Add Orders To Cluster</a-button
-    >
-    <a-modal
-      :width="700"
-      v-model="visible"
-      :centered="true"
-      title="Add Orders To Cluster"
-      :footer="null"
-    >
+    <a-button type="primary" icon="plus" @click.prevent="showModal">Add Orders To Cluster</a-button>
+    <a-modal :width="700" v-model="visible" :centered="true" title="Add Orders To Cluster" :footer="null">
       <loading-screen :is-loading="isSaving"></loading-screen>
 
       <!-- Orders table -->
       <div>
         <div style="margin-bottom: 20px; text-align: left">
-          <a-input-search
-            placeholder="Search ERP orders"
-            v-model="searchQuery"
-            style="width: 300px"
-            @search="fetch"
-          />
+          <a-input-search placeholder="Search ERP orders" v-model="searchQuery" style="width: 300px" @search="fetch" />
         </div>
 
         <a-table
@@ -37,9 +24,7 @@
         </a-table>
 
         <div style="text-align: right; margin-top: 15px">
-          <a-button :disabled="!canSave" type="primary" @click="save"
-            >Add to cluster</a-button
-          >
+          <a-button :disabled="!canSave" type="primary" @click="save">Add to cluster</a-button>
         </div>
       </div>
       <!-- / Orders table -->
@@ -108,15 +93,9 @@ export default {
       let vm = this;
       vm.isSaving = true;
       axios
-        .post(
-          window.API_BASE +
-            "/intelligence/clusters/" +
-            this.clusterId +
-            "/add-orders",
-          {
-            erp_order_ids: this.selectedOrderIds,
-          }
-        )
+        .post(window.API_BASE + "/intelligence/clusters/" + this.clusterId + "/add-orders", {
+          erp_order_ids: this.selectedOrderIds,
+        })
         .then(() => {
           vm.visible = false;
           vm.isSaving = false;
@@ -141,10 +120,7 @@ export default {
     fetch: _.debounce(function (params = {}) {
       this.loading = true;
       axios
-        .post(
-          window.API_BASE + "/intelligence/clusters/search-erp-orders",
-          this.determineSearchParams(params)
-        )
+        .post(window.API_BASE + "/intelligence/clusters/search-erp-orders", this.determineSearchParams(params))
         .then((r) => {
           const pagination = { ...this.pagination };
           // Read total count from server
@@ -197,5 +173,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

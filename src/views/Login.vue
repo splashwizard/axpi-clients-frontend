@@ -2,51 +2,46 @@
   <div class="login-page">
     <div class="login-page-inner">
       <div class="login-form-card">
-        <img src="/img/axiom-tab-icon.svg" alt="Logo" width="50">
+        <img src="/img/axiom-tab-icon.svg" alt="Logo" width="50" />
 
         <h1>Welcome Back!</h1>
-        <svg class="block mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" width="100" height="2"
-             viewBox="0 0 100 2">
+        <svg class="block mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" width="100" height="2" viewBox="0 0 100 2">
           <path fill="#D8E3EC" d="M0 0h100v2H0z"></path>
         </svg>
 
-        <a-form
-            :form="form"
-            class="login-form"
-            @submit="handleSubmit"
-        >
+        <a-form :form="form" class="login-form" @submit="handleSubmit">
           <a-form-item>
             <a-input
-                size="large"
-                v-decorator="[
-          'email',
-          { rules: [{ required: true, message: 'Please input your email' }, {type: 'email', message: 'Please enter a valid email address'}] },
-        ]"
-                placeholder="Email"
+              size="large"
+              v-decorator="[
+                'email',
+                {
+                  rules: [
+                    { required: true, message: 'Please input your email' },
+                    { type: 'email', message: 'Please enter a valid email address' },
+                  ],
+                },
+              ]"
+              placeholder="Email"
             >
-              <a-icon slot="prefix" type="mail" style="color: rgba(0,0,0,.25)"/>
+              <a-icon slot="prefix" type="mail" style="color: rgba(0, 0, 0, 0.25)" />
             </a-input>
           </a-form-item>
           <a-form-item>
             <a-input
-                size="large"
-                v-decorator="[
-          'password',
-          { rules: [{ required: true, message: 'Please input your password' }] },
-        ]"
-                type="password"
-                placeholder="Password"
+              size="large"
+              v-decorator="['password', { rules: [{ required: true, message: 'Please input your password' }] }]"
+              type="password"
+              placeholder="Password"
             >
-              <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)"/>
+              <a-icon slot="prefix" type="lock" style="color: rgba(0, 0, 0, 0.25)" />
             </a-input>
           </a-form-item>
           <a-form-item>
             <a-button type="primary" size="large" html-type="submit" class="login-form-button" :loading="isLoading">
               Log In
             </a-button>
-            <a href="">
-              Forgot password
-            </a>
+            <a href=""> Forgot password </a>
           </a-form-item>
         </a-form>
       </div>
@@ -55,24 +50,24 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {},
   data() {
     return {
-      form: this.$form.createForm(this, {name: 'login_form'})
-    }
+      form: this.$form.createForm(this, { name: "login_form" }),
+    };
   },
   computed: {
-    ...mapGetters('auth', {
-      isLoading: 'isLoading'
-    })
+    ...mapGetters("auth", {
+      isLoading: "isLoading",
+    }),
   },
   methods: {
-    ...mapActions('auth', {
-      attemptLogin: 'attemptLogin'
+    ...mapActions("auth", {
+      attemptLogin: "attemptLogin",
     }),
 
     handleSubmit(e) {
@@ -82,13 +77,13 @@ export default {
           this.attemptLogin({
             email: values.email,
             password: values.password,
-            to: this.$route.query.to ? this.$route.query.to : '/'
+            to: this.$route.query.to ? this.$route.query.to : "/",
           });
         }
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">
@@ -110,7 +105,7 @@ export default {
     width: 25rem;
     padding: 2rem 2rem 0.4rem 2rem;
     background: #fff;
-    border-radius: .5rem;
+    border-radius: 0.5rem;
 
     img {
       margin-bottom: 20px;

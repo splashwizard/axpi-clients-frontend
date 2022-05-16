@@ -19,16 +19,13 @@
         <a-tab-pane key="results" tab="Results">
           <analytics-result />
         </a-tab-pane>
-        <a-tab-pane key="filters" tab="Filters">
-          Filters
-        </a-tab-pane>
+        <a-tab-pane key="filters" tab="Filters"> Filters </a-tab-pane>
       </a-tabs>
     </a-layout>
   </a-layout>
 </template>
 
 <script>
-
 import LeftSidebar from "./LeftSidebar";
 import AnalyticsView from "./Analytics/View";
 import AnalyticsSearch from "./Analytics/Searches";
@@ -44,11 +41,9 @@ export default {
     AnalyticsSearch,
     AnalyticsSearchWithoutResult,
     AnalyticsSearchWithoutClick,
-    AnalyticsResult
-  }
-}
+    AnalyticsResult,
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

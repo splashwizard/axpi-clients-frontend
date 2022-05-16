@@ -33,8 +33,11 @@
       <div class="form-header">
         <h2>Additional Information</h2>
       </div>
-      <a-textarea v-model="orderLocal.additional_information"
-                  placeholder="Enter additional information here..." :rows="4"/>
+      <a-textarea
+        v-model="orderLocal.additional_information"
+        placeholder="Enter additional information here..."
+        :rows="4"
+      />
     </div>
     <!-- / Additional Information -->
 
@@ -45,28 +48,26 @@
         Go Back
       </a-button>
 
-      <a-button size="large" type="primary" @click="saveAndQuit">
-        Save And Quit
-      </a-button>
+      <a-button size="large" type="primary" @click="saveAndQuit"> Save And Quit </a-button>
     </div>
     <!-- / Form Footer -->
   </div>
 </template>
 
 <script>
-import {mapActions} from "vuex";
+import { mapActions } from "vuex";
 // import AddressSelector from "../../Addresses/AddressSelector";
 import ChemicalsEditor from "../../Chemicals/ChemicalsEditor";
 import DeliveryInformationEditor from "./AdditionalInformationEditor/DeliveryInformationEditor";
 
 export default {
   name: "AdditionalInformationEditor",
-  props: ['orderLocal'],
-  components: {ChemicalsEditor, DeliveryInformationEditor},
+  props: ["orderLocal"],
+  components: { ChemicalsEditor, DeliveryInformationEditor },
   data() {
     return {
-      updateKey: 1
-    }
+      updateKey: 1,
+    };
   },
   created() {
     if (!this.orderLocal.chemicals) {
@@ -74,9 +75,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('orderEditor', {
-      goToPreviousStage: 'goToPreviousStage',
-      saveOrder: 'saveOrder'
+    ...mapActions("orderEditor", {
+      goToPreviousStage: "goToPreviousStage",
+      saveOrder: "saveOrder",
     }),
 
     incrementUpdateKey() {
@@ -94,13 +95,11 @@ export default {
     saveAndQuit() {
       this.saveOrder({
         order: this.orderLocal,
-        quitAfterSave: true
+        quitAfterSave: true,
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

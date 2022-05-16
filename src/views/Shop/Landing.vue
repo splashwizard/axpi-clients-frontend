@@ -11,10 +11,8 @@ import LandingPageCarousels from "./Landing/LandingPageCarousels";
 
 export default {
   name: "Landing",
-  components: {LandingPageCarousels, LandingPageCarousel}
-}
+  components: { LandingPageCarousels, LandingPageCarousel },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

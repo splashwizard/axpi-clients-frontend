@@ -1,10 +1,15 @@
 <template>
   <div class="binding-details-wrapper">
     <inline-validation-errors id="print-detail-binding"></inline-validation-errors>
-    <a-spin v-if="isDropdownLoading('paper-binding')"/>
+    <a-spin v-if="isDropdownLoading('paper-binding')" />
     <div class="pill-selector">
-      <a-button :class="{'selected': isSelected(bindingType)}" shape="round" :key="bindingType"
-                v-for="bindingType in bindingTypes" @click="select(bindingType)">
+      <a-button
+        :class="{ selected: isSelected(bindingType) }"
+        shape="round"
+        :key="bindingType"
+        v-for="bindingType in bindingTypes"
+        @click="select(bindingType)"
+      >
         {{ bindingType }}
       </a-button>
     </div>
@@ -12,7 +17,7 @@
 </template>
 
 <script>
-let _ = require('lodash');
+let _ = require("lodash");
 
 // const BINDING_TYPES = {
 //   'leaflet': [
@@ -70,13 +75,13 @@ import Forms from "../../../../../mixins/Forms";
 
 export default {
   name: "ProductSubtypeSelector",
-  props: ['orderLocal'],
+  props: ["orderLocal"],
   mixins: [Forms],
   data() {
     return {
       selected: null,
-      allBindings: []
-    }
+      allBindings: [],
+    };
   },
   computed: {
     subtype() {
@@ -88,33 +93,33 @@ export default {
       //   return BINDING_TYPES[this.subtype];
       // }
       // return [];
-      let forSubtype = _.filter(this.allBindings, bindingType => {
+      let forSubtype = _.filter(this.allBindings, (bindingType) => {
         return bindingType.subtype === this.subtype;
       });
-      return _.map(forSubtype, 'name');
-    }
+      return _.map(forSubtype, "name");
+    },
   },
   mounted() {
     this.selected = this.orderLocal.print_binding_type;
-    this.getDropdownOptions('paper-binding', 'allBindings');
+    this.getDropdownOptions("paper-binding", "allBindings");
   },
   watch: {
     selected(newSelection) {
       this.orderLocal.print_binding_type = newSelection;
-      this.$emit('property-updated');
-    }
+      this.$emit("property-updated");
+    },
   },
   methods: {
     getHumanReadableSubtype(bindingType) {
-      if (bindingType === 'pur_bound') {
-        return 'PUR Bound';
+      if (bindingType === "pur_bound") {
+        return "PUR Bound";
       }
 
-      let parts = bindingType.split('_');
-      parts = _.map(parts, part => {
+      let parts = bindingType.split("_");
+      parts = _.map(parts, (part) => {
         return part.charAt(0).toUpperCase() + part.slice(1);
       });
-      return parts.join(' ');
+      return parts.join(" ");
     },
 
     select(key) {
@@ -123,11 +128,9 @@ export default {
 
     isSelected(key) {
       return this.selected === key;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,55 +1,53 @@
 <template>
-  <a-form-item
-      :validate-status="validateStatus">
-<!--      :label="label">-->
+  <a-form-item :validate-status="validateStatus">
+    <!--      :label="label">-->
     <div class="validated-form-item-label">
       <span class="label-lhs">{{ label }}</span>
-      <infobox v-for="(singularId, i) in ids" :key="i"
-               :id="singularId"></infobox>
+      <infobox v-for="(singularId, i) in ids" :key="i" :id="singularId"></infobox>
     </div>
     <slot></slot>
   </a-form-item>
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "ValidatedFormItem",
-  props: ['label', 'id', 'conditions'],
+  props: ["label", "id", "conditions"],
   computed: {
-    ...mapGetters('orderEditor', {
-      validationErrors: 'validationErrors'
+    ...mapGetters("orderEditor", {
+      validationErrors: "validationErrors",
     }),
 
     ids() {
       if (this.id) {
-        return this.id.split(',')
+        return this.id.split(",");
       }
       return [];
     },
 
     errorsForId() {
       let vm = this;
-      return _.filter(this.validationErrors, err => {
+      return _.filter(this.validationErrors, (err) => {
         // return err.rule && err.rule.id === vm.id;
         return err.rule && vm.ids.includes(err.rule.id);
       });
     },
 
     errorsForField() {
-     let errors = [];
+      let errors = [];
 
       if (this.conditions) {
-        _.each(this.errorsForId, errorForId => {
+        _.each(this.errorsForId, (errorForId) => {
           let doesErrorApplyToField = true;
-          _.each(this.conditions, condition => {
-            let propertyValue = (errorForId['with'] ? errorForId['with'][condition['field']] : null);
-            let expectedPropertyValue = condition['value'];
+          _.each(this.conditions, (condition) => {
+            let propertyValue = errorForId["with"] ? errorForId["with"][condition["field"]] : null;
+            let expectedPropertyValue = condition["value"];
             if (propertyValue !== expectedPropertyValue) {
-             doesErrorApplyToField = false;
+              doesErrorApplyToField = false;
             }
           });
           if (doesErrorApplyToField) {
@@ -64,14 +62,14 @@ export default {
     },
 
     hasErrors() {
-      return (this.errorsForField.length > 0);
+      return this.errorsForField.length > 0;
     },
 
     validateStatus() {
-      return this.hasErrors ? 'error' : 'success';
-    }
-  }
-}
+      return this.hasErrors ? "error" : "success";
+    },
+  },
+};
 </script>
 
 <style>

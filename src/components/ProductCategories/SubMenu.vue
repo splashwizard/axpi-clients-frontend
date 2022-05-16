@@ -11,29 +11,29 @@
 
 <script>
 export default {
-  name: 'subMenu',
-  props: ['menuInfo']
-}
+  name: "subMenu",
+  props: ["menuInfo"],
+};
 </script>
 
 <style>
-  .dropdown-item {
-    font-size: 16px;
-    min-width: 200px;
-    padding-right: 8px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
+.dropdown-item {
+  font-size: 16px;
+  min-width: 200px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .sub-item{
-    min-width: 200px;
-    padding-right: 8px;
-  }
+.sub-item {
+  min-width: 200px;
+  padding-right: 8px;
+}
 
-  .ant-dropdown-menu-submenu-popup ul {
-    box-shadow: none;
-    margin: 0!important;
-  }
+.ant-dropdown-menu-submenu-popup ul {
+  box-shadow: none;
+  margin: 0 !important;
+}
 </style>

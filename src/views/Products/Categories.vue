@@ -21,7 +21,11 @@
               @node-drag-end="handleDragend"
             >
               <span class="custom-tree-node" slot-scope="{ node, data }">
-                <a-icon v-if="data.type" :type="data.type === 'custom' ? 'shop' : 'shopping'" :style="{paddingRight: '4px'}"/>
+                <a-icon
+                  v-if="data.type"
+                  :type="data.type === 'custom' ? 'shop' : 'shopping'"
+                  :style="{ paddingRight: '4px' }"
+                />
                 <span>{{ node.label }}</span>
               </span>
             </el-tree>
@@ -33,16 +37,20 @@
           </div>
           <div class="card-body">
             <el-tree
-              :data="treeData2" 
+              :data="treeData2"
               ref="tree2"
-              class="tree" 
+              class="tree"
               node-key="id"
               draggable
               default-expand-all
               :allow-drop="returnTrue"
             >
               <span class="custom-tree-node" slot-scope="{ node, data }">
-                <a-icon v-if="data.type" :type="data.type === 'custom' ? 'shop' : 'shopping'" :style="{paddingRight: '4px'}"/>
+                <a-icon
+                  v-if="data.type"
+                  :type="data.type === 'custom' ? 'shop' : 'shopping'"
+                  :style="{ paddingRight: '4px' }"
+                />
                 <span>{{ node.label }}</span>
               </span>
             </el-tree>
@@ -54,7 +62,6 @@
 </template>
 
 <script>
-
 import LeftSidebar from "./LeftSidebar";
 
 export default {
@@ -62,70 +69,73 @@ export default {
   components: { LeftSidebar },
   data() {
     return {
-      treeData1: [{
-        id: 1,
-        label: "Category",
-        children: [
-          {
-            id: 2,
-            label: "Category 1",
-            type: 'custom'
-          },
-          {
-            id: 3,
-            label: "Category 2",
-            type: 'custom'
-          },
-          {
-            id: 4,
-            label: "Category 3",
-            type: 'custom'
-          },
-          {
-            id: 5,
-            label: "Category 4",
-            type: 'custom'
-          }
-        ],
-      }],
-      treeData2: [{
-        id: 2,
-        label: "Item 2",
-        children: [
-          {
-            id: 6,
-            label: "Shop Category 1",
-            type: 'shop'
-          },
-          {
-            id: 7,
-            label: "Shop Category 2",
-            type: 'shop'
-          },
-          {
-            id: 8,
-            label: "Shop Category 3",
-            type: 'shop'
-          },
-          {
-            id: 9,
-            label: "Shop Category 4",
-            type: 'shop'
-          }
-        ],
-      }],
-    }
+      treeData1: [
+        {
+          id: 1,
+          label: "Category",
+          children: [
+            {
+              id: 2,
+              label: "Category 1",
+              type: "custom",
+            },
+            {
+              id: 3,
+              label: "Category 2",
+              type: "custom",
+            },
+            {
+              id: 4,
+              label: "Category 3",
+              type: "custom",
+            },
+            {
+              id: 5,
+              label: "Category 4",
+              type: "custom",
+            },
+          ],
+        },
+      ],
+      treeData2: [
+        {
+          id: 2,
+          label: "Item 2",
+          children: [
+            {
+              id: 6,
+              label: "Shop Category 1",
+              type: "shop",
+            },
+            {
+              id: 7,
+              label: "Shop Category 2",
+              type: "shop",
+            },
+            {
+              id: 8,
+              label: "Shop Category 3",
+              type: "shop",
+            },
+            {
+              id: 9,
+              label: "Shop Category 4",
+              type: "shop",
+            },
+          ],
+        },
+      ],
+    };
   },
   methods: {
-    handleDragstart (node, event) {
-      this.$refs.tree2.$emit('tree-node-drag-start', event, {node: node});
+    handleDragstart(node, event) {
+      this.$refs.tree2.$emit("tree-node-drag-start", event, { node: node });
     },
-    handleDragend (draggingNode, endNode, position, event) {
-      
-      let emptyData = {id: (+new Date), children: []};
+    handleDragend(draggingNode, endNode, position, event) {
+      let emptyData = { id: +new Date(), children: [] };
       // this.$refs.tree1.insertBefore(emptyData, draggingNode);
 
-      this.$refs.tree2.$emit('tree-node-drag-end', event);
+      this.$refs.tree2.$emit("tree-node-drag-end", event);
       this.$nextTick(() => {
         if (this.$refs.tree1.getNode(draggingNode.data)) {
           this.$refs.tree1.remove(emptyData);
@@ -134,55 +144,53 @@ export default {
           // this.$refs.tree1.insertAfter(data, this.$refs.tree1.getNode(emptyData));
           this.$refs.tree1.remove(this.$refs.tree1.getNode(emptyData));
         }
-      })
+      });
     },
-    returnTrue () {
+    returnTrue() {
       return true;
     },
-    returnFalse () {
+    returnFalse() {
       return false;
-    }
+    },
   },
-  created() {
-  }
-}
+  created() {},
+};
 </script>
 
 <style scoped>
-  .page-title {
-    padding-bottom: 16px;
-  }
+.page-title {
+  padding-bottom: 16px;
+}
 
-  .tree-container {
-    display: flex;
-  }
+.tree-container {
+  display: flex;
+}
 
-  .tree {
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 10px;
-    width: 100%;
-  }
+.tree {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 10px;
+  width: 100%;
+}
 
-  .card {
-    border: 2px solid lightgray;
-    border-radius: 10px;
-    width: 40%;
-    overflow: hidden;
-  }
+.card {
+  border: 2px solid lightgray;
+  border-radius: 10px;
+  width: 40%;
+  overflow: hidden;
+}
 
-  .card-header {
-    background-color: rgb(184, 247, 237);
-    padding: 8px 16px;
-    border-bottom: 2px solid lightgray;
-  }
+.card-header {
+  background-color: rgb(184, 247, 237);
+  padding: 8px 16px;
+  border-bottom: 2px solid lightgray;
+}
 
-  .card-body {
-    padding: 16px;
-  }
+.card-body {
+  padding: 16px;
+}
 
-  .ml-2 {
-    margin-left: 8px;
-  }
-
+.ml-2 {
+  margin-left: 8px;
+}
 </style>

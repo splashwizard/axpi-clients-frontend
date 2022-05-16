@@ -28,22 +28,22 @@
 <script>
 import ChangePasswordForm from "../components/Account/ChangePasswordForm";
 import ChangeEmailForm from "../components/Account/ChangeEmailForm";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
-  components: {ChangePasswordForm, ChangeEmailForm},
+  components: { ChangePasswordForm, ChangeEmailForm },
 
   data() {
     return {
       changePasswordModalVisible: false,
-      changeEmailModalVisible: false
-    }
+      changeEmailModalVisible: false,
+    };
   },
 
   computed: {
-    ...mapGetters('auth', {
-      user: 'user'
-    })
+    ...mapGetters("auth", {
+      user: "user",
+    }),
   },
 
   methods: {
@@ -61,9 +61,9 @@ export default {
 
     closeChangeEmailModal() {
       this.changeEmailModalVisible = false;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style scoped>
 .account-card {

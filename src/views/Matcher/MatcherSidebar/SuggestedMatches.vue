@@ -2,18 +2,14 @@
   <div>
     <!-- Loading -->
     <div class="loading-screen" v-if="isLoadingSuggestedMatches">
-      <a-spin/>
+      <a-spin />
     </div>
     <!-- / Loading -->
 
     <!-- Loaded -->
     <div v-if="!isLoadingSuggestedMatches">
-
       <!-- No matches -->
-      <a-alert type="error"
-               message="No suggested matches"
-               v-if="suggestedMatches.length === 0"
-               banner/>
+      <a-alert type="error" message="No suggested matches" v-if="suggestedMatches.length === 0" banner />
       <!-- / No matches -->
 
       <!-- Matches -->
@@ -21,34 +17,33 @@
         <matches :matches="suggestedMatches"></matches>
       </div>
       <!-- / Matches -->
-
     </div>
     <!-- / Loaded -->
   </div>
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 // const _ = require('lodash');
 import Matches from "./Matches";
 
 export default {
   name: "SuggestedMatches",
-  components: {Matches},
+  components: { Matches },
   computed: {
-    ...mapGetters('matcher', {
-      selectedErpOrder: 'selectedErpOrder',
-      isLoadingSuggestedMatches: 'isLoadingSuggestedMatches',
-      suggestedMatches: 'suggestedMatches'
-    })
+    ...mapGetters("matcher", {
+      selectedErpOrder: "selectedErpOrder",
+      isLoadingSuggestedMatches: "isLoadingSuggestedMatches",
+      suggestedMatches: "suggestedMatches",
+    }),
   },
   data() {
     return {
-      showMoreDetailsForIds: []
-    }
+      showMoreDetailsForIds: [],
+    };
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
 <style scoped>

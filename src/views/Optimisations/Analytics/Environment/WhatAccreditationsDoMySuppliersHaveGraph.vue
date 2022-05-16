@@ -1,59 +1,61 @@
 <template>
   <div class="graph-container">
     <div v-if="isLoading" class="loading-screen">
-      <a-spin/>
+      <a-spin />
     </div>
     <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
       <!--      <v-legend/>-->
-      <v-tooltip/>
-      <v-axis :title="{'text': 'Accreditation'}"
-              :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
-      <v-axis :title="{'text': 'Supplier'}"
-              :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
-      <v-polygon :position="seriesOpts.position" :color="seriesOpts.color" :label="seriesOpts.label"
-                 :vStyle="seriesOpts.style"/>
+      <v-tooltip />
+      <v-axis :title="{ text: 'Accreditation' }" :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid" />
+      <v-axis :title="{ text: 'Supplier' }" :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid" />
+      <v-polygon
+        :position="seriesOpts.position"
+        :color="seriesOpts.color"
+        :label="seriesOpts.label"
+        :vStyle="seriesOpts.style"
+      />
     </v-chart>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 const axis1Opts = {
-  dataKey: 'accreditation',
+  dataKey: "accreditation",
   tickLine: null,
   grid: {
-    align: 'center',
+    align: "center",
     lineStyle: {
       lineWidth: 1,
       lineDash: null,
-      stroke: '#f0f0f0',
+      stroke: "#f0f0f0",
     },
   },
 };
 
 const axis2Opts = {
-  dataKey: 'supplier',
+  dataKey: "supplier",
   title: null,
   grid: {
-    align: 'center',
+    align: "center",
     lineStyle: {
       lineWidth: 1,
       lineDash: null,
-      stroke: '#f0f0f0',
+      stroke: "#f0f0f0",
     },
     showFirstLine: true,
   },
 };
 
 const seriesOpts = {
-  quickType: 'polygon',
+  quickType: "polygon",
   // color: ['value', '#E60000-#000000-#4CBB17'],
-  color: ['value', '#BAE7FF-#1890FF-#0050B3'],
-  position: 'accreditation*supplier',
+  color: ["value", "#BAE7FF-#1890FF-#0050B3"],
+  position: "accreditation*supplier",
   // label: ['value', {
   //   offset: -2,
   //   textStyle: {
@@ -64,7 +66,7 @@ const seriesOpts = {
   // }],
   style: {
     lineWidth: 1,
-    stroke: '#fff',
+    stroke: "#fff",
   },
 };
 
@@ -78,13 +80,13 @@ export default {
       height: 500,
       axis1Opts,
       axis2Opts,
-      seriesOpts
-    }
+      seriesOpts,
+    };
   },
   computed: {
-    ...mapGetters('optimisationAnalyticsManager', {
-      filterBySupplier: 'filterBySupplier',
-      selectedSupplier: 'selectedSupplier'
+    ...mapGetters("optimisationAnalyticsManager", {
+      filterBySupplier: "filterBySupplier",
+      selectedSupplier: "selectedSupplier",
     }),
 
     accreditations() {
@@ -103,14 +105,14 @@ export default {
 
     graphData() {
       let sourceData = [];
-      _.each(this.accreditations, accreditation => {
-        _.each(this.suppliers, supplier => {
-          let idsOfAccreditationsSupplierHas = _.map(supplier.accreditations, 'id');
+      _.each(this.accreditations, (accreditation) => {
+        _.each(this.suppliers, (supplier) => {
+          let idsOfAccreditationsSupplierHas = _.map(supplier.accreditations, "id");
           let doesSupplierHaveAccreditation = idsOfAccreditationsSupplierHas.includes(accreditation.id);
           sourceData.push({
             accreditation: accreditation.name,
-            supplier: supplier.name.substring(0, 6) + '...',
-            value: doesSupplierHaveAccreditation ? 1 : 0
+            supplier: supplier.name.substring(0, 6) + "...",
+            value: doesSupplierHaveAccreditation ? 1 : 0,
           });
         });
       });
@@ -118,16 +120,19 @@ export default {
     },
 
     scale() {
-      return [{
-        dataKey: 'supplier',
-        type: 'cat',
-        // values: _.map(this.suppliers, 'name'),
-      }, {
-        dataKey: 'accreditation',
-        type: 'cat',
-        // values: _.map(this.accreditations, 'name'),
-      }];
-    }
+      return [
+        {
+          dataKey: "supplier",
+          type: "cat",
+          // values: _.map(this.suppliers, 'name'),
+        },
+        {
+          dataKey: "accreditation",
+          type: "cat",
+          // values: _.map(this.accreditations, 'name'),
+        },
+      ];
+    },
   },
   created() {
     this.fetch();
@@ -138,19 +143,22 @@ export default {
 
       let params = {};
       if (this.filterBySupplier && this.selectedSupplier) {
-        params['supplier_id'] = this.selectedSupplier.id;
+        params["supplier_id"] = this.selectedSupplier.id;
       }
 
       vm.isLoading = true;
-      axios.post(window.API_BASE + '/suppliers/accreditations', params).then(r => {
-        vm.isLoading = false;
-        vm.data = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.$message.error('Error loading supplier accreditations');
-      });
-    }
+      axios
+        .post(window.API_BASE + "/suppliers/accreditations", params)
+        .then((r) => {
+          vm.isLoading = false;
+          vm.data = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          vm.$message.error("Error loading supplier accreditations");
+        });
+    },
   },
   watch: {
     filterBySupplier() {
@@ -158,9 +166,9 @@ export default {
     },
     selectedSupplier() {
       this.fetch();
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

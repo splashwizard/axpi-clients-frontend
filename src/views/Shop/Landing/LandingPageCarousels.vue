@@ -4,24 +4,23 @@
       <a-spin></a-spin>
     </div>
     <div v-if="!isLoading">
-      <product-carousel v-for="(carousel, i) in carousels" :carousel="carousel"
-                        :key="i"></product-carousel>
+      <product-carousel v-for="(carousel, i) in carousels" :carousel="carousel" :key="i"></product-carousel>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import ProductCarousel from "./LandingPageCarousels/ProductCarousel";
 
 export default {
   name: "LandingPageCarousels",
-  components: {ProductCarousel},
+  components: { ProductCarousel },
   data() {
     return {
       isLoading: false,
-      carousels: []
-    }
+      carousels: [],
+    };
   },
   created() {
     this.loadCarousels();
@@ -30,17 +29,20 @@ export default {
     loadCarousels() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/shop-landing-page/carousels').then(r => {
-        vm.isLoading = false;
-        vm.carousels = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.$message.error('Error loading carousels');
-      });
-    }
-  }
-}
+      axios
+        .get(window.API_BASE + "/shop-landing-page/carousels")
+        .then((r) => {
+          vm.isLoading = false;
+          vm.carousels = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          vm.$message.error("Error loading carousels");
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>

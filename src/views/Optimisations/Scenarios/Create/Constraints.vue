@@ -21,8 +21,11 @@
               <a-form layout="vertical">
                 <a-form-item label="Constrain">
                   <a-select v-model="constraint.constraint" @change="incrementUpdateKey">
-                    <a-select-option :value="constraintOption.id"
-                                     v-for="(constraintOption, ii) in availableConstraints" :key="ii">
+                    <a-select-option
+                      :value="constraintOption.id"
+                      v-for="(constraintOption, ii) in availableConstraints"
+                      :key="ii"
+                    >
                       {{ constraintOption.label }}
                     </a-select-option>
                   </a-select>
@@ -35,19 +38,18 @@
             <!-- Dimensions Wrapper -->
             <div v-if="constraint.constraint" class="dimensions-wrapper">
               <!-- Dimension -->
-              <div class="dimension" v-for="(dimension, dimensionIndex) in constraint.dimensions"
-                   :key="dimensionIndex">
+              <div class="dimension" v-for="(dimension, dimensionIndex) in constraint.dimensions" :key="dimensionIndex">
                 <!-- Logical connector -->
                 <div class="logical-connector" v-if="dimension.logicalConnector">
                   <!--                  {{ dimension.logicalConnector }}-->
-                  <a-select @change="forceRefresh" :dropdownMatchSelectWidth="false"
-                            class="logical-connector-select" v-model="dimension.logicalConnector">
-                    <a-select-option value="AND">
-                      AND
-                    </a-select-option>
-                    <a-select-option value="OR">
-                      OR
-                    </a-select-option>
+                  <a-select
+                    @change="forceRefresh"
+                    :dropdownMatchSelectWidth="false"
+                    class="logical-connector-select"
+                    v-model="dimension.logicalConnector"
+                  >
+                    <a-select-option value="AND"> AND </a-select-option>
+                    <a-select-option value="OR"> OR </a-select-option>
                   </a-select>
                 </div>
                 <!-- / Logical connector -->
@@ -55,20 +57,23 @@
                 <!-- Include/Exclude -->
                 <div class="include-exclude-wrapper">
                   <div class="left">
-                    <a-select @change="forceRefresh" :dropdownMatchSelectWidth="false"
-                              class="include-or-exclude-select" v-model="dimension.includeOrExclude">
-                      <a-select-option value="include">
-                        Include
-                      </a-select-option>
-                      <a-select-option value="exclude">
-                        Exclude
-                      </a-select-option>
+                    <a-select
+                      @change="forceRefresh"
+                      :dropdownMatchSelectWidth="false"
+                      class="include-or-exclude-select"
+                      v-model="dimension.includeOrExclude"
+                    >
+                      <a-select-option value="include"> Include </a-select-option>
+                      <a-select-option value="exclude"> Exclude </a-select-option>
                     </a-select>
                     Dimension
                   </div>
                   <div class="right">
-                    <a-button @click.prevent="deleteDimension(constraint, dimension)" type="link"
-                              icon="delete"></a-button>
+                    <a-button
+                      @click.prevent="deleteDimension(constraint, dimension)"
+                      type="link"
+                      icon="delete"
+                    ></a-button>
                   </div>
                 </div>
                 <!-- / Include/Exclude -->
@@ -76,22 +81,38 @@
                 <!-- Dimension -->
                 <a-form layout="vertical">
                   <a-form-item>
-                    <a-select label="Please select dimension"
-                              @change="incrementUpdateKey" class="dimension-select"
-                              v-model="dimension.dimensionToConstrain">
+                    <a-select
+                      label="Please select dimension"
+                      @change="incrementUpdateKey"
+                      class="dimension-select"
+                      v-model="dimension.dimensionToConstrain"
+                    >
                       <a-select-option
-                          v-for="(dimensionOption, dimensionOptionKey) in getDimensionOptionsForConstraint(constraint.constraint)"
-                          :value="dimensionOption.id" :key="dimensionOptionKey">
+                        v-for="(dimensionOption, dimensionOptionKey) in getDimensionOptionsForConstraint(
+                          constraint.constraint
+                        )"
+                        :value="dimensionOption.id"
+                        :key="dimensionOptionKey"
+                      >
                         {{ dimensionOption.label }}
                       </a-select-option>
                     </a-select>
                   </a-form-item>
                   <a-form-item v-if="dimension.dimensionToConstrain" label="Dimension values">
-                    <a-select mode="multiple" label="Please select dimension values" @change="incrementUpdateKey"
-                              v-model="dimension.dimensionValues">
+                    <a-select
+                      mode="multiple"
+                      label="Please select dimension values"
+                      @change="incrementUpdateKey"
+                      v-model="dimension.dimensionValues"
+                    >
                       <a-select-option
-                          v-for="(dimensionValue, dimensionValueKey) in getValueOptionsForDimension(constraint.constraint, dimension.dimensionToConstrain)"
-                          :value="dimensionValue.value" :key="dimensionValueKey">
+                        v-for="(dimensionValue, dimensionValueKey) in getValueOptionsForDimension(
+                          constraint.constraint,
+                          dimension.dimensionToConstrain
+                        )"
+                        :value="dimensionValue.value"
+                        :key="dimensionValueKey"
+                      >
                         {{ dimensionValue.label }}
                       </a-select-option>
                     </a-select>
@@ -105,11 +126,20 @@
 
             <!-- Button Toolbar -->
             <div class="button-toolbar">
-              <a-button @click.prevent="addDimensionToConstraint(constraint)" block class="add-dimension-button"
-                        icon="plus" :disabled="!constraint.constraint||!isConstraintValid(constraint)">Add Dimension
+              <a-button
+                @click.prevent="addDimensionToConstraint(constraint)"
+                block
+                class="add-dimension-button"
+                icon="plus"
+                :disabled="!constraint.constraint || !isConstraintValid(constraint)"
+                >Add Dimension
               </a-button>
-              <a-button type="primary" @click.prevent="stopEditingConstraint(constraint)" block
-                        :disabled="!constraint.constraint||!isConstraintValid(constraint)">Apply
+              <a-button
+                type="primary"
+                @click.prevent="stopEditingConstraint(constraint)"
+                block
+                :disabled="!constraint.constraint || !isConstraintValid(constraint)"
+                >Apply
               </a-button>
             </div>
             <!-- / Button Toolbar -->
@@ -119,11 +149,9 @@
           <!-- NOT Editing -->
           <div v-if="!constraint.isEditing" class="view-constraint">
             <div class="view-constraint-actions">
-              <a-button @click.prevent="editConstraint(constraint)" type="link"
-                        icon="edit"></a-button>
+              <a-button @click.prevent="editConstraint(constraint)" type="link" icon="edit"></a-button>
 
-              <a-button @click.prevent="deleteConstraint(constraint)" type="link"
-                        icon="delete"></a-button>
+              <a-button @click.prevent="deleteConstraint(constraint)" type="link" icon="delete"></a-button>
             </div>
 
             <b>{{ getConstraintById(constraint.constraint).label }}</b>
@@ -132,7 +160,7 @@
               <b>{{ capitalise(dim.includeOrExclude) }}</b>
               {{ getDimensionById(constraint.constraint, dim.dimensionToConstrain).label }}
               =
-              {{ dim.dimensionValues.join(', ') }}
+              {{ dim.dimensionValues.join(", ") }}
             </div>
           </div>
           <!-- / NOT Editing -->
@@ -141,8 +169,13 @@
       </a-col>
       <a-col :span="8">
         <div>
-          <a-button block class="add-constraint-button" :disabled="!canAddNewConstraint"
-                    icon="plus" @click.prevent="addConstraint">Add constraint
+          <a-button
+            block
+            class="add-constraint-button"
+            :disabled="!canAddNewConstraint"
+            icon="plus"
+            @click.prevent="addConstraint"
+            >Add constraint
           </a-button>
         </div>
       </a-col>
@@ -152,25 +185,27 @@
 </template>
 
 <script>
-const _ = require('lodash');
-import axios from 'axios';
+const _ = require("lodash");
+import axios from "axios";
 
 const CONSTRAINT_DATA_TEMPLATE = {
   constraint: null,
   isEditing: true,
-  dimensions: [{
-    includeOrExclude: 'include',
-    logicalConnector: null,
-    dimensionToConstrain: null,
-    dimensionValues: []
-  }]
+  dimensions: [
+    {
+      includeOrExclude: "include",
+      logicalConnector: null,
+      dimensionToConstrain: null,
+      dimensionValues: [],
+    },
+  ],
 };
 
 const DIMENSION_DATA_TEMPLATE = {
-  includeOrExclude: 'include',
-  logicalConnector: 'AND',
+  includeOrExclude: "include",
+  logicalConnector: "AND",
   dimensionToConstrain: null,
-  dimensionValues: []
+  dimensionValues: [],
 };
 
 export default {
@@ -341,9 +376,9 @@ export default {
       //     }
       //   ]
       // }
-    }
+    };
   },
-  props: ['scenario', 'optimisationId'],
+  props: ["scenario", "optimisationId"],
   computed: {
     canAddNewConstraint() {
       let canAdd = true;
@@ -363,27 +398,30 @@ export default {
 
     dimensionsAvailable() {
       let dims = [];
-      _.each(this.constraintsFromServer, constraint => {
+      _.each(this.constraintsFromServer, (constraint) => {
         dims[constraint.id] = constraint.dimensions_available;
       });
       return dims;
-    }
+    },
   },
   created() {
-   this.fetchConstraints();
+    this.fetchConstraints();
   },
   methods: {
     fetchConstraints() {
       let vm = this;
       vm.isLoadingConstraints = true;
-      axios.get(window.API_BASE + '/optimisations/' + vm.optimisationId + '/get-constraints').then(r => {
-        vm.isLoadingConstraints = false;
-        vm.constraintsFromServer = r.data;
-      }).catch(e => {
-        vm.isLoadingConstraints = false;
-        console.log(e);
-        vm.$message.error('Error loading constraints');
-      });
+      axios
+        .get(window.API_BASE + "/optimisations/" + vm.optimisationId + "/get-constraints")
+        .then((r) => {
+          vm.isLoadingConstraints = false;
+          vm.constraintsFromServer = r.data;
+        })
+        .catch((e) => {
+          vm.isLoadingConstraints = false;
+          console.log(e);
+          vm.$message.error("Error loading constraints");
+        });
     },
 
     isConstraintValid(constraint) {
@@ -404,11 +442,11 @@ export default {
     },
 
     getConstraintById(constraintId) {
-      return _.find(this.availableConstraints, {id: constraintId});
+      return _.find(this.availableConstraints, { id: constraintId });
     },
 
     getDimensionById(constraintId, dimensionId) {
-      return _.find(this.dimensionsAvailable[constraintId], {id: dimensionId});
+      return _.find(this.dimensionsAvailable[constraintId], { id: dimensionId });
     },
 
     getDimensionOptionsForConstraint(constraintId) {
@@ -421,32 +459,32 @@ export default {
       let vm = this;
       this.$nextTick(() => {
         vm.$forceUpdate();
-      })
+      });
     },
 
     incrementUpdateKey() {
       let vm = this;
       this.$nextTick(() => {
         vm.updateKey += 1;
-      })
+      });
       // this.forceRefresh();
     },
 
     addConstraint() {
-      this.scenario.constraints.push(
-          _.cloneDeep({...this.constraintDataTemplate})
-      );
+      this.scenario.constraints.push(_.cloneDeep({ ...this.constraintDataTemplate }));
     },
 
     addDimensionToConstraint(constraint) {
-      constraint.dimensions.push(_.cloneDeep({
-        ...DIMENSION_DATA_TEMPLATE
-      }))
+      constraint.dimensions.push(
+        _.cloneDeep({
+          ...DIMENSION_DATA_TEMPLATE,
+        })
+      );
     },
 
     getValueOptionsForDimension(constraintId, dimensionId) {
       let dimensionsForConstraint = this.getDimensionOptionsForConstraint(constraintId);
-      let dimension = _.find(dimensionsForConstraint, {id: dimensionId});
+      let dimension = _.find(dimensionsForConstraint, { id: dimensionId });
       return dimension ? dimension.valueOptions : [];
     },
 
@@ -471,9 +509,9 @@ export default {
 
     editConstraint(constraint) {
       constraint.isEditing = true;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">

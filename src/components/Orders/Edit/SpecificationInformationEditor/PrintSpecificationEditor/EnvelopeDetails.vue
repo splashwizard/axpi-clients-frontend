@@ -5,11 +5,13 @@
       <a-row :gutter="70">
         <a-col span="12">
           <a-form-item label="Envelope Style">
-            <a-cascader :options="envelopeStyleOptions"
-                        v-model="orderLocal.envelope.envelope_style"
-                        :show-search="{ filter }"
-                        @change="forceRefresh"
-                        size="large"></a-cascader>
+            <a-cascader
+              :options="envelopeStyleOptions"
+              v-model="orderLocal.envelope.envelope_style"
+              :show-search="{ filter }"
+              @change="forceRefresh"
+              size="large"
+            ></a-cascader>
           </a-form-item>
         </a-col>
       </a-row>
@@ -20,16 +22,10 @@
         <a-col span="12">
           <a-form-item label="Width">
             <a-input-group compact>
-              <a-input size="large" style="width: 70%" v-model="orderLocal.envelope.width"
-                       @blur="forceRefresh"/>
-              <a-select size="large" style="width: 30%" v-model="orderLocal.envelope.width_unit"
-                        @change="forceRefresh">
-                <a-select-option value="mm">
-                  mm
-                </a-select-option>
-                <a-select-option value="inch">
-                  inch
-                </a-select-option>
+              <a-input size="large" style="width: 70%" v-model="orderLocal.envelope.width" @blur="forceRefresh" />
+              <a-select size="large" style="width: 30%" v-model="orderLocal.envelope.width_unit" @change="forceRefresh">
+                <a-select-option value="mm"> mm </a-select-option>
+                <a-select-option value="inch"> inch </a-select-option>
               </a-select>
             </a-input-group>
           </a-form-item>
@@ -37,16 +33,15 @@
         <a-col span="12">
           <a-form-item label="Height">
             <a-input-group compact>
-              <a-input size="large" style="width: 70%" v-model="orderLocal.envelope.height"
-                       @blur="forceRefresh"/>
-              <a-select size="large" style="width: 30%" v-model="orderLocal.envelope.height_unit"
-                        @change="forceRefresh">
-                <a-select-option value="mm">
-                  mm
-                </a-select-option>
-                <a-select-option value="inch">
-                  inch
-                </a-select-option>
+              <a-input size="large" style="width: 70%" v-model="orderLocal.envelope.height" @blur="forceRefresh" />
+              <a-select
+                size="large"
+                style="width: 30%"
+                v-model="orderLocal.envelope.height_unit"
+                @change="forceRefresh"
+              >
+                <a-select-option value="mm"> mm </a-select-option>
+                <a-select-option value="inch"> inch </a-select-option>
               </a-select>
             </a-input-group>
           </a-form-item>
@@ -58,12 +53,8 @@
       <a-row :gutter="70">
         <a-col span="12">
           <a-form-item label="Seal">
-            <a-select v-model="orderLocal.envelope.seal"
-                      show-search size="large"
-                      @change="forceRefresh">
-              <a-select-option v-for="seal in sealOptions"
-                               :value="seal.value"
-                               :key="seal.value">
+            <a-select v-model="orderLocal.envelope.seal" show-search size="large" @change="forceRefresh">
+              <a-select-option v-for="seal in sealOptions" :value="seal.value" :key="seal.value">
                 {{ seal.label }}
               </a-select-option>
             </a-select>
@@ -76,12 +67,8 @@
       <a-row :gutter="70">
         <a-col span="12">
           <a-form-item label="Paper Type">
-            <a-select v-model="orderLocal.envelope.paper_type"
-                      show-search size="large"
-                      @change="forceRefresh">
-              <a-select-option v-for="type in paperTypeOptions"
-                               :value="type.value"
-                               :key="type.value">
+            <a-select v-model="orderLocal.envelope.paper_type" show-search size="large" @change="forceRefresh">
+              <a-select-option v-for="type in paperTypeOptions" :value="type.value" :key="type.value">
                 {{ type.label }}
               </a-select-option>
             </a-select>
@@ -97,110 +84,110 @@
 const ENVELOPE_DATA_TEMPLATE = {
   envelope_style: null,
   width: null,
-  width_unit: 'mm',
+  width_unit: "mm",
   height: null,
-  height_unit: 'mm',
+  height_unit: "mm",
   seal: null,
-  paper_type: null
+  paper_type: null,
 };
 
 const ENVELOPE_STYLE_OPTIONS = [
   {
-    label: 'Baronial',
-    value: 'baronial'
+    label: "Baronial",
+    value: "baronial",
   },
   {
-    label: 'A-Style',
-    value: 'a-style'
+    label: "A-Style",
+    value: "a-style",
   },
   {
-    label: 'Square',
-    value: 'square'
+    label: "Square",
+    value: "square",
   },
   {
-    label: 'Commercial',
-    value: 'commercial',
+    label: "Commercial",
+    value: "commercial",
     children: [
       {
-        value: 'square-flap',
-        label: 'Square Flap'
+        value: "square-flap",
+        label: "Square Flap",
       },
       {
-        value: 'policy-flap',
-        label: 'policy-flap'
+        value: "policy-flap",
+        label: "policy-flap",
       },
       {
-        value: 'dl-international',
-        label: 'DL International'
-      }
-    ]
+        value: "dl-international",
+        label: "DL International",
+      },
+    ],
   },
   {
-    label: 'Booklet',
-    value: 'booklet'
+    label: "Booklet",
+    value: "booklet",
   },
   {
-    label: 'Catalog',
-    value: 'catalog'
-  }
+    label: "Catalog",
+    value: "catalog",
+  },
 ];
 
 const SEAL_OPTIONS = [
   {
-    label: 'Paper and Seal',
-    value: 'paper-and-seal'
+    label: "Paper and Seal",
+    value: "paper-and-seal",
   },
   {
-    label: 'Gummed',
-    value: 'gummed'
+    label: "Gummed",
+    value: "gummed",
   },
   {
-    label: 'Self Seal',
-    value: 'self-seal'
-  }
+    label: "Self Seal",
+    value: "self-seal",
+  },
 ];
 
 const PAPER_TYPE_OPTIONS = [
   {
-    label: 'Wove',
-    value: 'wove'
+    label: "Wove",
+    value: "wove",
   },
   {
-    label: 'Surface Enhanced White Wove',
-    value: 'surface-enhanced-white-wove',
+    label: "Surface Enhanced White Wove",
+    value: "surface-enhanced-white-wove",
   },
   {
-    label: 'Kraft',
-    value: 'kraft'
+    label: "Kraft",
+    value: "kraft",
   },
   {
-    label: 'Recycled',
-    value: 'recycled'
+    label: "Recycled",
+    value: "recycled",
   },
   {
-    label: 'Speciality',
-    value: 'speciality'
+    label: "Speciality",
+    value: "speciality",
   },
   {
-    label: 'Tear Resistant',
-    value: 'tear-resistant'
-  }
+    label: "Tear Resistant",
+    value: "tear-resistant",
+  },
 ];
 
 export default {
   name: "EnvelopeDetails",
-  props: ['orderLocal'],
+  props: ["orderLocal"],
   data() {
     return {
       envelopeStyleOptions: ENVELOPE_STYLE_OPTIONS,
       sealOptions: SEAL_OPTIONS,
-      paperTypeOptions: PAPER_TYPE_OPTIONS
-    }
+      paperTypeOptions: PAPER_TYPE_OPTIONS,
+    };
   },
   mounted() {
     if (!this.orderLocal.envelope) {
       this.orderLocal.envelope = {
-        ...ENVELOPE_DATA_TEMPLATE
+        ...ENVELOPE_DATA_TEMPLATE,
       };
       this.forceRefresh();
     }
@@ -213,12 +200,10 @@ export default {
     },
 
     filter(inputValue, path) {
-      return path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
-    }
-  }
-}
+      return path.some((option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

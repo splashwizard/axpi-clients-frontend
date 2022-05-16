@@ -1,56 +1,59 @@
 <template>
   <div class="graph-container">
     <div v-if="isLoading" class="loading-screen">
-      <a-spin/>
+      <a-spin />
     </div>
     <v-chart v-else :forceFit="true" :height="height" :data="graphData" :scale="scale" renderer="svg">
-      <v-tooltip/>
+      <v-tooltip />
 
-      <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid"/>
-      <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid"/>
-      <v-polygon :position="seriesOpts.position" :color="seriesOpts.color" :label="seriesOpts.label"
-                 :vStyle="seriesOpts.style"/>
-
+      <v-axis :tickLine="axis1Opts.tickLine" :grid="axis1Opts.grid" />
+      <v-axis :tickLine="axis2Opts.tickLine" :grid="axis2Opts.grid" />
+      <v-polygon
+        :position="seriesOpts.position"
+        :color="seriesOpts.color"
+        :label="seriesOpts.label"
+        :vStyle="seriesOpts.style"
+      />
     </v-chart>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 // const _ = require('lodash');
 
 const axis1Opts = {
-  dataKey: 'specification',
+  dataKey: "specification",
   tickLine: null,
   grid: {
-    align: 'center',
+    align: "center",
     lineStyle: {
       lineWidth: 1,
       lineDash: null,
-      stroke: '#f0f0f0',
+      stroke: "#f0f0f0",
     },
   },
 };
 
 const axis2Opts = {
-  dataKey: 'supplier',
+  dataKey: "supplier",
   title: null,
   grid: {
-    align: 'center',
+    align: "center",
     lineStyle: {
       lineWidth: 1,
       lineDash: null,
-      stroke: '#f0f0f0',
+      stroke: "#f0f0f0",
     },
     showFirstLine: true,
   },
 };
 
 const seriesOpts = {
-  quickType: 'polygon',
-  color: ['value', '#BAE7FF-#1890FF-#0050B3'],
-  position: 'specification*supplier',
+  quickType: "polygon",
+  color: ["value", "#BAE7FF-#1890FF-#0050B3"],
+  position: "specification*supplier",
   // label: ['expected_price', {
   //   offset: -2,
   //   textStyle: {
@@ -61,15 +64,15 @@ const seriesOpts = {
   // }],
   style: {
     lineWidth: 1,
-    stroke: '#fff',
-  }
-}
+    stroke: "#fff",
+  },
+};
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "ExpectedPriceBySupplierForEachSpecificationGraph",
-  props: ['optimisationId'],
+  props: ["optimisationId"],
   data() {
     return {
       isLoading: true,
@@ -77,15 +80,15 @@ export default {
       height: 500,
       axis1Opts,
       axis2Opts,
-      seriesOpts
-    }
+      seriesOpts,
+    };
   },
   computed: {
-    ...mapGetters('optimisationAnalyticsManager', {
-      filterBySupplier: 'filterBySupplier',
-      filterBySpecification: 'filterBySpecification',
-      selectedSupplier: 'selectedSupplier',
-      selectedSpecification: 'selectedSpecification'
+    ...mapGetters("optimisationAnalyticsManager", {
+      filterBySupplier: "filterBySupplier",
+      filterBySpecification: "filterBySpecification",
+      selectedSupplier: "selectedSupplier",
+      selectedSpecification: "selectedSpecification",
     }),
 
     graphData() {
@@ -102,28 +105,31 @@ export default {
       // });
       // return sourceData;
       let vm = this;
-      return _.map(this.data, specData => {
+      return _.map(this.data, (specData) => {
         let value = vm.normaliseExpectedPrice(specData);
 
         return {
           ...specData,
-          'specification': specData.specification.substring(0, 11) + '...',
-          'supplier': specData.supplier.substring(0, 7) + '...',
-          value: value
-        }
+          specification: specData.specification.substring(0, 11) + "...",
+          supplier: specData.supplier.substring(0, 7) + "...",
+          value: value,
+        };
       });
     },
     scale() {
-      return [{
-        dataKey: 'supplier',
-        type: 'cat',
-        // values: _.map(this.data, 'supplier'),
-      }, {
-        dataKey: 'specification',
-        type: 'cat',
-        // values: _.map(this.data, 'specification'),
-      }];
-    }
+      return [
+        {
+          dataKey: "supplier",
+          type: "cat",
+          // values: _.map(this.data, 'supplier'),
+        },
+        {
+          dataKey: "specification",
+          type: "cat",
+          // values: _.map(this.data, 'specification'),
+        },
+      ];
+    },
   },
   created() {
     this.fetch();
@@ -135,32 +141,35 @@ export default {
       let params = {};
 
       if (this.filterBySupplier && this.selectedSupplier) {
-        params['supplier_id'] = this.selectedSupplier.id;
+        params["supplier_id"] = this.selectedSupplier.id;
       }
 
       if (this.filterBySpecification && this.selectedSpecification) {
-        params['optimisation_specification_id'] = this.selectedSpecification.id;
+        params["optimisation_specification_id"] = this.selectedSpecification.id;
       }
 
       vm.isLoading = true;
-      axios.post(window.API_BASE + '/optimisations/' + this.optimisationId + '/supplier-spec-expected-prices', params).then(r => {
-        vm.isLoading = false;
-        vm.data = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.$message.error('Error loading supplier spec expected prices');
-      });
+      axios
+        .post(window.API_BASE + "/optimisations/" + this.optimisationId + "/supplier-spec-expected-prices", params)
+        .then((r) => {
+          vm.isLoading = false;
+          vm.data = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          vm.$message.error("Error loading supplier spec expected prices");
+        });
     },
 
     normaliseExpectedPrice(specData) {
       let dataForSpecification = _.filter(this.data, {
-        specification: specData.specification
-      })
-      let prices = _.map(dataForSpecification, 'expected_price');
+        specification: specData.specification,
+      });
+      let prices = _.map(dataForSpecification, "expected_price");
       let max = _.max(prices);
       return specData.expected_price / max;
-    }
+    },
   },
   watch: {
     filterBySupplier() {
@@ -174,9 +183,9 @@ export default {
     },
     selectedSpecification() {
       this.fetch();
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -1,50 +1,45 @@
 <template>
   <div class="form-section">
-
     <div class="form-header">
       <h2>Optimisation Metrics</h2>
     </div>
 
     <div class="icon-selector">
-      <a href="#" @click.prevent="select('best-price')" :class="{'selected': isSelected('best-price')}">
+      <a href="#" @click.prevent="select('best-price')" :class="{ selected: isSelected('best-price') }">
         <div class="icon">
-          <img src="/img/icons/scenarios/value_optimisation_icon.svg" alt="Value">
+          <img src="/img/icons/scenarios/value_optimisation_icon.svg" alt="Value" />
         </div>
-        <div class="caption">
-          Best Price
-        </div>
+        <div class="caption">Best Price</div>
       </a>
-      <a href="#" @click.prevent="select('environmentally-friendly')"
-         :class="{'selected': isSelected('environmentally-friendly')}">
+      <a
+        href="#"
+        @click.prevent="select('environmentally-friendly')"
+        :class="{ selected: isSelected('environmentally-friendly') }"
+      >
         <div class="icon">
-          <img src="/img/icons/scenarios/environment_optimisation_icon.svg" alt="POS">
+          <img src="/img/icons/scenarios/environment_optimisation_icon.svg" alt="POS" />
         </div>
-        <div class="caption">
-          Environmentally Friendly
-        </div>
+        <div class="caption">Environmentally Friendly</div>
       </a>
-<!--      <a href="#" @click.prevent="select('socially-responsible')"-->
-<!--         :class="{'selected': isSelected('socially-responsible')}">-->
-<!--        <div class="icon">-->
-<!--          <img src="/img/icons/product-type-selector/apparel.png" alt="Apparel">-->
-<!--        </div>-->
-<!--        <div class="caption">-->
-<!--          Socially Responsible-->
-<!--        </div>-->
-<!--      </a>-->
-      <a href="#" @click.prevent="select('custom')" :class="{'selected': isSelected('custom')}">
+      <!--      <a href="#" @click.prevent="select('socially-responsible')"-->
+      <!--         :class="{'selected': isSelected('socially-responsible')}">-->
+      <!--        <div class="icon">-->
+      <!--          <img src="/img/icons/product-type-selector/apparel.png" alt="Apparel">-->
+      <!--        </div>-->
+      <!--        <div class="caption">-->
+      <!--          Socially Responsible-->
+      <!--        </div>-->
+      <!--      </a>-->
+      <a href="#" @click.prevent="select('custom')" :class="{ selected: isSelected('custom') }">
         <div class="icon">
-<!--          <img src="/img/icons/product-type-selector/merchandise.png" alt="Merchandise">-->
-          <a-icon type="plus" style="font-size: 30px; color: #97BBF1;"></a-icon>
+          <!--          <img src="/img/icons/product-type-selector/merchandise.png" alt="Merchandise">-->
+          <a-icon type="plus" style="font-size: 30px; color: #97bbf1"></a-icon>
         </div>
-        <div class="caption">
-          Custom
-        </div>
+        <div class="caption">Custom</div>
       </a>
     </div>
 
     <div class="custom-metrics-wrapper" v-if="isSelected('custom')">
-
       <!-- Custom metric -->
       <div class="custom-metric" v-for="(metric, i) in addLabelsToCustomMetrics(scenario.custom_metrics)" :key="i">
         <div class="metric-header">
@@ -52,21 +47,32 @@
           <a-button type="link" icon="delete" @click.prevent="deleteMetric(metric)"></a-button>
         </div>
         <div class="icon-wrapper">
-<!--          <a-icon :style="{ color: preColor(metric.value) }" type="frown-o"/>-->
-<!--          <span></span>-->
-          <div v-if="metric.label === 'Cost'" style="width: 25px" :style="{ color: preColor(metric.value) }"  class="anticon">$$</div>
-
-          <div v-if="metric.label === 'CO2e'" :style="{ color: preColor(metric.value) }"  class="anticon">
-            <img src="/img/icons/bad_environment.svg" width="15" alt="Bad environment">
+          <!--          <a-icon :style="{ color: preColor(metric.value) }" type="frown-o"/>-->
+          <!--          <span></span>-->
+          <div
+            v-if="metric.label === 'Cost'"
+            style="width: 25px"
+            :style="{ color: preColor(metric.value) }"
+            class="anticon"
+          >
+            $$
           </div>
 
-          <a-slider :min="min" :max="max" :value="metric.value"
-                    @change="val => handleMetricValueChange(metric, val)"/>
+          <div v-if="metric.label === 'CO2e'" :style="{ color: preColor(metric.value) }" class="anticon">
+            <img src="/img/icons/bad_environment.svg" width="15" alt="Bad environment" />
+          </div>
 
-          <div v-if="metric.label === 'Cost'" :style="{ color: nextColor(metric.value) }"  class="anticon" >$</div>
+          <a-slider
+            :min="min"
+            :max="max"
+            :value="metric.value"
+            @change="(val) => handleMetricValueChange(metric, val)"
+          />
 
-          <div v-if="metric.label === 'CO2e'" :style="{ color: nextColor(metric.value) }"  class="anticon">
-            <img src="/img/icons/healthy_environment.svg" width="15" alt="Bad environment">
+          <div v-if="metric.label === 'Cost'" :style="{ color: nextColor(metric.value) }" class="anticon">$</div>
+
+          <div v-if="metric.label === 'CO2e'" :style="{ color: nextColor(metric.value) }" class="anticon">
+            <img src="/img/icons/healthy_environment.svg" width="15" alt="Bad environment" />
           </div>
         </div>
       </div>
@@ -75,8 +81,9 @@
       <!-- Add metric -->
       <div class="add-metric">
         <a-dropdown :trigger="['click']">
-          <a-button icon="plus">Add Metric
-            <a-icon type="down"/>
+          <a-button icon="plus"
+            >Add Metric
+            <a-icon type="down" />
           </a-button>
           <a-menu slot="overlay">
             <a-menu-item v-for="(metric, i) in addableMetrics" :key="i">
@@ -88,17 +95,15 @@
         </a-dropdown>
       </div>
       <!-- / Add metric -->
-
     </div>
-
   </div>
 </template>
 
 <script>
-const _ = require('lodash');
+const _ = require("lodash");
 export default {
   name: "OptimisationMetrics",
-  props: ['scenario'],
+  props: ["scenario"],
   data() {
     return {
       min: 0,
@@ -106,47 +111,47 @@ export default {
 
       availableMetrics: [
         {
-          id: 'cost',
-          label: 'Cost',
-          value: 0
+          id: "cost",
+          label: "Cost",
+          value: 0,
         },
         {
-          id: 'risk',
-          label: 'Risk',
-          value: 0
+          id: "risk",
+          label: "Risk",
+          value: 0,
         },
         {
-          id: 'quality',
-          label: 'Quality',
-          value: 0
+          id: "quality",
+          label: "Quality",
+          value: 0,
         },
         {
-          id: 'social-responsibility',
-          label: 'Social Responsibility',
-          value: 0
+          id: "social-responsibility",
+          label: "Social Responsibility",
+          value: 0,
         },
         {
-          id: 'co2e',
-          label: 'CO2e',
-          value: 0
+          id: "co2e",
+          label: "CO2e",
+          value: 0,
         },
         {
-          id: 'water-use',
-          label: 'Water Use',
-          value: 0
+          id: "water-use",
+          label: "Water Use",
+          value: 0,
         },
         {
-          id: 'plastic-use',
-          label: 'Plastic Use',
-          value: 0
+          id: "plastic-use",
+          label: "Plastic Use",
+          value: 0,
         },
         {
-          id: 'recycling',
-          label: 'Recycling',
-          value: 0
-        }
-      ]
-    }
+          id: "recycling",
+          label: "Recycling",
+          value: 0,
+        },
+      ],
+    };
   },
   methods: {
     select(key) {
@@ -168,14 +173,14 @@ export default {
     },
 
     preColor(value) {
-      const {max, min} = this;
+      const { max, min } = this;
       const mid = ((max - min) / 2).toFixed(5);
-      return value >= mid ? '' : 'rgba(0, 0, 0, .45)';
+      return value >= mid ? "" : "rgba(0, 0, 0, .45)";
     },
     nextColor(value) {
-      const {max, min} = this;
+      const { max, min } = this;
       const mid = ((max - min) / 2).toFixed(5);
-      return value >= mid ? 'rgba(0, 0, 0, .45)' : '';
+      return value >= mid ? "rgba(0, 0, 0, .45)" : "";
     },
 
     handleMetricValueChange(metric, val) {
@@ -188,23 +193,23 @@ export default {
     },
 
     addLabelsToCustomMetrics(customMetrics) {
-      return _.map(customMetrics, customMetric => {
+      return _.map(customMetrics, (customMetric) => {
         if (customMetric.label) {
           return customMetric;
         } else {
-          let referenceMetric = _.find(this.availableMetrics, {id: customMetric.id});
+          let referenceMetric = _.find(this.availableMetrics, { id: customMetric.id });
           customMetric.label = referenceMetric ? referenceMetric.label : customMetric.id;
           return customMetric;
         }
       });
-    }
+    },
   },
   computed: {
     addableMetrics() {
-      return _.differenceBy(this.availableMetrics, this.scenario.custom_metrics, 'id');
-    }
-  }
-}
+      return _.differenceBy(this.availableMetrics, this.scenario.custom_metrics, "id");
+    },
+  },
+};
 </script>
 
 <style scoped>

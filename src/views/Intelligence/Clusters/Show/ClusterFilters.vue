@@ -1,36 +1,29 @@
 <template>
-  <div style="display: inline;" class="cluster-filters">
+  <div style="display: inline" class="cluster-filters">
     <a-popover placement="bottomRight" trigger="click">
       <template slot="title">
         <div class="filter-title-wrapper">
           <div class="left">
             <a-button size="small" @click.prevent="clear">Clear</a-button>
           </div>
-          <div class="center">
-            Filters
-          </div>
+          <div class="center">Filters</div>
           <div class="right">
-            <a-button :disabled="!hasUnsavedChanges" @click="save"
-                      type="primary" size="small">Save
-            </a-button>
+            <a-button :disabled="!hasUnsavedChanges" @click="save" type="primary" size="small">Save </a-button>
           </div>
         </div>
       </template>
       <template slot="content">
         <div class="filters-inner">
-
           <!-- Common filters -->
           <div>
             <!-- Measure -->
             <div class="filter-wrapper">
               <div class="filter-header">
-                <a-checkbox v-model="showSelectedXOptionFilter">
-                  Measure
-                </a-checkbox>
+                <a-checkbox v-model="showSelectedXOptionFilter"> Measure </a-checkbox>
               </div>
               <div class="filter" v-if="showSelectedXOptionFilter">
                 <!--                <div class="form-label">Measure</div>-->
-                <a-select v-model="selectedXOptionLocal" style="width: 200px;">
+                <a-select v-model="selectedXOptionLocal" style="width: 200px">
                   <a-select-option v-for="(option, i) in xOptions" :value="option" :key="i">
                     {{ formatGraphLabel(option) }}
                   </a-select-option>
@@ -42,16 +35,10 @@
             <!-- Start date -->
             <div class="filter-wrapper">
               <div class="filter-header">
-                <a-checkbox v-model="showStartDateFilter">
-                  Start Date
-                </a-checkbox>
+                <a-checkbox v-model="showStartDateFilter"> Start Date </a-checkbox>
               </div>
               <div class="filter" v-if="showStartDateFilter">
-                <a-date-picker
-                    style="width: 100%"
-                    v-model="startDateLocal"
-                    placeholder="Start"
-                />
+                <a-date-picker style="width: 100%" v-model="startDateLocal" placeholder="Start" />
               </div>
             </div>
             <!-- / Start date -->
@@ -59,16 +46,10 @@
             <!-- End date -->
             <div class="filter-wrapper filter-last">
               <div class="filter-header">
-                <a-checkbox v-model="showEndDateFilter">
-                  End Date
-                </a-checkbox>
+                <a-checkbox v-model="showEndDateFilter"> End Date </a-checkbox>
               </div>
               <div class="filter" v-if="showEndDateFilter">
-                <a-date-picker
-                    style="width: 100%"
-                    v-model="endDateLocal"
-                    placeholder="End"
-                />
+                <a-date-picker style="width: 100%" v-model="endDateLocal" placeholder="End" />
               </div>
             </div>
             <!-- / End date -->
@@ -80,14 +61,12 @@
             <!-- Colour by -->
             <div class="filter-wrapper filter-last">
               <div class="filter-header">
-                <a-checkbox v-model="showSelectedColourByOptionFilter">
-                  Colour
-                </a-checkbox>
+                <a-checkbox v-model="showSelectedColourByOptionFilter"> Colour </a-checkbox>
               </div>
               <div class="filter" v-if="showSelectedColourByOptionFilter">
-                <a-select v-model="selectedColourByOptionLocal" style="width: 200px;">
+                <a-select v-model="selectedColourByOptionLocal" style="width: 200px">
                   <a-select-option v-for="option in colourByOptions" :value="option.key" :key="option.key">
-                    {{ option['label'] }}
+                    {{ option["label"] }}
                   </a-select-option>
                 </a-select>
               </div>
@@ -97,12 +76,10 @@
             <!-- Size by -->
             <div class="filter-wrapper filter-last">
               <div class="filter-header">
-                <a-checkbox v-model="showSelectedSizeByOptionFilter">
-                  Size
-                </a-checkbox>
+                <a-checkbox v-model="showSelectedSizeByOptionFilter"> Size </a-checkbox>
               </div>
               <div class="filter" v-if="showSelectedSizeByOptionFilter">
-                <a-select v-model="selectedSizeByOptionLocal" style="width: 200px;">
+                <a-select v-model="selectedSizeByOptionLocal" style="width: 200px">
                   <a-select-option v-for="(option, i) in sizeByOptions" :value="option" :key="i">
                     {{ option }}
                   </a-select-option>
@@ -118,12 +95,10 @@
             <!-- Bin by -->
             <div class="filter-wrapper">
               <div class="filter-header">
-                <a-checkbox v-model="showSelectedBinByOptionFilter">
-                  Bin
-                </a-checkbox>
+                <a-checkbox v-model="showSelectedBinByOptionFilter"> Bin </a-checkbox>
               </div>
               <div class="filter" v-if="showSelectedBinByOptionFilter">
-                <a-select v-model="selectedBinByOptionLocal" style="width: 200px;">
+                <a-select v-model="selectedBinByOptionLocal" style="width: 200px">
                   <a-select-option v-for="(option, i) in binByOptions" :value="option" :key="i">
                     {{ formatGraphLabel(option) }}
                   </a-select-option>
@@ -133,7 +108,6 @@
             <!-- / Bin by -->
           </div>
           <!-- / Demand graph -->
-
         </div>
       </template>
       <a-button icon="line-chart">Graph</a-button>
@@ -142,14 +116,14 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
-const _ = require('lodash');
+import { mapGetters, mapActions } from "vuex";
+const _ = require("lodash");
 
 export default {
   name: "ClusterFilters",
   data() {
     return {
-      binByOptions: ['day', 'month', 'year'],
+      binByOptions: ["day", "month", "year"],
 
       showSelectedXOptionFilter: true,
       selectedXOptionLocal: null,
@@ -167,8 +141,8 @@ export default {
       startDateLocal: null,
 
       showEndDateFilter: false,
-      endDateLocal: null
-    }
+      endDateLocal: null,
+    };
   },
   created() {
     this.selectedXOptionLocal = this.selectedXOption;
@@ -209,7 +183,7 @@ export default {
     selectedColourByOption(newVal) {
       if (newVal) {
         this.showSelectedColourByOptionFilter = true;
-        this.selectedColourByOptionLocal = newVal['key'];
+        this.selectedColourByOptionLocal = newVal["key"];
       } else {
         this.selectedColourByOptionLocal = null;
       }
@@ -234,25 +208,25 @@ export default {
       // if (newVal) {
       //   this.showEndDateFilter = true;
       // }
-    }
+    },
   },
   computed: {
-    ...mapGetters('clusterViewer', {
-      activeGraph: 'activeGraph',
+    ...mapGetters("clusterViewer", {
+      activeGraph: "activeGraph",
 
-      xOptions: 'xOptions',
-      selectedXOption: 'selectedXOption',
+      xOptions: "xOptions",
+      selectedXOption: "selectedXOption",
 
-      colourByOptions: 'colourByOptions',
-      selectedColourByOption: 'selectedColourByOption',
+      colourByOptions: "colourByOptions",
+      selectedColourByOption: "selectedColourByOption",
 
-      sizeByOptions: 'sizeByOptions',
-      selectedSizeByOption: 'selectedSizeByOption',
+      sizeByOptions: "sizeByOptions",
+      selectedSizeByOption: "selectedSizeByOption",
 
-      selectedBinByOption: 'selectedBinByOption',
+      selectedBinByOption: "selectedBinByOption",
 
-      startDate: 'startDate',
-      endDate: 'endDate'
+      startDate: "startDate",
+      endDate: "endDate",
     }),
 
     xType: {
@@ -261,7 +235,7 @@ export default {
       },
       set(val) {
         this.selectXOption(val);
-      }
+      },
     },
 
     colourBy: {
@@ -270,7 +244,7 @@ export default {
       },
       set(val) {
         this.selectColourByOption(val);
-      }
+      },
     },
 
     sizeBy: {
@@ -279,7 +253,7 @@ export default {
       },
       set(val) {
         this.selectSizeByOption(val);
-      }
+      },
     },
 
     binBy: {
@@ -288,7 +262,7 @@ export default {
       },
       set(val) {
         this.selectBinByOption(val);
-      }
+      },
     },
 
     hasUnsavedChanges() {
@@ -334,17 +308,17 @@ export default {
       }
 
       return hasUnsaved;
-    }
+    },
   },
   methods: {
-    ...mapActions('clusterViewer', {
-      selectXOption: 'selectXOption',
-      selectColourByOption: 'selectColourByOption',
-      selectSizeByOption: 'selectSizeByOption',
-      selectBinByOption: 'selectBinByOption',
-      setStartDate: 'setStartDate',
-      setEndDate: 'setEndDate',
-      incrementClusterViewerReloadKey: 'incrementClusterViewerReloadKey'
+    ...mapActions("clusterViewer", {
+      selectXOption: "selectXOption",
+      selectColourByOption: "selectColourByOption",
+      selectSizeByOption: "selectSizeByOption",
+      selectBinByOption: "selectBinByOption",
+      setStartDate: "setStartDate",
+      setEndDate: "setEndDate",
+      incrementClusterViewerReloadKey: "incrementClusterViewerReloadKey",
     }),
 
     clear() {
@@ -359,13 +333,11 @@ export default {
       if (this.showSelectedXOptionFilter) {
         this.selectXOption(this.selectedXOptionLocal);
       } else {
-        this.selectXOption('Quantity');
+        this.selectXOption("Quantity");
       }
 
       if (this.showSelectedColourByOptionFilter) {
-        this.selectColourByOption(
-            _.find(this.colourByOptions, {key: this.selectedColourByOptionLocal})
-        );
+        this.selectColourByOption(_.find(this.colourByOptions, { key: this.selectedColourByOptionLocal }));
       } else {
         this.selectColourByOption(null);
       }
@@ -379,7 +351,7 @@ export default {
       if (this.showSelectedBinByOptionFilter) {
         this.selectBinByOption(this.selectedBinByOptionLocal);
       } else {
-        this.selectBinByOption('day');
+        this.selectBinByOption("day");
       }
 
       if (this.showStartDateFilter) {
@@ -399,11 +371,9 @@ export default {
 
     formatGraphLabel(label) {
       return label.charAt(0).toUpperCase() + label.substring(1);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

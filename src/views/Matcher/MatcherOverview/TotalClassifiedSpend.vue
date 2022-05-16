@@ -1,16 +1,17 @@
 <template>
   <a-card>
-    <a-card-grid :hoverable="false" style="width: 100%;">
-      <b class="spend-under-management-title">Matched Spend</b> {{ formatCost({cost: overview['total_classified_spend']['total'], cost_currency: 'USD'}) }}
-      <a-progress :percent="100" :success-percent="percentageAutomatic" :show-info="false"/>
+    <a-card-grid :hoverable="false" style="width: 100%">
+      <b class="spend-under-management-title">Matched Spend</b>
+      {{ formatCost({ cost: overview["total_classified_spend"]["total"], cost_currency: "USD" }) }}
+      <a-progress :percent="100" :success-percent="percentageAutomatic" :show-info="false" />
     </a-card-grid>
-    <a-card-grid :hoverable="false" style="width:50%; padding-top: 17px; padding-bottom: 17px;">
+    <a-card-grid :hoverable="false" style="width: 50%; padding-top: 17px; padding-bottom: 17px">
       <b class="classified-title">AUTOMATIC</b>
-      <a-statistic :value="automaticSpendFormatted"/>
+      <a-statistic :value="automaticSpendFormatted" />
     </a-card-grid>
-    <a-card-grid :hoverable="false" style="width:50%; padding-top: 17px; padding-bottom: 17px;">
+    <a-card-grid :hoverable="false" style="width: 50%; padding-top: 17px; padding-bottom: 17px">
       <b class="unclassified-title">MANUAL</b>
-      <a-statistic :value="manualSpendFormatted"/>
+      <a-statistic :value="manualSpendFormatted" />
     </a-card-grid>
   </a-card>
 </template>
@@ -20,34 +21,34 @@ import Orders from "../../../mixins/Orders";
 
 export default {
   name: "TotalSpend",
-  props: ['overview'],
+  props: ["overview"],
   mixins: [Orders],
   computed: {
     percentageAutomatic() {
-      let total = this.overview['total_classified_spend']['total'];
-      let automatic = this.overview['total_classified_spend']['automatic'];
+      let total = this.overview["total_classified_spend"]["total"];
+      let automatic = this.overview["total_classified_spend"]["automatic"];
 
       return (automatic / total) * 100;
     },
 
     automaticSpendFormatted() {
-      let automatic = this.overview['total_classified_spend']['automatic'];
+      let automatic = this.overview["total_classified_spend"]["automatic"];
       return this.formatCost({
         cost: automatic,
-        cost_currency: 'USD'
+        cost_currency: "USD",
       });
     },
 
     manualSpendFormatted() {
-      let manual = this.overview['total_classified_spend']['manual'];
+      let manual = this.overview["total_classified_spend"]["manual"];
 
       return this.formatCost({
         cost: manual,
-        cost_currency: 'USD'
+        cost_currency: "USD",
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

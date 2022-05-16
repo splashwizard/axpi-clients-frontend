@@ -3,7 +3,6 @@
     <a-layout>
       <a-layout style="padding: 7px 30px">
         <div class="wrapper">
-
           <a-row :gutter="20" class="shop-topbar">
             <a-col :span="5">
               <ais-panel>
@@ -17,24 +16,22 @@
                     <!--                    Page {{ page + 1 }} of {{ nbPages }} with {{ hitsPerPage }} hits per page - -->
                     <!--                    {{ nbHits }} hits retrieved in {{ processingTimeMS }}ms for <q>{{ query }}</q>-->
 
-                    Showing {{ (page * hitsPerPage) + 1 }} - {{
+                    Showing {{ page * hitsPerPage + 1 }} -
+                    {{
                       (((page * hitsPerPage) + 1 + hitsPerPage) &lt; nbHits) ? ((page * hitsPerPage) + 1 + hitsPerPage) : nbHits
-                    }} of {{ nbHits }} results for <span class="stats-search-query">"{{ query }}"</span>
+                    }}
+                    of {{ nbHits }} results for <span class="stats-search-query">"{{ query }}"</span>
                   </template>
                 </ais-stats>
               </div>
               <div class="right">
                 <div class="sort-by-wrapper">
-                  <ais-sort-by
-                      :items="[
-    { value: 'products', label: 'Most Relevant' }
-  ]"
-                  />
+                  <ais-sort-by :items="[{ value: 'products', label: 'Most Relevant' }]" />
                 </div>
 
                 <a-radio-group v-model="display_mode">
                   <a-radio-button value="prices">
-                    <span style="margin-right: 3px;">$</span>
+                    <span style="margin-right: 3px">$</span>
                     Prices
                   </a-radio-button>
                   <a-radio-button value="specs">
@@ -93,13 +90,13 @@
           <!--            <ais-configure :hits-per-page.camel="8"/>-->
 
           <a-row :gutter="30">
-            <a-col span="5" style="padding-left: 17px;">
+            <a-col span="5" style="padding-left: 17px">
               <ais-panel>
                 <h4>Manufacturer</h4>
-                <ais-refinement-list attribute="manufacturer"/>
+                <ais-refinement-list attribute="manufacturer" />
               </ais-panel>
             </a-col>
-            <a-col :span="19" style="padding-right: 17px;">
+            <a-col :span="19" style="padding-right: 17px">
               <!--              <ais-panel>-->
               <!--                <ais-search-box placeholder=""/>-->
               <!--              </ais-panel>-->
@@ -113,11 +110,7 @@
                         <a-col :span="6">
                           <div class="product-image-wrapper">
                             <router-link :to="getProductPageUrl(item)">
-                              <img
-                                  :src="getImageSrc(item)"
-                                  :alt="item['name']"
-                                  class="product-image"
-                              />
+                              <img :src="getImageSrc(item)" :alt="item['name']" class="product-image" />
                             </router-link>
                           </div>
                         </a-col>
@@ -126,17 +119,13 @@
                             <div class="left">
                               <router-link :to="getProductPageUrl(item)">
                                 <h1 class="item-title">
-                                  <ais-highlight
-                                      :hit="item"
-                                      attribute="name"
-                                      class="hit-name"
-                                  />
+                                  <ais-highlight :hit="item" attribute="name" class="hit-name" />
                                 </h1>
                               </router-link>
                             </div>
                             <div class="right">
                               <span v-if="!isLoadingPrices">
-                              {{ getPriceRange(item.id) }}
+                                {{ getPriceRange(item.id) }}
                               </span>
                               <a-spin size="small" v-else></a-spin>
                             </div>
@@ -149,24 +138,33 @@
                           <div class="price-list-actions-wrapper">
                             <div class="left"></div>
                             <div class="right">
-                              <a-input v-if="!isProductInBasket(item)" class="quantity-input" placeholder="1"
-                                       v-model="quantities[item.id]" type="number"></a-input>
-                              <a-button v-if="!isProductInBasket(item)" :disabled="isLoadingPrices"
-                                        type="primary" @click.prevent="() => addToBasket(item)">Add to basket
+                              <a-input
+                                v-if="!isProductInBasket(item)"
+                                class="quantity-input"
+                                placeholder="1"
+                                v-model="quantities[item.id]"
+                                type="number"
+                              ></a-input>
+                              <a-button
+                                v-if="!isProductInBasket(item)"
+                                :disabled="isLoadingPrices"
+                                type="primary"
+                                @click.prevent="() => addToBasket(item)"
+                                >Add to basket
                               </a-button>
 
                               <div v-else class="quantity-changer">
-                                <a-button @click.prevent="() => decrementProductQuantity(item)"
-                                          icon="minus">
+                                <a-button @click.prevent="() => decrementProductQuantity(item)" icon="minus">
                                 </a-button>
                                 <div>
-                                  <a-input type="number"
-                                           @change="e => setProductQuantity({quantity: e.target.value, id: item['id']})"
-                                           :value="getQuantityOfProductInBasket(item)"></a-input>
+                                  <a-input
+                                    type="number"
+                                    @change="(e) => setProductQuantity({ quantity: e.target.value, id: item['id'] })"
+                                    :value="getQuantityOfProductInBasket(item)"
+                                  ></a-input>
                                 </div>
                                 <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-                                <a-button @click.prevent="() => incrementProductQuantity(item)"
-                                          icon="plus"></a-button>
+                                <a-button @click.prevent="() => incrementProductQuantity(item)" icon="plus"></a-button>
                               </div>
                             </div>
                           </div>
@@ -179,19 +177,21 @@
 
                 <!-- Specs display mode -->
                 <specs-display
-                    :prices="prices" :is-loading-prices="isLoadingPrices"
-                               :quantities="quantities" v-if="displayMode == 'specs' && false"></specs-display>
+                  :prices="prices"
+                  :is-loading-prices="isLoadingPrices"
+                  :quantities="quantities"
+                  v-if="displayMode == 'specs' && false"
+                ></specs-display>
                 <!-- / Specs display mode -->
               </ais-panel>
 
               <ais-panel>
-                <ais-pagination/>
+                <ais-pagination />
               </ais-panel>
             </a-col>
           </a-row>
           <!--          </ais-instant-search>-->
           <!-- / Instant search -->
-
         </div>
       </a-layout>
     </a-layout>
@@ -199,9 +199,9 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 import Units from "../mixins/Units";
-import axios from 'axios';
+import axios from "axios";
 // import AddSpecToBasketButtonAndModal from "./Shop/AddSpecToBasketButtonAndModal";
 // import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
 import SpecsDisplay from "./Shop/SpecsDisplay";
@@ -228,41 +228,37 @@ import Orders from "../mixins/Orders";
 // });
 // const searchClient = typesenseInstantsearchAdapter.searchClient;
 
-const _ = require('lodash');
+const _ = require("lodash");
 
-import {connectHitsWithInsights} from 'instantsearch.js/es/connectors';
-import {createWidgetMixin} from 'vue-instantsearch/src/mixins/widget';
+import { connectHitsWithInsights } from "instantsearch.js/es/connectors";
+import { createWidgetMixin } from "vue-instantsearch/src/mixins/widget";
 
 export default {
   name: "Shop",
   components: {
-    SpecsDisplay
+    SpecsDisplay,
     // AddSpecToBasketButtonAndModal
   },
-  mixins: [
-    Units,
-    Orders,
-    createWidgetMixin({connector: connectHitsWithInsights})
-  ],
+  mixins: [Units, Orders, createWidgetMixin({ connector: connectHitsWithInsights })],
   watch: {
-    'state.hits'() {
+    "state.hits"() {
       if (this.state.hits && this.state.hits.length) {
-        this.enrichWithPrices()
+        this.enrichWithPrices();
       }
-    }
+    },
   },
   data() {
     return {
       quantities: {},
       isLoadingPrices: false,
-      prices: []
+      prices: [],
       // searchClient
-    }
+    };
   },
   computed: {
-    ...mapGetters('shop', {
-      displayMode: 'displayMode',
-      basket: 'basket'
+    ...mapGetters("shop", {
+      displayMode: "displayMode",
+      basket: "basket",
     }),
 
     uniqueProperties() {
@@ -275,19 +271,19 @@ export default {
       },
       set(val) {
         this.setDisplayMode(val);
-      }
-    }
+      },
+    },
   },
   created() {
     // this.search();
   },
   methods: {
-    ...mapActions('shop', {
-      addProductToBasket: 'addProductToBasket',
-      incrementProductQuantity: 'incrementProductQuantity',
-      decrementProductQuantity: 'decrementProductQuantity',
-      setProductQuantity: 'setProductQuantity',
-      setDisplayMode: 'setDisplayMode'
+    ...mapActions("shop", {
+      addProductToBasket: "addProductToBasket",
+      incrementProductQuantity: "incrementProductQuantity",
+      decrementProductQuantity: "decrementProductQuantity",
+      setProductQuantity: "setProductQuantity",
+      setDisplayMode: "setDisplayMode",
     }),
 
     addToBasket(record) {
@@ -295,12 +291,12 @@ export default {
         return false;
       }
 
-      let prices = this.prices[record['id']];
+      let prices = this.prices[record["id"]];
       if (!prices) {
         prices = [];
       }
 
-      let quantity = this.quantities[record['id']];
+      let quantity = this.quantities[record["id"]];
       if (!quantity) {
         quantity = 1;
       }
@@ -308,95 +304,93 @@ export default {
         quantity: quantity,
         product: record,
         selectedPrice: _.first(prices),
-        prices: prices
+        prices: prices,
       });
     },
 
     getProductPageUrl(product) {
-      return '/products/' + product['id'] + '?fromShop=1';
+      return "/products/" + product["id"] + "?fromShop=1";
     },
 
     getImageSrc(order) {
-      if (order['imageURLs'] && order['imageURLs'].length) {
-        return order['imageURLs'][0];
+      if (order["imageURLs"] && order["imageURLs"].length) {
+        return order["imageURLs"][0];
       }
     },
 
     goToBasket() {
-      this.$router.push('/shop/basket');
+      this.$router.push("/shop/basket");
     },
 
     isProductInBasket(product) {
-      return _.filter(this.basket, item => {
-        return (
-            item.itemType === 'product'
-            && item.id === product['id']
-        );
-      }).length > 0;
+      return (
+        _.filter(this.basket, (item) => {
+          return item.itemType === "product" && item.id === product["id"];
+        }).length > 0
+      );
     },
 
     getQuantityOfProductInBasket(product) {
-      return _.find(this.basket, item => {
-        return (
-            item.itemType === 'product'
-            && item.id === product['id']
-        );
+      return _.find(this.basket, (item) => {
+        return item.itemType === "product" && item.id === product["id"];
       }).quantity;
     },
 
     getPriceRange(productId) {
       let prices = this.prices[productId];
       if (prices && prices.length) {
-        let ordered = _.orderBy(prices, 'price');
+        let ordered = _.orderBy(prices, "price");
         let minPrice = _.first(ordered);
         let maxPrice = _.last(ordered);
 
         if (minPrice !== maxPrice) {
           let minPriceFormatted = this.formatCostInPence2dp({
             cost: minPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
 
           let maxPriceFormatted = this.formatCostInPence2dp({
             cost: maxPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
 
-          return minPriceFormatted + ' - ' + maxPriceFormatted;
+          return minPriceFormatted + " - " + maxPriceFormatted;
         } else {
           return this.formatCostInPence2dp({
             cost: minPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
         }
       }
-      return '-';
+      return "-";
     },
 
     enrichWithPrices() {
       let vm = this;
       vm.isLoadingPrices = true;
       vm.prices = [];
-      axios.post(window.API_BASE + '/products/get-prices-for-many', {
-        ids: _.map(this.state.hits, 'id')
-      }).then(r => {
-        vm.prices = r.data;
-        vm.isLoadingPrices = false;
-      }).catch(e => {
-        console.log(e);
-        vm.prices = [];
-        vm.isLoadingPrices = false;
-        vm.$message.error('Error loading product prices');
-      });
-    }
-  }
-}
+      axios
+        .post(window.API_BASE + "/products/get-prices-for-many", {
+          ids: _.map(this.state.hits, "id"),
+        })
+        .then((r) => {
+          vm.prices = r.data;
+          vm.isLoadingPrices = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.prices = [];
+          vm.isLoadingPrices = false;
+          vm.$message.error("Error loading product prices");
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 .shop-index {
   .shop-index {
-
   }
 
   .table-wrapper {
@@ -432,8 +426,6 @@ export default {
       //  color: #000;
       //}
     }
-
-
   }
 
   .price-list-actions-wrapper {
@@ -672,7 +664,7 @@ export default {
   margin-right: 10px;
 
   .ais-SortBy-select {
-   height: 32px;
+    height: 32px;
     line-height: 25px;
   }
 }

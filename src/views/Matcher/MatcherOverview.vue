@@ -29,9 +29,7 @@
         <a-card>
           <a-row type="flex" :gutter="20">
             <a-col :span="20">
-                <classified-vendor-spend
-                  :overview="overview"
-                ></classified-vendor-spend>
+              <classified-vendor-spend :overview="overview"></classified-vendor-spend>
             </a-col>
             <a-col :span="4">
               <div class="sidebar-wrapper">

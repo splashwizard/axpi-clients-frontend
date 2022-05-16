@@ -10,9 +10,9 @@
   </div>
 </template>
 <script>
-export default{
-  props: ['errorList']
-}
+export default {
+  props: ["errorList"],
+};
 </script>
 <style lang="scss">
 .form-errors-list {

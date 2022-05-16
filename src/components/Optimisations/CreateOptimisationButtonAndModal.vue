@@ -3,16 +3,19 @@
     <a-button type="primary" icon="plus" @click.prevent="showModal">Create Optimisation</a-button>
 
     <a-modal
-        title="Create Optimisation"
-        :visible="visible"
-        :confirm-loading="isSaving"
-        ok-text="Create"
-        @ok="attemptSave"
-        @cancel="handleCancel"
+      title="Create Optimisation"
+      :visible="visible"
+      :confirm-loading="isSaving"
+      ok-text="Create"
+      @ok="attemptSave"
+      @cancel="handleCancel"
     >
       <a-form layout="vertical" :form="form">
         <a-form-item label="Name">
-          <a-input v-decorator="['name', {rules:[{required: true, message: 'Please enter a name'}]}]" size="large"/>
+          <a-input
+            v-decorator="['name', { rules: [{ required: true, message: 'Please enter a name' }] }]"
+            size="large"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -20,18 +23,18 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
-const _ = require('lodash');
+const _ = require("lodash");
 export default {
   name: "CreateOptimisationButtonAndModal",
   data() {
     return {
       visible: false,
       isSaving: false,
-      form: this.$form.createForm(this, {name: 'create_optimisation_form'}),
-      serverErrors: []
-    }
+      form: this.$form.createForm(this, { name: "create_optimisation_form" }),
+      serverErrors: [],
+    };
   },
   methods: {
     showModal() {
@@ -52,27 +55,30 @@ export default {
       let vm = this;
       vm.isSaving = true;
       vm.serverErrors = [];
-      axios.post(window.API_BASE + '/optimisations', {
-        name: vals.name
-      }).then(r => {
-        vm.$router.push('/optimisations/' + r.data.id);
-      }).catch(e => {
-        vm.$message.error('Error creating optimisation');
-        vm.isSaving = false;
-        let errors;
-        if (typeof e.response.data === 'object') {
-          errors = _.flatten(_.toArray(e.response.data.errors));
-        } else {
-          errors = ['Something went wrong. Please try again.'];
-        }
-        vm.serverErrors = errors;
-      });
+      axios
+        .post(window.API_BASE + "/optimisations", {
+          name: vals.name,
+        })
+        .then((r) => {
+          vm.$router.push("/optimisations/" + r.data.id);
+        })
+        .catch((e) => {
+          vm.$message.error("Error creating optimisation");
+          vm.isSaving = false;
+          let errors;
+          if (typeof e.response.data === "object") {
+            errors = _.flatten(_.toArray(e.response.data.errors));
+          } else {
+            errors = ["Something went wrong. Please try again."];
+          }
+          vm.serverErrors = errors;
+        });
     },
     handleCancel() {
       this.visible = false;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

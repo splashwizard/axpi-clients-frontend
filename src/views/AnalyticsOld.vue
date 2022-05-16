@@ -1,6 +1,5 @@
 <template>
   <div class="analytics">
-
     <!-- Wrapper -->
     <div class="wrapper" v-if="selectedView">
       <!-- Screenshot wrapper -->
@@ -12,31 +11,43 @@
               <template slot="title">
                 <span>Compare</span>
               </template>
-              <a-button type="secondary" class="button-header" size="large" shape="circle"
-                        icon="diff" @click="openCompareTab"></a-button>
+              <a-button
+                type="secondary"
+                class="button-header"
+                size="large"
+                shape="circle"
+                icon="diff"
+                @click="openCompareTab"
+              ></a-button>
             </a-tooltip>
             <a-drawer
-                width="300"
-                title="Compare"
-                placement="right"
-                :visible="compareTabVisible"
-                @close="closeCompareTab"
+              width="300"
+              title="Compare"
+              placement="right"
+              :visible="compareTabVisible"
+              @close="closeCompareTab"
             >
-
               <!-- Inside -->
               <div class="view-changer-inside" :key="screenshotUpdateKey">
                 <div class="top-section">
-
                   <!-- View -->
                   <div class="view-selector" v-for="view in views" :key="view.id">
-
                     <a-card :bordered="false" @click.prevent="selectView(view.id)" v-if="view.id !== selectedViewId">
-                      <img slot="cover" :class="{'selected': selectedViewId === view.id}"
-                           :src="view.screenshot" v-if="view.screenshot" alt="Analytics">
-                      <img slot="cover" :class="{'selected': selectedViewId === view.id}"
-                           src="/img/analytics/loading.png" v-else alt="Analytics">
-                      <a-card-meta :title="view.name">
-                      </a-card-meta>
+                      <img
+                        slot="cover"
+                        :class="{ selected: selectedViewId === view.id }"
+                        :src="view.screenshot"
+                        v-if="view.screenshot"
+                        alt="Analytics"
+                      />
+                      <img
+                        slot="cover"
+                        :class="{ selected: selectedViewId === view.id }"
+                        src="/img/analytics/loading.png"
+                        v-else
+                        alt="Analytics"
+                      />
+                      <a-card-meta :title="view.name"> </a-card-meta>
                     </a-card>
 
                     <!--                <a-button :class="{'active': selectedViewId === view.id}"-->
@@ -45,37 +56,42 @@
                     <!--                </a-button>-->
                   </div>
                   <!-- / View -->
-
                 </div>
               </div>
               <!-- / Inside -->
-
             </a-drawer>
 
             <a-tooltip placement="bottom">
               <template slot="title">
                 <span>Share</span>
               </template>
-              <a-button type="secondary" class="button-header" size="large" shape="circle"
-                        icon="share-alt" @click="openShareTab"></a-button>
+              <a-button
+                type="secondary"
+                class="button-header"
+                size="large"
+                shape="circle"
+                icon="share-alt"
+                @click="openShareTab"
+              ></a-button>
             </a-tooltip>
 
-            <a-drawer title="Share this report" placement="right" width="350" :visible="shareTabVisible"
-                      @close="closeShareTab"
-                      @click="openShareTab">
+            <a-drawer
+              title="Share this report"
+              placement="right"
+              width="350"
+              :visible="shareTabVisible"
+              @close="closeShareTab"
+              @click="openShareTab"
+            >
               <a-button block size="large" icon="link" class="share-button button-margin-bottom">
                 <div class="share-button-inner">
-                  <div class="share-button-text">
-                    Share link
-                  </div>
+                  <div class="share-button-text">Share link</div>
                   <a-icon type="right"></a-icon>
                 </div>
               </a-button>
               <a-button block size="large" icon="file" class="share-button button-margin-bottom">
                 <div class="share-button-inner">
-                  <div class="share-button-text">
-                    Download file
-                  </div>
+                  <div class="share-button-text">Download file</div>
                   <a-icon type="right"></a-icon>
                 </div>
               </a-button>
@@ -85,12 +101,22 @@
               <template slot="title">
                 <span>Insights</span>
               </template>
-              <a-button type="secondary" class="button-header" size="large" shape="circle"
-                        icon="bulb" @click="openInsightsTab"></a-button>
+              <a-button
+                type="secondary"
+                class="button-header"
+                size="large"
+                shape="circle"
+                icon="bulb"
+                @click="openInsightsTab"
+              ></a-button>
             </a-tooltip>
-            <a-drawer title="Insights" placement="right" width="350"
-                      :visible="insightsTabVisible" @close="closeInsightsTab">
-
+            <a-drawer
+              title="Insights"
+              placement="right"
+              width="350"
+              :visible="insightsTabVisible"
+              @close="closeInsightsTab"
+            >
               <a-collapse class="collapse-margin-bottom">
                 <a-collapse-panel key="1" header="Basic Performance">
                   <p></p>
@@ -98,97 +124,104 @@
               </a-collapse>
 
               <a-collapse class="collapse-margin-bottom">
-                <a-collapse-panel key="1" header="Price Performance">
-                </a-collapse-panel>
+                <a-collapse-panel key="1" header="Price Performance"> </a-collapse-panel>
               </a-collapse>
 
               <a-collapse class="collapse-margin-bottom">
-                <a-collapse-panel key="1" header="Diversity">
-                </a-collapse-panel>
+                <a-collapse-panel key="1" header="Diversity"> </a-collapse-panel>
               </a-collapse>
 
               <a-collapse class="collapse-margin-bottom">
-                <a-collapse-panel key="1" header="Suppliers">
-                </a-collapse-panel>
+                <a-collapse-panel key="1" header="Suppliers"> </a-collapse-panel>
               </a-collapse>
 
               <a-collapse class="collapse-margin-bottom">
-                <a-collapse-panel key="1" header="Orders">
-                </a-collapse-panel>
+                <a-collapse-panel key="1" header="Orders"> </a-collapse-panel>
               </a-collapse>
 
               <a-collapse class="collapse-margin-bottom">
-                <a-collapse-panel key="1" header="Information">
-                </a-collapse-panel>
+                <a-collapse-panel key="1" header="Information"> </a-collapse-panel>
               </a-collapse>
 
               <a-collapse>
                 <a-collapse-panel key="1" header="Environment">
-                  <a-button @click.prevent="getInsight">Which is my most environmentally harmful specification this
-                    month?
+                  <a-button @click.prevent="getInsight"
+                    >Which is my most environmentally harmful specification this month?
                   </a-button>
-                  <a-button @click.prevent="getInsight">Which business unit is the least environmentally friendly?
+                  <a-button @click.prevent="getInsight"
+                    >Which business unit is the least environmentally friendly?
                   </a-button>
                   <a-button @click.prevent="getInsight">Which country produces the most CO2e?</a-button>
-                  <a-button @click.prevent="getInsight">What should I do to reduce my environmental impact in my print
-                    category?
+                  <a-button @click.prevent="getInsight"
+                    >What should I do to reduce my environmental impact in my print category?
                   </a-button>
-                  <a-button @click.prevent="getInsight">What is my environmental impact by not using recycled materials?
+                  <a-button @click.prevent="getInsight"
+                    >What is my environmental impact by not using recycled materials?
                   </a-button>
                 </a-collapse-panel>
               </a-collapse>
 
               <!-- RESULTS DRAWER -->
-              <a-drawer class="insight-results-drawer" title="Results" :visible="insightResultsTabVisible" width="350"
-                        @close="closeInsightResultsTab">
-
+              <a-drawer
+                class="insight-results-drawer"
+                title="Results"
+                :visible="insightResultsTabVisible"
+                width="350"
+                @close="closeInsightResultsTab"
+              >
                 <div class="insight-results-question">
                   <b>You asked: Which business unit is the least environmentally friendly?</b>
                 </div>
 
                 <a-card>
-                  <p>
-                    Business unit 1 is the most environmentally friendly.
-                  </p>
-                  <p>
-                    It's carbon emissions are 20% below your organisational average.
-                  </p>
+                  <p>Business unit 1 is the most environmentally friendly.</p>
+                  <p>It's carbon emissions are 20% below your organisational average.</p>
                 </a-card>
-
               </a-drawer>
               <!-- / RESULTS DRAWER -->
-
             </a-drawer>
 
             <a-tooltip placement="bottom">
               <template slot="title">
                 <span>Views</span>
               </template>
-              <a-button type="secondary" class="button-header" size="large" shape="circle"
-                        icon="eye" @click="openViewChanger"></a-button>
+              <a-button
+                type="secondary"
+                class="button-header"
+                size="large"
+                shape="circle"
+                icon="eye"
+                @click="openViewChanger"
+              ></a-button>
             </a-tooltip>
             <a-drawer
-                width="300"
-                title="Views"
-                placement="right"
-                :visible="viewChangerVisible"
-                @close="closeViewChanger"
+              width="300"
+              title="Views"
+              placement="right"
+              :visible="viewChangerVisible"
+              @close="closeViewChanger"
             >
-
               <!-- Inside -->
               <div class="view-changer-inside" :key="screenshotUpdateKey">
                 <div class="top-section">
-
                   <!-- View -->
                   <div class="view-selector" v-for="view in views" :key="view.id">
-
                     <a-card :bordered="false" @click.prevent="selectView(view.id)">
-                      <img slot="cover" :class="{'selected': selectedViewId === view.id}"
-                           :src="view.screenshot" v-if="view.screenshot" alt="Analytics">
-                      <img slot="cover" :class="{'selected': selectedViewId === view.id}"
-                           src="/img/analytics/loading.png" v-else alt="Analytics">
-                      <a-card-meta :title="view.name">
-                      </a-card-meta>
+                      <img
+                        slot="cover"
+                        :class="{ selected: selectedViewId === view.id }"
+                        :src="view.screenshot"
+                        v-if="view.screenshot"
+                        alt="Analytics"
+                      />
+                      <img
+                        slot="cover"
+                        :class="{ selected: selectedViewId === view.id }"
+                        src="/img/analytics/loading.png"
+                        v-else
+                        alt="Analytics"
+                      />
+                      <a-card-meta :title="view.name"> </a-card-meta>
                     </a-card>
 
                     <!--                <a-button :class="{'active': selectedViewId === view.id}"-->
@@ -197,16 +230,12 @@
                     <!--                </a-button>-->
                   </div>
                   <!-- / View -->
-
                 </div>
                 <div class="bottom-section">
-                  <a-button @click.prevent="() => addView()"
-                            block type="primary" icon="plus">Add View
-                  </a-button>
+                  <a-button @click.prevent="() => addView()" block type="primary" icon="plus">Add View </a-button>
                 </div>
               </div>
               <!-- / Inside -->
-
             </a-drawer>
           </div>
         </div>
@@ -214,16 +243,18 @@
         <!-- Metrics top bar -->
         <div class="metrics-top-bar">
           <div v-for="(m, index) in selectedView.metricsTopBar" :key="index">
-            <metric-card :index="index"
-                         :background-colour="m.background"
-                         :text-colour="m.text"
-                         :metrics="metrics"
-                         :start-month="startMonth"
-                         :end-month="endMonth"
-                         :selected-metric-id="m.metric_id"
-                         :is-active="m.active"
-                         @metric-changed="handleMetricChanged"
-                         @toggle-active="toggleMetricActive"></metric-card>
+            <metric-card
+              :index="index"
+              :background-colour="m.background"
+              :text-colour="m.text"
+              :metrics="metrics"
+              :start-month="startMonth"
+              :end-month="endMonth"
+              :selected-metric-id="m.metric_id"
+              :is-active="m.active"
+              @metric-changed="handleMetricChanged"
+              @toggle-active="toggleMetricActive"
+            ></metric-card>
           </div>
         </div>
         <!-- / Metrics top bar -->
@@ -233,12 +264,19 @@
           <a-tabs default-active-key="1" :animated="false">
             <a-tab-pane key="1" tab="Time">
               <!-- Time toolbar -->
-              <time-toolbar @filter-updated="incrementUpdateKey"
-                            class="time-toolbar" :time-options="timeOptions"></time-toolbar>
+              <time-toolbar
+                @filter-updated="incrementUpdateKey"
+                class="time-toolbar"
+                :time-options="timeOptions"
+              ></time-toolbar>
               <!-- Time toolbar -->
 
-              <time-graph :key="updateKey" :chart-data="timeGraphData" :options="timeGraphOptions"
-                          :styles="timeGraphStyles"></time-graph>
+              <time-graph
+                :key="updateKey"
+                :chart-data="timeGraphData"
+                :options="timeGraphOptions"
+                :styles="timeGraphStyles"
+              ></time-graph>
             </a-tab-pane>
             <a-tab-pane key="2" tab="Location" force-render>
               <location-graph :key="updateKey"></location-graph>
@@ -261,20 +299,15 @@
           <a-tab-pane key="1" tab="Environment">
             <environment-tab></environment-tab>
           </a-tab-pane>
-          <a-tab-pane key="2" tab="Orders">
-          </a-tab-pane>
-          <a-tab-pane key="3" tab="Information">
-          </a-tab-pane>
-          <a-tab-pane key="4" tab="Suppliers">
-          </a-tab-pane>
-          <a-tab-pane key="5" tab="Pricing">
-          </a-tab-pane>
+          <a-tab-pane key="2" tab="Orders"> </a-tab-pane>
+          <a-tab-pane key="3" tab="Information"> </a-tab-pane>
+          <a-tab-pane key="4" tab="Suppliers"> </a-tab-pane>
+          <a-tab-pane key="5" tab="Pricing"> </a-tab-pane>
         </a-tabs>
       </div>
       <!-- / Tabs 2 -->
     </div>
     <!-- / Wrapper -->
-
   </div>
 </template>
 <script>
@@ -282,9 +315,9 @@ import TimeGraph from "./Analytics/TimeGraph";
 import TimeToolbar from "./Analytics/TimeToolbar";
 import EnvironmentTab from "./Analytics/EnvironmentTab";
 
-const _ = require('lodash');
-const moment = require('moment');
-import {v4 as uuidv4} from 'uuid';
+const _ = require("lodash");
+const moment = require("moment");
+import { v4 as uuidv4 } from "uuid";
 import OrganisationalGraph from "./Analytics/OrganisationalGraph";
 import LocationGraph from "./Analytics/LocationGraph";
 import AnalyticsSpecificationsTable from "./Analytics/AnalyticsSpecificationsTable";
@@ -292,38 +325,37 @@ import AnalyticsSpecificationsTable from "./Analytics/AnalyticsSpecificationsTab
 const VIEW_TEMPLATE = {
   metricsTopBar: [
     {
-      metric_id: 'total-spend',
-      background: '#3735b3',
-      text: '#fff',
-      active: true
+      metric_id: "total-spend",
+      background: "#3735b3",
+      text: "#fff",
+      active: true,
     },
     {
-      metric_id: 'co2e',
-      background: '#4dc8f2',
-      text: '#fff',
-      active: false
+      metric_id: "co2e",
+      background: "#4dc8f2",
+      text: "#fff",
+      active: false,
     },
     {
-      metric_id: 'water',
-      background: '#46b98e',
-      text: '#fff',
-      active: false
+      metric_id: "water",
+      background: "#46b98e",
+      text: "#fff",
+      active: false,
     },
     {
-      metric_id: 'savings',
-      background: '#ebdf00',
-      text: '#000',
-      active: false
+      metric_id: "savings",
+      background: "#ebdf00",
+      text: "#000",
+      active: false,
     },
     {
-      metric_id: 'orders',
-      background: '#fcb743',
-      text: '#000',
-      active: false
-    }
-  ]
+      metric_id: "orders",
+      background: "#fcb743",
+      text: "#000",
+      active: false,
+    },
+  ],
 };
-
 
 export default {
   components: {
@@ -332,7 +364,7 @@ export default {
     TimeToolbar,
     OrganisationalGraph,
     EnvironmentTab,
-    AnalyticsSpecificationsTable
+    AnalyticsSpecificationsTable,
   },
 
   data() {
@@ -347,136 +379,136 @@ export default {
 
       metrics: [
         {
-          id: 'total-spend',
-          label: 'Total Spend',
+          id: "total-spend",
+          label: "Total Spend",
           // value: '£1.4M',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth - 1, endMonth - 1));
-            return new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-              maximumFractionDigits: 0
+            return new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 0,
             }).format(sum);
           },
           time_series_data: {
-            'Jan 2020': 2282860,
-            'Feb 2020': 1343124,
-            'Mar 2020': 2476040,
-            'Apr 2020': 1243835,
-            'May 2020': 2647940,
-            'Jun 2020': 1950403,
-            'Jul 2020': 1106609,
-            'Aug 2020': 1754552,
-            'Sep 2020': 3023468,
-            'Oct 2020': 1729170,
-            'Nov 2020': 813515,
-            'Dec 2020': 2273012,
-            'Jan 2021': 1101033,
-            'Feb 2021': 1345824,
-            'Mar 2021': 3520224,
-            'Apr 2021': 2548798,
-            'May 2021': 3468080,
-            'Jun 2021': 2153280
-          }
+            "Jan 2020": 2282860,
+            "Feb 2020": 1343124,
+            "Mar 2020": 2476040,
+            "Apr 2020": 1243835,
+            "May 2020": 2647940,
+            "Jun 2020": 1950403,
+            "Jul 2020": 1106609,
+            "Aug 2020": 1754552,
+            "Sep 2020": 3023468,
+            "Oct 2020": 1729170,
+            "Nov 2020": 813515,
+            "Dec 2020": 2273012,
+            "Jan 2021": 1101033,
+            "Feb 2021": 1345824,
+            "Mar 2021": 3520224,
+            "Apr 2021": 2548798,
+            "May 2021": 3468080,
+            "Jun 2021": 2153280,
+          },
         },
         {
-          id: 'co2e',
-          label: 'CO2e',
+          id: "co2e",
+          label: "CO2e",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth - 1, endMonth - 1));
-            return sum + ' T';
+            return sum + " T";
           },
           time_series_data: {
-            'Jan 2020': 63,
-            'Feb 2020': 94,
-            'Mar 2020': 140,
-            'Apr 2020': 117,
-            'May 2020': 62,
-            'Jun 2020': 84,
-            'Jul 2020': 51,
-            'Aug 2020': 134,
-            'Sep 2020': 100,
-            'Oct 2020': 114,
-            'Nov 2020': 92,
-            'Dec 2020': 117,
-            'Jan 2021': 85,
-            'Feb 2021': 77,
-            'Mar 2021': 141,
-            'Apr 2021': 131,
-            'May 2021': 91,
-            'Jun 2021': 119
-          }
+            "Jan 2020": 63,
+            "Feb 2020": 94,
+            "Mar 2020": 140,
+            "Apr 2020": 117,
+            "May 2020": 62,
+            "Jun 2020": 84,
+            "Jul 2020": 51,
+            "Aug 2020": 134,
+            "Sep 2020": 100,
+            "Oct 2020": 114,
+            "Nov 2020": 92,
+            "Dec 2020": 117,
+            "Jan 2021": 85,
+            "Feb 2021": 77,
+            "Mar 2021": 141,
+            "Apr 2021": 131,
+            "May 2021": 91,
+            "Jun 2021": 119,
+          },
         },
         {
-          id: 'water',
-          label: 'Water',
+          id: "water",
+          label: "Water",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
-            return sum + ' T';
+            return sum + " T";
           },
           time_series_data: {
-            'Jan 2020': 730,
-            'Feb 2020': 685,
-            'Mar 2020': 606,
-            'Apr 2020': 910,
-            'May 2020': 910,
-            'Jun 2020': 392,
-            'Jul 2020': 592,
-            'Aug 2020': 1015,
-            'Sep 2020': 581,
-            'Oct 2020': 665,
-            'Nov 2020': 602,
-            'Dec 2020': 316,
-            'Jan 2021': 560,
-            'Feb 2021': 370,
-            'Mar 2021': 654,
-            'Apr 2021': 452,
-            'May 2021': 440,
-            'Jun 2021': 700
-          }
+            "Jan 2020": 730,
+            "Feb 2020": 685,
+            "Mar 2020": 606,
+            "Apr 2020": 910,
+            "May 2020": 910,
+            "Jun 2020": 392,
+            "Jul 2020": 592,
+            "Aug 2020": 1015,
+            "Sep 2020": 581,
+            "Oct 2020": 665,
+            "Nov 2020": 602,
+            "Dec 2020": 316,
+            "Jan 2021": 560,
+            "Feb 2021": 370,
+            "Mar 2021": 654,
+            "Apr 2021": 452,
+            "May 2021": 440,
+            "Jun 2021": 700,
+          },
         },
         {
-          id: 'savings',
-          label: 'Savings',
+          id: "savings",
+          label: "Savings",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
             let sum = _.sum(Object.values(timeSeriesData).splice(startMonth, endMonth));
-            return new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-              maximumFractionDigits: 0
+            return new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 0,
             }).format(sum);
           },
           time_series_data: {
-            'Jan 2020': 307304,
-            'Feb 2020': 331296,
-            'Mar 2020': 452668,
-            'Apr 2020': 202533,
-            'May 2020': 488522,
-            'Jun 2020': 149113,
-            'Jul 2020': 129732,
-            'Aug 2020': 487129,
-            'Sep 2020': 369323,
-            'Oct 2020': 197640,
-            'Nov 2020': 238145,
-            'Dec 2020': 363039,
-            'Jan 2021': 308252,
-            'Feb 2021': 398058,
-            'Mar 2021': 240899,
-            'Apr 2021': 262354,
-            'May 2021': 484095,
-            'Jun 2021': 364543
-          }
+            "Jan 2020": 307304,
+            "Feb 2020": 331296,
+            "Mar 2020": 452668,
+            "Apr 2020": 202533,
+            "May 2020": 488522,
+            "Jun 2020": 149113,
+            "Jul 2020": 129732,
+            "Aug 2020": 487129,
+            "Sep 2020": 369323,
+            "Oct 2020": 197640,
+            "Nov 2020": 238145,
+            "Dec 2020": 363039,
+            "Jan 2021": 308252,
+            "Feb 2021": 398058,
+            "Mar 2021": 240899,
+            "Apr 2021": 262354,
+            "May 2021": 484095,
+            "Jun 2021": 364543,
+          },
         },
         {
-          id: 'orders',
-          label: 'Orders',
+          id: "orders",
+          label: "Orders",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
@@ -484,29 +516,29 @@ export default {
             return sum;
           },
           time_series_data: {
-            'Jan 2020': 2140,
-            'Feb 2020': 3385,
-            'Mar 2020': 2205,
-            'Apr 2020': 2618,
-            'May 2020': 1475,
-            'Jun 2020': 2482,
-            'Jul 2020': 3012,
-            'Aug 2020': 1587,
-            'Sep 2020': 2456,
-            'Oct 2020': 1373,
-            'Nov 2020': 2135,
-            'Dec 2020': 2350,
-            'Jan 2021': 2146,
-            'Feb 2021': 2334,
-            'Mar 2021': 2394,
-            'Apr 2021': 1004,
-            'May 2021': 4782,
-            'Jun 2021': 2419
-          }
+            "Jan 2020": 2140,
+            "Feb 2020": 3385,
+            "Mar 2020": 2205,
+            "Apr 2020": 2618,
+            "May 2020": 1475,
+            "Jun 2020": 2482,
+            "Jul 2020": 3012,
+            "Aug 2020": 1587,
+            "Sep 2020": 2456,
+            "Oct 2020": 1373,
+            "Nov 2020": 2135,
+            "Dec 2020": 2350,
+            "Jan 2021": 2146,
+            "Feb 2021": 2334,
+            "Mar 2021": 2394,
+            "Apr 2021": 1004,
+            "May 2021": 4782,
+            "Jun 2021": 2419,
+          },
         },
         {
-          id: 'payments-made',
-          label: 'Payments Made',
+          id: "payments-made",
+          label: "Payments Made",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
@@ -514,29 +546,29 @@ export default {
             return sum;
           },
           time_series_data: {
-            'Jan 2020': 2140,
-            'Feb 2020': 3385,
-            'Mar 2020': 2205,
-            'Apr 2020': 2618,
-            'May 2020': 1475,
-            'Jun 2020': 2482,
-            'Jul 2020': 3012,
-            'Aug 2020': 1587,
-            'Sep 2020': 2456,
-            'Oct 2020': 1373,
-            'Nov 2020': 2135,
-            'Dec 2020': 2350,
-            'Jan 2021': 2146,
-            'Feb 2021': 2334,
-            'Mar 2021': 2394,
-            'Apr 2021': 1004,
-            'May 2021': 4782,
-            'Jun 2021': 2419
-          }
+            "Jan 2020": 2140,
+            "Feb 2020": 3385,
+            "Mar 2020": 2205,
+            "Apr 2020": 2618,
+            "May 2020": 1475,
+            "Jun 2020": 2482,
+            "Jul 2020": 3012,
+            "Aug 2020": 1587,
+            "Sep 2020": 2456,
+            "Oct 2020": 1373,
+            "Nov 2020": 2135,
+            "Dec 2020": 2350,
+            "Jan 2021": 2146,
+            "Feb 2021": 2334,
+            "Mar 2021": 2394,
+            "Apr 2021": 1004,
+            "May 2021": 4782,
+            "Jun 2021": 2419,
+          },
         },
         {
-          id: 'information-requests-rejected',
-          label: 'Information Requests Rejected',
+          id: "information-requests-rejected",
+          label: "Information Requests Rejected",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
@@ -544,29 +576,29 @@ export default {
             return sum;
           },
           time_series_data: {
-            'Jan 2020': 2140,
-            'Feb 2020': 3385,
-            'Mar 2020': 2205,
-            'Apr 2020': 2618,
-            'May 2020': 1475,
-            'Jun 2020': 2482,
-            'Jul 2020': 3012,
-            'Aug 2020': 1587,
-            'Sep 2020': 2456,
-            'Oct 2020': 1373,
-            'Nov 2020': 2135,
-            'Dec 2020': 2350,
-            'Jan 2021': 2146,
-            'Feb 2021': 2334,
-            'Mar 2021': 2394,
-            'Apr 2021': 1004,
-            'May 2021': 4782,
-            'Jun 2021': 2419
-          }
+            "Jan 2020": 2140,
+            "Feb 2020": 3385,
+            "Mar 2020": 2205,
+            "Apr 2020": 2618,
+            "May 2020": 1475,
+            "Jun 2020": 2482,
+            "Jul 2020": 3012,
+            "Aug 2020": 1587,
+            "Sep 2020": 2456,
+            "Oct 2020": 1373,
+            "Nov 2020": 2135,
+            "Dec 2020": 2350,
+            "Jan 2021": 2146,
+            "Feb 2021": 2334,
+            "Mar 2021": 2394,
+            "Apr 2021": 1004,
+            "May 2021": 4782,
+            "Jun 2021": 2419,
+          },
         },
         {
-          id: 'information-requests-sent',
-          label: 'Information Requests Sent',
+          id: "information-requests-sent",
+          label: "Information Requests Sent",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
@@ -574,29 +606,29 @@ export default {
             return sum;
           },
           time_series_data: {
-            'Jan 2020': 2140,
-            'Feb 2020': 3385,
-            'Mar 2020': 2205,
-            'Apr 2020': 2618,
-            'May 2020': 1475,
-            'Jun 2020': 2482,
-            'Jul 2020': 3012,
-            'Aug 2020': 1587,
-            'Sep 2020': 2456,
-            'Oct 2020': 1373,
-            'Nov 2020': 2135,
-            'Dec 2020': 2350,
-            'Jan 2021': 2146,
-            'Feb 2021': 2334,
-            'Mar 2021': 2394,
-            'Apr 2021': 1004,
-            'May 2021': 4782,
-            'Jun 2021': 2419
-          }
+            "Jan 2020": 2140,
+            "Feb 2020": 3385,
+            "Mar 2020": 2205,
+            "Apr 2020": 2618,
+            "May 2020": 1475,
+            "Jun 2020": 2482,
+            "Jul 2020": 3012,
+            "Aug 2020": 1587,
+            "Sep 2020": 2456,
+            "Oct 2020": 1373,
+            "Nov 2020": 2135,
+            "Dec 2020": 2350,
+            "Jan 2021": 2146,
+            "Feb 2021": 2334,
+            "Mar 2021": 2394,
+            "Apr 2021": 1004,
+            "May 2021": 4782,
+            "Jun 2021": 2419,
+          },
         },
         {
-          id: 'information-requests-completed',
-          label: 'Information Requests Completed',
+          id: "information-requests-completed",
+          label: "Information Requests Completed",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
@@ -604,29 +636,29 @@ export default {
             return sum;
           },
           time_series_data: {
-            'Jan 2020': 2140,
-            'Feb 2020': 3385,
-            'Mar 2020': 2205,
-            'Apr 2020': 2618,
-            'May 2020': 1475,
-            'Jun 2020': 2482,
-            'Jul 2020': 3012,
-            'Aug 2020': 1587,
-            'Sep 2020': 2456,
-            'Oct 2020': 1373,
-            'Nov 2020': 2135,
-            'Dec 2020': 2350,
-            'Jan 2021': 2146,
-            'Feb 2021': 2334,
-            'Mar 2021': 2394,
-            'Apr 2021': 1004,
-            'May 2021': 4782,
-            'Jun 2021': 2419
-          }
+            "Jan 2020": 2140,
+            "Feb 2020": 3385,
+            "Mar 2020": 2205,
+            "Apr 2020": 2618,
+            "May 2020": 1475,
+            "Jun 2020": 2482,
+            "Jul 2020": 3012,
+            "Aug 2020": 1587,
+            "Sep 2020": 2456,
+            "Oct 2020": 1373,
+            "Nov 2020": 2135,
+            "Dec 2020": 2350,
+            "Jan 2021": 2146,
+            "Feb 2021": 2334,
+            "Mar 2021": 2394,
+            "Apr 2021": 1004,
+            "May 2021": 4782,
+            "Jun 2021": 2419,
+          },
         },
         {
-          id: 'percentage-of-information-completed',
-          label: '% Information Completed',
+          id: "percentage-of-information-completed",
+          label: "% Information Completed",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
@@ -634,29 +666,29 @@ export default {
             return sum;
           },
           time_series_data: {
-            'Jan 2020': 2140,
-            'Feb 2020': 3385,
-            'Mar 2020': 2205,
-            'Apr 2020': 2618,
-            'May 2020': 1475,
-            'Jun 2020': 2482,
-            'Jul 2020': 3012,
-            'Aug 2020': 1587,
-            'Sep 2020': 2456,
-            'Oct 2020': 1373,
-            'Nov 2020': 2135,
-            'Dec 2020': 2350,
-            'Jan 2021': 2146,
-            'Feb 2021': 2334,
-            'Mar 2021': 2394,
-            'Apr 2021': 1004,
-            'May 2021': 4782,
-            'Jun 2021': 2419
-          }
+            "Jan 2020": 2140,
+            "Feb 2020": 3385,
+            "Mar 2020": 2205,
+            "Apr 2020": 2618,
+            "May 2020": 1475,
+            "Jun 2020": 2482,
+            "Jul 2020": 3012,
+            "Aug 2020": 1587,
+            "Sep 2020": 2456,
+            "Oct 2020": 1373,
+            "Nov 2020": 2135,
+            "Dec 2020": 2350,
+            "Jan 2021": 2146,
+            "Feb 2021": 2334,
+            "Mar 2021": 2394,
+            "Apr 2021": 1004,
+            "May 2021": 4782,
+            "Jun 2021": 2419,
+          },
         },
         {
-          id: 'number-of-suppliers-used',
-          label: 'Number Of Suppliers Used',
+          id: "number-of-suppliers-used",
+          label: "Number Of Suppliers Used",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
@@ -664,29 +696,29 @@ export default {
             return sum;
           },
           time_series_data: {
-            'Jan 2020': 2140,
-            'Feb 2020': 3385,
-            'Mar 2020': 2205,
-            'Apr 2020': 2618,
-            'May 2020': 1475,
-            'Jun 2020': 2482,
-            'Jul 2020': 3012,
-            'Aug 2020': 1587,
-            'Sep 2020': 2456,
-            'Oct 2020': 1373,
-            'Nov 2020': 2135,
-            'Dec 2020': 2350,
-            'Jan 2021': 2146,
-            'Feb 2021': 2334,
-            'Mar 2021': 2394,
-            'Apr 2021': 1004,
-            'May 2021': 4782,
-            'Jun 2021': 2419
-          }
+            "Jan 2020": 2140,
+            "Feb 2020": 3385,
+            "Mar 2020": 2205,
+            "Apr 2020": 2618,
+            "May 2020": 1475,
+            "Jun 2020": 2482,
+            "Jul 2020": 3012,
+            "Aug 2020": 1587,
+            "Sep 2020": 2456,
+            "Oct 2020": 1373,
+            "Nov 2020": 2135,
+            "Dec 2020": 2350,
+            "Jan 2021": 2146,
+            "Feb 2021": 2334,
+            "Mar 2021": 2394,
+            "Apr 2021": 1004,
+            "May 2021": 4782,
+            "Jun 2021": 2419,
+          },
         },
         {
-          id: 'number-of-unique-specifications',
-          label: 'Number Of Unique Specifications',
+          id: "number-of-unique-specifications",
+          label: "Number Of Unique Specifications",
           // value: '1',
           value: function (startMonth, endMonth, timeSeriesData) {
             // return startMonth + endMonth;
@@ -694,66 +726,63 @@ export default {
             return sum;
           },
           time_series_data: {
-            'Jan 2020': 2140,
-            'Feb 2020': 3385,
-            'Mar 2020': 2205,
-            'Apr 2020': 2618,
-            'May 2020': 1475,
-            'Jun 2020': 2482,
-            'Jul 2020': 3012,
-            'Aug 2020': 1587,
-            'Sep 2020': 2456,
-            'Oct 2020': 1373,
-            'Nov 2020': 2135,
-            'Dec 2020': 2350,
-            'Jan 2021': 2146,
-            'Feb 2021': 2334,
-            'Mar 2021': 2394,
-            'Apr 2021': 1004,
-            'May 2021': 4782,
-            'Jun 2021': 2419
-          }
+            "Jan 2020": 2140,
+            "Feb 2020": 3385,
+            "Mar 2020": 2205,
+            "Apr 2020": 2618,
+            "May 2020": 1475,
+            "Jun 2020": 2482,
+            "Jul 2020": 3012,
+            "Aug 2020": 1587,
+            "Sep 2020": 2456,
+            "Oct 2020": 1373,
+            "Nov 2020": 2135,
+            "Dec 2020": 2350,
+            "Jan 2021": 2146,
+            "Feb 2021": 2334,
+            "Mar 2021": 2394,
+            "Apr 2021": 1004,
+            "May 2021": 4782,
+            "Jun 2021": 2419,
+          },
         },
       ],
 
       timeGraphStyles: {
-        marginTop: '25px',
-        height: '350px',
-        position: 'relative'
+        marginTop: "25px",
+        height: "350px",
+        position: "relative",
       },
 
       timeOptions: {
-        duration: '1Y',
-        dateRange: [
-            moment('2020-04-01'),
-            moment('2021-04-30')
-        ]
+        duration: "1Y",
+        dateRange: [moment("2020-04-01"), moment("2021-04-30")],
       },
 
       updateKey: 1,
       screenshotUpdateKey: 1,
-      selectedViewId: null
-    }
+      selectedViewId: null,
+    };
   },
 
   computed: {
     startMonth() {
       switch (this.timeOptions.duration) {
-        case '1W':
+        case "1W":
           return 16;
-        case '2W':
+        case "2W":
           return 16;
-        case '1M':
+        case "1M":
           return 14;
-        case '3M':
+        case "3M":
           return 13;
-        case '1Y':
+        case "1Y":
           return 3;
-        case 'QTD':
+        case "QTD":
           return 13;
-        case 'MTD':
+        case "MTD":
           return 14;
-        case 'YTD':
+        case "YTD":
           return 12;
         default:
           return 1;
@@ -765,29 +794,48 @@ export default {
     },
 
     timeGraphData() {
-      const labels = ["Jan 20", "Feb 20", "Mar 20", "Apr 20", "May 20", "Jun 20", "Jul 20", "Aug 20", "Sep 20", "Oct 20", "Nov 20", "Dec 20", "Jan 21", "Feb 21", "Mar 21", "Apr 21", "May 21", "Jun 21"].slice(this.startMonth, this.endMonth);
+      const labels = [
+        "Jan 20",
+        "Feb 20",
+        "Mar 20",
+        "Apr 20",
+        "May 20",
+        "Jun 20",
+        "Jul 20",
+        "Aug 20",
+        "Sep 20",
+        "Oct 20",
+        "Nov 20",
+        "Dec 20",
+        "Jan 21",
+        "Feb 21",
+        "Mar 21",
+        "Apr 21",
+        "May 21",
+        "Jun 21",
+      ].slice(this.startMonth, this.endMonth);
       let datasets = [];
 
-      const activeTopBarMetrics = _.filter(this.selectedView.metricsTopBar, metric => {
+      const activeTopBarMetrics = _.filter(this.selectedView.metricsTopBar, (metric) => {
         return metric.active === true;
-      })
+      });
 
-      _.each(activeTopBarMetrics, tbm => {
-        let metric = _.find(this.metrics, {id: tbm.metric_id});
+      _.each(activeTopBarMetrics, (tbm) => {
+        let metric = _.find(this.metrics, { id: tbm.metric_id });
         datasets.push({
           label: metric.label,
           data: Object.values(metric.time_series_data).slice(this.startMonth, this.endMonth),
-          backgroundColor: 'rgba(0,0,0,0)',
+          backgroundColor: "rgba(0,0,0,0)",
           borderColor: tbm.background,
           pointBackgroundColor: tbm.background,
           pointRadius: 2,
-          borderWidth: 2
+          borderWidth: 2,
         });
       });
 
       return {
         labels: labels,
-        datasets: datasets
+        datasets: datasets,
       };
     },
 
@@ -796,46 +844,50 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          xAxes: [{
-            gridLines: {
-              display: false
-            }
-          }],
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-              // Return an empty string to draw the tick line but hide the tick label
-              // Return `null` or `undefined` to hide the tick line entirely
-              userCallback: function(value) {
-                // Convert the number to a string and splite the string every 3 charaters from the end
-                value = value.toString();
-                value = value.split(/(?=(?:...)*$)/);
-                // Convert the array to a string and format the output
-                value = value.join(',');
-                if (value !== '0') {
-                  return '$' + value;
-                } else {
-                  return 0;
-                }
-              }
-            }
-          }]
+          xAxes: [
+            {
+              gridLines: {
+                display: false,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+                // Return an empty string to draw the tick line but hide the tick label
+                // Return `null` or `undefined` to hide the tick line entirely
+                userCallback: function (value) {
+                  // Convert the number to a string and splite the string every 3 charaters from the end
+                  value = value.toString();
+                  value = value.split(/(?=(?:...)*$)/);
+                  // Convert the array to a string and format the output
+                  value = value.join(",");
+                  if (value !== "0") {
+                    return "$" + value;
+                  } else {
+                    return 0;
+                  }
+                },
+              },
+            },
+          ],
         },
         legend: {
-          display: false
-        }
-      }
+          display: false,
+        },
+      };
     },
 
     selectedView() {
       return _.find(this.views, {
-        id: this.selectedViewId
+        id: this.selectedViewId,
       });
-    }
+    },
   },
 
   mounted() {
-    this.addView('Default');
+    this.addView("Default");
     let vm = this;
     vm.updateViewScreenshot(vm);
     this.screenshotInterval = window.setInterval(function () {
@@ -860,13 +912,11 @@ export default {
 
     addView(name = null) {
       const viewId = this.generateViewId();
-      this.views.push(
-          {
-            id: viewId,
-            name: name ? name : moment().format('DD/MM/YYYY HH:mm'),
-            ..._.cloneDeep(VIEW_TEMPLATE)
-          }
-      );
+      this.views.push({
+        id: viewId,
+        name: name ? name : moment().format("DD/MM/YYYY HH:mm"),
+        ..._.cloneDeep(VIEW_TEMPLATE),
+      });
       this.selectView(viewId);
       // this.viewChangerVisible = false;
     },
@@ -878,7 +928,7 @@ export default {
     },
 
     handleMetricChanged(params) {
-      const {index, metric_id} = params;
+      const { index, metric_id } = params;
 
       let metric = this.selectedView.metricsTopBar[index];
       metric.metric_id = metric_id;
@@ -898,11 +948,11 @@ export default {
     },
 
     async updateViewScreenshot(vm) {
-      console.log('Taking screenshot huston');
+      console.log("Taking screenshot huston");
       const options = {
-        type: 'dataURL'
-      }
-      vm.selectedView.screenshot = await this.$html2canvas(this.$refs['screenshot'], options);
+        type: "dataURL",
+      };
+      vm.selectedView.screenshot = await this.$html2canvas(this.$refs["screenshot"], options);
       vm.incrementScreenshotUpdateKey();
     },
 
@@ -944,9 +994,9 @@ export default {
 
     getInsight() {
       this.openInsightResultsTab();
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style>
 .tabs-container {
@@ -1047,7 +1097,8 @@ export default {
   margin-bottom: 20px;
 }
 
-.ant-collapse-content-box .ant-btn, .ant-collapse-content-box .ant-btn span {
+.ant-collapse-content-box .ant-btn,
+.ant-collapse-content-box .ant-btn span {
   width: 100%;
   word-wrap: break-word;
   height: auto;

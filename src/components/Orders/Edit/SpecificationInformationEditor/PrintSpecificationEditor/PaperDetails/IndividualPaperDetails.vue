@@ -4,126 +4,131 @@
       <a-col span="12">
         <!-- General Paper Details -->
         <a-form layout="vertical">
-          <validated-form-item v-if="!hideNameOfSection"
-                               id="paper-section-name"
-                               label="Name of Section">
-            <a-select v-model="paper.section_name"
-                      show-search size="large"
-                      @change="forceRefresh">
-              <a-select-option v-for="name in sectionNameOptions" :value="name.value"
-                               :key="name.value">
+          <validated-form-item v-if="!hideNameOfSection" id="paper-section-name" label="Name of Section">
+            <a-select v-model="paper.section_name" show-search size="large" @change="forceRefresh">
+              <a-select-option v-for="name in sectionNameOptions" :value="name.value" :key="name.value">
                 {{ name.label }}
               </a-select-option>
             </a-select>
           </validated-form-item>
 
-          <validated-form-item label="Number of Pages"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-number-of-pages">
-            <a-input type="number" min="0"
-                     v-model="paper.number_of_pages"
-                     addon-after="pp"
-                     @blur="forceRefresh"
-                     size="large"></a-input>
+          <validated-form-item
+            label="Number of Pages"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-number-of-pages"
+          >
+            <a-input
+              type="number"
+              min="0"
+              v-model="paper.number_of_pages"
+              addon-after="pp"
+              @blur="forceRefresh"
+              size="large"
+            ></a-input>
           </validated-form-item>
 
-          <validated-form-item label="Paper Finish"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-finish">
-            <a-select v-model="paper.finish"
-                      show-search size="large"
-                      :disabled="isDropdownLoading('paper-finish')"
-                      @change="forceRefresh">
+          <validated-form-item
+            label="Paper Finish"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-finish"
+          >
+            <a-select
+              v-model="paper.finish"
+              show-search
+              size="large"
+              :disabled="isDropdownLoading('paper-finish')"
+              @change="forceRefresh"
+            >
               <a-select-opt-group v-for="(group, i) in paperFinishOptions" :key="i">
                 <span slot="label">{{ group.group }}</span>
-                <a-select-option v-for="paperFinish in group.options"
-                                 :value="paperFinish.name"
-                                 :key="paperFinish.name">
+                <a-select-option v-for="paperFinish in group.options" :value="paperFinish.name" :key="paperFinish.name">
                   {{ paperFinish.name }}
                 </a-select-option>
               </a-select-opt-group>
             </a-select>
           </validated-form-item>
 
-          <validated-form-item label="Fold Type"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-fold-type"
-                               v-if="productSubtype === 'leaflet'">
-            <a-select v-model="paper.fold_type"
-                      show-search size="large"
-                      :disabled="isDropdownLoading('paper-fold-type')"
-                      @change="forceRefresh">
-              <a-select-option v-for="type in paperFoldTypeOptions"
-                               :value="type.name"
-                               :key="type.name">
+          <validated-form-item
+            label="Fold Type"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-fold-type"
+            v-if="productSubtype === 'leaflet'"
+          >
+            <a-select
+              v-model="paper.fold_type"
+              show-search
+              size="large"
+              :disabled="isDropdownLoading('paper-fold-type')"
+              @change="forceRefresh"
+            >
+              <a-select-option v-for="type in paperFoldTypeOptions" :value="type.name" :key="type.name">
                 {{ type.name }}
               </a-select-option>
             </a-select>
           </validated-form-item>
 
-          <validated-form-item label="Paper Weight"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-weight,paper-weight-unit"
+          <validated-form-item
+            label="Paper Weight"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-weight,paper-weight-unit"
           >
             <a-input-group compact>
-              <a-input @blur="forceRefresh"
-                       size="large" type="number" style="width: 75%" v-model="paper.paper_weight"/>
-              <a-select @change="forceRefresh"
-                        size="large" style="width: 25%" v-model="paper.paper_weight_unit">
-                <a-select-option value="gsm">
-                  gsm
-                </a-select-option>
-                <a-select-option value="lbs">
-                  lbs
-                </a-select-option>
+              <a-input
+                @blur="forceRefresh"
+                size="large"
+                type="number"
+                style="width: 75%"
+                v-model="paper.paper_weight"
+              />
+              <a-select @change="forceRefresh" size="large" style="width: 25%" v-model="paper.paper_weight_unit">
+                <a-select-option value="gsm"> gsm </a-select-option>
+                <a-select-option value="lbs"> lbs </a-select-option>
               </a-select>
             </a-input-group>
           </validated-form-item>
 
-          <validated-form-item label="Paper Brand"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-brand">
-            <a-select v-model="paper.paper_brand"
-                      show-search size="large"
-                      :disabled="isDropdownLoading('paper-brand')"
-                      @change="forceRefresh">
+          <validated-form-item
+            label="Paper Brand"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-brand"
+          >
+            <a-select
+              v-model="paper.paper_brand"
+              show-search
+              size="large"
+              :disabled="isDropdownLoading('paper-brand')"
+              @change="forceRefresh"
+            >
               <div slot="dropdownRender" slot-scope="menu">
-                <v-nodes :vnodes="menu"/>
-                <a-divider style="margin: 4px 0;"/>
-                <div style="display: flex; flex-wrap: nowrap; padding: 4px 8px 8px 8px;">
-                  <a-button block
-                            @click.prevent="setCustomPaperBrand"
-                      style="flex: none; display: block "
-                      icon="plus">Add custom paper brand
+                <v-nodes :vnodes="menu" />
+                <a-divider style="margin: 4px 0" />
+                <div style="display: flex; flex-wrap: nowrap; padding: 4px 8px 8px 8px">
+                  <a-button block @click.prevent="setCustomPaperBrand" style="flex: none; display: block" icon="plus"
+                    >Add custom paper brand
                   </a-button>
                 </div>
               </div>
-              <a-select-option v-for="paperBrand in paperBrandOptions"
-                               :value="paperBrand.name"
-                               :key="paperBrand.name">
+              <a-select-option v-for="paperBrand in paperBrandOptions" :value="paperBrand.name" :key="paperBrand.name">
                 {{ paperBrand.name }}
               </a-select-option>
             </a-select>
           </validated-form-item>
-          <validated-form-item label="Paper Name"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-name">
-            <a-select v-model="paper.paper_name"
-                      show-search size="large"
-                      @change="forceRefresh">
+          <validated-form-item
+            label="Paper Name"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-name"
+          >
+            <a-select v-model="paper.paper_name" show-search size="large" @change="forceRefresh">
               <div slot="dropdownRender" slot-scope="menu">
-                <v-nodes :vnodes="menu"/>
-                <a-divider style="margin: 4px 0;"/>
-                <div style="display: flex; flex-wrap: nowrap; padding: 4px 8px 8px 8px;">
-                  <a-button block
-                            @click.prevent="setCustomPaperName"
-                            style="flex: none; display: block "
-                            icon="plus">Add custom paper name
+                <v-nodes :vnodes="menu" />
+                <a-divider style="margin: 4px 0" />
+                <div style="display: flex; flex-wrap: nowrap; padding: 4px 8px 8px 8px">
+                  <a-button block @click.prevent="setCustomPaperName" style="flex: none; display: block" icon="plus"
+                    >Add custom paper name
                   </a-button>
                 </div>
               </div>
-              <a-select-option v-for="paperName in paperNameOptions" :value="paperName.name"
-                               :key="paperName.name">
+              <a-select-option v-for="paperName in paperNameOptions" :value="paperName.name" :key="paperName.name">
                 {{ paperName.name }}
               </a-select-option>
             </a-select>
@@ -135,71 +140,78 @@
         <!-- Paper size type -->
         <div class="paper-size-type">
           <div class="label">
-            <label class="paper-size-label" title="Finished Page Size">Finished Page
-              Size</label>
+            <label class="paper-size-label" title="Finished Page Size">Finished Page Size</label>
           </div>
           <div class="toggle">
-            <a-radio-group @change="forceRefresh" v-model="paper.paper_size_type"
-                           default-value="standard" button-style="solid">
-              <a-radio-button value="standard">
-                Standard
-              </a-radio-button>
-              <a-radio-button value="custom">
-                Custom
-              </a-radio-button>
+            <a-radio-group
+              @change="forceRefresh"
+              v-model="paper.paper_size_type"
+              default-value="standard"
+              button-style="solid"
+            >
+              <a-radio-button value="standard"> Standard </a-radio-button>
+              <a-radio-button value="custom"> Custom </a-radio-button>
             </a-radio-group>
           </div>
         </div>
         <!-- / Paper size type -->
 
         <!-- Paper size selector (standard) -->
-        <paper-size-selector v-show="paper.paper_size_type === 'standard'"
-                             :section-name="paper.section_name"
-                             :initial-size="paper.paper_size"
-                             @paper-size-selected="size => handlePaperSizeSelected(size)"></paper-size-selector>
+        <paper-size-selector
+          v-show="paper.paper_size_type === 'standard'"
+          :section-name="paper.section_name"
+          :initial-size="paper.paper_size"
+          @paper-size-selected="(size) => handlePaperSizeSelected(size)"
+        ></paper-size-selector>
         <!-- / Paper size selector -->
 
         <!-- Paper size (manual) -->
         <div v-show="paper.paper_size_type === 'custom'">
           <a-form layout="vertical">
             <!-- Width -->
-            <validated-form-item label="Width"
-                                 :conditions="[{field: 'section_name', value: paper.section_name}]"
-                                 id="paper-custom-paper-size-width,paper-custom-paper-size-width-unit">
+            <validated-form-item
+              label="Width"
+              :conditions="[{ field: 'section_name', value: paper.section_name }]"
+              id="paper-custom-paper-size-width,paper-custom-paper-size-width-unit"
+            >
               <a-input-group compact>
-                <a-input @blur="forceRefresh"
-                         size="large" style="width: 60%"
-                         v-model="paper.custom_paper_size_width"/>
-                <a-select @change="forceRefresh"
-                          default-value="mm" style="width: 20%" size="large"
-                          v-model="paper.custom_paper_size_width_unit">
-                  <a-select-option value="mm">
-                    mm
-                  </a-select-option>
-                  <a-select-option value="in">
-                    in
-                  </a-select-option>
+                <a-input @blur="forceRefresh" size="large" style="width: 60%" v-model="paper.custom_paper_size_width" />
+                <a-select
+                  @change="forceRefresh"
+                  default-value="mm"
+                  style="width: 20%"
+                  size="large"
+                  v-model="paper.custom_paper_size_width_unit"
+                >
+                  <a-select-option value="mm"> mm </a-select-option>
+                  <a-select-option value="in"> in </a-select-option>
                 </a-select>
               </a-input-group>
             </validated-form-item>
             <!-- / Width -->
 
             <!-- Height -->
-            <validated-form-item label="Height" :conditions="[{field: 'section_name', value: paper.section_name}]"
-                                 id="paper-custom-paper-size-height,paper-custom-paper-size-height-unit">
+            <validated-form-item
+              label="Height"
+              :conditions="[{ field: 'section_name', value: paper.section_name }]"
+              id="paper-custom-paper-size-height,paper-custom-paper-size-height-unit"
+            >
               <a-input-group compact>
-                <a-input @blur="forceRefresh"
-                         size="large" style="width: 60%"
-                         v-model="paper.custom_paper_size_height"/>
-                <a-select @change="forceRefresh"
-                          default-value="mm" style="width: 20%" size="large"
-                          v-model="paper.custom_paper_size_height_unit">
-                  <a-select-option value="mm">
-                    mm
-                  </a-select-option>
-                  <a-select-option value="in">
-                    in
-                  </a-select-option>
+                <a-input
+                  @blur="forceRefresh"
+                  size="large"
+                  style="width: 60%"
+                  v-model="paper.custom_paper_size_height"
+                />
+                <a-select
+                  @change="forceRefresh"
+                  default-value="mm"
+                  style="width: 20%"
+                  size="large"
+                  v-model="paper.custom_paper_size_height_unit"
+                >
+                  <a-select-option value="mm"> mm </a-select-option>
+                  <a-select-option value="in"> in </a-select-option>
                 </a-select>
               </a-input-group>
             </validated-form-item>
@@ -216,43 +228,45 @@
         <a-row :gutter="70">
           <a-col :span="12">
             <validated-form-item
-                label="Colour Type"
-                :conditions="[{field: 'section_name', value: paper.section_name}]"
-                id="paper-colour-type">
-              <a-radio-group @change="forceRefresh" v-model="paper.colour_type"
-                             button-style="solid">
-                <a-radio-button value="process">
-                  Process
-                </a-radio-button>
-                <a-radio-button value="spot">
-                  Spot
-                </a-radio-button>
-                <a-radio-button value="process-and-spot">
-                  Process & Spot
-                </a-radio-button>
+              label="Colour Type"
+              :conditions="[{ field: 'section_name', value: paper.section_name }]"
+              id="paper-colour-type"
+            >
+              <a-radio-group @change="forceRefresh" v-model="paper.colour_type" button-style="solid">
+                <a-radio-button value="process"> Process </a-radio-button>
+                <a-radio-button value="spot"> Spot </a-radio-button>
+                <a-radio-button value="process-and-spot"> Process & Spot </a-radio-button>
               </a-radio-group>
             </validated-form-item>
 
             <validated-form-item
-                v-if="paper.colour_type === 'process'"
-                label="Number Of Process Colours"
-                :conditions="[{field: 'section_name', value: paper.section_name}]"
-                id="paper-number-of-process-colours">
-              <a-input type="number" min="0"
-                       v-model="paper.number_of_process_colours"
-                       @blur="forceRefresh"
-                       size="large"></a-input>
+              v-if="paper.colour_type === 'process'"
+              label="Number Of Process Colours"
+              :conditions="[{ field: 'section_name', value: paper.section_name }]"
+              id="paper-number-of-process-colours"
+            >
+              <a-input
+                type="number"
+                min="0"
+                v-model="paper.number_of_process_colours"
+                @blur="forceRefresh"
+                size="large"
+              ></a-input>
             </validated-form-item>
 
             <validated-form-item
-                v-if="paper.colour_type === 'spot'"
-                :conditions="[{field: 'section_name', value: paper.section_name}]"
-                id="paper-number-of-spot-colours"
-                label="Number Of Spot Colours">
-              <a-input type="number" min="0"
-                       v-model="paper.number_of_spot_colours"
-                       @blur="forceRefresh"
-                       size="large"></a-input>
+              v-if="paper.colour_type === 'spot'"
+              :conditions="[{ field: 'section_name', value: paper.section_name }]"
+              id="paper-number-of-spot-colours"
+              label="Number Of Spot Colours"
+            >
+              <a-input
+                type="number"
+                min="0"
+                v-model="paper.number_of_spot_colours"
+                @blur="forceRefresh"
+                size="large"
+              ></a-input>
             </validated-form-item>
           </a-col>
         </a-row>
@@ -260,23 +274,33 @@
         <!-- Process and spot -->
         <a-row :gutter="70" v-if="paper.colour_type === 'process-and-spot'">
           <a-col span="12">
-            <validated-form-item label="Number Of Process Colours"
-                                 :conditions="[{field: 'section_name', value: paper.section_name}]"
-                                 id="paper-number-of-process-colours">
-              <a-input type="number" min="0"
-                       v-model="paper.number_of_process_colours"
-                       @blur="forceRefresh"
-                       size="large"></a-input>
+            <validated-form-item
+              label="Number Of Process Colours"
+              :conditions="[{ field: 'section_name', value: paper.section_name }]"
+              id="paper-number-of-process-colours"
+            >
+              <a-input
+                type="number"
+                min="0"
+                v-model="paper.number_of_process_colours"
+                @blur="forceRefresh"
+                size="large"
+              ></a-input>
             </validated-form-item>
           </a-col>
           <a-col span="12">
-            <validated-form-item label="Number Of Spot Colours"
-                                 :conditions="[{field: 'section_name', value: paper.section_name}]"
-                                 id="paper-number-of-spot-colours">
-              <a-input type="number" min="0"
-                       v-model="paper.number_of_spot_colours"
-                       @blur="forceRefresh"
-                       size="large"></a-input>
+            <validated-form-item
+              label="Number Of Spot Colours"
+              :conditions="[{ field: 'section_name', value: paper.section_name }]"
+              id="paper-number-of-spot-colours"
+            >
+              <a-input
+                type="number"
+                min="0"
+                v-model="paper.number_of_spot_colours"
+                @blur="forceRefresh"
+                size="large"
+              ></a-input>
             </validated-form-item>
           </a-col>
         </a-row>
@@ -287,17 +311,14 @@
 
     <!-- Coating Applied -->
     <a-form layout="vertical">
-      <validated-form-item label="Coating Applied"
-                           :conditions="[{field: 'section_name', value: paper.section_name}]"
-                           id="paper-is-coating-applied">
-        <a-radio-group @change="forceRefresh" v-model="paper.is_coating_applied"
-                       button-style="solid">
-          <a-radio-button :value="true">
-            Yes
-          </a-radio-button>
-          <a-radio-button :value="false">
-            No
-          </a-radio-button>
+      <validated-form-item
+        label="Coating Applied"
+        :conditions="[{ field: 'section_name', value: paper.section_name }]"
+        id="paper-is-coating-applied"
+      >
+        <a-radio-group @change="forceRefresh" v-model="paper.is_coating_applied" button-style="solid">
+          <a-radio-button :value="true"> Yes </a-radio-button>
+          <a-radio-button :value="false"> No </a-radio-button>
         </a-radio-group>
       </validated-form-item>
     </a-form>
@@ -305,46 +326,55 @@
     <a-form layout="vertical" v-if="paper.is_coating_applied === true">
       <a-row :gutter="60">
         <a-col span="12">
-          <validated-form-item label="Coating Type"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-coating-type">
-            <a-select v-model="paper.coating_type"
-                      show-search size="large"
-                      style="width: 100%"
-                      @change="forceRefresh">
-              <a-select-option v-for="coatingType in coatingTypeOptions"
-                               :value="coatingType.value"
-                               :key="coatingType.value">
+          <validated-form-item
+            label="Coating Type"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-coating-type"
+          >
+            <a-select v-model="paper.coating_type" show-search size="large" style="width: 100%" @change="forceRefresh">
+              <a-select-option
+                v-for="coatingType in coatingTypeOptions"
+                :value="coatingType.value"
+                :key="coatingType.value"
+              >
                 {{ coatingType.label }}
               </a-select-option>
             </a-select>
           </validated-form-item>
 
-          <validated-form-item label="Coating Applied"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-coating-applied">
-            <a-select v-model="paper.coating_applied"
-                      show-search size="large"
-                      style="width: 100%"
-                      @change="forceRefresh">
-              <a-select-option v-for="coatingApplied in coatingAppliedOptions"
-                               :value="coatingApplied.value"
-                               :key="coatingApplied.value">
+          <validated-form-item
+            label="Coating Applied"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-coating-applied"
+          >
+            <a-select
+              v-model="paper.coating_applied"
+              show-search
+              size="large"
+              style="width: 100%"
+              @change="forceRefresh"
+            >
+              <a-select-option
+                v-for="coatingApplied in coatingAppliedOptions"
+                :value="coatingApplied.value"
+                :key="coatingApplied.value"
+              >
                 {{ coatingApplied.label }}
               </a-select-option>
             </a-select>
           </validated-form-item>
 
-          <validated-form-item label="Sides Coated"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-sides-coated">
-            <a-select v-model="paper.sides_coated"
-                      show-search size="large"
-                      style="width: 100%"
-                      @change="forceRefresh">
-              <a-select-option v-for="sidesCoated in sidesCoatedOptions"
-                               :value="sidesCoated.value"
-                               :key="sidesCoated.value">
+          <validated-form-item
+            label="Sides Coated"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-sides-coated"
+          >
+            <a-select v-model="paper.sides_coated" show-search size="large" style="width: 100%" @change="forceRefresh">
+              <a-select-option
+                v-for="sidesCoated in sidesCoatedOptions"
+                :value="sidesCoated.value"
+                :key="sidesCoated.value"
+              >
                 {{ sidesCoated.label }}
               </a-select-option>
             </a-select>
@@ -356,17 +386,14 @@
 
     <!-- Embellishments -->
     <a-form layout="vertical">
-      <validated-form-item label="Is Embellished"
-                           :conditions="[{field: 'section_name', value: paper.section_name}]"
-                           id="paper-is-embellished">
-        <a-radio-group @change="forceRefresh" v-model="paper.is_embellished"
-                       button-style="solid">
-          <a-radio-button :value="true">
-            Yes
-          </a-radio-button>
-          <a-radio-button :value="false">
-            No
-          </a-radio-button>
+      <validated-form-item
+        label="Is Embellished"
+        :conditions="[{ field: 'section_name', value: paper.section_name }]"
+        id="paper-is-embellished"
+      >
+        <a-radio-group @change="forceRefresh" v-model="paper.is_embellished" button-style="solid">
+          <a-radio-button :value="true"> Yes </a-radio-button>
+          <a-radio-button :value="false"> No </a-radio-button>
         </a-radio-group>
       </validated-form-item>
     </a-form>
@@ -374,16 +401,23 @@
     <a-form layout="vertical" v-if="paper.is_embellished">
       <a-row :gutter="60">
         <a-col span="12">
-          <validated-form-item label="Embellishment Type"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-embellishment-type">
-            <a-select v-model="paper.embellishment_type"
-                      show-search size="large"
-                      style="width: 100%"
-                      @change="forceRefresh">
-              <a-select-option v-for="embellishmentType in embellishmentTypeOptions"
-                               :value="embellishmentType.value"
-                               :key="embellishmentType.value">
+          <validated-form-item
+            label="Embellishment Type"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-embellishment-type"
+          >
+            <a-select
+              v-model="paper.embellishment_type"
+              show-search
+              size="large"
+              style="width: 100%"
+              @change="forceRefresh"
+            >
+              <a-select-option
+                v-for="embellishmentType in embellishmentTypeOptions"
+                :value="embellishmentType.value"
+                :key="embellishmentType.value"
+              >
                 {{ embellishmentType.label }}
               </a-select-option>
             </a-select>
@@ -397,14 +431,13 @@
     <a-form layout="vertical">
       <a-row :gutter="60">
         <a-col span="12">
-          <validated-form-item label="Die Cutting Required"
-                               :conditions="[{field: 'section_name', value: paper.section_name}]"
-                               id="paper-die-cutting-required">
-            <a-radio-group @change="forceRefresh"
-                           v-model="paper.die_cutting_required"
-                           button-style="solid">
-              <a-radio-button v-for="option in dieCuttingRequiredOptions" :key="option.value"
-                              :value="option.value">
+          <validated-form-item
+            label="Die Cutting Required"
+            :conditions="[{ field: 'section_name', value: paper.section_name }]"
+            id="paper-die-cutting-required"
+          >
+            <a-radio-group @change="forceRefresh" v-model="paper.die_cutting_required" button-style="solid">
+              <a-radio-button v-for="option in dieCuttingRequiredOptions" :key="option.value" :value="option.value">
                 {{ option.label }}
               </a-radio-button>
             </a-radio-group>
@@ -420,7 +453,7 @@
 import PaperSizeSelector from "./PaperSizeSelector";
 import Forms from "../../../../../../mixins/Forms";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 // const PAPER_FINISH_OPTIONS = [
 //   {
@@ -477,41 +510,41 @@ const _ = require('lodash');
 
 const PAPER_WEIGHT_OPTIONS = [
   {
-    value: '10-35gsm',
-    label: '10-35gsm'
+    value: "10-35gsm",
+    label: "10-35gsm",
   },
   {
-    value: '35-55gsm',
-    label: '35-55gsm'
+    value: "35-55gsm",
+    label: "35-55gsm",
   },
   {
-    value: '70-100gsm',
-    label: '70-100gsm'
+    value: "70-100gsm",
+    label: "70-100gsm",
   },
   {
-    value: '110-120gsm',
-    label: '110-120gsm'
+    value: "110-120gsm",
+    label: "110-120gsm",
   },
   {
-    value: '130-170gsm',
-    label: '130-170gsm'
+    value: "130-170gsm",
+    label: "130-170gsm",
   },
   {
-    value: '170-200gsm',
-    label: '170-200gsm'
+    value: "170-200gsm",
+    label: "170-200gsm",
   },
   {
-    value: '200-250gsm',
-    label: '200-250gsm'
+    value: "200-250gsm",
+    label: "200-250gsm",
   },
   {
-    value: '300-350gsm',
-    label: '300-350gsm'
+    value: "300-350gsm",
+    label: "300-350gsm",
   },
   {
-    value: '400gsm',
-    label: '400gsm'
-  }
+    value: "400gsm",
+    label: "400gsm",
+  },
 ];
 
 // const PAPER_BRAND_OPTIONS = [
@@ -821,7 +854,6 @@ const PAPER_WEIGHT_OPTIONS = [
 //   }
 // ];
 
-
 // const PAPER_NAME_OPTIONS = [
 //   {
 //     value: 'Magno Gloss',
@@ -855,96 +887,96 @@ const PAPER_WEIGHT_OPTIONS = [
 
 const COATING_TYPE_OPTIONS = [
   {
-    value: 'laminate',
-    label: 'Laminate'
+    value: "laminate",
+    label: "Laminate",
   },
   {
-    value: 'varnish',
-    label: 'Varnish'
+    value: "varnish",
+    label: "Varnish",
   },
   {
-    value: 'encapsulation',
-    label: 'Encapsulation'
+    value: "encapsulation",
+    label: "Encapsulation",
   },
   {
-    value: 'uv-varnish',
-    label: 'UV Varnish'
+    value: "uv-varnish",
+    label: "UV Varnish",
   },
   {
-    value: 'aqueous-coating',
-    label: 'Aqueous Coating'
-  }
+    value: "aqueous-coating",
+    label: "Aqueous Coating",
+  },
 ];
 
 const COATING_FINISH_OPTIONS = [
   {
-    value: 'matte',
-    label: 'Matte'
+    value: "matte",
+    label: "Matte",
   },
   {
-    value: 'gloss',
-    label: 'Gloss'
+    value: "gloss",
+    label: "Gloss",
   },
   {
-    value: 'satin',
-    label: 'Satin'
+    value: "satin",
+    label: "Satin",
   },
   {
-    value: 'silk',
-    label: 'Silk'
+    value: "silk",
+    label: "Silk",
   },
   {
-    value: 'soft-touch',
-    label: 'Soft Touch'
+    value: "soft-touch",
+    label: "Soft Touch",
   },
   {
-    value: 'other',
-    label: 'Other'
-  }
+    value: "other",
+    label: "Other",
+  },
 ];
 
 const COATING_APPLIED_OPTIONS = [
   {
-    value: 'spot',
-    label: 'Spot'
+    value: "spot",
+    label: "Spot",
   },
   {
-    value: 'process',
-    label: 'Process'
-  }
+    value: "process",
+    label: "Process",
+  },
 ];
 
 const SIDES_COATED_OPTIONS = [
   {
-    value: '1',
-    label: 'One'
+    value: "1",
+    label: "One",
   },
   {
-    value: '2',
-    label: 'Two'
-  }
+    value: "2",
+    label: "Two",
+  },
 ];
 
 const EMBELLISHMENT_TYPE_OPTIONS = [
   {
-    value: 'foiling',
-    label: 'Foiling'
+    value: "foiling",
+    label: "Foiling",
   },
   {
-    value: 'embossing',
-    label: 'Embossing'
-  }
+    value: "embossing",
+    label: "Embossing",
+  },
 ];
 
 const DIE_CUTTING_REQUIRED_OPTIONS = [
   {
     value: true,
-    label: 'Yes'
+    label: "Yes",
   },
   {
     value: false,
-    label: 'No'
-  }
+    label: "No",
+  },
 ];
 
 // const PAPER_FOLD_TYPE_OPTIONS = [
@@ -989,18 +1021,11 @@ const DIE_CUTTING_REQUIRED_OPTIONS = [
 export default {
   name: "IndividualPaperDetails",
   mixins: [Forms],
-  props: [
-    'productSubtype',
-    'paper',
-    'propagateForceRefresh',
-    'sectionNameOptions',
-    'hideNameOfSection',
-    'paperBrands'
-  ],
+  props: ["productSubtype", "paper", "propagateForceRefresh", "sectionNameOptions", "hideNameOfSection", "paperBrands"],
   methods: {
     forceRefresh() {
       if (this.propagateForceRefresh) {
-        this.$emit('force-refresh');
+        this.$emit("force-refresh");
       }
       this.$forceUpdate();
     },
@@ -1022,14 +1047,14 @@ export default {
       if (custom) {
         this.paper.paper_name = custom;
       }
-    }
+    },
   },
   components: {
     PaperSizeSelector,
     VNodes: {
       functional: true,
       render: (h, ctx) => ctx.props.vnodes,
-    }
+    },
   },
   data() {
     return {
@@ -1044,13 +1069,13 @@ export default {
       sidesCoatedOptions: SIDES_COATED_OPTIONS,
       embellishmentTypeOptions: EMBELLISHMENT_TYPE_OPTIONS,
       dieCuttingRequiredOptions: DIE_CUTTING_REQUIRED_OPTIONS,
-      paperFoldTypeOptions: []
-    }
+      paperFoldTypeOptions: [],
+    };
   },
   mounted() {
-    this.getDropdownOptions('paper-brand', 'paperBrandOptions');
-    this.getDropdownOptions('paper-finish', 'paperFinishOptions');
-    this.getDropdownOptions('paper-fold-type', 'paperFoldTypeOptions');
+    this.getDropdownOptions("paper-brand", "paperBrandOptions");
+    this.getDropdownOptions("paper-finish", "paperFinishOptions");
+    this.getDropdownOptions("paper-fold-type", "paperFoldTypeOptions");
   },
   computed: {
     // paperBrandNames() {
@@ -1064,15 +1089,15 @@ export default {
 
     paperNameOptions() {
       let paperBrand = _.find(this.paperBrandOptions, {
-        name: this.paper.paper_brand
+        name: this.paper.paper_brand,
       });
       if (paperBrand) {
-        return paperBrand.profiles
+        return paperBrand.profiles;
       }
       return [];
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

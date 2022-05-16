@@ -1,14 +1,14 @@
 .pill-selector {
   .ant-btn {
     margin-right: 15px;
-    background: #DDEAFB;
-    color: #5D9CF4;
+    background: #ddeafb;
+    color: #5d9cf4;
     font-weight: 500;
     margin-bottom: 17px;
 
     &.selected {
-      background: #5D9CF4 !important;
-      color: #EAF2FD !important;
+      background: #5d9cf4 !important;
+      color: #eaf2fd !important;
     }
   }
 }

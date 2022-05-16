@@ -20,9 +20,9 @@
   padding: 0 6px;
   display: inline-block;
   border-radius: 100px;
-  background-color: rgb(245,245,250);
-  color: rgb(72,76,122);
-  border: 1px solid rgb(214,214,231);
+  background-color: rgb(245, 245, 250);
+  color: rgb(72, 76, 122);
+  border: 1px solid rgb(214, 214, 231);
   margin-left: 6px;
 }
 
@@ -46,7 +46,7 @@
   background-color: rgb(242, 230, 194);
   color: rgb(175, 134, 97);
   margin-left: 6px;
-  
+
   &.bordered {
     border: 1px solid rgb(202, 184, 130);
   }
@@ -74,7 +74,7 @@
   padding: 0;
 }
 
-.p-6{
+.p-6 {
   padding: 1.5rem;
 }
 
@@ -123,7 +123,7 @@
 }
 
 .ant-modal {
-  width: 900px!important;
+  width: 900px !important;
 }
 
 .ant-dropdown-menu-submenu-title {

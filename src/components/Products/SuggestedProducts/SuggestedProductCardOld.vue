@@ -1,8 +1,7 @@
 <template>
   <div class="suggested-product-card-wrapper">
     <div class="suggested-product-card" @click.prevent="navigateToProduct(product)">
-      <div class="left" :style="{backgroundImage: 'url(' + getImageSrc(product) + ')'}">
-      </div>
+      <div class="left" :style="{ backgroundImage: 'url(' + getImageSrc(product) + ')' }"></div>
       <div class="right">
         <div class="category">
           {{ getCategory(product) }}
@@ -18,7 +17,7 @@
 <script>
 export default {
   name: "SuggestedProductCard",
-  props: ['product'],
+  props: ["product"],
   methods: {
     getImageSrc(product) {
       if (product["imageURLs"] && product["imageURLs"].length) {
@@ -28,7 +27,7 @@ export default {
 
     truncate(str, maxLength) {
       if (str && str.length > maxLength) {
-        return str.slice(0, maxLength) + '...';
+        return str.slice(0, maxLength) + "...";
       }
       return str;
     },
@@ -37,18 +36,18 @@ export default {
       if (product.taxonomyCategory) {
         return product.taxonomyCategory[product.taxonomyCategory.length - 1];
       }
-      return 'Miscellaneous';
+      return "Miscellaneous";
     },
 
     navigateToProduct(product) {
       let id = product.id;
       if (!id) {
-        id = product['_id'];
+        id = product["_id"];
       }
-      this.$router.push('/products/' + id);
-    }
-  }
-}
+      this.$router.push("/products/" + id);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

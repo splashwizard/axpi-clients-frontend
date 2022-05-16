@@ -3,17 +3,15 @@
     <div v-if="isLoading">
       <a-spin></a-spin>
     </div>
-    <div v-else
-         class="suggested-product-card" @click.prevent="navigateToProduct(productFleshed['product'])">
-      <div class="top" :style="{backgroundImage: 'url(' + getImageSrc(productFleshed['product']) + ')'}">
-      </div>
+    <div v-else class="suggested-product-card" @click.prevent="navigateToProduct(productFleshed['product'])">
+      <div class="top" :style="{ backgroundImage: 'url(' + getImageSrc(productFleshed['product']) + ')' }"></div>
       <div class="bottom">
         <div class="left">
           <div class="title">
-            {{ truncate(productFleshed['product'].name, 50) }}
+            {{ truncate(productFleshed["product"].name, 50) }}
           </div>
           <div class="category">
-            {{ getCategory(productFleshed['product']) }}
+            {{ getCategory(productFleshed["product"]) }}
           </div>
         </div>
         <div class="right">
@@ -26,22 +24,22 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import Orders from "../../../../../mixins/Orders";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "ProductCard",
-  props: ['product'],
+  props: ["product"],
   mixins: [Orders],
   data() {
     return {
       productFleshed: null,
       isLoading: true,
       prices: [],
-      isLoadingPrices: true
-    }
+      isLoadingPrices: true,
+    };
   },
   created() {
     this.loadProductDetails();
@@ -51,57 +49,63 @@ export default {
     priceRange() {
       let prices = this.prices;
       if (prices && prices.length) {
-        let ordered = _.orderBy(prices, 'price');
+        let ordered = _.orderBy(prices, "price");
         let minPrice = _.first(ordered);
         let maxPrice = _.last(ordered);
 
         if (minPrice !== maxPrice) {
           let minPriceFormatted = this.formatCostInPence2dp({
             cost: minPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
 
           let maxPriceFormatted = this.formatCostInPence2dp({
             cost: maxPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
 
-          return minPriceFormatted + ' - ' + maxPriceFormatted;
+          return minPriceFormatted + " - " + maxPriceFormatted;
         } else {
           return this.formatCostInPence2dp({
             cost: minPrice.price,
-            cost_currency: 'USD'
+            cost_currency: "USD",
           });
         }
       }
-      return '-';
-    }
+      return "-";
+    },
   },
   methods: {
     loadProductDetails() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/products/' + this.product.product_id).then(r => {
-        vm.isLoading = false;
-        vm.productFleshed = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.$message.error('Error loading product details');
-      });
+      axios
+        .get(window.API_BASE + "/products/" + this.product.product_id)
+        .then((r) => {
+          vm.isLoading = false;
+          vm.productFleshed = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          vm.$message.error("Error loading product details");
+        });
     },
 
     loadPrices() {
       let vm = this;
       vm.isLoadingPrices = true;
-      axios.get(window.API_BASE + '/products/' + this.product.product_id + '/prices').then(r => {
-        vm.isLoadingPrices = false;
-        vm.prices = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoadingPrices = false;
-        vm.$message.error('Error loading product prices');
-      });
+      axios
+        .get(window.API_BASE + "/products/" + this.product.product_id + "/prices")
+        .then((r) => {
+          vm.isLoadingPrices = false;
+          vm.prices = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoadingPrices = false;
+          vm.$message.error("Error loading product prices");
+        });
     },
 
     getImageSrc(product) {
@@ -112,7 +116,7 @@ export default {
 
     truncate(str, maxLength) {
       if (str && str.length > maxLength) {
-        return str.slice(0, maxLength) + '...';
+        return str.slice(0, maxLength) + "...";
       }
       return str;
     },
@@ -121,18 +125,18 @@ export default {
       if (product.taxonomyCategory) {
         return product.taxonomyCategory[product.taxonomyCategory.length - 1];
       }
-      return 'Miscellaneous';
+      return "Miscellaneous";
     },
 
     navigateToProduct(product) {
       let id = product.id;
       if (!id) {
-        id = product['_id'];
+        id = product["_id"];
       }
-      this.$router.push('/products/' + id);
-    }
-  }
-}
+      this.$router.push("/products/" + id);
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -142,7 +146,6 @@ export default {
   cursor: pointer;
 
   .suggested-product-card {
-
     .top {
       width: 100%;
       height: 300px;
@@ -175,7 +178,6 @@ export default {
         padding-right: 15px;
       }
     }
-
   }
 }
 </style>

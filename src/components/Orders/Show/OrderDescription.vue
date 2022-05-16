@@ -42,11 +42,13 @@
     <a-descriptions :column="1" title="Emissions" bordered>
       <a-descriptions-item label="CO2">
         <a-spin v-if="isLoadingEmissions" />
-        <span v-if="!isLoadingEmissions">{{ emissions ? formatFloat(emissions['total']) : '-' }} kg</span>
-        <emission-breakdown-modal-and-button :is-loading="isLoadingEmissions" :emissions="emissions"></emission-breakdown-modal-and-button>
+        <span v-if="!isLoadingEmissions">{{ emissions ? formatFloat(emissions["total"]) : "-" }} kg</span>
+        <emission-breakdown-modal-and-button
+          :is-loading="isLoadingEmissions"
+          :emissions="emissions"
+        ></emission-breakdown-modal-and-button>
       </a-descriptions-item>
     </a-descriptions>
-
   </div>
 </template>
 
@@ -55,19 +57,19 @@ import orders from "../../../helpers/orders";
 import Dates from "../../../mixins/Dates";
 import Orders from "../../../mixins/Orders";
 import EmissionBreakdownModalAndButton from "./EmissionBreakdownModalAndButton";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "OrderDescription",
-  props: ['order'],
+  props: ["order"],
   mixins: [Dates, Orders],
   data() {
     return {
       isLoadingEmissions: false,
-      emissions: null
-    }
+      emissions: null,
+    };
   },
-  components: {EmissionBreakdownModalAndButton},
+  components: { EmissionBreakdownModalAndButton },
   created() {
     this.loadEmissions();
   },
@@ -75,25 +77,28 @@ export default {
     loadEmissions() {
       let vm = this;
       vm.isLoadingEmissions = true;
-      axios.get(window.API_BASE + '/orders/' + vm.order.id + '/environmental-data').then(r => {
-        vm.isLoadingEmissions = false;
-        vm.emissions = r.data;
-      }).catch(e => {
-        vm.isLoadingEmissions = false;
-        console.log(e);
-      });
+      axios
+        .get(window.API_BASE + "/orders/" + vm.order.id + "/environmental-data")
+        .then((r) => {
+          vm.isLoadingEmissions = false;
+          vm.emissions = r.data;
+        })
+        .catch((e) => {
+          vm.isLoadingEmissions = false;
+          console.log(e);
+        });
     },
 
     formatFloat(val) {
-      return Math.round( val * 100 + Number.EPSILON ) / 100;
-    }
+      return Math.round(val * 100 + Number.EPSILON) / 100;
+    },
   },
   computed: {
     orderLocal() {
       return orders.decodeOrder(this.order);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

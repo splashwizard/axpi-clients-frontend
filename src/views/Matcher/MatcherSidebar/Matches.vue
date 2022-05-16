@@ -1,16 +1,12 @@
 <template>
   <div class="wrapper">
     <!-- No matches -->
-    <a-alert type="error"
-             message="No matches"
-             v-if="allMatches.length === 0"
-             banner/>
+    <a-alert type="error" message="No matches" v-if="allMatches.length === 0" banner />
     <!-- / No matches -->
 
     <!-- Matches -->
     <div class="wrapper matches-list-wrapper" v-if="allMatches.length" :key="matchSelectedReloadKey">
-      <a-list item-layout="horizontal"
-              :data-source="allMatches">
+      <a-list item-layout="horizontal" :data-source="allMatches">
         <match-list-item slot="renderItem" slot-scope="item" :list-item="item"></match-list-item>
       </a-list>
     </div>
@@ -21,55 +17,55 @@
 <script>
 import MatchListItem from "./Matches/MatchListItem";
 
-const _ = require('lodash');
-import {mapGetters} from "vuex";
+const _ = require("lodash");
+import { mapGetters } from "vuex";
 
 export default {
-  props: ['matches', 'idsOfManualSelections'],
+  props: ["matches", "idsOfManualSelections"],
   name: "Matches",
-  components: {MatchListItem},
+  components: { MatchListItem },
   data() {
     return {
-      showMoreDetailsForIds: []
-    }
+      showMoreDetailsForIds: [],
+    };
   },
   methods: {
     getImageSrc(order) {
-      if (order['Images'] && order['Images'].length) {
-        return order['Images'][0];
+      if (order["Images"] && order["Images"].length) {
+        return order["Images"][0];
       }
     },
 
     toggleShowMoreDetailsFor(order) {
-      this.showMoreDetailsForIds = _.xor(this.showMoreDetailsForIds, [order['_id']]);
-    }
+      this.showMoreDetailsForIds = _.xor(this.showMoreDetailsForIds, [order["_id"]]);
+    },
   },
   computed: {
-    ...mapGetters('matcher', {
-      matchSelectedReloadKey: 'matchSelectedReloadKey'
+    ...mapGetters("matcher", {
+      matchSelectedReloadKey: "matchSelectedReloadKey",
     }),
 
     allMatches() {
       let allMatches = [];
 
-      _.each(this.idsOfManualSelections, s => {
+      _.each(this.idsOfManualSelections, (s) => {
         allMatches.push({
-          type: 'id',
-          value: s
+          type: "id",
+          value: s,
         });
       });
 
-      _.each(this.matches, m => {
+      _.each(this.matches, (m) => {
         allMatches.push({
-          type: 'product',
-          value: m
+          type: "product",
+          value: m,
         });
       });
 
       return allMatches;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

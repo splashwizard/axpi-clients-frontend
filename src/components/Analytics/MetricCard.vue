@@ -1,15 +1,12 @@
 <template>
-  <div class="metric-container" :class="{'active': isActive}"
-       @click="toggleActive"
-       :style="metricStyle">
+  <div class="metric-container" :class="{ active: isActive }" @click="toggleActive" :style="metricStyle">
     <div class="ant-statistic" v-if="metric">
       <div class="ant-statistic-title">
         <span v-if="!isActive">{{ metric.label }}</span>
         <a-dropdown v-if="isActive" :trigger="['click']">
-          <a class="ant-dropdown-link" :style="textStyle"
-             @click.stop="e => e.preventDefault()">
+          <a class="ant-dropdown-link" :style="textStyle" @click.stop="(e) => e.preventDefault()">
             {{ metric.label }}
-            <a-icon type="down"/>
+            <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
             <a-menu-item v-for="m in metrics" :key="m.id">
@@ -21,7 +18,7 @@
       <div class="ant-statistic-content">
         <span class="ant-statistic-content-value">
           <span class="ant-statistic-content-value-int" :style="textStyle">
-           {{ metric.value(this.startMonth, this.endMonth, metric.time_series_data) }}
+            {{ metric.value(this.startMonth, this.endMonth, metric.time_series_data) }}
           </span>
         </span>
       </div>
@@ -30,50 +27,59 @@
 </template>
 
 <script>
-let _ = require('lodash');
+let _ = require("lodash");
 export default {
-  props: ['index', 'metrics', 'selectedMetricId', 'isActive', 'backgroundColour', 'textColour', 'startMonth', 'endMonth'],
+  props: [
+    "index",
+    "metrics",
+    "selectedMetricId",
+    "isActive",
+    "backgroundColour",
+    "textColour",
+    "startMonth",
+    "endMonth",
+  ],
   name: "MetricCard",
   data() {
-    return {}
+    return {};
   },
   computed: {
     metric() {
       let metric = _.find(this.metrics, {
-        id: this.selectedMetricId
+        id: this.selectedMetricId,
       });
-      return metric ? metric : null
+      return metric ? metric : null;
     },
 
     metricStyle() {
-      let s = '';
+      let s = "";
       if (this.isActive) {
-        s = s + ' background-color: ' + this.backgroundColour + ';';
+        s = s + " background-color: " + this.backgroundColour + ";";
       }
       return s;
     },
 
     textStyle() {
-      let s = '';
+      let s = "";
       if (this.isActive) {
-        s = s + ' color: ' + this.textColour + ';';
+        s = s + " color: " + this.textColour + ";";
       }
       return s;
-    }
+    },
   },
   methods: {
     toggleActive() {
-      this.$emit('toggle-active', this.index);
+      this.$emit("toggle-active", this.index);
     },
 
     selectMetric(m) {
-      this.$emit('metric-changed', {
+      this.$emit("metric-changed", {
         index: this.index,
-        metric_id: m.id
+        metric_id: m.id,
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

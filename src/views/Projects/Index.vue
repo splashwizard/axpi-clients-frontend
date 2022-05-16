@@ -1,6 +1,5 @@
 <template>
   <div class="projects">
-
     <div class="page-header">
       <h1 class="page-title">Projects</h1>
       <div class="actions">
@@ -9,7 +8,6 @@
     </div>
 
     <projects-table></projects-table>
-
   </div>
 </template>
 
@@ -19,10 +17,8 @@ import CreateProjectButtonAndModal from "./Index/CreateProjectButtonAndModal";
 
 export default {
   name: "Index",
-  components: {CreateProjectButtonAndModal, ProjectsTable}
-}
+  components: { CreateProjectButtonAndModal, ProjectsTable },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

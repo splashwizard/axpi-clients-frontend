@@ -1,12 +1,12 @@
 <template>
-  <img src="/img/icons/basket-icon.svg" class="shop-icon"
-       style="width: 19px" alt="">
-</template>w
+  <img src="/img/icons/basket-icon.svg" class="shop-icon" style="width: 19px" alt="" />
+</template>
+w
 
 <script>
 export default {
-name: "ShopIcon"
-}
+  name: "ShopIcon",
+};
 </script>
 
 <style scoped>

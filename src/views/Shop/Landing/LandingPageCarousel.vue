@@ -1,23 +1,22 @@
 <template>
-  <div :class="{'carousel-margin-bottom': carouselImages.length < 2}">
+  <div :class="{ 'carousel-margin-bottom': carouselImages.length < 2 }">
     <div v-if="isLoading">
       <a-spin></a-spin>
     </div>
-    <carousel
-        v-if="!isLoading" :autoplay="true" :autoplay-timeout="3000" :per-page="1">
+    <carousel v-if="!isLoading" :autoplay="true" :autoplay-timeout="3000" :per-page="1">
       <slide v-for="(image, i) in carouselImages" :key="i">
         <div class="carousel-text">
           <h1>{{ image.title }}</h1>
           <h2>{{ image.subtitle }}</h2>
         </div>
-        <img class="carousel-image" :src="getImageSrc(image.image)" :alt="image.alt">
+        <img class="carousel-image" :src="getImageSrc(image.image)" :alt="image.alt" />
       </slide>
     </carousel>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import Images from "../../../mixins/Images";
 
 export default {
@@ -26,8 +25,8 @@ export default {
   data() {
     return {
       isLoading: false,
-      carouselImages: []
-    }
+      carouselImages: [],
+    };
   },
   created() {
     this.loadCarouselImages();
@@ -36,17 +35,20 @@ export default {
     loadCarouselImages() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/shop-landing-page/carousel-images').then(r => {
-        vm.isLoading = false;
-        vm.carouselImages = r.data;
-      }).catch(e => {
-        console.log(e);
-        vm.isLoading = false;
-        vm.$message.error('Error loading carousel images');
-      });
-    }
-  }
-}
+      axios
+        .get(window.API_BASE + "/shop-landing-page/carousel-images")
+        .then((r) => {
+          vm.isLoading = false;
+          vm.carouselImages = r.data;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isLoading = false;
+          vm.$message.error("Error loading carousel images");
+        });
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

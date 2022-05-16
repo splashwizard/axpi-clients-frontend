@@ -1,12 +1,12 @@
 <template>
   <div class="quicksight-q-bar-wrapper">
-<!--    <a-spin v-if="isLoading"></a-spin>-->
+    <!--    <a-spin v-if="isLoading"></a-spin>-->
     <div id="q-bar-embedding-container"></div>
   </div>
 </template>
 <script>
-import axios from 'axios';
-import * as QuickSightEmbedding from 'amazon-quicksight-embedding-sdk';
+import axios from "axios";
+import * as QuickSightEmbedding from "amazon-quicksight-embedding-sdk";
 
 export default {
   components: {},
@@ -14,8 +14,8 @@ export default {
   data() {
     return {
       isLoading: false,
-      embedUrl: null
-    }
+      embedUrl: null,
+    };
   },
 
   computed: {},
@@ -29,15 +29,18 @@ export default {
     getEmbedUrlAndSetup() {
       let vm = this;
       vm.isLoading = true;
-      axios.get(window.API_BASE + '/quicksight-q-bar').then(r => {
-        vm.isLoading = false;
-        this.embedUrl = r.data;
-        this.setup();
-        console.log(r.data);
-      }).catch(e => {
-        console.log(e);
-        this.isLoading = false;
-      });
+      axios
+        .get(window.API_BASE + "/quicksight-q-bar")
+        .then((r) => {
+          vm.isLoading = false;
+          this.embedUrl = r.data;
+          this.setup();
+          console.log(r.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          this.isLoading = false;
+        });
     },
 
     setup() {
@@ -45,20 +48,20 @@ export default {
       var options = {
         url: this.embedUrl,
         container: containerDiv,
-        width: '100%',
+        width: "100%",
         qSearchBarOptions: {
           // expandCallback: onOpen,
           // collapseCallback: onClose,
           iconDisabled: false,
           topicNameDisabled: false,
           // themeId: 'theme12345',
-          allowTopicSelection: true
-        }
+          allowTopicSelection: true,
+        },
       };
       QuickSightEmbedding.embedQSearchBar(options);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style scoped lang="scss">
 .quicksight-q-bar-wrapper {

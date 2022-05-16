@@ -1,15 +1,16 @@
-import store from '@/store'
+import store from "@/store";
 
-export default axios => {
+export default (axios) => {
   axios.interceptors.request.use(
-    config => {
-      const token = store.getters['auth/apiToken']
+    (config) => {
+      const token = store.getters["auth/apiToken"];
       if (token) {
-        config.headers['Authorization'] = 'Bearer ' + token
+        config.headers["Authorization"] = "Bearer " + token;
       }
-      return config
+      return config;
     },
-    error => {
-      Promise.reject(error)
-    })
-}
+    (error) => {
+      Promise.reject(error);
+    }
+  );
+};

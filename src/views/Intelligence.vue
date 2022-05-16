@@ -5,13 +5,12 @@
       <h1 class="page-title">Axiom Insights</h1>
       <div class="actions">
         <intelligence-filters
-            @filter-updated="handleFilterUpdated"
-            @set-filters="setFilters"
-            :filters="filters"
+          @filter-updated="handleFilterUpdated"
+          @set-filters="setFilters"
+          :filters="filters"
         ></intelligence-filters>
 
-        <a-button icon="pie-chart" @click.prevent="viewAllClusters" type="primary">All Clusters
-        </a-button>
+        <a-button icon="pie-chart" @click.prevent="viewAllClusters" type="primary">All Clusters </a-button>
       </div>
     </div>
     <!-- / Header -->
@@ -31,15 +30,15 @@
 </template>
 
 <script>
-import Insights from "./Intelligence/Insights.vue"
+import Insights from "./Intelligence/Insights.vue";
 import DashboardStats from "./Intelligence/DashboardStats";
 import IntelligenceFilters from "./Intelligence/IntelligenceFilters";
 
 export default {
-  components: {IntelligenceFilters, DashboardStats, Insights},
+  components: { IntelligenceFilters, DashboardStats, Insights },
   methods: {
     viewAllClusters() {
-      this.$router.push('/intelligence/clusters');
+      this.$router.push("/intelligence/clusters");
     },
 
     incrementReloadKey() {
@@ -52,17 +51,17 @@ export default {
 
     handleFilterUpdated() {
       this.incrementReloadKey();
-    }
+    },
   },
   data() {
     return {
       reloadKey: 1,
       filters: {
         filters_enabled: {},
-        date_range: 'last-12-months'
-      }
-    }
-  }
+        date_range: "last-12-months",
+      },
+    };
+  },
 };
 </script>
 

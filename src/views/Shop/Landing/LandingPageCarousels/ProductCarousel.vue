@@ -5,14 +5,20 @@
         <h2>{{ carousel.name }}</h2>
       </div>
       <div class="right">
-        <a-button @click.prevent="scrollLeft" type="default" shape="circle" icon="left" size="large"
-                  class="left-button"/>
-        <a-button @click.prevent="scrollRight" type="default" shape="circle" icon="right" size="large"/>
+        <a-button
+          @click.prevent="scrollLeft"
+          type="default"
+          shape="circle"
+          icon="left"
+          size="large"
+          class="left-button"
+        />
+        <a-button @click.prevent="scrollRight" type="default" shape="circle" icon="right" size="large" />
       </div>
     </div>
 
     <div>
-      <a-alert message="No products to show" v-if="products.length === 0" banner/>
+      <a-alert message="No products to show" v-if="products.length === 0" banner />
 
       <div class="carousel-container" ref="carousel">
         <div class="carousel-card" v-for="(product, i) in products" :key="i">
@@ -27,58 +33,58 @@
 import ProductCard from "./ProductCarousel/ProductCard";
 export default {
   name: "ProductCarousel",
-  components: {ProductCard},
-  props: ['carousel'],
+  components: { ProductCard },
+  props: ["carousel"],
   methods: {
     scrollLeft() {
       let scrollStep = 400;
-      let carousel = this.$refs['carousel'];
+      let carousel = this.$refs["carousel"];
 
       let sl = carousel.scrollLeft;
 
-      if ((sl - scrollStep) <= 0) {
+      if (sl - scrollStep <= 0) {
         carousel.scrollTo({
           left: 0,
           top: 0,
-          behaviour: 'smooth'
+          behaviour: "smooth",
         });
       } else {
         carousel.scrollTo({
-          left: (sl - scrollStep),
+          left: sl - scrollStep,
           top: 0,
-          behaviour: 'smooth'
+          behaviour: "smooth",
         });
       }
     },
 
     scrollRight() {
       let scrollStep = 400;
-      let carousel = this.$refs['carousel'];
+      let carousel = this.$refs["carousel"];
 
       let sl = carousel.scrollLeft,
-          cw = carousel.scrollWidth;
+        cw = carousel.scrollWidth;
 
-      if ((sl + scrollStep) >= cw) {
+      if (sl + scrollStep >= cw) {
         carousel.scrollTo({
           left: cw,
           top: 0,
-          behaviour: 'smooth'
+          behaviour: "smooth",
         });
       } else {
         carousel.scrollTo({
-          left: (sl + scrollStep),
+          left: sl + scrollStep,
           top: 0,
-          behaviour: 'smooth'
+          behaviour: "smooth",
         });
       }
-    }
+    },
   },
   computed: {
     products() {
       return this.carousel.shop_landing_carousel_products;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

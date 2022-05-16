@@ -1,14 +1,14 @@
 <template>
   <div class="approved-badge">
-    <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf">
+    <img src="/img/leaf.jpg" class="leaf" width="15" alt="Leaf" />
     <span><a-tag color="green">Approved</a-tag></span>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ApprovedBadge"
-}
+  name: "ApprovedBadge",
+};
 </script>
 
 <style scoped lang="scss">

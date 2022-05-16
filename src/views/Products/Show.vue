@@ -1,22 +1,20 @@
 <template>
   <div class="product-show">
     <loading-screen
-        :is-loading="isLoading||isLoadingDocuments||isLoadingDetails||isSavingDescription||isLoadingPrices"></loading-screen>
+      :is-loading="isLoading || isLoadingDocuments || isLoadingDetails || isSavingDescription || isLoadingPrices"
+    ></loading-screen>
 
-    <a-page-header v-if="product && (fromShop||fromBasket)"
-                   @back="handleBackButton"
-    >
+    <a-page-header v-if="product && (fromShop || fromBasket)" @back="handleBackButton">
       <template slot="title">
         {{ product.name }}
         <approved-badge v-if="product.certified" style="margin-left: 20px"></approved-badge>
-        <has-banned-materials-badge :product-id="product['_id']"
-                                    style="margin-left: 20px;"></has-banned-materials-badge>
+        <has-banned-materials-badge :product-id="product['_id']" style="margin-left: 20px"></has-banned-materials-badge>
       </template>
       <template slot="extra">
         <view-toggler></view-toggler>
       </template>
     </a-page-header>
-    <a-page-header v-if="product && !(fromShop||fromBasket)" :title="product.name">
+    <a-page-header v-if="product && !(fromShop || fromBasket)" :title="product.name">
       <template slot="extra">
         <view-toggler></view-toggler>
       </template>
@@ -35,25 +33,26 @@
     <!-- Product details top -->
     <div class="product-details-top">
       <!-- Has vendor mapping -->
-      <div v-if="productVendorMapping && productVendorMapping.vendors && productVendorMapping.vendors.names"
-           class="product-details-top-property">
+      <div
+        v-if="productVendorMapping && productVendorMapping.vendors && productVendorMapping.vendors.names"
+        class="product-details-top-property"
+      >
         <b>Vendors:</b>
-        <a-badge v-for="(vendor, i) in productVendorMapping.vendors.names" :key="i"
-                 :count="vendor"/>
+        <a-badge v-for="(vendor, i) in productVendorMapping.vendors.names" :key="i" :count="vendor" />
       </div>
       <!-- / Has vendor mapping -->
 
       <!-- Doesn't have vendor mapping -->
       <div v-if="!(productVendorMapping && productVendorMapping.vendors)" class="product-details-top-property">
         <b>Vendors:</b>
-        <a-badge :count="product['vendor']"/>
+        <a-badge :count="product['vendor']" />
       </div>
       <!-- Doesn't have vendor mapping -->
 
       <!-- Manufacturer -->
       <div class="product-details-top-property">
         <b>Manufacturer:</b>
-        {{ product['manufacturer'] ? product['manufacturer'] : '-' }}
+        {{ product["manufacturer"] ? product["manufacturer"] : "-" }}
       </div>
       <!-- / Manufacturer -->
 
@@ -67,14 +66,14 @@
       <!-- Product Code -->
       <div class="product-details-top-property">
         <b>Product Code:</b>
-        {{ product['productCode'] ? product['productCode'] : '-' }}
+        {{ product["productCode"] ? product["productCode"] : "-" }}
       </div>
       <!-- / Product Code -->
 
       <!-- Catalog Code -->
       <div class="product-details-top-property">
         <b>Catalog Code:</b>
-        {{ product['catalogCode'] ? product['catalogCode'] : '-' }}
+        {{ product["catalogCode"] ? product["catalogCode"] : "-" }}
       </div>
       <!-- / Catalog Code -->
     </div>
@@ -88,45 +87,64 @@
         </a-col>
 
         <a-col :span="9">
-          <div style="margin-bottom: 15px;" class="price-description">
-            <h3 style="display: inline;">Price: </h3>
+          <div style="margin-bottom: 15px" class="price-description">
+            <h3 style="display: inline">Price:</h3>
             <span class="price">
-             {{
-                selectedPrice ? formatCostInPence2dp({
-                  cost: selectedPrice.price,
-                  cost_currency: (selectedPrice.price_currency ? selectedPrice.price_currency : 'USD')
-                }) : '-'
+              {{
+                selectedPrice
+                  ? formatCostInPence2dp({
+                      cost: selectedPrice.price,
+                      cost_currency: selectedPrice.price_currency ? selectedPrice.price_currency : "USD",
+                    })
+                  : "-"
               }}
-           </span>
-            ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency: ((selectedPrice && selectedPrice.price_currency) ? selectedPrice.price_currency : 'USD')}) }}/{{ unit }})
+            </span>
+            ({{
+              formatCostInPence2dp({
+                cost: pricePerUnit,
+                cost_currency: selectedPrice && selectedPrice.price_currency ? selectedPrice.price_currency : "USD",
+              })
+            }}/{{ unit }})
 
             <a href="#" @click.prevent="scrollToPrices">View more</a>
           </div>
 
-          <div style="margin-bottom: 10px;">
-            <h3 style="display: inline;">Description</h3>
-            <a-button style="display: inline; margin-left: 10px;"
-                      @click.prevent="editDescription" v-if="view == 'edit' && !isEditingDescription" size="small"
-                      icon="edit" type="default"></a-button>
+          <div style="margin-bottom: 10px">
+            <h3 style="display: inline">Description</h3>
+            <a-button
+              style="display: inline; margin-left: 10px"
+              @click.prevent="editDescription"
+              v-if="view == 'edit' && !isEditingDescription"
+              size="small"
+              icon="edit"
+              type="default"
+            ></a-button>
           </div>
 
           <!-- Not Editing -->
           <div v-if="view !== 'edit'">
             <div v-if="descriptionTooLong">
               <div v-html="descriptionToShow"></div>
-              <div style="margin-top: 10px;">
-                <a v-if="descriptionShowMore"
-                   href="#" style="margin-top: 5px;" @click.prevent="toggleDescriptionShowMore">View less
-                  <a-icon :style="{fontSize: '10px'}" type="up"/>
+              <div style="margin-top: 10px">
+                <a
+                  v-if="descriptionShowMore"
+                  href="#"
+                  style="margin-top: 5px"
+                  @click.prevent="toggleDescriptionShowMore"
+                  >View less
+                  <a-icon :style="{ fontSize: '10px' }" type="up" />
                 </a>
-                <a v-if="!descriptionShowMore"
-                   href="#" style="margin-top: 5px;" @click.prevent="toggleDescriptionShowMore">View more
-                  <a-icon :style="{fontSize: '10px'}" type="down"/>
+                <a
+                  v-if="!descriptionShowMore"
+                  href="#"
+                  style="margin-top: 5px"
+                  @click.prevent="toggleDescriptionShowMore"
+                  >View more
+                  <a-icon :style="{ fontSize: '10px' }" type="down" />
                 </a>
               </div>
             </div>
-            <div v-if="!descriptionTooLong" v-html="description">
-            </div>
+            <div v-if="!descriptionTooLong" v-html="description"></div>
           </div>
           <!-- / Not Editing -->
 
@@ -140,16 +158,17 @@
               <!--              />-->
 
               <div class="quill-editor-wrapper">
-                <quill-editor
-                    ref="myQuillEditor"
-                    v-model="descriptionLocalEditing"
-                />
+                <quill-editor ref="myQuillEditor" v-model="descriptionLocalEditing" />
               </div>
 
               <!-- Actions -->
-              <div style="margin-top: 10px;">
-                <a-button @click.prevent="cancelEditDescription" style="margin-right: 10px;" v-if="isEditingDescription"
-                          type="default">Cancel
+              <div style="margin-top: 10px">
+                <a-button
+                  @click.prevent="cancelEditDescription"
+                  style="margin-right: 10px"
+                  v-if="isEditingDescription"
+                  type="default"
+                  >Cancel
                 </a-button>
                 <a-button @click.prevent="saveDescription" v-if="isEditingDescription" type="primary">Save</a-button>
               </div>
@@ -158,7 +177,6 @@
             <div v-else v-html="description"></div>
           </div>
           <!-- / Editing -->
-
         </a-col>
 
         <a-col :span="6">
@@ -167,12 +185,19 @@
             <div class="top-row">
               <div class="left">
                 <span class="price">{{
-                    selectedPrice ? formatCostInPence2dp({
-                      cost: selectedPrice.price,
-                      cost_currency:  (selectedPrice.price_currency ? selectedPrice.price_currency : 'USD')
-                    }) : '-'
-                  }}</span>
-                ({{ formatCostInPence2dp({cost: pricePerUnit, cost_currency:  ((selectedPrice && selectedPrice.price_currency) ? selectedPrice.price_currency : 'USD')}) }}/{{ unit }})
+                  selectedPrice
+                    ? formatCostInPence2dp({
+                        cost: selectedPrice.price,
+                        cost_currency: selectedPrice.price_currency ? selectedPrice.price_currency : "USD",
+                      })
+                    : "-"
+                }}</span>
+                ({{
+                  formatCostInPence2dp({
+                    cost: pricePerUnit,
+                    cost_currency: selectedPrice && selectedPrice.price_currency ? selectedPrice.price_currency : "USD",
+                  })
+                }}/{{ unit }})
               </div>
               <div class="right">
                 <co2e-indicator :product="product"></co2e-indicator>
@@ -188,17 +213,27 @@
               <!--                      two-tone-color="#52c41a"></a-icon>-->
               <!--              <a-icon v-if="isOutOfStock(stockForSelectedPrice)" type="close-circle" theme="twoTone"-->
               <!--                      two-tone-color="#FF0000"></a-icon>-->
-              <span class="stock-text"
-                    :class="{'in-stock': isInStock(stockForSelectedPrice ? stockForSelectedPrice.stock : null), 'out-of-stock': isOutOfStock(stockForSelectedPrice ? stockForSelectedPrice.stock : null)}">{{
-                  getStockText(stockForSelectedPrice ? stockForSelectedPrice.stock : null, false, stockForSelectedPrice ? stockForSelectedPrice.lead_time : null)
-                }}</span>
+              <span
+                class="stock-text"
+                :class="{
+                  'in-stock': isInStock(stockForSelectedPrice ? stockForSelectedPrice.stock : null),
+                  'out-of-stock': isOutOfStock(stockForSelectedPrice ? stockForSelectedPrice.stock : null),
+                }"
+                >{{
+                  getStockText(
+                    stockForSelectedPrice ? stockForSelectedPrice.stock : null,
+                    false,
+                    stockForSelectedPrice ? stockForSelectedPrice.lead_time : null
+                  )
+                }}</span
+              >
             </div>
             <!-- / Stock -->
 
             <!-- Effectiveness Wrapper -->
             <div class="effectiveness-wrapper" v-if="product.effectiveness">
               <a-tag color="blue">
-              <a-icon type="bulb"></a-icon> {{ formatEffectiveness(product.effectiveness) }} Effectiveness
+                <a-icon type="bulb"></a-icon> {{ formatEffectiveness(product.effectiveness) }} Effectiveness
               </a-tag>
             </div>
             <!-- / Effectiveness Wrapper -->
@@ -212,23 +247,18 @@
             <!-- General details -->
             <div class="general-details">
               <div class="general-details-row">
-                <div class="left">
-                  Dispatches from
-                </div>
+                <div class="left">Dispatches from</div>
                 <div class="right">
-                  <dispatches-from v-if="product"
-                      :product="product"></dispatches-from>
+                  <dispatches-from v-if="product" :product="product"></dispatches-from>
                 </div>
               </div>
               <div class="general-details-row">
-                <div class="left">
-                  Sold by
-                </div>
+                <div class="left">Sold by</div>
                 <div class="right">
                   <a-dropdown>
-                    <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-                      {{ selectedPrice ? selectedPrice.supplier_name : 'Select supplier' }}
-                      <a-icon type="down"/>
+                    <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
+                      {{ selectedPrice ? selectedPrice.supplier_name : "Select supplier" }}
+                      <a-icon type="down" />
                     </a>
                     <a-menu slot="overlay">
                       <a-menu-item v-for="(price, i) in prices" :key="i">
@@ -248,22 +278,22 @@
             <!-- / Address selector -->
 
             <!-- Quantity: Not Editing -->
-            <div v-if="view !== 'edit' && selectedPrice"
-                 class="quantity-changer-wrapper">
-
+            <div v-if="view !== 'edit' && selectedPrice" class="quantity-changer-wrapper">
               <div class="quantity-adder-wrapper">
                 <a-input-group v-if="!isProductInBasket" class="quantity-input-group" compact>
                   <a-button icon="minus" @click.prevent="decrementQuantityToAdd"></a-button>
-                  <a-input class="quantity-input" placeholder="1"
-                           type="number"
-                           v-model="quantityToAdd"></a-input>
+                  <a-input class="quantity-input" placeholder="1" type="number" v-model="quantityToAdd"></a-input>
                   <a-button icon="plus" @click.prevent="incrementQuantityToAdd"></a-button>
                 </a-input-group>
-                <a-button v-if="!isProductInBasket" class="add-button button-yellow"
-                          type="default" @click.prevent="() => addToBasket()">Add to basket
+                <a-button
+                  v-if="!isProductInBasket"
+                  class="add-button button-yellow"
+                  type="default"
+                  @click.prevent="() => addToBasket()"
+                  >Add to basket
                 </a-button>
                 <div class="list-btn-wrapper">
-                  <a-button @click.prevent="compare" :style="{marginRight: '8px'}">Compare</a-button>
+                  <a-button @click.prevent="compare" :style="{ marginRight: '8px' }">Compare</a-button>
                   <a-button @click.prevent="showAddToListModal">Add to List</a-button>
                 </div>
               </div>
@@ -271,18 +301,33 @@
               <div v-if="isProductInBasket" class="quantity-changer">
                 <a-input-group compact class="quantity-input-group">
                   <a-button
-                      @click.prevent="() => decrementProductQuantity({product: product, selectedPriceId: selectedPrice.id})"
-                      icon="minus">
+                    @click.prevent="
+                      () => decrementProductQuantity({ product: product, selectedPriceId: selectedPrice.id })
+                    "
+                    icon="minus"
+                  >
                   </a-button>
-                  <a-input type="number" class="quantity-input"
-                           @change="e => setProductQuantity({quantity: e.target.value, id: product['_id'], selectedPriceId: selectedPrice.id})"
-                           :value="quantityOfProductInBasket"></a-input>
+                  <a-input
+                    type="number"
+                    class="quantity-input"
+                    @change="
+                      (e) =>
+                        setProductQuantity({
+                          quantity: e.target.value,
+                          id: product['_id'],
+                          selectedPriceId: selectedPrice.id,
+                        })
+                    "
+                    :value="quantityOfProductInBasket"
+                  ></a-input>
                   <a-button
-                      @click.prevent="() => incrementProductQuantity({product: product, selectedPriceId: selectedPrice.id})"
-                      icon="plus"></a-button>
+                    @click.prevent="
+                      () => incrementProductQuantity({ product: product, selectedPriceId: selectedPrice.id })
+                    "
+                    icon="plus"
+                  ></a-button>
                 </a-input-group>
                 <!--                        <div>{{ getQuantityOfProductInBasket(item) }}</div>-->
-
               </div>
             </div>
             <!-- / Quantity: Not Editing -->
@@ -300,9 +345,8 @@
 
     <!-- Properties -->
     <div class="page-inner-wrapper" :key="reloadKey">
-
       <!-- Navbar -->
-      <div class="product-navbar" ref="product-navbar" :class="{'fixed': isNavbarFixed}">
+      <div class="product-navbar" ref="product-navbar" :class="{ fixed: isNavbarFixed }">
         <div class="nav-link">
           <a-tabs v-model="selectedTab" @tabClick="handleTabClicked">
             <a-tab-pane key="properties" tab="Properties"></a-tab-pane>
@@ -352,7 +396,6 @@
         <h2>Documents</h2>
         <documents-tab></documents-tab>
       </div>
-
     </div>
     <!-- / Properties -->
 
@@ -373,9 +416,7 @@
 
     <a-modal v-model="addProductModalVisible" title="Add Product to Lists" @ok="handleAddProduct">
       <template slot="footer">
-        <a-button key="back" @click="handleCancel">
-          Cancel
-        </a-button>
+        <a-button key="back" @click="handleCancel"> Cancel </a-button>
         <a-button key="submit" type="primary" :disabled="selectedListIds.length === 0" @click="handleAddProduct">
           Add
         </a-button>
@@ -383,28 +424,28 @@
       <div>
         <div class="product-wrapper">
           <div class="product-header">
-            <a-avatar size="large" :src="getImageSrc(product)"/>
-            <p class="m-0">{{product.name}}</p>
+            <a-avatar size="large" :src="getImageSrc(product)" />
+            <p class="m-0">{{ product.name }}</p>
           </div>
           <div class="quantity-changer">
             <a-input-group compact>
-              <a-button
-                  @click.prevent="() => quantityToAddList--"
-                  icon="minus">
-              </a-button>
-              <a-input type="number" class="quantity-input"
-                        @change="e => quantityToAddList = e.target.value"
-                        :value="quantityToAddList"></a-input>
-              <a-button
-                  @click.prevent="() => quantityToAddList++"
-                  icon="plus"></a-button>
+              <a-button @click.prevent="() => quantityToAddList--" icon="minus"> </a-button>
+              <a-input
+                type="number"
+                class="quantity-input"
+                @change="(e) => (quantityToAddList = e.target.value)"
+                :value="quantityToAddList"
+              ></a-input>
+              <a-button @click.prevent="() => quantityToAddList++" icon="plus"></a-button>
             </a-input-group>
           </div>
         </div>
         <div class="list-header">
           <div>
             <div v-if="selectedListIds.length > 0">
-              <h4 class="text-normal m-0"><b>{{selectedListIds.length}}</b> List selected</h4>
+              <h4 class="text-normal m-0">
+                <b>{{ selectedListIds.length }}</b> List selected
+              </h4>
             </div>
           </div>
           <div>
@@ -413,25 +454,41 @@
           </div>
         </div>
         <div :class="getListClass(listIdx)" v-for="(item, listIdx) in list" :key="item.id">
-          <h4 class="text-normal m-0">{{item.name}}</h4>
+          <h4 class="text-normal m-0">{{ item.name }}</h4>
           <div style="font-size: 28px">
-            <a-button @click.prevent="addToList(item.id)" icon="plus-circle" v-if="selectedListIds.indexOf(item.id) === -1" :disabled="isProductOnList(item.id)" />
-            <a-button @click.prevent="removeFromList(item.id)" icon="check-circle" v-else :disabled="isProductOnList(item.id)"/>
+            <a-button
+              @click.prevent="addToList(item.id)"
+              icon="plus-circle"
+              v-if="selectedListIds.indexOf(item.id) === -1"
+              :disabled="isProductOnList(item.id)"
+            />
+            <a-button
+              @click.prevent="removeFromList(item.id)"
+              icon="check-circle"
+              v-else
+              :disabled="isProductOnList(item.id)"
+            />
           </div>
         </div>
-        <a-input class="list-input" :value="newList" @change="e => this.newList = e.target.value" @keydown="keydownNewList" placeholder="Create a new List"/>
+        <a-input
+          class="list-input"
+          :value="newList"
+          @change="(e) => (this.newList = e.target.value)"
+          @keydown="keydownNewList"
+          placeholder="Create a new List"
+        />
       </div>
     </a-modal>
   </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 import ImageCarousel from "./Show/ImageCarousel";
 import DocumentsTab from "./Show/DocumentsTab";
 import SpecificationsTab from "./Show/SpecificationsTab";
 import ViewToggler from "./Show/ViewToggler";
-import axios from 'axios';
+import axios from "axios";
 import AddressSelectorInline from "./Show/AddressSelectorInline";
 import Orders from "../../mixins/Orders";
 import EnvironmentTab from "./Show/EnvironmentTab";
@@ -443,7 +500,7 @@ import ApprovedBadge from "./Show/ApprovedBadge";
 import HasBannedMaterialsBadge from "./Show/HasBannedMaterialsBadge";
 import DispatchesFrom from "./Show/DispatchesFrom";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 export default {
   name: "Show",
@@ -459,14 +516,14 @@ export default {
     ImageCarousel,
     EnvironmentTab,
     PricingTab,
-    SuggestedProducts
+    SuggestedProducts,
   },
   mixins: [Orders, StockManagement],
   data() {
     return {
       descriptionShowMore: false,
-      descriptionLocal: '',
-      descriptionLocalEditing: '',
+      descriptionLocal: "",
+      descriptionLocalEditing: "",
       isEditingDescription: false,
       isSavingDescription: false,
 
@@ -474,14 +531,14 @@ export default {
 
       reloadKey: 1,
       isMounted: false,
-      selectedTab: 'properties',
+      selectedTab: "properties",
 
       isNavbarFixed: false,
       addProductModalVisible: false,
       quantityToAddList: 1,
       selectedListIds: [],
-      newList: ''
-    }
+      newList: "",
+    };
   },
   created() {
     this.attemptLoadProduct();
@@ -490,54 +547,52 @@ export default {
     this.isMounted = true;
   },
   watch: {
-    '$route'() {
+    $route() {
       this.attemptLoadProduct();
-    }
+    },
   },
   computed: {
-    ...mapGetters('productViewer', {
-      product: 'product',
-      productVendorMapping: 'productVendorMapping',
-      isLoading: 'isLoading',
-      isLoadingDocuments: 'isLoadingDocuments',
-      isLoadingDetails: 'isLoadingDetails',
-      isLoadingPrices: 'isLoadingPrices',
-      isLoadingStocks: 'isLoadingStocks',
-      view: 'view',
-      prices: 'prices',
-      stocks: 'stocks',
-      selectedPrice: 'selectedPrice',
-      stockForSelectedPrice: 'stockForSelectedPrice'
+    ...mapGetters("productViewer", {
+      product: "product",
+      productVendorMapping: "productVendorMapping",
+      isLoading: "isLoading",
+      isLoadingDocuments: "isLoadingDocuments",
+      isLoadingDetails: "isLoadingDetails",
+      isLoadingPrices: "isLoadingPrices",
+      isLoadingStocks: "isLoadingStocks",
+      view: "view",
+      prices: "prices",
+      stocks: "stocks",
+      selectedPrice: "selectedPrice",
+      stockForSelectedPrice: "stockForSelectedPrice",
     }),
 
-    ...mapGetters('shop', {
-      basket: 'basket',
-      list: 'list'
+    ...mapGetters("shop", {
+      basket: "basket",
+      list: "list",
     }),
 
     productId() {
       if (this.product) {
-        return this.product['id'] ? this.product['id'] : this.product['_id'];
+        return this.product["id"] ? this.product["id"] : this.product["_id"];
       }
       return null;
     },
 
     isProductInBasket() {
-      return _.filter(this.basket, item => {
-        return (
-            item.itemType === 'product'
-            && item.id === this.productId
-            && item.selectedPriceId === this.selectedPrice.id
-        );
-      }).length > 0;
+      return (
+        _.filter(this.basket, (item) => {
+          return (
+            item.itemType === "product" && item.id === this.productId && item.selectedPriceId === this.selectedPrice.id
+          );
+        }).length > 0
+      );
     },
 
     quantityOfProductInBasket() {
-      return _.find(this.basket, item => {
+      return _.find(this.basket, (item) => {
         return (
-            item.itemType === 'product'
-            && item.id === this.productId
-            && item.selectedPriceId === this.selectedPrice.id
+          item.itemType === "product" && item.id === this.productId && item.selectedPriceId === this.selectedPrice.id
         );
       }).quantity;
     },
@@ -554,11 +609,11 @@ export default {
       if (this.descriptionLocal) {
         return this.descriptionLocal;
       }
-      return this.product['description'];
+      return this.product["description"];
     },
 
     descriptionTooLong() {
-      let length = this.product['description'].length;
+      let length = this.product["description"].length;
       if (length > 1000) {
         return true;
       }
@@ -574,70 +629,71 @@ export default {
 
     pricePerUnit() {
       let selectedPrice = this.selectedPrice ? this.selectedPrice.price : null;
-      let normalisedUnitMagnitude = this.product.normalisedQuantity ? this.product.normalisedQuantity.normalisedUnitMagnitude : null;
+      let normalisedUnitMagnitude = this.product.normalisedQuantity
+        ? this.product.normalisedQuantity.normalisedUnitMagnitude
+        : null;
 
       if (selectedPrice && normalisedUnitMagnitude) {
         return selectedPrice / normalisedUnitMagnitude;
       }
 
-      return '-';
+      return "-";
     },
 
     unit() {
       if (this.product.normalisedQuantity) {
-        if (this.product.normalisedQuantity.normalisedUnitBase === 'dimensionless') {
-          return 'unit';
+        if (this.product.normalisedQuantity.normalisedUnitBase === "dimensionless") {
+          return "unit";
         }
         return this.product.normalisedQuantity.normalisedUnitBase;
       }
-      return '-';
-    }
+      return "-";
+    },
   },
   methods: {
     keydownNewList(e) {
-      if(e.keyCode === 13) {
-        this.createList({name: this.newList});
-        this.newList = '';
+      if (e.keyCode === 13) {
+        this.createList({ name: this.newList });
+        this.newList = "";
       }
     },
     isProductOnList(listId) {
-      const listIdx = this.list.findIndex(item => item.id === listId);
+      const listIdx = this.list.findIndex((item) => item.id === listId);
       const productId = this.product.id;
-      return this.list[listIdx].items.findIndex(item => item.id === productId) !== -1;
+      return this.list[listIdx].items.findIndex((item) => item.id === productId) !== -1;
     },
     getListClass(listIdx) {
-      let className = listIdx === this.list.length - 1 ? 'list-content' : 'list-content border-bottom-gray';
-      if(this.selectedListIds.indexOf(this.list[listIdx].id) !== -1)
-        className += ' selected';
+      let className = listIdx === this.list.length - 1 ? "list-content" : "list-content border-bottom-gray";
+      if (this.selectedListIds.indexOf(this.list[listIdx].id) !== -1) className += " selected";
       return className;
     },
     addToList(listId) {
       this.selectedListIds.push(listId);
     },
     removeFromList(listId) {
-      this.selectedListIds = this.selectedListIds.filter(item => item !== listId);
+      this.selectedListIds = this.selectedListIds.filter((item) => item !== listId);
     },
     selectAllList() {
-      this.selectedListIds = this.list.map(item => item.id);
+      this.selectedListIds = this.list.map((item) => item.id);
     },
     getImageSrc(item) {
-      if (item['product'] && item['product']['imageURLs'] && item['product']['imageURLs'].length) {
-        return item['product']['imageURLs'][0];
+      if (item["product"] && item["product"]["imageURLs"] && item["product"]["imageURLs"].length) {
+        return item["product"]["imageURLs"][0];
       }
-      return '/img/icons/basket-order-icon.png';
+      return "/img/icons/basket-order-icon.png";
     },
-    ...mapActions('productViewer', {
-      loadProduct: 'loadProduct',
-      selectPrice: 'selectPrice'
+    ...mapActions("productViewer", {
+      loadProduct: "loadProduct",
+      selectPrice: "selectPrice",
     }),
 
-    ...mapActions('shop', {
-      addProductToBasket: 'addProductToBasket',
-      addProductToList: 'addProductToList',
-      createList: 'createList',
-      incrementProductQuantity: 'incrementProductQuantity',
-      decrementProductQuantity: 'decrementProductQuantity',
-      setProductQuantity: 'setProductQuantity'
+    ...mapActions("shop", {
+      addProductToBasket: "addProductToBasket",
+      addProductToList: "addProductToList",
+      createList: "createList",
+      incrementProductQuantity: "incrementProductQuantity",
+      decrementProductQuantity: "decrementProductQuantity",
+      setProductQuantity: "setProductQuantity",
     }),
 
     formatEffectiveness(effectiveness) {
@@ -648,7 +704,7 @@ export default {
       if (product.taxonomyCategory) {
         return product.taxonomyCategory[product.taxonomyCategory.length - 1];
       }
-      return 'Miscellaneous';
+      return "Miscellaneous";
     },
 
     decrementQuantityToAdd() {
@@ -662,7 +718,7 @@ export default {
       }
       this.$nextTick(() => {
         this.$forceUpdate();
-      })
+      });
     },
 
     incrementQuantityToAdd() {
@@ -677,12 +733,10 @@ export default {
     },
 
     handleTabClicked(e) {
-      this.$refs[e + '-tab'].scrollIntoView({behavior: "smooth"});
+      this.$refs[e + "-tab"].scrollIntoView({ behavior: "smooth" });
     },
 
-    compare() {
-
-    },
+    compare() {},
 
     handleCancel() {
       this.addProductModalVisible = false;
@@ -699,7 +753,7 @@ export default {
         selectedPrice: this.selectedPrice,
         selectedPriceId: this.selectedPrice.id,
         prices: this.prices,
-        selectedListIds: this.selectedListIds
+        selectedListIds: this.selectedListIds,
       });
     },
 
@@ -713,7 +767,7 @@ export default {
         quantity: quantity,
         selectedPrice: this.selectedPrice,
         selectedPriceId: this.selectedPrice.id,
-        prices: this.prices
+        prices: this.prices,
       });
     },
 
@@ -726,15 +780,15 @@ export default {
     },
 
     backToAllProducts() {
-      this.$router.push('/products');
+      this.$router.push("/products");
     },
 
     backToShop() {
-      this.$router.push('/shop');
+      this.$router.push("/shop");
     },
 
     backToBasket() {
-      this.$router.push('/shop/basket')
+      this.$router.push("/shop/basket");
     },
 
     handleBackButton() {
@@ -767,25 +821,28 @@ export default {
     saveDescription() {
       let vm = this;
       vm.isSavingDescription = true;
-      axios.post(window.API_BASE + '/products/' + this.product['_id'] + '/update-description', {
-        description: this.descriptionLocalEditing
-      }).then(() => {
-        vm.isSavingDescription = false;
-        vm.isEditingDescription = false;
-        vm.descriptionLocal = vm.descriptionLocalEditing;
-        vm.descriptionLocalEditing = null;
-      }).catch(e => {
-        console.log(e);
-        vm.isSavingDescription = false;
-        vm.$message.error('Error saving description');
-      });
+      axios
+        .post(window.API_BASE + "/products/" + this.product["_id"] + "/update-description", {
+          description: this.descriptionLocalEditing,
+        })
+        .then(() => {
+          vm.isSavingDescription = false;
+          vm.isEditingDescription = false;
+          vm.descriptionLocal = vm.descriptionLocalEditing;
+          vm.descriptionLocalEditing = null;
+        })
+        .catch((e) => {
+          console.log(e);
+          vm.isSavingDescription = false;
+          vm.$message.error("Error saving description");
+        });
     },
 
     scrollToPrices() {
-      this.$refs['pricing-tab'].scrollIntoView({behavior: "smooth"});
-    }
-  }
-}
+      this.$refs["pricing-tab"].scrollIntoView({ behavior: "smooth" });
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -820,10 +877,10 @@ export default {
   }
   &.selected {
     h4 {
-      color: rgb(108,170,52);
+      color: rgb(108, 170, 52);
     }
     button {
-      color: rgb(108,170,52);
+      color: rgb(108, 170, 52);
     }
   }
 }
@@ -935,7 +992,6 @@ export default {
 }
 
 .product-details-top {
-
   .ant-badge {
     margin-right: 5px;
   }
@@ -986,7 +1042,6 @@ export default {
 }
 
 .quantity-adder-wrapper {
-
   .add-button {
     width: 100%;
     margin-top: 10px;
@@ -1033,7 +1088,6 @@ export default {
     padding-top: 12px;
     justify-content: space-between;
   }
-
 }
 
 .breadcrumb-wrapper {
@@ -1120,7 +1174,7 @@ export default {
       }
 
       &.out-of-stock {
-        color: #FF0000;
+        color: #ff0000;
       }
     }
 

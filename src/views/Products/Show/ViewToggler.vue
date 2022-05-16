@@ -14,17 +14,17 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "ViewToggler",
   computed: {
-    ...mapGetters('auth', {
-      canEditProducts: 'canEditProducts'
+    ...mapGetters("auth", {
+      canEditProducts: "canEditProducts",
     }),
 
-    ...mapGetters('productViewer', {
-      view: 'view'
+    ...mapGetters("productViewer", {
+      view: "view",
     }),
 
     viewToUse: {
@@ -33,17 +33,15 @@ export default {
       },
       set(val) {
         this.setView(val);
-      }
-    }
+      },
+    },
   },
   methods: {
-    ...mapActions('productViewer', {
-      setView: 'setView'
-    })
-  }
-}
+    ...mapActions("productViewer", {
+      setView: "setView",
+    }),
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

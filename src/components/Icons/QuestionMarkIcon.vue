@@ -1,14 +1,19 @@
 <template>
-    <svg height="16" width="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zM7 8.089V8.5a1 1 0 0 0 1.926.377 3.456 3.456 0 0 0 1.549-.902 3.5 3.5 0 0 0-4.95-4.95A3.437 3.437 0 0 0 4.5 5.51a1.004 1.004 0 1 0 2.009-.02 1.43 1.43 0 0 1 .436-1.045 1.5 1.5 0 0 1 1.058-.437 1.492 1.492 0 0 1 0 2.983A1.004 1.004 0 0 0 7 8.09zM8 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill-rule="evenodd"></path></svg>
+  <svg height="16" width="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zM7 8.089V8.5a1 1 0 0 0 1.926.377 3.456 3.456 0 0 0 1.549-.902 3.5 3.5 0 0 0-4.95-4.95A3.437 3.437 0 0 0 4.5 5.51a1.004 1.004 0 1 0 2.009-.02 1.43 1.43 0 0 1 .436-1.045 1.5 1.5 0 0 1 1.058-.437 1.492 1.492 0 0 1 0 2.983A1.004 1.004 0 0 0 7 8.09zM8 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+      fill-rule="evenodd"
+    ></path>
+  </svg>
 </template>
 <script>
-    export default {
-        name: "QuestionMarkIcon"
-    }
+export default {
+  name: "QuestionMarkIcon",
+};
 </script>
 
 <style scoped>
-    svg {
-        fill: #8792a2;
-    }
+svg {
+  fill: #8792a2;
+}
 </style>

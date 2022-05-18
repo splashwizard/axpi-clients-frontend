@@ -27,12 +27,12 @@
             </div>
             <h4>Choose Category page</h4>
           </div> -->
-          <!-- <div class="Picker" @click="toggleAddDrawer('daterange')">
+          <div class="Picker" @click="toggleAddDrawer('daterange')">
             <div class="Picker-icon">
               <a-icon type="calendar" />
             </div>
             <h4>Add a date range</h4>
-          </div> -->
+          </div>
         </div>
       </div>
 
@@ -137,7 +137,7 @@
                 <a-icon type="arrow-up" />
                 <span> Hide items </span>
               </a-menu-item>
-              <a-menu-item
+              <!-- <a-menu-item
                 key="boost_category"
                 class="dropdown-item"
                 @click="addBoostCategory"
@@ -154,7 +154,7 @@
               >
                 <a-icon type="arrow-down" />
                 <span> Bury categories </span>
-              </a-menu-item>
+              </a-menu-item> -->
               <a-menu-item
                 key="filter_results"
                 class="dropdown-item"

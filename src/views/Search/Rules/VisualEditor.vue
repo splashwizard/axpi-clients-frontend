@@ -231,11 +231,17 @@ export default {
       }
     },
     onPublish() {
-      const { query_conditions } = this.triggerData;
+      const { query_conditions, period } = this.triggerData;
       let payload = {
         query_name: query_conditions[0].query.keyword,
         query_type: query_conditions[0].query.option,
       };
+
+      if (period.length > 0) {
+        payload["start_date"] = period[0].format("YYYY-MM-DD");
+        payload["end_date"] = period[1].format("YYYY-MM-DD");
+      }
+
       const { pinnedItems, hiddenItems, filterResults } = this.strategyData;
       if (pinnedItems.length > 0) {
         payload["pin_items"] = pinnedItems.map((item) => ({
@@ -265,13 +271,9 @@ export default {
           window.location.href = "/search/rules";
         })
         .catch(() => {
+          this.loading = false;
           this.$message.error("Error creating rule");
         });
-
-      // const rules = localStorage.getItem('rules') ? JSON.parse(localStorage.getItem('rules')) : [];
-      // rules.push({key: `qr-${rules.length + 1}`, conditions: this.triggerData, consequences: this.strategyData, timestamp: moment().toISOString()});
-      // localStorage.setItem('rules', JSON.stringify(rules));
-      // this.$router.push('/search/rules');
     },
     toggleAddDrawer(type) {
       this.editDrawerVisible = false;

@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 
 // const list = [
 //     {"id":"list-1","name":"Android","lastEdited":"2020-03-02","numberOfItems":"11","visible":true, items: []},
@@ -63,8 +64,7 @@ export const actions = {
       .get(`${window.API_BASE}/rules`)
       .then((res) => {
         const rules = res.data.data.map((override) => {
-          const { id, rule, includes, excludes } = override;
-          console.log("rule", id, rule, includes, excludes);
+          const { id, rule, includes, excludes, is_enable } = override;
           let query_conditions = [
             {
               query: {
@@ -86,7 +86,7 @@ export const actions = {
           return {
             conditions: {
               query_conditions: query_conditions,
-              period: [],
+              period: override.start_date ? [moment(override.start_date), moment(override.end_date)] : [],
             },
             consequences: {
               filterResults: [],
@@ -96,6 +96,7 @@ export const actions = {
               hiddenItems: hiddenItems,
             },
             key: id,
+            disabled: !is_enable,
             timestamp: "2022-04-27T09:05:32.318Z",
           };
         });

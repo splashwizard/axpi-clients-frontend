@@ -90,9 +90,18 @@
         <h3 class="drawer-title">Choose a date range</h3>
         <section class="drawer-section">
           <a-range-picker @change="onChangeDate" :value="dateperiod" />
+          <div class="mt-2 text-danger" v-if="start_date_error">
+            Start date should be before or same with current date
+          </div>
+          <div class="mt-2 text-danger" v-if="end_date_error">End date should be after with current date</div>
         </section>
         <div class="drawer-close">
-          <a-button type="primary" @click="onApply" :disabled="this.dateperiod.length === 0">Apply</a-button>
+          <a-button
+            type="primary"
+            @click="onApply"
+            :disabled="this.dateperiod.length === 0 || this.start_date_error || this.end_date_error"
+            >Apply</a-button
+          >
         </div>
       </div>
 
@@ -292,6 +301,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
   name: "Drawer",
   props: ["drawerVisible", "drawerType", "drawerClose", "addDrawer", "list"],
@@ -312,6 +323,18 @@ export default {
     };
   },
   computed: {
+    start_date_error() {
+      return (
+        this.dateperiod.length > 0 &&
+        !moment(this.dateperiod[0].format("YYYY-MM-DD")).isSameOrBefore(moment().format("YYYY-MM-DD"))
+      );
+    },
+    end_date_error() {
+      return (
+        this.dateperiod.length > 0 &&
+        !moment(this.dateperiod[1].format("YYYY-MM-DD")).isAfter(moment().format("YYYY-MM-DD"))
+      );
+    },
     availablePinItems() {
       return this.list.map((item) => item.title);
     },

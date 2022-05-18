@@ -134,7 +134,7 @@ export default {
       rules: "list",
     }),
     availableList: {
-      get: function () {
+      get: function() {
         const showedList = this.list.filter(
           (item) => this.strategyData.hiddenItems.findIndex((hiddenItem) => hiddenItem.id === item.id) === -1
         );
@@ -156,7 +156,7 @@ export default {
         const finalList = resultList.filter((item) => item);
         return finalList;
       },
-      set: function (newValue) {
+      set: function(newValue) {
         // this.list = this.list.map((item) => item.hidden ? item : newValue[this.availableList.indexOf(item)])
         this.list = this.list.map((item) => {
           if (this.strategyData.hiddenItems.findIndex((hiddenItem) => hiddenItem.id === item.id) === -1) {
@@ -252,11 +252,17 @@ export default {
       }
     },
     onPublish() {
-      const { query_conditions } = this.triggerData;
+      const { query_conditions, period } = this.triggerData;
       let payload = {
         query_name: query_conditions[0].query.keyword,
         query_type: query_conditions[0].query.option,
       };
+
+      if (period.length > 0) {
+        payload["start_date"] = period[0].format("YYYY-MM-DD");
+        payload["end_date"] = period[1].format("YYYY-MM-DD");
+      }
+
       const { pinnedItems, hiddenItems } = this.strategyData;
       if (pinnedItems.length > 0) {
         payload["pin_items"] = pinnedItems.map((item) => ({

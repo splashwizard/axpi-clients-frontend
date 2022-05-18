@@ -11,7 +11,7 @@
     @close="drawerClose"
   >
     <div class="drawer-close">
-      <a-button class="btn-non-border" @click="drawerClose"><a-icon type="close" /></a-button>
+      <a-button class="btn-non-border" @click="drawerClose"><a-icon type="close"/></a-button>
     </div>
     <div class="drawer-scroll">
       <div v-if="drawerType === 'condition'">
@@ -98,9 +98,18 @@
         <h3 class="drawer-title">Choose a date range</h3>
         <section class="drawer-section">
           <a-range-picker @change="onChangeDate" :value="period" />
+          <div class="mt-2 text-danger" v-if="start_date_error">
+            Start date should be before or same with current date
+          </div>
+          <div class="mt-2 text-danger" v-if="end_date_error">End date should be after with current date</div>
         </section>
         <div class="drawer-close">
-          <a-button type="primary" @click="onApply" :disabled="editDrawerItem.length === 0">Apply</a-button>
+          <a-button
+            type="primary"
+            @click="onApply"
+            :disabled="editDrawerItem.length === 0 || this.start_date_error || this.end_date_error"
+            >Apply</a-button
+          >
         </div>
       </div>
 
@@ -300,9 +309,7 @@
                 </div>
               </div>
             </div>
-            <a-button class="btn-non-border btn-filter-margin" @click="addResultFilter(si)"
-              ><a-icon type="plus" />Or</a-button
-            >
+            <!-- <a-button class="btn-non-border btn-filter-margin" @click="addResultFilter(si)"><a-icon type="plus" />Or</a-button> -->
           </div>
           <a-button class="btn-non-border btn-filter-margin" @click="addSubFilter"><a-icon type="plus" />And</a-button>
         </section>
@@ -315,6 +322,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
   name: "Drawer",
   props: ["drawerType", "drawerVisible", "drawerClose", "updateDrawerItem", "list", "editDrawerItem", "setItem"],
@@ -326,6 +335,20 @@ export default {
     };
   },
   computed: {
+    start_date_error() {
+      return (
+        this.drawerType === "daterange" &&
+        this.editDrawerItem.length > 0 &&
+        !moment(this.editDrawerItem[0].format("YYYY-MM-DD")).isSameOrBefore(moment().format("YYYY-MM-DD"))
+      );
+    },
+    end_date_error() {
+      return (
+        this.drawerType === "daterange" &&
+        this.editDrawerItem.length > 0 &&
+        !moment(this.editDrawerItem[1].format("YYYY-MM-DD")).isAfter(moment().format("YYYY-MM-DD"))
+      );
+    },
     availablePinItems() {
       return this.list.map((item) => item.title);
     },
@@ -356,58 +379,58 @@ export default {
       }, 0);
     },
     period: {
-      get: function () {
+      get: function() {
         return this.editDrawerItem;
       },
-      set: function (newValue) {
+      set: function(newValue) {
         this.setItem("period", newValue);
       },
     },
     filters: {
-      get: function () {
+      get: function() {
         return this.editDrawerItem.filters.slice();
       },
-      set: function (newValue) {
+      set: function(newValue) {
         this.setItem("filters", newValue);
       },
     },
     pinnedItems: {
-      get: function () {
+      get: function() {
         return this.editDrawerItem.slice();
       },
-      set: function (newValue) {
+      set: function(newValue) {
         this.setItem("pin_items", newValue);
       },
     },
     hiddenItems: {
-      get: function () {
+      get: function() {
         return this.editDrawerItem.slice();
       },
-      set: function (newValue) {
+      set: function(newValue) {
         this.setItem("hide_items", newValue);
       },
     },
     boostCategories: {
-      get: function () {
+      get: function() {
         return this.editDrawerItem.slice();
       },
-      set: function (newValue) {
+      set: function(newValue) {
         this.setItem("boost_category", newValue);
       },
     },
     buryCategories: {
-      get: function () {
+      get: function() {
         return this.editDrawerItem.slice();
       },
-      set: function (newValue) {
+      set: function(newValue) {
         this.setItem("bury_category", newValue);
       },
     },
     filterResults: {
-      get: function () {
+      get: function() {
         return this.editDrawerItem.slice();
       },
-      set: function (newValue) {
+      set: function(newValue) {
         this.setItem("filter_results", newValue);
       },
     },

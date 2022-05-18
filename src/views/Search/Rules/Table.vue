@@ -9,12 +9,7 @@
     class="rules-table"
   >
     <template slot="conditions-column" slot-scope="conditions">
-      <date-period
-        :period="conditions.period"
-        :editPeriod="editPeriod"
-        :deletePeriod="deletePeriod"
-        v-if="conditions.period.length > 0"
-      />
+      <date-period :period="conditions.period" v-if="conditions.period.length > 0" />
       <query-condition
         v-for="(condition, ci) in conditions.query_conditions"
         :condition="condition"

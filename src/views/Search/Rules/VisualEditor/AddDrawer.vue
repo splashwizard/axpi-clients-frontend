@@ -305,7 +305,7 @@ import moment from "moment";
 
 export default {
   name: "Drawer",
-  props: ["drawerVisible", "drawerType", "drawerClose", "addDrawer", "list"],
+  props: ['drawerVisible', 'drawerType', 'drawerClose', 'addDrawer', 'list', 'filterNames'],
   data() {
     return {
       queryExpanded: true,
@@ -313,14 +313,16 @@ export default {
       option: "contains",
       keyword: "",
       filters: [],
-      pinnedItems: [{ id: 0, title: "", position: 0 }],
-      hiddenItems: [{ id: 0, title: "" }],
-      boostCategories: [{ name: "", keyword: "" }],
-      buryCategories: [{ name: "", keyword: "" }],
-      filterResults: [[{ name: "", operator: "is", keyword: "" }]],
-      filterNames: ["Bottom style", "Capacity", "Color", "Model", "Needle gauge", "Needle length", "Needle tip"],
-      dateperiod: [],
-    };
+      pinnedItems: [{ id: 0, title: '', position: 0 }],
+      hiddenItems: [{ id: 0, title: '' }],
+      boostCategories: [{ name: '', keyword: '' }],
+      buryCategories: [{ name: '', keyword: '' }],
+      filterResults: [
+        [{ name: '', operator: 'is', keyword: '' }]
+      ],
+      // filterNames: ['Bottom style', 'Capacity', 'Color', 'Model', 'Needle gauge', 'Needle length', 'Needle tip'],
+      dateperiod: []
+    }
   },
   computed: {
     start_date_error() {

@@ -40,6 +40,7 @@
         </div>
         <add-drawer
           :list="list"
+          :filterNames="filterNames"
           :drawerVisible="addDrawerVisible"
           :drawerType="addDrawerType"
           :drawerClose="addDrawerClose"
@@ -47,6 +48,7 @@
         />
         <edit-drawer
           :list="list"
+          :filterNames="filterNames"
           :drawerVisible="editDrawerVisible"
           :drawerType="editDrawerType"
           :drawerClose="editDrawerClose"
@@ -101,6 +103,7 @@ export default {
         pinnedItems: [],
         hiddenItems: [],
       },
+      filterNames: [],
       list: [],
       // list: searchItems.map((item, index) => {
       //   return {
@@ -168,7 +171,15 @@ export default {
           query_by: "name",
         })
         .then((res) => {
+          let filterNames = [];
           this.list = res.data.hits.map((item) => {
+            filterNames = [
+              ...filterNames,
+              ...Object.keys(item.document)
+                .filter((document_key) => document_key.startsWith("properties."))
+                .map((document_key) => document_key.slice("properties.".length))
+                .filter((document_key) => filterNames.indexOf(document_key) === -1),
+            ];
             const { id, name } = item.document;
             const image_urls = item.document.image_urls ? item.document.image_urls : [];
             return {
@@ -185,6 +196,7 @@ export default {
               hidden: false,
             };
           });
+          this.filterNames = filterNames;
         })
         .catch(() => {
           this.$message.error("Error fetching products");

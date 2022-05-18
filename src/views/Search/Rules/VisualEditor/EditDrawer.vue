@@ -326,13 +326,12 @@ import moment from "moment";
 
 export default {
   name: "Drawer",
-  props: ["drawerType", "drawerVisible", "drawerClose", "updateDrawerItem", "list", "editDrawerItem", "setItem"],
+  props: ['drawerType', 'drawerVisible', 'drawerClose', 'updateDrawerItem', 'list', 'filterNames', 'editDrawerItem', 'setItem'],
   data() {
     return {
       queryExpanded: true,
       filtersExpanded: true,
-      filterNames: ["Bottom style", "Capacity", "Color", "Model", "Needle gauge", "Needle length", "Needle tip"],
-    };
+    }
   },
   computed: {
     start_date_error() {

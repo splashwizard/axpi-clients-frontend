@@ -153,7 +153,9 @@
                 v-if="strategyData.buryCategories.length === 0"
               >
                 <a-icon type="arrow-down" />
-                <span> Bury categories </span>
+                <span>
+                  Bury categories
+                </span>
               </a-menu-item> -->
               <a-menu-item
                 key="filter_results"
@@ -162,7 +164,9 @@
                 v-if="strategyData.filterResults.length === 0"
               >
                 <a-icon type="filter" />
-                <span> Filter Results </span>
+                <span>
+                  Filter Results
+                </span>
               </a-menu-item>
             </a-menu>
             <a-button icon="plus" />
